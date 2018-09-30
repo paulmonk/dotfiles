@@ -116,3 +116,13 @@ xcuserdata/
 ## Other
 *.moved-aside
 *.xccheckout
+
+#---------------------------
+# Secrets
+#---------------------------
+/ssh/id_*
+id_*
+*.pem
+*.key
+*_history
+*.history
