@@ -1,0 +1,5 @@
+[commit]
+  gpgsign = false
+
+[user]
+  email = paul.monk@titanemail.com

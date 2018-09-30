@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+# Quick function to create or connect to an existing tmux remote session.
+# ssh-tmux <target> <session_name>
+
+local target
+local session_name
+target="$1"
+session_name="${2:-main}"
+if [[ -n "${target}" ]]; then
+    ssh "${target}" -t -- tmux new-session -A -s "${session_name}"
+else
+    echo "No ssh target passed in. You need to specify your target."
+fi

@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+pre_lock() {
+  # Pause notification manager
+  pkill -u "${LOGNAME}" -USR1 dunst
+}
+
+post_lock() {
+  # Resume notification manager
+  pkill -u "${LOGNAME}" -USR2 dunst
+}
+
+main() {
+  # Pre lock conditions
+  pre_lock
+
+  # Lock the screen
+  # Colours
+  local b c d t w v
+  b='#00000000' # blank
+  c='#FFFFFF22' # clear ish
+  d='#D33682CC' # default
+  t='#D33682FF' # text
+  w='#DC322FFF' # wrong
+  v='#CB4B16FF' # verifying
+
+  i3lock \
+    --nofork \
+    --color="#002B36" \
+    --screen 0 \
+    --clock \
+    --indicator \
+    --timestr="%H:%M:%S" \
+    --datestr="%A, %b %Y" \
+    --keylayout 2 \
+    --insidevercolor="${c}" \
+    --ringvercolor="${v}" \
+    --insidewrongcolor="${c}" \
+    --ringwrongcolor="${w}" \
+    --insidecolor="${b}" \
+    --ringcolor="${d}" \
+    --linecolor="${b}" \
+    --separatorcolor="${d}" \
+    --verifcolor="${t}" \
+    --wrongcolor="${t}" \
+    --timecolor="${t}" \
+    --datecolor="${t}" \
+    --layoutcolor="${t}" \
+    --keyhlcolor="${w}" \
+    --bshlcolor="${w}" \
+    --veriftext="Checking that out..." \
+    --wrongtext="Guess again." \
+    --noinputtext="Running on empty." \
+    --radius \
+    180 \
+    --ring-width 10
+
+  # Post lock conditions
+  post_lock
+}
+
+main
+# vim: set ts=2 sw=2 tw=80 et :

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# GPG / SSH
+# Start the gpg-agent if not already running
+if command -v gpg >/dev/null 2>&1; then
+  if ! pgrep -x -u "${LOGNAME}" gpg-agent >/dev/null 2>&1; then
+    gpg-connect-agent /bye >/dev/null 2>&1
+  fi
+
+  # Also set the GPG_TTY and refresh the TTY in case we have switched into
+  # an X session as stated in man gpg-agent
+  GPG_TTY="$(tty)" && export GPG_TTY
+  gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
+
+  # SSH Agent
+  unset SSH_AGENT_PID
+  if [ "${gnupg_ssh_auth_sock_by:-0}" -ne $$ ]; then
+    SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    export SSH_AUTH_SOCK
+  fi
+fi
+
+#  vim: set ft=sh ts=2 sw=4 tw=80 et :

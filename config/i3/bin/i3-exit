@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+stop_vpn() {
+  nmcli con show --active | grep vpn | cut -d' ' -f1 | xargs -n1 nmcli con down
+}
+
+case "$1" in
+  lock)
+    "${XDG_CONFIG_HOME}/i3/bin/i3-lock"
+    ;;
+  logout)
+    i3-msg exit
+    ;;
+  suspend)
+    stop_vpn
+    systemctl suspend
+    ;;
+  reboot)
+    stop_vpn
+    systemctl reboot
+    ;;
+  shutdown)
+    stop_vpn
+    systemctl poweroff
+    ;;
+  *)
+    echo "Usage: $0 {lock|logout|suspend|reboot|shutdown}"
+    exit 2
+    ;;
+esac
+
+exit 0

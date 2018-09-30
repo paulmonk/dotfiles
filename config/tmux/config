@@ -1,0 +1,310 @@
+#--------------------------------------------------------
+# TMUX shims
+# https://superuser.com/questions/1069902/tmux-configuration-stanzas-based-on-tmux-version
+# Version-specific commands [grumble, grumble]
+# See: https://github.com/tmux/tmux/blob/master/CHANGES
+run-shell "tmux set-environment -g TMUX_VERSION $(tmux -V | cut -c 6-)"
+
+#--------------------------------------------------------
+# General
+#--------------------------------------------------------
+# Must set default-command to $SHELL, in order to not source ~/.profile
+# Start a non-login shell
+set-option -g default-command "${SHELL}"
+set-option -g default-shell "${SHELL}"
+
+# Make tmux display things in 256 colors
+set-option -g default-terminal "screen-256color"
+# :Tc adds TrueColor support.
+set-option -g terminal-overrides 'xterm-256color:Tc'
+
+# Update the tmux environment
+# DBUS address needs updating as gpg requires it for pinentry.
+# https://unix.stackexchange.com/questions/396712/pinentry-not-showing-in-tmux
+set-option -g update-environment "DBUS_SESSION_BUS_ADDRESS DISPLAY GPG_TTY SSH_AUTH_SOCK XAUTHORITY"
+
+# scrollback buffer size increase
+set-option -g history-limit 20000
+
+# Address vim mode switching delay (http://superuser.com/a/252717/65504)
+set-option -s escape-time 0
+
+# tmux messages are displayed for 4 seconds
+set-option -g display-time 4000
+
+# Allow the arrow key to be used immediately after changing windows, default is 500
+set-option -g repeat-time 300
+
+# focus events enabled for terminals that support them
+set-option -g focus-events on
+
+# Visual notifications
+set-option -g visual-bell off
+set-option -g visual-activity off
+set-option -g visual-silence off
+
+# Turn on window titles
+set-option -g set-titles on
+
+# set-option window title string
+#  #H  Hostname of local host
+#  #I  Current window index
+#  #P  Current pane index
+#  #S  Session name
+#  #T  Current window title
+#  #W  Current window name
+#  #   A literal ‘#’
+#set-option -g set-titles-string '#(whoami)@#H: #W'
+set-option -g set-titles-string '#T'
+
+# Automatically set window title
+set-window-option -g window-status-attr default
+set-window-option -g window-status-current-attr default
+
+# rename window to reflect current program
+set-window-option -g automatic-rename on
+
+# Window Monitoring
+set-window-option -g monitor-activity on
+set-window-option -g monitor-silence 0
+
+# Start windows and panes from 1
+set-option -g base-index 1
+set-window-option -g pane-base-index 1
+
+# Renumber windows automatically.
+set-option -g renumber-windows on
+
+# Super useful when using "grouped sessions" and multi-monitor setup
+# Do not use on macOS
+if-shell -b '[ ! $(uname -s) = "Darwin" ]' \
+  "set-window-option -g aggressive-resize on"
+
+# Allow copy/paste on macOS. This was fixed in tmux 2.6
+if-shell -b '[ $(uname -s) = "Darwin" ] && [ "$(echo "${TMUX_VERSION} < 2.6" | bc)" = 1 ]' \
+  "set-option -g default-command 'reattach-to-user-namespace ${SHELL}'"
+
+#--------------------------------------------------------
+# keybindings
+#--------------------------------------------------------
+# set ` (tic) as the default prefix key combination
+# and unbind C-b to free it up
+unbind C-b
+set-option -g prefix `
+
+# use send-prefix to pass ` (tic) through to application
+bind-key ` send-prefix
+
+# Help screen: rebind list-keys window into a new pane
+bind-key ? split-window -h 'exec tmux list-keys | less'
+
+# Open a man page in new vertical pane
+bind-key / command-prompt -p 'Man>' "split-window -d -v 'exec man %%'"
+
+# Use Facebook PathPicker to select paths from buffer interactively
+bind-key f capture-pane \; save-buffer /tmp/tmux-buffer \; new-window -c "#{pane_current_path}" "sh -c 'cat /tmp/tmux-buffer | fpp && rm /tmp/tmux-buffer'"
+
+# Use urlscan for displaying all links from buffer
+bind-key u capture-pane -J \; save-buffer /tmp/tmux-buffer \; split-window -l 10 "urlscan -c -d '/tmp/tmux-buffer' && rm /tmp/tmux-buffer"
+
+# Quick view of processes
+bind-key P split-window -h 'exec htop'
+
+# Quick view of git
+bind-key G split-window -h 'exec tig'
+
+# Search for previous error
+bind-key e copy-mode \; send-keys "?error" C-m
+
+# bind-key syntax changed in 2.4
+# Use vim keybindings in copy mode
+bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
+bind-key -T copy-mode-vi 'y' send-keys -X copy-selection
+bind-key -T copy-mode-vi 'Space' send-keys -X halfpage-down
+bind-key -T copy-mode-vi 'Bspace' send-keys -X halfpage-up
+
+# Reload tmux conf
+bind-key R run-shell " \
+  tmux source-file ${XDG_CONFIG_HOME}/tmux/config >/dev/null && \
+  tmux display-message '✱ ${XDG_CONFIG_HOME}/tmux/config reloaded'"
+
+# Smart pane switching with awareness of vim splits.
+# See: https://github.com/christoomey/vim-tmux-navigator
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+bind-key -n C-h if-shell "$is_vim" "send-keys C-h"  "select-pane -L"
+bind-key -n C-j if-shell "$is_vim" "send-keys C-j"  "select-pane -D"
+bind-key -n C-k if-shell "$is_vim" "send-keys C-k"  "select-pane -U"
+bind-key -n C-l if-shell "$is_vim" "send-keys C-l"  "select-pane -R"
+bind-key -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+bind-key -T copy-mode-vi C-h select-pane -L
+bind-key -T copy-mode-vi C-j select-pane -D
+bind-key -T copy-mode-vi C-k select-pane -U
+bind-key -T copy-mode-vi C-l select-pane -R
+bind-key -T copy-mode-vi C-\ select-pane -l
+
+# Restore the usage of clear screen.
+bind-key C-l send-keys 'C-l'
+
+# Toggle synchronized input to all panes in current window
+bind-key S set-window-option synchronize-panes
+
+# pane navigation binding
+bind-key h   select-pane -L
+bind-key j   select-pane -D
+bind-key k   select-pane -U
+bind-key l   select-pane -R
+
+# window move bindings
+bind-key -r "<" swap-window -t -1
+bind-key -r ">" swap-window -t +1
+
+# pane resizing bindings
+pane_resize=5
+bind-key -r H resize-pane -L "$pane_resize"
+bind-key -r J resize-pane -D "$pane_resize"
+bind-key -r K resize-pane -U "$pane_resize"
+bind-key -r L resize-pane -R "$pane_resize"
+
+# pane split bindings
+# Use v and g for splitting from current path
+unbind-key %
+unbind-key '"'
+bind-key g split-window -h -c "#{pane_current_path}"
+bind-key v split-window -v -c "#{pane_current_path}"
+bind-key "|" split-window -h -c "#{pane_current_path}"
+bind-key - split-window -v -c "#{pane_current_path}"
+
+# Make the current window the first window
+bind-key T swap-window -t 1
+
+# new window binding
+bind-key c new-window -c "#{pane_current_path}"
+
+# Create new session
+bind-key N new-session
+
+# Kill a session
+bind-key D choose-tree -sf "kill-session -t '%%'"
+
+# Rename session
+bind @ command-prompt -p session "attach-session -t '%%'"
+
+#--------------------------------------------------------
+# Mouse (tmux >= 2.1)
+#--------------------------------------------------------
+# Allows scrolling and selecting in copy-mode
+set-option -g -q mouse on
+
+# Enable mouse copy-mode scrolling
+bind-key -T root WheelUpPane   if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; copy-mode -e; send-keys -M"
+bind-key -T root WheelDownPane if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; send-keys -M"
+
+# Enable fast scrolling with Ctrl
+bind-key -T root C-WheelUpPane if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; copy-mode -e; send-keys -M"
+bind-key -Tcopy-mode-vi C-WheelUpPane   send -X halfpage-up
+bind-key -Tcopy-mode-vi C-WheelDownPane send -X halfpage-down
+
+# Make mouse-drag work only with Ctrl
+# unbind -T root MouseDrag1Pane
+# unbind -T root MouseDragEnd1Pane
+# unbind -Tcopy-mode-vi MouseDrag1Pane
+# unbind -Tcopy-mode-vi MouseDragEnd1Pane
+# unbind -Tcopy-mode-vi M-MouseDrag1Pane
+# unbind -Tcopy-mode-vi C-MouseDrag1Pane
+
+bind-key -Tcopy-mode-vi MouseDrag1Pane send-keys -X begin-selection
+# Linux
+if-shell -b '[ $(uname -s) = "Linux" ]' \
+  "bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'xsel -ib'"
+# MacOS
+if-shell -b '[ $(uname -s) = "Darwin" ]' \
+  "bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'pbcopy'"
+
+# bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xsel -ib --logfile $XDG_CACHE_HOME/xsel.log >/dev/null"
+
+# bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= "#{pane_in_mode}" "copy-mode -M" "send-keys -M"' 'copy-mode -M'
+# bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= \"#{pane_in_mode}\" \"copy-mode -M\" \"send-keys -M\"' 'copy-mode -M'
+
+# Toggle mouse on/off
+bind-key m set-option -g mouse on \; display 'Mouse: ON'
+bind-key M set-option -g mouse off \; display 'Mouse: OFF'
+
+#--------------------------------------------------------
+# Status
+#--------------------------------------------------------
+set-option -g status on
+set-option -g status-position top
+set-option -g status-justify left
+
+set-option -g status-keys vi
+
+# refresh 'status-left' and 'status-right' more often
+set-option -g status-interval 3
+
+#---------------------------------------
+# Theme
+# SOLARIZED TERMCOL
+# base03    brightblack
+# base02    black
+# base01    brightgreen
+# base00    brightyellow
+# base0     brightblue
+# base1     brightcyan
+# base2     white
+# base3     brightwhite
+# yellow    yellow
+# orange    brightred
+# red       red
+# magenta   magenta
+# violet    brightmagenta
+# blue      blue
+# cyan      cyan
+# green     green
+#---------------------------------------
+set-option -g status-fg yellow
+set-option -g status-bg black
+set-option -g status-attr default
+
+set-option -g status-left-length 15
+set-option -g status-left-attr none
+set-option -g status-left '#{?client_prefix,#[fg=white],#[bg=brightblack]} #S '
+set-option -g status-right-fg black
+set-option -g status-right-bg brightblue
+set-option -g status-right-attr none
+set-option -g status-right-length 83
+set-option -g status-right "#[fg=green,bg=brightblack]  #(tmux-mem-cpu-load -g 0 -i 3) #[fg=brightblack,bg=brightyellow]  %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
+
+set-window-option -g window-style ''
+set-window-option -g window-active-style ''
+set-window-option -g pane-active-border-style ''
+
+set-window-option -g window-status-fg brightblack
+set-window-option -g window-status-bg brightblue
+set-window-option -g window-status-attr none
+set-window-option -g window-status-separator ""
+set-window-option -g window-status-format "#[fg=brightblack,bg=brightblue] #I#[fg=brightblack,bg=brightblue]#F#[fg=brightblack,bg=brightblue] #W "
+set-window-option -g window-status-current-fg brightred
+set-window-option -g window-status-current-bg brightblack
+set-window-option -g window-status-current-attr bright
+set-window-option -g window-status-current-format "#[fg=white,bg=blue] #I#[fg=white,bg=blue]#F#[fg=white,bg=blue] #W "
+
+# pane border
+set-option -g pane-border-fg black
+set-option -g pane-active-border-fg brightgreen
+
+# message text
+set-option -g message-bg black
+set-option -g message-fg brightred
+
+# pane number display
+set-option -g display-panes-active-colour blue
+set-option -g display-panes-colour brightred
+
+# clock
+set-window-option -g clock-mode-colour green
+
+# bell
+set-window-option -g window-status-bell-style fg=black,bg=red
+
+#  vim: set ft=tmux ts=2 sw=2 tw=80 noet :

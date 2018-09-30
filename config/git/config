@@ -1,0 +1,307 @@
+; vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
+
+[alias]
+    # Branches
+    #--------------------
+    br = branch -v
+
+    # Remove branches that have already been merged with master
+    # a.k.a. ‘delete merged’
+    brdm = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
+
+    # Commits
+    #--------------------
+    a = add
+    c = commit -v
+    ca = !"git add -A && git commit -av"
+    cm = commit -vm
+
+    # Amend the currently staged files to the latest commit
+    amend = "commit --amend --reuse-message=HEAD"
+
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered
+
+    # Credit an author on the latest commit
+    credit = "!f() { \
+        git commit --amend --author \"$1 <$2>\" -C HEAD; \
+    }; f"
+
+    # Checkout
+    #--------------------
+    co = checkout
+    cob = checkout -b
+
+    # Switch to a branch, creating it if necessary
+    cbgo = "!f() { \
+        git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; \
+    }; f"
+
+    # Clone
+    #--------------------
+    # Clone a repository including all submodules
+    cl = clone --recursive
+
+    # Cherry-pick
+    #--------------------
+    cp = cherry-pick
+
+    # Diff
+    #--------------------
+    # Show the diff between the latest commit and the current state
+    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { \
+        git diff --patch-with-stat HEAD~$1; \
+    }; git diff-index --quiet HEAD -- || clear; d"
+
+    # Useful for patch emails.
+    patch = !git --no-pager diff --no-color
+
+    # Find
+    #--------------------
+    # Find branches containing commit
+    fb = "!f() { \
+        git branch -a --contains $1; \
+    }; f"
+
+    # Find tags containing commit
+    ft = "!f() { \
+        git describe --always --contains $1; \
+    }; f"
+
+    # Find commits by source code
+    fc = "!f() { \
+        git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; \
+    }; f"
+
+    # Find commits by commit message
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+
+    # Log
+    #--------------------
+    # View abbreviated SHA, description, and history graph of the latest 20 commits
+    l = !"git --no-pager log --pretty=oneline -n 20 --graph --abbrev-commit"
+    log  = log --color=auto --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+    # Pull
+    #--------------------
+    pu = pull
+
+    # Pull in remote changes for the current repository and all its submodules
+    pu-all = !"git pull; git submodule foreach git pull origin master"
+
+    # Push
+    #--------------------
+    p = push
+    pom = push origin master
+    poh = push origin head
+
+    # Rebase
+    #--------------------
+    # Interactive rebase with the given number of latest commits
+    reb = "!r() { \
+        git rebase -i HEAD~$1; \
+    }; r"
+
+    # Remotes
+    #--------------------
+    # Show verbose output about tags, branches or remotes
+    remotes = "remote -v"
+
+    # Stash
+    #--------------------
+    st = stash
+    stp = stash pop
+    st-all = stash save --include-untracked
+
+    # Take a snapshot of your current working tree without removing the
+    # changes from your tree.
+    # via http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
+    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    snapshots = !git stash list --grep snapshot
+
+    # Status
+    #--------------------
+    s = status -sb
+
+    # Submodule
+    #--------------------
+    sm = submodule
+    smu = submodule foreach git pull origin master
+
+    # Tags
+    #--------------------
+    # Remove the old tag with this name and tag the latest commit with it.
+    retag = "!r() { \
+        git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; \
+    }; r"
+
+    sync-tags = fetch --prune origin '+refs/tags/*:refs/tags/*'
+
+    # Show verbose output about tags
+    tags = "tag -l"
+
+    # Whatchanged
+    #--------------------
+    w  = whatchanged --decorate
+    wp = whatchanged --decorate -p
+
+[core]
+    excludesfile = ~/.config/git/ignore
+    pager = diff-so-fancy | less --tabs=4 -RFX
+
+    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+    # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+    precomposeunicode = false
+
+    # Make `git rebase` safer on macOS
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+[apply]
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
+
+[color]
+    ui = auto
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    commit = yellow
+    frag = magenta
+    meta = yellow
+    new = green
+    old = red
+    whitespace = red reverse
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[commit]
+    gpgSign = true
+    template = ~/.config/git/templates/commit.txt
+
+[credential]
+    helper = cache --timeout=3600
+
+[diff]
+    # Detect copies as well as renames
+    renames = copies
+
+[diff "bin"]
+    # Use `hexdump` to diff binary files
+    textconv = hexdump -v -C
+
+[fetch]
+    prune = true
+    recurseSubmodules = true
+
+[init]
+    templatedir = ~/.config/git/templates
+
+[merge]
+    # Standard diff is two sets of final changes.
+    # This introduces the original text before each side's changes.
+    # https://git-scm.com/docs/git-config#git-config-mergeconflictStyle
+    conflictstyle = diff3
+
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+
+    prompt = false
+    tool = vimdiff
+
+[mergetool]
+    prompt = false
+    keepBackup = true
+    writeToTemp = true
+
+[pull]
+    # Rebase all pulls by default, instead of merge
+    rebase= true
+
+[push]
+    # Defines the action git push should take if no refspec is explicitly
+    # given:
+    # current = Push the current branch to update a branch with the same
+    # name on the receiving end
+    default = current
+
+    # Make `git push` push relevant annotated tags when pushing branches out.
+    followTags = true
+
+[rebase]
+    autosquash = true
+    autostash = true
+
+[status]
+    submodulesummary = true
+    showUntrackedFiles = all
+
+[tig]
+    # [Global opts]
+    commit-order = topo
+    ignore-case = smart-case
+    line-graphics = utf-8
+    show-changes = false
+    split-view-height = 75%
+    tab-size = 4
+
+    # [View opts]
+    main-view-author-display = full
+    main-view-commit-title-graph = true
+    main-view-commit-title-refs = true
+    main-view-commit-title-overflow = false
+    main-view-date-display = relative
+    main-view-id-display = true
+
+[tig "bind"]
+    generic = <Backspace> view-close
+    generic = \\ scroll-line-up
+    generic = tw :toggle wrap-lines
+    main = C none
+    main = CP !g cp %(commit)
+    main = G move-last-line
+    main = P !git p
+    main = PU !git pu
+    status = C !git c
+
+[url "git@github.com:"]
+    insteadOf = "gh:"
+    pushInsteadOf = "github:"
+    pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+    insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+    insteadOf = "gst:"
+    pushInsteadOf = "gist:"
+    pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+    insteadOf = "gist:"
+
+[user]
+    name = Paul Monk
+    email = git@paulmonk.org
+    # Add an `!` to the end of the key to be explicit about what key to use.
+    # otherwise GPG will override and pick the most recent valid key.
+    signingKey = 76A45DC5162383BE0FF431F94C0993B829F49191!
+    useConfigOnly = true
+
+[includeIf "gitdir:~/projects/teg"]
+    path = ~/.config/git/users/teg

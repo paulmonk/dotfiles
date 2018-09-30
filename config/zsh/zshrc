@@ -1,0 +1,112 @@
+#!/usr/bin/env zsh
+
+# shellcheck source=/dev/null
+
+#------------------------------------------------------------------------------
+# .zshrc is sourced in interactive shells. It should contain commands to set
+# up aliases, functions, options, key bindings, etc.
+#------------------------------------------------------------------------------
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+
+# Zsh Opts
+#-------------------------
+[[ -s "${XDG_CONFIG_HOME}/zsh/opts" ]] && source "${XDG_CONFIG_HOME}/zsh/opts"
+
+
+# Plugins
+#-------------------------
+# Load antigen
+if [[ -s "${ZDOTDIR}/plugins" ]]; then
+    # Antigen
+    export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
+    export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
+    export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
+    export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
+
+    # Create antigen dirs if they do not exist.
+    [[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
+    [[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
+
+    antigen_repo_dir="${ADOTDIR}/repo"
+    antigen_init_file="${antigen_repo_dir}/antigen.zsh"
+    antigen_status=1
+    if [[ ! -f "${antigen_init_file}" ]]; then
+        git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" || antigen_status=0
+    fi
+    if [[ ${antigen_status} == 1 ]]; then
+        source "${antigen_init_file}"
+        antigen init "${ZDOTDIR}/plugins"
+    else
+        echo "Antigen install failed, no plugins available."
+    fi
+fi
+
+
+# Sh
+#-------------------------
+[[ -s "${XDG_CONFIG_HOME}/sh/aliases" ]] && source "${XDG_CONFIG_HOME}/sh/aliases"
+[[ -s "${XDG_CONFIG_HOME}/sh/colors" ]] && source "${XDG_CONFIG_HOME}/sh/colors"
+[[ -s "${XDG_CONFIG_HOME}/sh/gpg-agent" ]] && source "${XDG_CONFIG_HOME}/sh/gpg-agent"
+
+
+# ZSH Keybindings
+#-------------------------
+[[ -s "${ZDOTDIR}/keybindings" ]] && source "${ZDOTDIR}/keybindings"
+
+
+# ZSH Aliases
+#-------------------------
+[[ -s "${ZDOTDIR}/aliases" ]] && source "${ZDOTDIR}/aliases"
+[[ -s "${ZDOTDIR}/aliases.local" ]] && source "${ZDOTDIR}/aliases.local"
+
+
+# ZSH Functions
+#-------------------------
+# Autoload all shell functions from all directories in $fpath (following
+# symlinks) that have the executable bit on (the executable bit is not
+# necessary, but gives you an easy way to stop the autoloading of a
+# particular shell function). $fpath should not be empty for this to work.
+if [[ -d "${ZDOTDIR}/functions" ]]; then
+    fpath=(
+        ${ZDOTDIR}/functions
+        ${fpath}
+    )
+fi
+for func in $^fpath/*(N-.x:t); do
+    autoload -Uz "${func}";
+done
+
+
+# ZSH Commands Conf
+#-------------------------
+# Source all shell command specific config
+if [[ -d "${ZDOTDIR}/commands" ]]; then
+    for bin in ${ZDOTDIR}/commands/*; do
+        if (( $+commands[$bin] )) && [[ -s "${bin}" ]]; then
+            source "${bin}";
+        fi
+    done
+fi
+
+
+# ZSH Completions
+#-------------------------
+if [[ -d "${ZDOTDIR}/completions" ]]; then
+    fpath=(
+        ${ZDOTDIR}/completions
+        ${fpath}
+    )
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        fpath=(
+            ${PREFIX}/share/zsh/site-functions
+            ${fpath}
+        )
+    fi
+fi
+
+# Load completions and bash completions
+autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
+autoload -Uz bashcompinit && bashcompinit

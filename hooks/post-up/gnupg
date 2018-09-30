@@ -1,0 +1,13 @@
+#!/bin/sh
+gpg_agent_conf="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg/gpg-agent.conf"
+pinentry_bin="$(command -v pinentry-mac)"
+
+if [ "$(uname -s)" = "Darwin" ] &&
+  [ -x "${pinentry_bin}" ] &&
+  [ -f "${gpg_agent_conf}" ]; then
+
+  # Force use of BSD installed variant.
+  /usr/bin/sed -i "" -e \
+    "s#/usr/bin/pinentry-curses#${pinentry_bin}#g" \
+    "${gpg_agent_conf}"
+fi

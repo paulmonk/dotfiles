@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+
+#------------------------------------------------------------------------------
+# Plugins - .antigenrc file.
+#------------------------------------------------------------------------------
+antigen use oh-my-zsh
+
+# Bundles
+antigen bundles <<EOBUNDLES
+    hlissner/zsh-autopair
+    marzocchi/zsh-notify
+    rupa/z
+    changyuheng/fz
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-syntax-highlighting
+    zsh-users/zsh-history-substring-search
+    zdharma/history-search-multi-word
+    mafredri/zsh-async
+EOBUNDLES
+
+# Set theme
+antigen theme "geometry-zsh/geometry"
+source "${ZDOTDIR}/themes/geometry"
+
+# Tell Antigen that you're done.
+antigen apply
+
+
+# Plugins Config
+# ----------------
+# Z
+[[ -f "${XDG_DATA_HOME}/zsh/z" ]] || touch "${XDG_DATA_HOME}/zsh/z"
+export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
+
+# zsh-notify
+zstyle ':notify:*' command-complete-timeout 15
+zstyle ':notify:*' error-title 'Error'
+zstyle ':notify:*' success-title 'Success'
+zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/64x64/status/dialog-error.png'
+zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/64x64/status/dialog-information.png'

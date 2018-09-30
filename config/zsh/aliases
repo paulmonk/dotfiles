@@ -1,0 +1,212 @@
+#!/usr/bin/env zsh
+
+#------------------------------------------------------------------------------
+# ZSH Specfic Aliases
+#------------------------------------------------------------------------------
+# Disable correction.
+alias ack="nocorrect ack"
+alias cd="nocorrect cd"
+alias cp="nocorrect cp"
+alias ebuild="nocorrect ebuild"
+alias gcc="nocorrect gcc"
+alias gist="nocorrect gist"
+alias grep="nocorrect grep"
+alias heroku="nocorrect heroku"
+alias ln="nocorrect ln"
+alias man="nocorrect man"
+alias mkdir="nocorrect mkdir"
+alias mv="nocorrect mv"
+alias mysql="nocorrect mysql"
+alias rm="nocorrect rm"
+
+# Disable globbing.
+alias fc="noglob fc"
+alias find="noglob find"
+alias ftp="noglob ftp"
+alias history="noglob history"
+alias locate="noglob locate"
+alias rake="noglob rake"
+alias rsync="noglob rsync"
+alias scp="noglob scp"
+alias sftp="noglob sftp"
+
+# Safety first.
+alias rm="${aliases[rm]:-rm} -i"
+alias mv="${aliases[mv]:-mv} -i"
+alias cp="${aliases[cp]:-cp} -i"
+alias ln="${aliases[ln]:-ln} -i"
+
+# No log history.
+# Use a space at the beginning to prevent command entering history.
+for bin in "pwd" "jobs" "ll" "ls" "l" "fg" "history" "clear" "exit" "exa" "pass"; do
+  alias $bin=" ${aliases[$bin]:-$bin}";
+done
+
+# Lists the ten most used commands.
+alias hist-stat="history 0 | awk \"{print \$2}\" | sort | uniq -c | sort -n -r | head"
+
+# Show PATH info in a more readable format.
+alias fpath="echo -e \${FPATH//:/\\n}"
+alias path="echo -e \${PATH//:/\\n}"
+
+# Reload zshrc.
+alias zreload="source \${ZDOTDIR}/.zshrc && echo 'Success!'"
+
+
+# General aliases
+# -------------------------
+alias _="sudo"
+alias a="alias"
+alias as="alias | grep -i"
+alias afk="${XDG_CONFIG_HOME}/i3/bin/i3-lock"
+alias b="${(z)BROWSER}"
+alias df="df -kh"
+alias du="du -kh"
+alias e="${(z)VISUAL:-${(z)EDITOR}}"
+alias g="git"
+alias h="history"
+alias hs="history | grep -i"
+alias md="mkdir -p"
+alias o="open"
+alias p="${(z)PAGER}"
+alias sudo="sudo -E "
+alias type="type -a"
+alias x="extract"
+
+# Alias cat to be bat.
+(( $+commands[bat] )) && alias cat=bat
+
+# Find shortcuts. If FD not available
+if ! (( $+commands[fd] )); then
+  alias f="find . -iname"
+  alias ff="find . -type f -iname"
+  alias fd="find . -type d -iname"
+fi
+
+# head and tail will show as much possible without scrolling
+alias h="head -n \$((\${LINES:-12}-4))"
+alias t="tail -n \$((\${LINES:-12}-4)) -s.1"
+
+# help - make this tldr.
+(( $+commands[tldr] )) && alias help="tldr"
+
+# Hex dump Canonical; some systems have this symlinked
+(( $+commands[hd] )) || alias hd="hexdump -C"
+
+# ls
+# If ls is set to exa. Some of these aliases will not work.
+# TODO: add checks for exa.
+alias l="ls -1A"         # Lists in one column.
+alias ll="ls -lh"        # Lists human readable sizes.
+alias lr="ll -R"         # Lists human readable sizes, recursively.
+alias lm="la | ${PAGER}" # Lists human readable sizes,  through pager.
+alias lx="ll -XB"        # Lists sorted by extension (GNU only).
+alias lk="ll -Sr"        # Lists sorted by size, largest last.
+alias lt="ll -tr"        # Lists sorted by date, most recent last.
+alias lc="lt -c"         # Lists sorted by date, most recent last, shows change time.
+alias lu="lt -u"         # Lists sorted by date, most recent last, shows access time.
+
+# process
+alias ps="ps -ax"
+alias psk="ps | fzf | cut -d " " -f1 | xargs -o kill"
+alias pst="pstree -g 3 -ws"
+
+# Systemd
+if (( $+commands[systemctl] )); then
+  alias jc="journalctl"
+  alias jcu="journalctl --user"
+  alias sc="systemctl"
+  alias scu="systemctl --user"
+fi
+
+# File Download
+if (( $+commands[curl] )); then
+  alias get="curl --continue-at - --location --progress-bar --remote-name --remote-time"
+elif (( $+commands[wget] )); then
+  alias get="wget --continue --progress=bar --timestamping"
+fi
+
+# Check for various OS openers. Quit as soon as we find one that works.
+for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
+  if (( $+commands[${opener}] )); then
+    if [[ "${opener}" == "cmd.exe" ]]; then
+      alias open="${opener} /c start";
+    else
+      alias open="${opener}";
+    fi
+  break;
+ fi
+done
+
+
+# Network aliases
+# -------------------------
+# IP addresses
+alias pubip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="sudo ifconfig | grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | grep -Eo '([0-9]*\\.){3}[0-9]*' | grep -v '127.0.0.1'"
+alias ips="sudo ifconfig -a | grep -o 'inet6\\? \\(addr:\\)\\?\\s\\?\\(\\(\\([0-9]\\+\\.\\)\\{3\\}[0-9]\\+\\)\\|[a-fA-F0-9:]\\+\\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+# See what's going on.
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+
+# Serve content. Cater for both python versions.
+if (( $+commands[python3] )); then
+    alias http-serve="python3 -m http.server"
+else
+    alias http-serve="python -m SimpleHTTPServer"
+fi
+
+# Misc aliases
+# -------------------------
+# Weather
+alias weather="curl -s wttr.in"
+
+
+# App aliases
+# -------------------------
+# Docker
+if (( $+commands[docker] )); then
+  alias dops="docker ps -q | xargs docker inspect --format '{{.Id}} @{{.Name}} @{{.Config.Image}} @{{.Config.Cmd}} @{{range \$p, \$conf := .NetworkSettings.Ports}}{{\$p}}->{{(index \$conf 0).HostPort}}{{end}} @{{.NetworkSettings.IPAddress}} @{{.State.Status}}' | column -t -s='@' | cut -c 1-5,64-"
+  alias dols='docker ps -a --format "table{{ .Names }}\\t{{ .ID }}\\t{{ .Image }}\\t{{ .Status }}\\t{{ .Ports }}\\t{{ .Command }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
+  alias doim='docker images --format "table{{ .Repository }}\\t{{ .Tag }}\\t{{ .ID }}\\t{{ .Size }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
+  alias dogc='docker rmi $(docker images -qf "dangling=true")'
+  alias dovc='docker volume ls -qf dangling=true | xargs docker volume rm'
+  alias dotop='docker stats $(docker ps --format="{{.Names}}")'
+  alias dolast='docker inspect --format "{{.State.Running}}" $(docker ps -lq)'
+fi
+
+# macOS aliases
+#-----------------------
+if [[ "${OSTYPE}" == "darwin"* ]]; then
+  # No `md5sum`, so use `md5` as a fallback
+  (( $+commands[md5sum] )) || alias md5sum="md5"
+
+  # No `sha1sum`, so use `shasum` as a fallback
+  (( $+commands[sha1sum] )) || alias sha1sum="shasum"
+
+  # Hide/show all desktop icons (useful when presenting)
+  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool falsel && killall Finder"
+  alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+  # Recursively delete `.DS_Store` files
+  alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+
+  # Empty the Trash on all mounted volumes and the main HDD
+  # Also, clear Apple’s System Logs to improve shell startup speed
+  alias emptytrash=" \
+        sudo rm -rfv /Volumes/*/.Trashes; \
+        sudo rm -rfv ~/.Trash; \
+        sudo rm -rfv /private/var/log/asl/*.asl; \
+        sqlite3 ~/Library/Preferences/com.apple.LaunchServices.sQuarantineEventsV* 'delete from LSQuarantineEvent' \
+    "
+
+  # Flush the DNS on Mac
+  alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+
+  # Clean up LaunchServices to remove duplicates in the “Open With” menu
+  alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+
+  # Lock the screen (when going AFK)
+  alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+fi

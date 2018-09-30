@@ -1,0 +1,30 @@
+# Load user X resource config
+if [ -x "${XDG_CONFIG_HOME}/xorg/xresources" ]; then
+  xrdb -merge "${XDG_CONFIG_HOME}/xorg/Xresources"
+fi
+
+# X11 Key repeat (delay / rate)
+xset r rate 230 35
+
+# DPMS monitor setting (Standby -> Suspend -> Off, in seconds)
+xset dpms 500 700 900
+
+# Disable PC speaker beeps
+xset -b
+
+# Setup Gnome Keyring.
+if command -v gnome-keyring-daemon >/dev/null 2>&1; then
+  eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets)"
+fi
+
+# Autorandr the displays.
+if command -v autorandr >/dev/null 2>&1; then
+  autorandr --change
+fi
+
+# Activate numlock
+if command -v numlockx >/dev/null 2>&1; then
+  numlockx &
+fi
+
+#  vim: set ft=sh ts=2 sw=2 tw=80 noet :

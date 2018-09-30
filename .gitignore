@@ -1,0 +1,20 @@
+._*
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.apdisk
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+*.DS_Store
+*.log
+
+Network Trash Folder
+Icon
+Temporary Items

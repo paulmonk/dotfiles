@@ -1,0 +1,76 @@
+[general]
+# This variable specifies which accounts are defined. Separate them with commas.
+accounts = fastmail,gmail
+
+# By default, Offlineimap will use fsync() to force data out to disk at
+# opportune times to ensure consistency.  This can, however, reduce performance.
+# Users where /home is on SSD (Flash) may also wish to reduce write cycles.
+# Therefore, you can disable Offlineimap's use of fsync().  Doing so will come
+# at the expense of greater risk of message duplication in the event of a system
+# crash or power loss. Default is true. Set it to false to disable fsync.
+fsync = True
+
+# This specifies where Offlineimap is to store its metadata.
+# This directory will be created if it does not already exist.
+metadata = ~/.local/share/offlineimap
+
+# Helper python functions.
+pythonfile = ~/.config/offlineimap/helper.py
+
+# TLS
+starttls = yes
+ssl = yes
+# This has to be set when tls_level differs from default.
+ssl_version = tls1_2
+# default: tls_compat
+tls_level = tls_secure
+
+[Account fastmail]
+localrepository = fastmail-local
+remoterepository = fastmail-remote
+
+[Repository fastmail-local]
+type = Maildir
+localfolders = ~/.local/share/mail/fastmail
+
+
+[Repository fastmail-remote]
+type = IMAP
+remotehost = imap.fastmail.com
+remoteport = 993
+remoteusereval = get_user("fastmail")
+remotepasseval = get_pass("fastmail")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+realdelete = yes
+folderfilter = lambda foldername: foldername in ['INBOX', 'Trash', 'Sent', 'Drafts', 'Spam']
+
+[Account gmail]
+localrepository = gmail-local
+remoterepository = gmail-remote
+
+[Repository gmail-local]
+type = Maildir
+localfolders = ~/.local/share/mail/gmail
+nametrans = lambda folder: {'Drafts':    '[Gmail]/Drafts',
+                            'Sent':      '[Gmail]/Sent',
+                            'Trash':     '[Gmail]/Trash',
+                            'Bin':       '[Gmail]/Bin',
+                            'Spam':      '[Gmail]/Spam'
+                            }.get(folder, folder)
+
+[Repository gmail-remote]
+type = Gmail
+remoteusereval = get_user("gmail")
+remotepasseval = get_pass("gmail")
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+realdelete = yes
+nametrans = lambda folder: {'[Gmail]/Drafts':    'Drafts',
+                            '[Gmail]/Sent Mail': 'Sent',
+                            '[Gmail]/Trash':     'Trash',
+                            '[Gmail]/Bin':       'Trash',
+                            '[Gmail]/Spam':      'Spam'
+                            }.get(folder, folder)
+folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Bin', '[Gmail]/Drafts', '[Gmail]/Spam', '[Gmail]/Trash', '[Gmail]/Sent Mail']
+
+
+# vim: set ft=config ts=2 sw=2 tw=80 et :

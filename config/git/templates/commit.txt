@@ -1,0 +1,51 @@
+# <emoji>?<type>: (If applied, this commit will...) <subject> (Max 50 char)
+# |<----  Using a Maximum Of 50 Characters  ---->|
+
+
+# Explain why this change is being made
+# |<----   Try To Limit Each Line to a Maximum Of 72 Characters   ---->|
+
+
+# Provide links or keys to any relevant tickets, articles or other resources
+# Example: Github issue #23
+
+
+# --- COMMIT END ---
+# Type can be
+#    feat     (new feature)
+#    fix      (bug fix)
+#    refactor (refactoring production code)
+#    style    (formatting, missing semi colons, etc; no code change)
+#    docs     (changes to documentation)
+#    test     (adding missing tests, refactoring tests; no production code change)
+#    chore    (updating grunt tasks etc; no production code change)
+# --------------------
+# Remember to
+#    Capitalize the subject line
+#    Use the imperative mood in the subject line
+#    Do not end the subject line with a period
+#    Separate subject from body with a blank line
+#    Use the body to explain what and why vs. how
+#    Can use multiple lines with "-" for bullet points in body
+# --------------------
+# Emoji can be
+#    :new:                when adding a feature
+#    :bug:                when fixing a bug
+#    :apple:              when fixing something on Mac OS
+#    :penguin:            when fixing something on Linux
+#    :checkered_flag:     when fixing something on Windows
+#    :lock:               when dealing with security
+#    :racehorse:          when improving performance
+#    :non-potable_water:  when plugging memory leaks
+#    :haircut:            when refactoring
+#    :x:                  when removing code or files
+#    :art:                when improving the format/structure of the code
+#    :book:               when writing docs
+#    :white_check_mark:   when adding tests
+#    :shirt:              when removing linter warnings
+#    :traffic_light:      when fixing the CI build
+#    :arrow_up:           when upgrading dependencies
+#    :arrow_down:         when downgrading dependencies
+# --------------------
+# For more information about this template, check out
+# https://gist.github.com/adeekshith/cd4c95a064977cdc6c50

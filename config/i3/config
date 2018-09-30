@@ -1,0 +1,392 @@
+# Reference: http://i3wm.org/docs/userguide.html
+
+#==============================================================================
+# i3 general behavior →
+#------------------------------------------------------------------------------
+# Default vars
+set $alt Mod1
+set $mod Mod4
+
+# i3 behavior
+workspace_auto_back_and_forth yes
+
+# If focus should follow your mouse movements
+focus_follows_mouse no
+
+# By default, when switching focus to a client on a different output (e.g. focusing a client on workspace 3 on output VGA-1, coming from workspace 2 on LVDS-1), the mouse cursor is warped to the center of that client.
+mouse_warping none
+
+# Be pixel stingy <none|vertical|horizontal|both>
+hide_edge_borders vertical
+
+# Use Mouse+$alt to drag and resize floating windows
+floating_modifier $alt
+
+# DISABLED:
+#floating_minimum_size 250 x 250
+#floating_maximum_size 1920 x 0
+#force_display_urgency_hint 1000 ms
+
+# default tiling orientation
+default_orientation vertical
+
+#==============================================================================
+# i3 gaps behavior →
+#------------------------------------------------------------------------------
+# Gaps will only work correctly if you disable window titlebars entirely. 
+# Unfortunately this is necessary due to the way i3 creates such bars on windows.
+for_window [class="^.*"] border pixel 0
+
+gaps inner 5
+gaps outer 5
+
+# Gaps are only used if more than one container on the workspace
+smart_gaps on
+
+# Draw borders around a container only if it is not the only container in this workspace
+smart_borders on
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+    bindsym o           mode "$mode_gaps_outer"
+    bindsym i           mode "$mode_gaps_inner"
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
+
+mode "$mode_gaps_inner" {
+    bindsym plus        gaps inner current plus 5
+    bindsym minus       gaps inner current minus 5
+    bindsym 0           gaps inner current set 0
+
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     gaps inner all set 0
+
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
+mode "$mode_gaps_outer" {
+    bindsym plus        gaps outer current plus 4
+    bindsym minus       gaps outer current minus 4
+    bindsym -1          gaps outer current set 0
+
+    bindsym Shift+plus  gaps outer all plus 4
+    bindsym Shift+minus gaps outer all minus 4
+    bindsym Shift+-1    gaps outer all set 0
+
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
+
+#==============================================================================
+# Workspaces →
+#------------------------------------------------------------------------------
+set $ws1  "1 "
+set $ws2  "2 "
+set $ws3  "3 "
+set $ws4  "4 "
+set $ws5  "5 "
+set $ws6  "6 "
+set $ws7  "7 "
+set $ws8  "8 "
+set $ws9  "9 "
+set $ws10 "10 "
+
+# Force workspaces to specific output monitor
+#workspace "$ws1" output DFP10
+#workspace "$ws2" output DFP1
+#workspace "$ws3" output DFP9
+
+
+#==============================================================================
+# Key bindings →
+#------------------------------------------------------------------------------
+# Change focus
+bindsym $alt+h focus left
+bindsym $alt+j focus down
+bindsym $alt+k focus up
+bindsym $alt+l focus right
+
+# Alternative focus
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+# Move focused window
+bindsym $alt+Ctrl+h move left
+bindsym $alt+Ctrl+j move down
+bindsym $alt+Ctrl+k move up
+bindsym $alt+Ctrl+l move right
+
+# Alternatively, you can use the Super+Shift+Arrows:
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Right move right
+
+# Vert/horiz orientation and fullscreen
+bindsym $alt+f fullscreen
+bindsym $alt+Ctrl+g split h
+bindsym $alt+Ctrl+v split v
+
+# Toggle floating/tiling
+bindsym $alt+t floating toggle
+
+# Focus last floating/tiling container. Very helpful!
+bindsym $alt+space focus mode_toggle
+
+bindsym $alt+a focus parent
+bindsym $alt+z focus child
+
+# Scratchpad control
+bindsym $alt+Ctrl+minus move scratchpad
+bindsym $alt+minus scratchpad show
+
+# i3 Session
+bindsym $alt+Ctrl+q kill
+bindsym $alt+Ctrl+e reload
+bindsym $alt+Ctrl+r restart
+bindsym $alt+Ctrl+Delete exec "i3-nagbar -t warning -m 'exit i3? This will end your X session.' -b 'Yes' 'i3-msg exit'"
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+d layout stacking
+bindsym $mod+f layout tabbed
+bindsym $mod+g layout toggle split
+
+# Toggle between stacking/tabbed/split (Use Super+x!)
+bindsym $mod+x layout toggle
+
+# Toggle border modes (Use Super+b!)
+bindsym $mod+b border toggle
+
+# Utils
+# ------------
+# Commands
+set $media_play                  "playerctl play-pause"
+set $media_next                  "playerctl next"
+set $media_previous              "playerctl previous"
+set $media_stop                  "playerctl stop"
+set $vol_up                      "pamixer -i 5"
+set $vol_down                    "pamixer -d 5"
+set $vol_mute                    "pamixer -t"
+
+# The awesome rofi.
+bindsym --release $alt+Tab       exec --no-startup-id "pgrep -x rofi && killall rofi || rofi -normal-window -show window"
+bindsym --release $alt+r         exec --no-startup-id "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
+bindsym --release $alt+n         exec --no-startup-id "networkmanager_dmenu"
+bindsym --release $alt+p         exec --no-startup-id "passmenu"
+
+# Screenshot
+bindsym Print                    exec --no-startup-id "flameshot gui"
+
+# XF86 keys
+bindsym XF86AudioPlay            exec --no-startup-id $media_play
+bindsym XF86AudioNext            exec --no-startup-id $media_next
+bindsym XF86AudioPrev            exec --no-startup-id $media_previous
+bindsym XF86AudioStop            exec --no-startup-id $media_stop
+bindsym XF86AudioRaiseVolume     exec --no-startup-id $vol_up
+bindsym XF86AudioLowerVolume     exec --no-startup-id $vol_down
+bindsym XF86AudioMute            exec --no-startup-id $vol_mute
+
+# Standard F-keys
+bindsym F8                       exec --no-startup-id $media_play
+bindsym F9                       exec --no-startup-id $media_next
+bindsym F7                       exec --no-startup-id $media_previous
+bindsym F12                      exec --no-startup-id $vol_up
+bindsym F11                      exec --no-startup-id $vol_down
+bindsym F10                      exec --no-startup-id $vol_mute
+
+# Screen brightness controls
+bindsym XF86MonBrightnessUp      exec --no-startup-id "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown    exec --no-startup-id "xbacklight -dec 10"
+
+
+# Quick Actions
+# ------------
+# Apps
+bindsym $alt+Shift+b              exec --no-startup-id "${BROWSER}"
+bindsym $alt+Shift+e              exec --no-startup-id "${TERMINAL} -e neomutt"
+bindsym $alt+Shift+f              exec --no-startup-id "${TERMINAL} -e ranger"
+bindsym $alt+Shift+i              exec --no-startup-id "${TERMINAL} -e htop"
+bindsym $alt+Shift+t              exec --no-startup-id "${TERMINAL}"
+
+
+# Workspaces
+# ----------
+# Helpful: Rename workspaces on-the-fly
+bindsym $alt+Ctrl+a              exec i3-input -F 'rename workspace to %s' -P 'New name: '
+
+# Moving whole workspaces or containers to other outputs
+bindsym $alt+Home                move workspace to output left
+bindsym $alt+End                 move workspace to output right
+bindsym $alt+Ctrl+Home           move container to output left
+bindsym $alt+Ctrl+End            move container to output right
+
+# Switch to workspace
+bindsym $alt+1 workspace $ws1
+bindsym $alt+2 workspace $ws2
+bindsym $alt+3 workspace $ws3
+bindsym $alt+4 workspace $ws4
+bindsym $alt+5 workspace $ws5
+bindsym $alt+6 workspace $ws6
+bindsym $alt+7 workspace $ws7
+bindsym $alt+8 workspace $ws8
+
+# Move focused container to workspace
+bindsym $alt+Ctrl+1 move container to workspace $ws1
+bindsym $alt+Ctrl+2 move container to workspace $ws2
+bindsym $alt+Ctrl+3 move container to workspace $ws3
+bindsym $alt+Ctrl+4 move container to workspace $ws4
+bindsym $alt+Ctrl+5 move container to workspace $ws5
+bindsym $alt+Ctrl+6 move container to workspace $ws6
+bindsym $alt+Ctrl+7 move container to workspace $ws7
+bindsym $alt+Ctrl+8 move container to workspace $ws8
+
+
+#==============================================================================
+# Look 'n Feel →
+#------------------------------------------------------------------------------
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+# font pango: DejaVu Sans Mono, FontAwesome 11
+
+# Other nice fonts
+# Awesome ttf version 5 has no space, causes a bug in Pango.
+# https://bugs.archlinux.org/task/56899
+# font pango: Inconsolata, Font Awesome 5 Free, Font Awesome 5 Brands 11
+font pango: Noto Sans, FontAwesome 11
+
+# Borders
+new_window pixel 2
+new_float pixel 0
+
+# Solarized Colors
+set $base03    #002b36
+set $base02    #073642
+set $base01    #586e75
+set $base00    #657b83
+set $base0     #839496
+set $base1     #93a1a1
+set $base2     #eee8d5
+set $base3     #fdf6e3
+set $yellow    #b58900
+set $orange    #cb4b16
+set $red       #dc322f
+set $magenta   #d33682
+set $violet    #6c71c4
+set $blue      #268bd2
+set $cyan      #2aa198
+set $green     #859900
+
+# Class                  Border   Backgr.  Text    Indicator
+client.focused           $green   $green   $base3  $violet
+client.focused_inactive  $base02  $base02  $base2  $violet
+client.unfocused         $base02  $base02  $base1  $base01
+client.urgent            $magenta $magenta $base3  $red
+
+bar {
+    position          top
+    separator_symbol  " | "
+    status_command    i3status -c "${XDG_CONFIG_HOME}/i3/i3status.conf"
+    tray_output       primary
+    tray_padding      5
+
+    colors {
+        background          $base03
+        statusline          $base2
+        separator           $base01
+        # workspace         Border     Backgr     text
+        focused_workspace   $base3     $green     $base3
+        active_workspace    $base3     $violet    $base3
+        inactive_workspace  $base3     $base1     $base03
+        urgent_workspace    $magenta   $magenta   $base3
+    }
+}
+
+#==============================================================================
+# Workspace → App assignment
+#------------------------------------------------------------------------------
+# Media
+#assign [class="Vlc"] → $w2
+#assign [class="mpv"] → $w2
+#assign [class="Google-chrome-stable"] → $w3
+
+
+#==============================================================================
+# App window behavior →
+#------------------------------------------------------------------------------
+# Misc app behavior
+for_window [class="Cmst"] floating enable border normal
+for_window [class="Lxappearance"] floating enable border normal
+for_window [class="Nitrogen"] floating enable border normal
+for_window [class="Pinentry"] sticky enable
+for_window [class="Rofi"] floating enable
+for_window [class="(?i)virtualbox"] floating enable border normal
+for_window [class="Vlc"]     floating enable, border none
+for_window [class="zeal"]    floating enable, border none
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="^Preferences$"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+
+#==============================================================================
+# Modes → and their key bindings
+#------------------------------------------------------------------------------
+# resize window (you can also use the mouse for that)
+set $resize_mode Resize: (hjkl) small, (arrows) normal
+mode "$resize_mode" {
+    # Small 5 step resize
+    bindsym h resize shrink width 5 px or 5 ppt
+    bindsym j resize grow height 5 px or 5 ppt
+    bindsym k resize shrink height 5 px or 5 ppt
+    bindsym l resize grow width 5 px or 5 ppt
+
+    # Larger shrink/grow, 10 step
+    bindsym Left  resize shrink width 10 px or 10 ppt
+    bindsym Down  resize grow height 10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # Back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "$resize_mode"
+
+# Logout confirm
+set $i3exit ${XDG_CONFIG_HOME}/i3/bin/i3-exit
+set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $i3exit lock, mode "default"
+    bindsym e exec --no-startup-id $i3exit logout, mode "default"
+    bindsym s exec --no-startup-id $i3exit suspend, mode "default"
+    bindsym r exec --no-startup-id $i3exit reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id $i3exit shutdown, mode "default"
+
+    # Back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Pause mode "$mode_system"
+
+
+#==============================================================================
+# Exec (Startup) →
+#------------------------------------------------------------------------------
+# Set background
+exec_always --no-startup-id nitrogen --restore &
+
+# Composite manager
+exec --no-startup-id compton -b --config ${XDG_CONFIG_HOME}/compton/config --xrender-sync-fence &
+
+# vim: set ft=i3config ts=2 sw=4 tw=80 et :
