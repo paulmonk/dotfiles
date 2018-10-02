@@ -163,19 +163,6 @@ fi
 alias weather="curl -s wttr.in"
 
 
-# App aliases
-# -------------------------
-# Docker
-if (( $+commands[docker] )); then
-  alias dops="docker ps -q | xargs docker inspect --format '{{.Id}} @{{.Name}} @{{.Config.Image}} @{{.Config.Cmd}} @{{range \$p, \$conf := .NetworkSettings.Ports}}{{\$p}}->{{(index \$conf 0).HostPort}}{{end}} @{{.NetworkSettings.IPAddress}} @{{.State.Status}}' | column -t -s='@' | cut -c 1-5,64-"
-  alias dols='docker ps -a --format "table{{ .Names }}\\t{{ .ID }}\\t{{ .Image }}\\t{{ .Status }}\\t{{ .Ports }}\\t{{ .Command }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
-  alias doim='docker images --format "table{{ .Repository }}\\t{{ .Tag }}\\t{{ .ID }}\\t{{ .Size }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
-  alias dogc='docker rmi $(docker images -qf "dangling=true")'
-  alias dovc='docker volume ls -qf dangling=true | xargs docker volume rm'
-  alias dotop='docker stats $(docker ps --format="{{.Names}}")'
-  alias dolast='docker inspect --format "{{.State.Running}}" $(docker ps -lq)'
-fi
-
 # macOS aliases
 #-----------------------
 if [[ "${OSTYPE}" == "darwin"* ]]; then
