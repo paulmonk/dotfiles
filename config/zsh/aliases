@@ -166,18 +166,14 @@ alias weather="curl -s wttr.in"
 # macOS aliases
 #-----------------------
 if [[ "${OSTYPE}" == "darwin"* ]]; then
-  # No `md5sum`, so use `md5` as a fallback
-  (( $+commands[md5sum] )) || alias md5sum="md5"
-
-  # No `sha1sum`, so use `shasum` as a fallback
-  (( $+commands[sha1sum] )) || alias sha1sum="shasum"
-
-  # Hide/show all desktop icons (useful when presenting)
-  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool falsel && killall Finder"
-  alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+  # Lock the screen (when going AFK)
+  alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
   # Recursively delete `.DS_Store` files
   alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+
+  # Flush the DNS on Mac
+  alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 
   # Empty the Trash on all mounted volumes and the main HDD
   # Also, clear Apple’s System Logs to improve shell startup speed
@@ -188,12 +184,16 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
         sqlite3 ~/Library/Preferences/com.apple.LaunchServices.sQuarantineEventsV* 'delete from LSQuarantineEvent' \
     "
 
-  # Flush the DNS on Mac
-  alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+  # Hide/show all desktop icons (useful when presenting)
+  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool falsel && killall Finder"
+  alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
   # Clean up LaunchServices to remove duplicates in the “Open With” menu
   alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
-  # Lock the screen (when going AFK)
-  alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+  # No `md5sum`, so use `md5` as a fallback
+  (( $+commands[md5sum] )) || alias md5sum="md5"
+
+  # No `sha1sum`, so use `shasum` as a fallback
+  (( $+commands[sha1sum] )) || alias sha1sum="shasum"
 fi
