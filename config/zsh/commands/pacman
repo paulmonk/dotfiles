@@ -1,0 +1,47 @@
+#!/usr/bin/env zsh
+
+alias paci="pacman -Sy"
+alias paci!="paci -dd"
+alias pacr="pacman -Rs"
+alias pacr!="pacr -dd"
+alias pacf="pacman -U"
+alias pacu="pacman -Syu"
+alias pacq="pacman -Si"
+alias pacQ="pacman -Qo"
+
+function pac() {
+  sudo pacman "$@"
+}
+compdef pac=pacman
+
+function pacs() {
+  aur search -n -k NumVotes "$@"
+  pacman -Ss "$@"
+}
+
+function pacs!() {
+  aur search -k NumVotes "$@"
+  pacman -Ss "$@"
+}
+
+function aurs() {
+  aur sync -sc "$@"
+  post_aur
+}
+alias aurs!="aurs --no-ver-shallow"
+
+function aurb() {
+  aur build -sc -d "${LOGNAME}" "$@"
+  post_aur
+}
+
+function auru() {
+  aur vercmp-devel "$@" | cut -d: -f1 | xargs aur sync -scu --no-ver-shallow "$@"
+  post_aur
+}
+
+function post_aur() {
+  sudo pacman -Sy
+  find "${XDG_CACHE_HOME}/aurutils/sync" -name .git -execdir git clean -fx \;
+  find "/var/cache/pacman/${LOGNAME}" -name "*~" -delete
+}
