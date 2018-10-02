@@ -84,18 +84,25 @@ else
   # Aurutils
   export AUR_PAGER="${PREFIX}/bin/ranger"
 
-  # Forces QT to use GTK icons
-  export DESKTOP_SESSION="gnome"
-
-  # Pull GTK2 RC files from the standard config location, similar to gtk-3.0
+  # GTK: Pull GTK2 RC files from the standard config location, similar to gtk-3.0
   export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
 
   # Make
   MAKEFLAGS="-j $(nproc)"
   export MAKEFLAGS
 
-  # https://github.com/zealdocs/zeal/issues/172
+  # Qt: Forces QT to use GTK icons
+  export DESKTOP_SESSION="gnome"
+
+  # XSECURELOCK
+  export XSECURELOCK_FONT=""
+  export XSECURELOCK_SHOW_HOSTNAME="0"
+  export XSECURELOCK_SHOW_USERNAME="0"
+  export XSECURELOCK_WANT_FIRST_KEYPRESS="1"
+
+  # Zeal: https://github.com/zealdocs/zeal/issues/172
   export QT_QPA_PLATFORMTHEME="gtk2"
+
 fi
 
 # Defaults

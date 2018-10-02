@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
+pre_lock() {
+  killall compton
+  sudo systemctl stop pcscd.service
+}
+
+post_lock() {
+  compton &
+}
+
 stop_vpn() {
   nmcli con show --active | grep vpn | cut -d' ' -f1 | xargs -n1 nmcli con down
 }
 
 case "$1" in
   lock)
-    "${XDG_CONFIG_HOME}/i3/bin/i3-lock"
+    pre_lock
+    xsecurelock
+    post_lock
     ;;
   logout)
     i3-msg exit
