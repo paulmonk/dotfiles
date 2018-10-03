@@ -12,23 +12,6 @@ if command -v neomutt >/dev/null 2>&1; then
   alias mutt="neomutt"
 fi
 
-# Neovim / Vim
-if command -v nvim >/dev/null 2>&1; then
-  alias vim=nvim
-  alias vless="nvim -u \${PREFIX}/share/nvim/runtime/macros/less.vim"
-  alias suvim="sudo -E nvim"
-  alias oldvim="VIMINIT='let \${MYVIMRC}=\"\${XDG_CONFIG_HOME}/nvim/vimrc\" | source \${MYVIMRC}' \${PREFIX}/bin/vim"
-  alias v="nvim \$(fzf)"
-  alias vi="nvim"
-  alias vimdiff="nvim -d"
-elif command -v vim >/dev/null 2>&1; then
-  alias vless="vim -u \${PREFIX}/share/vim/vim80/macros/less.vim"
-  alias suvim="sudo -E vim"
-  alias v="vim \$(fzf)"
-  alias vi="vim"
-  alias vimdiff="vim -d"
-fi
-
 # Tmux
 if command -v tmux >/dev/null 2>&1; then
   alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/config"'

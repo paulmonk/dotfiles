@@ -5,19 +5,24 @@
 #------------------------------------------------------------------------------
 # Disable correction.
 alias ack="nocorrect ack"
+alias ag="nocorrect ag"
 alias cd="nocorrect cd"
 alias cp="nocorrect cp"
-alias ebuild="nocorrect ebuild"
 alias gcc="nocorrect gcc"
 alias gist="nocorrect gist"
-alias grep="nocorrect grep"
 alias heroku="nocorrect heroku"
 alias ln="nocorrect ln"
 alias man="nocorrect man"
 alias mkdir="nocorrect mkdir"
 alias mv="nocorrect mv"
 alias mysql="nocorrect mysql"
+alias rg="nocorrect rg"
 alias rm="nocorrect rm"
+
+# grep alias is set in colors sh config.
+alias grep="nocorrect ${aliases[grep]:-grep}"
+alias egrep="nocorrect ${aliases[egrep]:-egrep}"
+alias fgrep="nocorrect ${aliases[fgrep]:-fgrep}"
 
 # Disable globbing.
 alias fc="noglob fc"
@@ -43,7 +48,7 @@ for bin in "pwd" "jobs" "ll" "ls" "l" "fg" "history" "clear" "exit" "exa" "pass"
 done
 
 # Lists the ten most used commands.
-alias hist-stat="history 0 | awk \"{print \$2}\" | sort | uniq -c | sort -n -r | head"
+alias hist-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
 # Show PATH info in a more readable format.
 alias fpath="echo -e \${FPATH//:/\\n}"
@@ -73,19 +78,19 @@ alias sudo="sudo -E "
 alias type="type -a"
 alias x="extract"
 
+# head and tail will show as much possible without scrolling
+alias head="head -n \$((\${LINES:-12}-4))"
+alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
+
 # Alias cat to be bat.
 (( $+commands[bat] )) && alias cat=bat
 
 # Find shortcuts. If FD not available
 if ! (( $+commands[fd] )); then
-  alias f="find . -iname"
-  alias ff="find . -type f -iname"
-  alias fd="find . -type d -iname"
+  alias fd="find . -iname"
+  alias fdf="find . -type f -iname"
+  alias fdd="find . -type d -iname"
 fi
-
-# head and tail will show as much possible without scrolling
-alias h="head -n \$((\${LINES:-12}-4))"
-alias t="tail -n \$((\${LINES:-12}-4)) -s.1"
 
 # help - make this tldr.
 (( $+commands[tldr] )) && alias help="tldr"
@@ -94,6 +99,7 @@ alias t="tail -n \$((\${LINES:-12}-4)) -s.1"
 (( $+commands[hd] )) || alias hd="hexdump -C"
 
 # ls
+# ls alias is set in colors sh config.
 # If ls is set to exa. Some of these aliases will not work.
 # TODO: add checks for exa.
 alias l="ls -1A"         # Lists in one column.
@@ -117,6 +123,25 @@ if (( $+commands[systemctl] )); then
   alias jcu="journalctl --user"
   alias sc="systemctl"
   alias scu="systemctl --user"
+fi
+
+# Neovim / Vim
+if (( $+commands[nvim] )); then
+  alias vim="nvim"
+  alias suvim="sudo -E nvim"
+  alias v="nvim \$(fzf)"
+  alias vi="nvim"
+  alias vimdiff="nvim -d"
+elif (( $+commands[vim] )); then
+  alias suvim="sudo -E vim"
+  alias v="vim \$(fzf)"
+  alias vi="vim"
+  alias vimdiff="vim -d"
+fi
+if (( $+commands[fzf] )); then
+  alias v="vi \$(fzf)"
+else
+  alias v="vi"
 fi
 
 # File Download
