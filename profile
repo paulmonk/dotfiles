@@ -4,8 +4,8 @@
 # Profile
 #------------------------------------------------------------------------------
 
-PREFIX="${PREFIX:-/usr}"
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+PREFIX="/usr"
+XDG_CONFIG_HOME="${HOME}/.config"
 
 # Source exports if BASH.
 # ZSH is handled in the .zshenv

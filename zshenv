@@ -6,7 +6,7 @@
 # Don't load default zshrc
 unsetopt GLOBAL_RCS
 
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:$HOME/.config}"
+XDG_CONFIG_HOME="${HOME}/.config"
 
 # Source exports.
 if [[ -s "${XDG_CONFIG_HOME}/sh/exports" ]]; then
