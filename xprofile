@@ -27,4 +27,20 @@ if command -v numlockx >/dev/null 2>&1; then
   numlockx &
 fi
 
+# Set background
+if command -v nitrogen >/dev/null 2>&1; then
+  nitrogen --restore &
+fi
+
+# Composite manager
+if command -v compton >/dev/null 2>&1; then
+  compton -b &
+fi
+
+# Run dunst if not started
+pgrep -x dunst || systemctl --user start dunst &
+
+# Run redshift if not started
+pgrep -x redshift || systemctl --user start redshift-gtk &
+
 #  vim: set ft=sh ts=2 sw=2 tw=80 noet :

@@ -379,14 +379,4 @@ mode "$mode_system" {
 }
 bindsym $mod+Pause mode "$mode_system"
 
-
-#==============================================================================
-# Exec (Startup) →
-#------------------------------------------------------------------------------
-# Set background
-exec_always --no-startup-id nitrogen --restore &
-
-# Composite manager
-exec --no-startup-id compton -b --config ${XDG_CONFIG_HOME}/compton/config --xrender-sync-fence &
-
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :

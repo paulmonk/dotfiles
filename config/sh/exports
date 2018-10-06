@@ -60,7 +60,8 @@ else
   export PREFIX="/usr"
 
   # XDG
-  export XDG_RUNTIME_DIR="/run"
+  XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  export XDG_RUNTIME_DIR
 
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
@@ -95,7 +96,7 @@ else
   export DESKTOP_SESSION="gnome"
 
   # XSECURELOCK
-  export XSECURELOCK_FONT=""
+  export XSECURELOCK_FONT="-misc-roboto-medium-r-normal--0-0-0-0-p-0-iso10646-1"
   export XSECURELOCK_SHOW_HOSTNAME="0"
   export XSECURELOCK_SHOW_USERNAME="0"
   export XSECURELOCK_WANT_FIRST_KEYPRESS="1"
@@ -225,6 +226,9 @@ export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
 export PATH="${PATH}:${PYTHONUSERBASE}/bin"
 # Disable virtualenv's prompt display
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# RCM
+export RCRC="${XDG_CONFIG_HOME}/rcm/rcrc"
 
 # Readline
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"

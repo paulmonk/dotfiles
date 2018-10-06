@@ -6,7 +6,7 @@ pre_lock() {
 }
 
 post_lock() {
-  compton &
+  compton -b &
 }
 
 stop_vpn() {

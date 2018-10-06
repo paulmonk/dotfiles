@@ -9,12 +9,12 @@ XDG_CONFIG_HOME="${HOME}/.config"
 
 # Source exports if BASH.
 # ZSH is handled in the .zshenv
-if [ -n "${BASH}" ] && [ -x "${XDG_CONFIG_HOME}/sh/exports" ]; then
+if [ -n "${BASH}" ] && [ -s "${XDG_CONFIG_HOME}/sh/exports" ]; then
   # shellcheck source=/dev/null
   . "${XDG_CONFIG_HOME}/sh/exports"
 
   # . bashrc if bash.
-  if [ -x "${XDG_CONFIG_HOME}/bash/bashrc" ]; then
+  if [ -s "${XDG_CONFIG_HOME}/bash/bashrc" ]; then
     # shellcheck source=/dev/null
     . "${XDG_CONFIG_HOME}/bash/bashrc"
   fi

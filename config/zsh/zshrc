@@ -20,28 +20,28 @@
 #-------------------------
 # Load antigen
 if [[ -s "${ZDOTDIR}/plugins" ]]; then
-    # Antigen
-    export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
-    export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
-    export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
-    export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
+  # Antigen
+  export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
+  export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
+  export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
+  export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
 
-    # Create antigen dirs if they do not exist.
-    [[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
-    [[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
+  # Create antigen dirs if they do not exist.
+  [[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
+  [[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
 
-    antigen_repo_dir="${ADOTDIR}/repo"
-    antigen_init_file="${antigen_repo_dir}/antigen.zsh"
-    antigen_status=1
-    if [[ ! -f "${antigen_init_file}" ]]; then
-        git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" || antigen_status=0
-    fi
-    if [[ ${antigen_status} == 1 ]]; then
-        source "${antigen_init_file}"
-        antigen init "${ZDOTDIR}/plugins"
-    else
-        echo "Antigen install failed, no plugins available."
-    fi
+  antigen_repo_dir="${ADOTDIR}/repo"
+  antigen_init_file="${antigen_repo_dir}/antigen.zsh"
+  antigen_status=0
+  if [[ ! -f "${antigen_init_file}" ]]; then
+    git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" && antigen_status=1
+  fi
+  if [[ ${antigen_status} == 1 ]]; then
+    source "${antigen_init_file}"
+    antigen init "${ZDOTDIR}/plugins"
+  else
+    echo "Antigen install failed, no plugins available."
+  fi
 fi
 
 
@@ -70,41 +70,42 @@ fi
 # necessary, but gives you an easy way to stop the autoloading of a
 # particular shell function). $fpath should not be empty for this to work.
 if [[ -d "${ZDOTDIR}/functions" ]]; then
-    fpath=(
-        ${ZDOTDIR}/functions
-        ${fpath}
-    )
+  fpath=(
+    ${ZDOTDIR}/functions
+    ${fpath}
+  )
 fi
 for func in $^fpath/*(N-.x:t); do
-    autoload -Uz "${func}";
+  autoload -Uz "${func}";
 done
 
 
-# ZSH Commands Conf
-#-------------------------
+# ZSH Commands
 # Source all shell command specific config
+#-------------------------
 if [[ -d "${ZDOTDIR}/commands" ]]; then
-    for bin in ${ZDOTDIR}/commands/*; do
-        if (( $+commands[$bin] )) && [[ -s "${bin}" ]]; then
-            source "${bin}";
-        fi
-    done
+  for bin in ${ZDOTDIR}/commands/*; do
+    cmd=$(basename "${bin}")
+    if (( $+commands[$cmd] )) && [[ -s "${bin}" ]]; then
+      source "${bin}";
+    fi
+  done
 fi
 
 
 # ZSH Completions
 #-------------------------
 if [[ -d "${ZDOTDIR}/completions" ]]; then
+  fpath=(
+    ${ZDOTDIR}/completions
+    ${fpath}
+  )
+  if [[ "$(uname -s)" == "Darwin" ]]; then
     fpath=(
-        ${ZDOTDIR}/completions
-        ${fpath}
+      ${PREFIX}/share/zsh/site-functions
+      ${fpath}
     )
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        fpath=(
-            ${PREFIX}/share/zsh/site-functions
-            ${fpath}
-        )
-    fi
+  fi
 fi
 
 # Load completions and bash completions
