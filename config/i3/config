@@ -294,12 +294,6 @@ client.unfocused         $base02  $base02  $base1  $base01
 client.urgent            $magenta $magenta $base3  $red
 
 bar {
-    position          top
-    separator_symbol  " | "
-    status_command    i3status -c "${XDG_CONFIG_HOME}/i3/i3status.conf"
-    tray_output       primary
-    tray_padding      5
-
     colors {
         background          $base03
         statusline          $base2
@@ -310,6 +304,10 @@ bar {
         inactive_workspace  $base3     $base1     $base03
         urgent_workspace    $magenta   $magenta   $base3
     }
+    position          top
+    separator_symbol  " | "
+    status_command    py3status -c "${XDG_CONFIG_HOME}/i3/i3status.conf" --dbus-notify
+    tray_output       none
 }
 
 #==============================================================================
