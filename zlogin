@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 
-# shellcheck disable=SC1035,SC2148
-
 #------------------------------------------------------------------------------
 # .zlogin
 # Executes commands at login post-zshrc

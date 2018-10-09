@@ -4,9 +4,6 @@
 # Profile
 #------------------------------------------------------------------------------
 
-PREFIX="/usr"
-XDG_CONFIG_HOME="${HOME}/.config"
-
 # Source exports if BASH.
 # ZSH is handled in the .zshenv
 if [ -n "${BASH}" ] && [ -s "${XDG_CONFIG_HOME}/sh/exports" ]; then

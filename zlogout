@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 
-# shellcheck disable=SC2148
-#
 #------------------------------------------------------------------------------
 # zlogout
 # Executes commands at logout

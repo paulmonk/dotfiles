@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 
-# shellcheck source=/dev/null
-
 #------------------------------------------------------------------------------
 # .zshrc is sourced in interactive shells. It should contain commands to set
 # up aliases, functions, options, key bindings, etc.
@@ -10,8 +8,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-
-# Zsh Opts
+# Opts
 #-------------------------
 [[ -s "${XDG_CONFIG_HOME}/zsh/opts" ]] && source "${XDG_CONFIG_HOME}/zsh/opts"
 
@@ -19,7 +16,7 @@
 # Plugins
 #-------------------------
 # Load antigen
-if [[ -s "${ZDOTDIR}/plugins" ]]; then
+if [[ -s "${XDG_CONFIG_HOME}/zsh/plugins" ]]; then
   # Antigen
   export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
   export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
@@ -38,7 +35,7 @@ if [[ -s "${ZDOTDIR}/plugins" ]]; then
   fi
   if [[ ${antigen_status} == 1 ]]; then
     source "${antigen_init_file}"
-    antigen init "${ZDOTDIR}/plugins"
+    antigen init "${XDG_CONFIG_HOME}/zsh/plugins"
   else
     echo "Antigen install failed, no plugins available."
   fi
@@ -54,13 +51,12 @@ fi
 
 # ZSH Keybindings
 #-------------------------
-[[ -s "${ZDOTDIR}/keybindings" ]] && source "${ZDOTDIR}/keybindings"
+[[ -s "${XDG_CONFIG_HOME}/zsh/keybindings" ]] && source "${XDG_CONFIG_HOME}/zsh/keybindings"
 
 
 # ZSH Aliases
 #-------------------------
-[[ -s "${ZDOTDIR}/aliases" ]] && source "${ZDOTDIR}/aliases"
-[[ -s "${ZDOTDIR}/aliases.local" ]] && source "${ZDOTDIR}/aliases.local"
+[[ -s "${XDG_CONFIG_HOME}/zsh/aliases" ]] && source "${XDG_CONFIG_HOME}/zsh/aliases"
 
 
 # ZSH Functions
@@ -69,9 +65,9 @@ fi
 # symlinks) that have the executable bit on (the executable bit is not
 # necessary, but gives you an easy way to stop the autoloading of a
 # particular shell function). $fpath should not be empty for this to work.
-if [[ -d "${ZDOTDIR}/functions" ]]; then
+if [[ -d "${XDG_CONFIG_HOME}/zsh/functions" ]]; then
   fpath=(
-    ${ZDOTDIR}/functions
+    ${XDG_CONFIG_HOME}/zsh/functions
     ${fpath}
   )
 fi
@@ -83,8 +79,8 @@ done
 # ZSH Commands
 # Source all shell command specific config
 #-------------------------
-if [[ -d "${ZDOTDIR}/commands" ]]; then
-  for bin in ${ZDOTDIR}/commands/*; do
+if [[ -d "${XDG_CONFIG_HOME}/zsh/commands" ]]; then
+  for bin in ${XDG_CONFIG_HOME}/zsh/commands/*; do
     cmd=$(basename "${bin}")
     if (( $+commands[$cmd] )) && [[ -s "${bin}" ]]; then
       source "${bin}";
@@ -95,9 +91,9 @@ fi
 
 # ZSH Completions
 #-------------------------
-if [[ -d "${ZDOTDIR}/completions" ]]; then
+if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
   fpath=(
-    ${ZDOTDIR}/completions
+    ${XDG_CONFIG_HOME}/zsh/completions
     ${fpath}
   )
   if [[ "$(uname -s)" == "Darwin" ]]; then
