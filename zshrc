@@ -29,9 +29,9 @@ if [[ -s "${XDG_CONFIG_HOME}/zsh/plugins" ]]; then
 
   antigen_repo_dir="${ADOTDIR}/repo"
   antigen_init_file="${antigen_repo_dir}/antigen.zsh"
-  antigen_status=0
+  antigen_status=1
   if [[ ! -f "${antigen_init_file}" ]]; then
-    git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" && antigen_status=1
+    git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" || antigen_status=0
   fi
   if [[ ${antigen_status} == 1 ]]; then
     source "${antigen_init_file}"

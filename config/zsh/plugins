@@ -20,7 +20,7 @@ EOBUNDLES
 
 # Set theme
 antigen theme "geometry-zsh/geometry"
-source "${ZDOTDIR}/themes/geometry"
+source "${XDG_CONFIG_HOME}/zsh/themes/geometry"
 
 # Tell Antigen that you're done.
 antigen apply

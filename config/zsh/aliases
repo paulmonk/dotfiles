@@ -55,7 +55,7 @@ alias fpath="echo -e \${FPATH//:/\\n}"
 alias path="echo -e \${PATH//:/\\n}"
 
 # Reload zshrc.
-alias zreload="source \${ZDOTDIR}/.zshrc && echo 'Success!'"
+alias zreload="source \${HOME}/.zshrc && echo '✱ ~/.zshrc reloaded'"
 
 
 # General aliases
