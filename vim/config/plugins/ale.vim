@@ -44,7 +44,7 @@ let g:ale_fix_on_save = 1
 
 " Set the ale fixers for specfic filetypes
 let g:ale_fixers = {
-\   'javascript': ['prettier-eslint'],
+\   'javascript': ['prettier'],
 \   'python': ['isort', 'black'],
 \   'sh': ['shfmt']
 \}
@@ -63,8 +63,8 @@ let g:ale_dockerfile_hadolint_use_docker = 'maybe'
 " Javascript
 "------------------------------
 " Prettier.
-let g:ale_javascript_prettier_eslint_use_global = 1
-let g:ale_javascript_prettier_eslint_options = '--single-quote --no-bracket-spacing'
+let g:ale_javascript_prettier_use_global = 1
+let g:ale_javascript_prettier_options = '--single-quote --no-bracket-spacing'
 
 " Do not lint or fix minified files.
 let g:ale_pattern_options = {
