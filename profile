@@ -11,9 +11,9 @@ if [ -n "${BASH}" ] && [ -s "${XDG_CONFIG_HOME}/sh/exports" ]; then
   . "${XDG_CONFIG_HOME}/sh/exports"
 
   # . bashrc if bash.
-  if [ -s "${XDG_CONFIG_HOME}/bash/bashrc" ]; then
+  if [ -s "${HOME}/.bashrc" ]; then
     # shellcheck source=/dev/null
-    . "${XDG_CONFIG_HOME}/bash/bashrc"
+    . "${HOME}/.bashrc"
   fi
 fi
 
