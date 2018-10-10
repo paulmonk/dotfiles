@@ -1,4 +1,2 @@
 #!/bin/sh
-if command -v nvim || command -v vim; then
-  cd "${HOME}/.vim" && make install
-fi
+cd "${HOME}/.vim" && make install

@@ -1,6 +1,4 @@
 #!/bin/sh
-lesskey_dir="${XDG_CONFIG_HOME:-$HOME/.config}/less/lesskey"
-
-if command -v lesskey && [ -f "${lesskey_dir}/output" ]; then
-  lesskey -o "${lesskey_dir}/output" "${lesskey_dir}/input"
+if command -v lesskey && [ ! -f "${XDG_CONFIG_HOME}/less/lesskey/output" ]; then
+  lesskey -o "${XDG_CONFIG_HOME}/less/lesskey/output" "${XDG_CONFIG_HOME}/less/lesskey/input"
 fi

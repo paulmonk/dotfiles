@@ -1,2 +1,2 @@
 #!/bin/sh
-mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/pg"
+mkdir -p "${XDG_CACHE_HOME}/pg"
