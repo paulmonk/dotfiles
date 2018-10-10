@@ -75,6 +75,7 @@ alias md="mkdir -p"
 alias o="open"
 alias p="${(z)PAGER}"
 alias type="type -a"
+alias v="vi"
 alias x="extract"
 
 # head and tail will show as much possible without scrolling
@@ -124,12 +125,17 @@ if (( $+commands[systemctl] )); then
   alias scu="systemctl --user"
 fi
 
+# NeoMutt / Mutt
+if (( $+commands[neomutt] )); then
+  alias mutt="neomutt"
+fi
+
 # Neovim / Vim
 if (( $+commands[nvim] )); then
-  alias vim="nvim"
   alias suvim="sudo -E nvim"
   alias v="nvim \$(fzf)"
   alias vi="nvim"
+  alias vim="nvim"
   alias vimdiff="nvim -d"
 elif (( $+commands[vim] )); then
   alias suvim="sudo -E vim"
@@ -139,8 +145,6 @@ elif (( $+commands[vim] )); then
 fi
 if (( $+commands[fzf] )); then
   alias v="vi \$(fzf)"
-else
-  alias v="vi"
 fi
 
 # File Download
@@ -158,8 +162,8 @@ for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
     else
       alias open="${opener}";
     fi
-  break;
- fi
+    break;
+  fi
 done
 
 

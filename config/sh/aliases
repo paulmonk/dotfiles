@@ -7,11 +7,6 @@ if command -v mysql >/dev/null 2>&1; then
   alias mysql='mysql --defaults-extra-file="${XDG_CONFIG_HOME}/mysql/config"'
 fi
 
-# NeoMutt
-if command -v neomutt >/dev/null 2>&1; then
-  alias mutt="neomutt"
-fi
-
 # Tmux
 if command -v tmux >/dev/null 2>&1; then
   alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/config"'

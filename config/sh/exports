@@ -3,10 +3,6 @@
 #------------------------------------------------------------------------------
 # This file contains most of our environment exports.
 #------------------------------------------------------------------------------
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_CACHE_HOME="${HOME}/.cache"
-export XDG_DATA_HOME="${HOME}/.local/share"
-
 # macOS
 if [ "$(uname -s)" = "Darwin" ]; then
   # Prefix
@@ -56,13 +52,6 @@ if [ "$(uname -s)" = "Darwin" ]; then
   MAKEFLAGS="-j $(sysctl -n hw.ncpu)"
   export MAKEFLAGS
 else
-  # Prefix
-  export PREFIX="/usr"
-
-  # XDG
-  XDG_RUNTIME_DIR="/run/user/$(id -u)"
-  export XDG_RUNTIME_DIR
-
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
   export TERMINAL="${PREFIX}/bin/sakura"
@@ -103,11 +92,11 @@ else
 
   # Zeal: https://github.com/zealdocs/zeal/issues/172
   export QT_QPA_PLATFORMTHEME="gtk2"
-
 fi
 
 # Defaults
 export LANG="en_GB.UTF-8"
+export MAIL="mutt"
 export PAGER="less"
 
 # Defaults: Editor
@@ -123,13 +112,6 @@ else
   export MANPAGER="less -X"
 fi
 export VISUAL="${EDITOR}"
-
-# Defaults: Mail
-if command -v neomutt >/dev/null 2>&1; then
-  export MAIL="neomutt"
-else
-  export MAIL="mutt"
-fi
 
 # Local Bin
 export PATH="${HOME}/.local/bin:${PATH}"
