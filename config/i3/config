@@ -306,8 +306,7 @@ bar {
     }
     position          top
     separator_symbol  " | "
-    status_command    py3status -c "${XDG_CONFIG_HOME}/i3/i3status.conf" --dbus-notify
-    tray_output       primary
+    status_command    py3status --dbus-notify
 }
 
 #==============================================================================
