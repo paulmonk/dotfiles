@@ -4,14 +4,11 @@
 # FZF
 #-------------------------------------------
 
-# Contrib
+# Defaults
 #-------------------------
-# keybindings
 if [[ -s "/usr/share/fzf/key-bindings.zsh" ]]; then
   source "/usr/share/fzf/key-bindings.zsh"
 fi
-
-# completions
 if [[ -s "/usr/share/fzf/completion.zsh" ]]; then
   source "/usr/share/fzf/completion.zsh"
 fi
@@ -22,36 +19,18 @@ fi
 if (( $+commands[rg] )); then
   export FZF_DEFAULT_COMMAND="rg --hidden --files --smart-case --follow "
 elif (( $+commands[ag] )); then
-  export FZF_DEFAULT_COMMAND="ag --hidden --follow --nogroup  -g "
+  export FZF_DEFAULT_COMMAND="ag --hidden --follow --nogroup -g "
 fi
 
 # Default Opts
-_gen_fzf_default_opts() {
-  local base03="234"
-  local base02="235"
-  local base01="240"
-  local base00="241"
-  local base0="244"
-  local base1="245"
-  local base2="254"
-  local base3="230"
-  local yellow="136"
-  local orange="166"
-  local red="160"
-  local magenta="125"
-  local violet="61"
-  local blue="33"
-  local cyan="37"
-  local green="64"
-
-  # Solarized Dark color scheme
-  export FZF_DEFAULT_OPTS="
-    --color fg:-1,bg:-1,hl:${blue},fg+:${base2},bg+:${base02},hl+:${blue}
-    --color info:${yellow},prompt:${yellow},pointer:${base3},marker:${base3},spinner:${yellow}
-    --reverse --height 50% --multi
-  "
-}
-_gen_fzf_default_opts
+# Solarized Dark color scheme
+export FZF_DEFAULT_OPTS="
+  --color=bg+:#073642,bg:#002b36,spinner:#719e07,hl:#586e75
+  --color=fg:#839496,header:#586e75,info:#cb4b16,pointer:#719e07
+  --color=marker:#719e07,fg+:#839496,prompt:#719e07,hl+:#719e07
+  --history ${XDG_DATA_HOME}/fzf/history
+  --reverse --height 50% --multi
+"
 
 # Alt C:
 if (( $+commands[fd] )); then
@@ -75,10 +54,8 @@ zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
 
 
-# Completions
+# Completion
 #-------------------------
-export FZF_COMPLETION_TRIGGER=""
-
 if (( $+commands[fd] )); then
   # Use fd (https://github.com/sharkdp/fd) instead of the default find
   # command for listing path candidates.
@@ -93,3 +70,8 @@ if (( $+commands[fd] )); then
     fd --type d --hidden --follow . "${1}"
   }
 fi
+
+# Use Ctrl+T to complete with FZF
+export FZF_COMPLETION_TRIGGER=""
+bindkey '^T' fzf-completion
+bindkey '^I' ${fzf_default_completion}
