@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# fzf
+mkdir -p "${XDG_DATA_HOME}/fzf"
+
+# npm
 mkdir -p "${XDG_CACHE_HOME}/npm"
 mkdir -p "${XDG_CONFIG_HOME}/npm"
 mkdir -p "${XDG_DATA_HOME}/npm"
+
+# postgres
+mkdir -p "${XDG_CACHE_HOME}/pg"
