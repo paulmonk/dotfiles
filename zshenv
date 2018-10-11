@@ -6,6 +6,9 @@
 # Don't load default zshrc
 unsetopt GLOBAL_RCS
 
+# Dump all aliases before load.
+unalias -m '*'
+
 # Source exports.
 if [[ -s "${XDG_CONFIG_HOME}/sh/exports" ]]; then
   # shellcheck source=/dev/null
