@@ -4,59 +4,40 @@
 # ZSH Specfic Aliases
 #------------------------------------------------------------------------------
 # Disable correction.
-alias ack="nocorrect ack"
-alias ag="nocorrect ag"
-alias cd="nocorrect cd"
-alias cp="nocorrect cp"
-alias gcc="nocorrect gcc"
-alias gist="nocorrect gist"
-alias heroku="nocorrect heroku"
-alias ln="nocorrect ln"
-alias man="nocorrect man"
-alias mkdir="nocorrect mkdir"
-alias mv="nocorrect mv"
-alias mysql="nocorrect mysql"
-alias rg="nocorrect rg"
-alias rm="nocorrect rm"
-
-# grep alias is set in colors sh config.
-alias grep="nocorrect ${aliases[grep]:-grep}"
-alias egrep="nocorrect ${aliases[egrep]:-egrep}"
-alias fgrep="nocorrect ${aliases[fgrep]:-fgrep}"
+for com in "ack" "ag" "cd" "cp" "egrep" "fd" "fgrep" "gcc" "gist" "grep" "heroku" "ln" "man" "mkdir" "mv" "mysql" "psql" "rg" "rm"; do
+  alias $com="nocorrect ${aliases[$com]:-$com}"
+done
 
 # Disable globbing.
-alias fc="noglob fc"
-alias find="noglob find"
-alias ftp="noglob ftp"
-alias history="noglob history"
-alias locate="noglob locate"
-alias rake="noglob rake"
-alias rsync="noglob rsync"
-alias scp="noglob scp"
-alias sftp="noglob sftp"
+for com in "fc" "find" "ftp" "history" "locate" "rake" "rsync" "scp" "sftp"; do
+  alias $com="noglob ${aliases[$com]:-$com}"
+done
 
 # Safety first.
-alias rm="${aliases[rm]:-rm} -i"
-alias mv="${aliases[mv]:-mv} -i"
-alias cp="${aliases[cp]:-cp} -i"
-alias ln="${aliases[ln]:-ln} -i"
+for com in "cp" "ln" "mv" "rm"; do
+  alias $com="${aliases[$com]:-$com} -i"
+done
 
+# Reload zsh.
+alias zreload="source \${HOME}/.zshenv && source \${HOME}/.zshrc && echo '✱ ZSH reloaded'"
+
+# History
+# -------------------------
 # No log history.
 # Use a space at the beginning to prevent command entering history.
-for bin in "pwd" "jobs" "ll" "ls" "l" "fg" "history" "clear" "exit" "exa" "pass"; do
-  alias $bin=" ${aliases[$bin]:-$bin}";
+for com in "clear" "exa" "exit" "fg" "history" "jobs" "ls" "pass" "pwd"; do
+  alias $com=" ${aliases[$com]:-$com}";
 done
 
 # Lists the ten most used commands.
-alias hist-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+alias h="history"
+alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
+# Path
+# -------------------------
 # Show PATH info in a more readable format.
-alias fpath="echo -e \${FPATH//:/\\n}"
-alias path="echo -e \${PATH//:/\\n}"
-
-# Reload zshrc.
-alias zreload="source \${HOME}/.zshrc && echo '✱ \${HOME}/.zshrc reloaded'"
-
+alias fpath="echo ${FPATH} | tr ':' '\n' | nl"
+alias path="echo ${PATH} | tr ':' '\n' | nl"
 
 # General aliases
 # -------------------------
@@ -69,14 +50,15 @@ alias df="df -kh"
 alias du="du -kh"
 alias e="${(z)VISUAL:-${(z)EDITOR}}"
 alias g="git"
-alias h="history"
-alias hs="history | grep -i"
 alias md="mkdir -p"
 alias o="open"
 alias p="${(z)PAGER}"
 alias type="type -a"
 alias v="vi"
 alias x="extract"
+
+# Carry over aliases to the root account when using sudo
+alias sudo="sudo "
 
 # head and tail will show as much possible without scrolling
 alias head="head -n \$((\${LINES:-12}-4))"
@@ -133,13 +115,11 @@ fi
 # Neovim / Vim
 if (( $+commands[nvim] )); then
   alias suvim="sudo -E nvim"
-  alias v="nvim \$(fzf)"
   alias vi="nvim"
   alias vim="nvim"
   alias vimdiff="nvim -d"
 elif (( $+commands[vim] )); then
   alias suvim="sudo -E vim"
-  alias v="vim \$(fzf)"
   alias vi="vim"
   alias vimdiff="vim -d"
 fi
