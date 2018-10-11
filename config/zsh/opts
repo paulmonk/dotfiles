@@ -106,6 +106,10 @@ unsetopt CHECK_JOBS       # Do not report on jobs when shell exit.
 # This 'rehash' can be set to happen automatically as below.
 zstyle ':completion:*' rehash true
 
+# Cache
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ${XDG_CACHE_HOME}/zsh/completion
+
 # If you end up using a directory as argument, this will remove the trailing slash (useful in ln)
 zstyle ':completion:*' squeeze-slashes true
 
