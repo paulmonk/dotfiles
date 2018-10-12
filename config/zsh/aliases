@@ -37,8 +37,8 @@ alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 # Path
 # -------------------------
 # Show PATH info in a more readable format.
-alias fpath="echo ${FPATH} | tr ':' '\n' | nl"
-alias path="echo ${PATH} | tr ':' '\n' | nl"
+alias fpath="echo \${FPATH} | tr ':' '\n' | nl"
+alias path="echo \${PATH} | tr ':' '\n' | nl"
 
 # General aliases
 # -------------------------
