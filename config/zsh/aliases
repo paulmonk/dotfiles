@@ -4,12 +4,13 @@
 # ZSH Specfic Aliases
 #------------------------------------------------------------------------------
 # Disable correction.
-for com in "ack" "ag" "cd" "cp" "egrep" "fd" "fgrep" "gcc" "gist" "grep" "heroku" "ln" "man" "mkdir" "mv" "mysql" "psql" "rg" "rm"; do
-  alias $com="nocorrect ${aliases[$com]:-$com}"
+for com in "ack" "ag" "cd" "cp" "egrep" "fd" "find" "fgrep" "gcc" "gist" "grep" \
+  "heroku" "ln" "man" "mkdir" "mv" "mysql" "psql" "rg" "rm"; do
+    alias $com="nocorrect ${aliases[$com]:-$com}"
 done
 
 # Disable globbing.
-for com in "fc" "find" "ftp" "history" "locate" "rake" "rsync" "scp" "sftp"; do
+for com in "fc" "ftp" "history" "locate" "rake" "rsync" "scp" "sftp"; do
   alias $com="noglob ${aliases[$com]:-$com}"
 done
 
@@ -66,13 +67,6 @@ alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
 
 # Alias cat to be bat.
 (( $+commands[bat] )) && alias cat=bat
-
-# Find shortcuts. If FD not available
-if ! (( $+commands[fd] )); then
-  alias fd="find . -iname"
-  alias fdf="find . -type f -iname"
-  alias fdd="find . -type d -iname"
-fi
 
 # help - make this tldr.
 (( $+commands[tldr] )) && alias help="tldr"
