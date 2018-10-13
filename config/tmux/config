@@ -14,9 +14,16 @@ set-option -g default-command "${SHELL}"
 set-option -g default-shell "${SHELL}"
 
 # Make tmux display things in 256 colors
-set-option -g default-terminal "screen-256color"
+set-option -g default-terminal "tmux-256color"
+
+# Scrolling works as expected
+set-option -ga terminal-overrides ',*256color*:smcup@:rmcup@'
+
 # :Tc adds TrueColor support.
-set-option -g terminal-overrides 'xterm-256color:Tc'
+set-option -g terminal-overrides ',*256color:Tc'
+
+# Add cursor shapes
+set -ga terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 
 # Update the tmux environment
 # DBUS address needs updating as gpg requires it for pinentry.
@@ -202,26 +209,26 @@ bind-key -T root WheelDownPane if-shell -F -t = "#{alternate_on}" "send-keys -M"
 
 # Enable fast scrolling with Ctrl
 bind-key -T root C-WheelUpPane if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; copy-mode -e; send-keys -M"
-bind-key -Tcopy-mode-vi C-WheelUpPane   send -X halfpage-up
-bind-key -Tcopy-mode-vi C-WheelDownPane send -X halfpage-down
+bind-key -T copy-mode-vi C-WheelUpPane   send -X halfpage-up
+bind-key -T copy-mode-vi C-WheelDownPane send -X halfpage-down
 
 # Make mouse-drag work only with Ctrl
 # unbind -T root MouseDrag1Pane
 # unbind -T root MouseDragEnd1Pane
-# unbind -Tcopy-mode-vi MouseDrag1Pane
-# unbind -Tcopy-mode-vi MouseDragEnd1Pane
-# unbind -Tcopy-mode-vi M-MouseDrag1Pane
-# unbind -Tcopy-mode-vi C-MouseDrag1Pane
+# unbind -T copy-mode-vi MouseDrag1Pane
+# unbind -T copy-mode-vi MouseDragEnd1Pane
+# unbind -T copy-mode-vi M-MouseDrag1Pane
+# unbind -T copy-mode-vi C-MouseDrag1Pane
 
-bind-key -Tcopy-mode-vi MouseDrag1Pane send-keys -X begin-selection
+bind-key -T copy-mode-vi MouseDrag1Pane send-keys -X begin-selection
 # Linux
 if-shell -b '[ $(uname -s) = "Linux" ]' \
-  "bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'xsel -ib'"
+  "bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'xsel -ib'"
 # MacOS
 if-shell -b '[ $(uname -s) = "Darwin" ]' \
-  "bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'pbcopy'"
+  "bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'pbcopy'"
 
-# bind-key -Tcopy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xsel -ib --logfile $XDG_CACHE_HOME/xsel.log >/dev/null"
+# bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xsel -ib --logfile $XDG_CACHE_HOME/xsel.log >/dev/null"
 
 # bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= "#{pane_in_mode}" "copy-mode -M" "send-keys -M"' 'copy-mode -M'
 # bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= \"#{pane_in_mode}\" \"copy-mode -M\" \"send-keys -M\"' 'copy-mode -M'
