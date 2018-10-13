@@ -65,6 +65,9 @@ alias sudo="sudo "
 alias head="head -n \$((\${LINES:-12}-4))"
 alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
 
+# Set sensible rsync defaults.
+alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --human-readable --compress --partial"
+
 # Alias cat to be bat.
 (( $+commands[bat] )) && alias cat=bat
 
