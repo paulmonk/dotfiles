@@ -3,7 +3,7 @@
 
 # Paths
 # -----------
-set mailcap_path     = "~/config/mutt/etc/mailcap"
+set mailcap_path     = "${XDG_CONFIG_HOME}/mutt/etc/mailcap"
 
 # Basic
 # -----------
@@ -18,7 +18,7 @@ unset wait_key                                       # Wait for a key only if th
 
 # Colours
 # -----------
-source ~/config/mutt/etc/muttcol
+source ${XDG_CONFIG_HOME}/mutt/etc/muttcol
 
 # Composing
 # -----------
@@ -61,40 +61,7 @@ set crypt_verify_sig                                # Auto verify the signed mes
 
 # VI remappings
 # -----------
-# Moving around
-bind attach,browser,index       g   noop
-bind attach,browser,index       gg  first-entry
-bind attach,browser,index       G   last-entry
-bind pager                      g   noop
-bind pager                      gg  top
-bind pager                      G   bottom
-bind pager                      k   previous-line
-bind pager                      j   next-line
-
-# Scrolling
-bind attach,browser,pager,index \CF next-page
-bind attach,browser,pager,index \CB previous-page
-bind attach,browser,pager,index \Cu half-up
-bind attach,browser,pager,index \Cd half-down
-bind browser,pager              \Ce next-line
-bind browser,pager              \Cy previous-line
-bind index                      \Ce next-line
-bind index                      \Cy previous-line
-
-bind pager,index                d   noop
-bind pager,index                dd  delete-message
-
-# Mail & Reply
-bind index                      \Cm list-reply                   # Doesn't work currently
-
-# Threads
-bind browser,pager,index        N   search-opposite
-bind pager,index                dT  delete-thread
-bind pager,index                dt  delete-subthread
-bind pager,index                gt  next-thread
-bind pager,index                gT  previous-thread
-bind index                      za  collapse-thread
-bind index                      zA  collapse-all                 # Missing :folddisable/foldenable
+source ${XDG_CONFIG_HOME}/mutt/etc/vim-keys
 
 # General remappings
 # -----------
@@ -141,16 +108,16 @@ macro index,pager cs "<shell-escape>vdirsyncer sync fastmail_contacts<return>" "
 
 # Notmuch searching
 # -----------
-macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>read -p 'notmuch query: ' x; echo \$x >~/.cache/mutt/terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt/terms) | head -n 600 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a'\`\"<enter>" "show only messages matching a notmuch pattern"
+macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>read -p 'notmuch query: ' x; echo \$x >${XDG_CACHE_HOME}/mutt/terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ${XDG_CACHE_HOME}/mutt/terms) | head -n 600 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a'\`\"<enter>" "show only messages matching a notmuch pattern"
 macro index A "<limit>all\n" "show all messages (undo limit)"
 
 # Accounts
 # -----------
 # Shortcuts
-macro index,pager i1 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/gmail/muttrc<enter><change-folder>!<enter>'
-macro index,pager i2 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/fastmail/muttrc<enter><change-folder>!<enter>'
+macro index,pager i1 '<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/mutt/accounts/gmail/muttrc<enter><change-folder>!<enter>'
+macro index,pager i2 '<sync-mailbox><enter-command>source ${XDG_CONFIG_HOME}/mutt/accounts/fastmail/muttrc<enter><change-folder>!<enter>'
 
 # Source Primary Account
-source ~/.config/mutt/accounts/fastmail/muttrc
+source ${XDG_CONFIG_HOME}/mutt/accounts/fastmail/muttrc
 
 #  vim: set ft=muttrc ts=2 sw=2 tw=80 et :

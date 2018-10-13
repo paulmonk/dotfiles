@@ -1,15 +1,16 @@
 # Paths
 # -----------
-set folder             = "~/.local/share/mail/gmail"
-set header_cache       = "~/.cache/mutt/accounts/gmail/headers"
-set message_cachedir   = "~/.cache/mutt/accounts/gmail/bodies"
-set alias_file         = "~/.config/mutt/accounts/gmail/alias"
-set certificate_file   = "~/.config/mutt/accounts/gmail/certificates"
-set signature          = "~/.config/mutt/accounts/gmail/signature"
+set folder             = "${XDG_DATA_HOME}/mail/gmail"
+set header_cache       = "${XDG_CACHE_HOME}/mutt/accounts/gmail/headers"
+set message_cachedir   = "${XDG_CACHE_HOME}/mutt/accounts/gmail/bodies"
+set alias_file         = "${XDG_CONFIG_HOME}/mutt/accounts/gmail/alias"
+set certificate_file   = "${XDG_CONFIG_HOME}/mutt/accounts/gmail/certificates"
+set signature          = "${XDG_CONFIG_HOME}/mutt/accounts/gmail/signature"
 
 # General
 # -----------
-source "~/.config/mutt/credentials/getaccount gmail |"
+source "${XDG_CONFIG_HOME}/mutt/credentials/getaccount gmail |"
+
 set mbox_type          = Maildir
 set ssl_starttls
 set ssl_force_tls
@@ -24,11 +25,13 @@ set sendmail           = "msmtp -a gmail"
 # -----------
 unmailboxes *
 mailboxes +gmail +INBOX +Sent +Drafts +Spam +Trash
+
 macro index,pager gi "<change-folder>+INBOX<enter>" "Go to INBOX."
 macro index,pager gs "<change-folder>+Sent<enter>" "Go to Sent."
 macro index,pager gd "<change-folder>+Drafts<enter>" "Go to Drafts."
 macro index,pager gS "<change-folder>+Spam<enter>" "Go to Spam."
 macro index,pager gt "<change-folder>+Trash<enter>" "Go to Trash."
+
 set spoolfile     = "+INBOX"
 set record        = "+Sent"
 set postponed     = "+Drafts"
