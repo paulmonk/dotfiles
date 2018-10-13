@@ -125,7 +125,7 @@
 - { repo: neomutt/neomutt, on_ft: [ mail, neomuttrc ]}
 
 - { repo: cespare/vim-toml, on_ft: toml }
-- { repo: mboughaba/i3config.vim, on_ft: i3 }
+- { repo: mboughaba/i3config.vim, on_ft: i3config }
 - { repo: dag/vim-fish, on_ft: fish }
 - { repo: jstrater/mpvim, on_ft: portfile }
 - { repo: robbles/logstash.vim, on_ft: logstash }
