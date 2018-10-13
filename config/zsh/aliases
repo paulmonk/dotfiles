@@ -34,6 +34,20 @@ done
 alias h="history"
 alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
+# Open
+# -------------------------
+# Check for various OS openers. Quit as soon as we find one that works.
+for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
+  if (( $+commands[${opener}] )); then
+    if [[ "${opener}" == "cmd.exe" ]]; then
+      alias open="${opener} /c start";
+    else
+      alias open="${opener}";
+    fi
+    break;
+  fi
+done
+
 # Path
 # -------------------------
 # Show PATH info in a more readable format.
@@ -54,6 +68,7 @@ alias g="git"
 alias md="mkdir -p"
 alias o="open"
 alias p="${(z)PAGER}"
+alias r="ranger"
 alias type="type -a"
 alias v="vi"
 alias x="extract"
@@ -65,7 +80,7 @@ alias sudo="sudo "
 alias head="head -n \$((\${LINES:-12}-4))"
 alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
 
-# Set sensible rsync defaults.
+# rsync sensible defaults.
 alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --human-readable --compress --partial"
 
 # Alias cat to be bat.
@@ -132,25 +147,18 @@ if (( $+commands[fzf] )); then
   alias v="vi \$(fzf)"
 fi
 
+# Youtube DL
+if (( $+commands[youtube-dl] )); then
+  alias yt="youtube-dl --add-metadata -ic" # Download video link
+  alias yta="yt -x -f bestaudio/best" # Download only audio
+fi
+
 # File Download
 if (( $+commands[curl] )); then
   alias get="curl --continue-at - --location --progress-bar --remote-name --remote-time"
 elif (( $+commands[wget] )); then
   alias get="wget --continue --progress=bar --timestamping"
 fi
-
-# Check for various OS openers. Quit as soon as we find one that works.
-for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
-  if (( $+commands[${opener}] )); then
-    if [[ "${opener}" == "cmd.exe" ]]; then
-      alias open="${opener} /c start";
-    else
-      alias open="${opener}";
-    fi
-    break;
-  fi
-done
-
 
 # Network aliases
 # -------------------------
