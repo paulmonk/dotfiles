@@ -308,6 +308,8 @@ bar {
     position          top
     separator_symbol  " | "
     status_command    py3status --dbus-notify
+    # Tray icons may look weird as Gnome like to break things.
+    # https://github.com/i3/i3/issues/3335#issuecomment-419815719
     tray_output       primary
     tray_padding      5px
 }
