@@ -261,9 +261,10 @@ bindsym $alt+Ctrl+8 move container to workspace $ws8
 
 # Other nice fonts
 # Awesome ttf version 5 has no space, causes a bug in Pango.
+# Use the otf version: otf-font-awesome.
 # https://bugs.archlinux.org/task/56899
-# font pango: Inconsolata, Font Awesome 5 Free, Font Awesome 5 Brands 11
-font pango: Noto Sans, FontAwesome 11
+# font pango: Noto Sans, FontAwesome 11
+font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 11
 
 # Borders
 new_window pixel 2
@@ -307,6 +308,7 @@ bar {
     position          top
     separator_symbol  " | "
     status_command    py3status --dbus-notify
+    tray_output       none
 }
 
 #==============================================================================

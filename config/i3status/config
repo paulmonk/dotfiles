@@ -29,7 +29,7 @@ order += 'clock'
 
 backlight {
   brightness_delta = 10
-  cache_timeout = -1
+  cache_timeout = 1
   command = 'xbacklight'
   format = '\?color=good ☼ {level}%'
   low_tune_threshold = 10
@@ -49,12 +49,12 @@ battery_level {
 clock {
   blocks = ''
   format = '{Local}'
-  format_time = '{icon}  %Y-%m-%d %H:%M:%S  '
+  format_time = '{icon} %Y-%m-%d %H:%M:%S  '
 }
 
 diskdata {
   disk = '/dev/mapper/vgcrypt-root'
-  format = '\?color=free   {free} GB'
+  format = '\?color=free  {free} GB'
   format_space = '{value:.0f}'
   thresholds = {'free': [(0, 'bad'), (2, 'degraded'), (5, 'good')]}
 }
@@ -71,8 +71,8 @@ ethernet _first_ {
 
 file_status VPN {
   # path exists when a VPN tunnel launched by nmcli/nm-applet is active
-  cache_timeout = -1
-  format='\?color=path   VPN|'
+  cache_timeout = 5
+  format='\?color=path  VPN|'
   paths = '/proc/sys/net/ipv4/conf/tun0'
 }
 
@@ -86,7 +86,7 @@ net_rate {
 
 sysdata {
   cache_timeout = 1
-  format = '[\?color=cpu   {cpu_usage:.0f}%]      [\?color=temp   {cpu_temp:.0f}°C]      [\?color=mem   {mem_used_percent:.0f}%]'
+  format = '[\?color=cpu  {cpu_usage:.0f}%]      [\?color=temp  {cpu_temp:.0f}°C]      [\?color=mem  {mem_used_percent:.0f}%]'
   mem_unit = 'GiB'
   temp_unit = 'C'
   thresholds = {
@@ -102,9 +102,10 @@ wireless _first_ {
 }
 
 volume_status {
-  device = '@DEFAULT_SINK@'
+  cache_timeout = 1
   command = 'pamixer'
-  format = '  {percentage}%'
+  device = '@DEFAULT_SINK@'
+  format = ' {percentage}%'
   format_muted = ' MUTE'
   thresholds = [(0, 'bad'), (1, 'good'), (101, 'degraded')]
   volume_delta = 5
