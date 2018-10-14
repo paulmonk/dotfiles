@@ -24,6 +24,11 @@ function pacs!() {
   pacman -Ss "$@"
 }
 
+function aur-official() {
+  comm -12 <(pacman -Sl | grep -v ${LOGNAME} | cut -d' ' -f2 | sort) \
+    <(aur sync --list 2>/dev/null | cut -f2 | sort)
+}
+
 function aurs() {
   aur sync -sc "$@"
   post_aur
