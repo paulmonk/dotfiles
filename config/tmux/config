@@ -84,10 +84,6 @@ set-window-option -g pane-base-index 1
 # Renumber windows automatically.
 set-option -g renumber-windows on
 
-# Renumber sessions
-set-hook -g session-created "run-shell ${XDG_CONFIG_HOME}/tmux/bin/renumber-sessions"
-set-hook -g session-closed "run-shell ${XDG_CONFIG_HOME}/tmux/bin/renumber-sessions"
-
 # Super useful when using "grouped sessions" and multi-monitor setup
 # Do not use on macOS
 if-shell -b '[ ! $(uname -s) = "Darwin" ]' \
@@ -96,6 +92,17 @@ if-shell -b '[ ! $(uname -s) = "Darwin" ]' \
 # Allow copy/paste on macOS. This was fixed in tmux 2.6
 if-shell -b '[ $(uname -s) = "Darwin" ] && [ "$(echo "${TMUX_VERSION} < 2.6" | bc)" = 1 ]' \
   "set-option -g default-command 'reattach-to-user-namespace ${SHELL}'"
+
+#--------------------------------------------------------
+# hooks
+#--------------------------------------------------------
+# GPG and SSH never gets the TTY right. Let's ensure it updates.
+# https://unix.stackexchange.com/questions/280879/how-to-get-pinentry-curses-to-start-on-the-correct-tty
+set-hook -g window-pane-changed "run-shell 'gpg-connect-agent updatestartuptty /bye >/dev/null'"
+
+# Renumber sessions
+set-hook -g session-created "run-shell ${XDG_CONFIG_HOME}/tmux/bin/renumber-sessions"
+set-hook -g session-closed "run-shell ${XDG_CONFIG_HOME}/tmux/bin/renumber-sessions"
 
 #--------------------------------------------------------
 # keybindings
