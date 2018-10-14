@@ -12,6 +12,11 @@ xset dpms 500 700 900
 # Disable PC speaker beeps
 xset -b
 
+# Activate numlock
+if command -v numlockx >/dev/null 2>&1; then
+  numlockx &
+fi
+
 # Setup Gnome Keyring.
 if command -v gnome-keyring-daemon >/dev/null 2>&1; then
   eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets)"
@@ -22,11 +27,6 @@ if command -v autorandr >/dev/null 2>&1; then
   autorandr --change
 fi
 
-# Activate numlock
-if command -v numlockx >/dev/null 2>&1; then
-  numlockx &
-fi
-
 # Set background
 if command -v nitrogen >/dev/null 2>&1; then
   nitrogen --restore &
@@ -35,6 +35,16 @@ fi
 # Composite manager
 if command -v compton >/dev/null 2>&1; then
   compton -b &
+fi
+
+# USBGuard
+if command -v usbguard-applet-qt >/dev/null 2>&1; then
+  usbguard-applet-qt &
+fi
+
+# Udiskie
+if command -v udiskie >/dev/null 2>&1; then
+  udiskie &
 fi
 
 # Run dunst if not started
