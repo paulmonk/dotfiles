@@ -1,7 +1,7 @@
 
 " General Settings
 "---------------------------------------------------------
-" General 
+" General
 set mouse=nv                 " Disable mouse in command-line mode
 set modeline                 " automatically setting options from modelines
 set report=0                 " Don't report on line changes
@@ -41,8 +41,8 @@ if has('clipboard')
   set clipboard& clipboard+=unnamedplus
 endif
 
-" 
-" Wildmenu 
+"
+" Wildmenu
 " --------
 if has('wildmenu')
   set nowildmenu
@@ -56,8 +56,8 @@ if has('wildmenu')
   set wildignore+=__pycache__,*.egg-info
 endif
 
-" 
-" Vim Directories 
+"
+" Vim Directories
 " ---------------
 set undofile swapfile nobackup
 set directory=$CACHEPATH/swap//,$CACHEPATH,~/tmp,/var/tmp,/tmp
@@ -80,8 +80,8 @@ else
   set viminfo='300,<10,@50,h,n$CACHEPATH/viminfo
 endif
 
-" 
-" Tabs and Indents 
+"
+" Tabs and Indents
 " ----------------
 set textwidth=80    " Text width maximum chars before wrapping
 set expandtab       " Expand tabs to spaces.
@@ -93,8 +93,8 @@ set autoindent      " Use same indenting on new lines
 set smartindent     " Smart autoindenting on new lines
 set shiftround      " Round indent to multiple of 'shiftwidth'
 
-" 
-" Timing 
+"
+" Timing
 " ------
 set timeout ttimeout
 set timeoutlen=750  " Time out on mappings
@@ -103,8 +103,8 @@ set updatetime=1000 " Idle time to write swap and trigger CursorHold
 " Time out on key codes
 set ttimeoutlen=10
 
-" 
-" Searching 
+"
+" Searching
 " ---------
 set ignorecase      " Search ignoring case
 set smartcase       " Keep case when searching with *
@@ -117,8 +117,8 @@ set matchpairs+=<:> " Add HTML brackets to pair matching
 set matchtime=1     " Tenths of a second to show the matching paren
 set cpoptions-=m    " showmatch will wait 0.5s or until a char is typed
 
-" 
-" Behavior 
+"
+" Behavior
 " --------
 set nowrap                      " No wrap by default
 set linebreak                   " Break long lines at 'breakat'
@@ -142,8 +142,8 @@ if exists('+inccommand')
   set inccommand=nosplit
 endif
 
-" 
-" Editor UI Appearance 
+"
+" Editor UI Appearance
 " --------------------
 set noshowmode          " Don't show mode in cmd window
 set shortmess=aoOTI     " Shorten messages and don't show intro
@@ -152,6 +152,7 @@ set sidescrolloff=5     " Keep at least 5 lines left/right
 set number              " Show line numbers
 set noruler             " Disable default status ruler
 set list                " Show hidden characters
+set lazyredraw          " Do not redraw uneccessarily
 
 set showtabline=2       " Always show the tabs line
 set winwidth=30         " Minimum width for active window
@@ -184,8 +185,8 @@ if has('conceal') && v:version >= 703
   set conceallevel=2 concealcursor=niv
 endif
 
-" 
-" Folds 
+"
+" Folds
 " -----
 
 " FastFold
@@ -231,7 +232,5 @@ function! FoldText()
   let expansionString = repeat('.', w - strwidth(foldSizeStr.line.foldLevelStr.foldPercentage))
   return line . expansionString . foldSizeStr . foldPercentage . foldLevelStr
 endfunction
-
-" 
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :

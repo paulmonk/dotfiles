@@ -53,28 +53,6 @@ if dein#tap('vim-denite-z')
     \ call denite#start([{'name': 'z', 'args': [<q-args>], {'immediately': 1}}])
 endif
 
-if dein#tap('tagbar')
-  nnoremap <silent> <Leader>o   :<C-u>TagbarOpenAutoClose<CR>
-
-  " Also use h/l to open/close folds
-  let g:tagbar_map_closefold = ['h', '-', 'zc']
-  let g:tagbar_map_openfold = ['l', '+', 'zo']
-endif
-
-if dein#tap('nerdtree')
-  let g:NERDTreeMapOpenSplit = 'sv'
-  let g:NERDTreeMapOpenVSplit = 'sg'
-  let g:NERDTreeMapOpenInTab = 'st'
-  let g:NERDTreeMapOpenInTabSilent = 'sT'
-  let g:NERDTreeMapUpdirKeepOpen = '<BS>'
-  let g:NERDTreeMapOpenRecursively = 't'
-  let g:NERDTreeMapCloseChildren = 'T'
-  let g:NERDTreeMapToggleHidden = '.'
-
-  nnoremap <silent> <LocalLeader>e :<C-u>NERDTreeToggle<CR>
-  nnoremap <silent> <LocalLeader>a :<C-u>NERDTreeFind<CR>
-endif
-
 if dein#tap('neosnippet.vim')
   imap <expr><C-o> neosnippet#expandable_or_jumpable()
     \ ? "\<Plug>(neosnippet_expand_or_jump)" : "\<ESC>o"
@@ -229,23 +207,6 @@ if dein#tap('phpcomplete-extended')
     \   nmap <silent> <unique> K <Plug>(phpcomplete-extended-doc)
     \ | nmap <silent> <unique> <C-]> <Plug>(phpcomplete-extended-goto)
     \ | nmap <silent> <unique> <Leader>a <Plug>(phpcomplete-extended-add-use)
-endif
-
-if dein#tap('vimagit')
-  nnoremap <silent> mg :Magit<CR>
-
-  " autocmd MyAutoCmd FileType magit
-  "   \ nnoremap <silent><buffer> <CR> za
-endif
-
-if dein#tap('vim-easygit')
-  nnoremap <silent> <leader>gd :Gdiff<CR>
-  nnoremap <silent> <leader>gD :Gdiffoff<CR>
-  nnoremap <silent> <leader>gc :Gcommit<CR>
-  nnoremap <silent> <leader>gb :Gblame<CR>
-  nnoremap <silent> <leader>gB :Gbrowse<CR>
-  nnoremap <silent> <leader>gS :Gstatus<CR>
-  nnoremap <silent> <leader>gp :Gpush<CR>
 endif
 
 if dein#tap('undotree')

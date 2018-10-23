@@ -1,8 +1,7 @@
-
 " Key-mappings
 "---------------------------------------------------------
 
-" Non-standard 
+" Non-standard
 " ------------
 
 " Window-control prefix
@@ -14,12 +13,10 @@ map <Nul> <C-Space>
 map! <Nul> <C-Space>
 
 " Disable arrow movement, resize splits instead.
-if get(g:, 'elite_mode')
-  nnoremap <Up>    :resize +2<CR>
-  nnoremap <Down>  :resize -2<CR>
-  nnoremap <Left>  :vertical resize +2<CR>
-  nnoremap <Right> :vertical resize -2<CR>
-endif
+nnoremap <Up>    :resize +2<CR>
+nnoremap <Down>  :resize -2<CR>
+nnoremap <Left>  :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
 
 " Double leader key for toggling visual-line mode
 nmap <silent> <Leader><Leader> V
@@ -53,7 +50,7 @@ nmap <Tab>  <C-w>w
 nmap <S-Tab>  <C-w>W
 
 "
-" Global niceties 
+" Global niceties
 " ---------------
 
 " Start an external command with a single bang
@@ -117,8 +114,8 @@ cnoremap <C-n>  <Down>
 cnoremap <Up>   <C-p>
 cnoremap <Down> <C-n>
 
-" 
-" File operations 
+"
+" File operations
 " ---------------
 
 " When pressing <leader>cd switch to the directory of the open buffer
@@ -135,8 +132,8 @@ cnoremap <silent><C-s> <C-u>write<CR>
 " http://forrst.com/posts/Use_w_to_sudo_write_a_file_with_Vim-uAN
 cmap W!! w !sudo tee % >/dev/null
 
-" 
-" Editor UI 
+"
+" Editor UI
 " ---------
 
 " I like to :quit with 'q', shrug.
@@ -171,9 +168,8 @@ nnoremap <silent> <C-S-Tab> :<C-U>tabprevious<CR>
 let g:lasttab = 1
 nmap <silent> \\ :execute 'tabn '.g:lasttab<CR>
 
-
-" 
-" Totally Custom 
+"
+" Totally Custom
 " --------------
 
 " Remove spaces at the end of lines
@@ -189,49 +185,6 @@ function! s:get_selection(cmdtype) "
   let @/ = substitute(escape(@s, '\'.a:cmdtype), '\n', '\\n', 'g')
   let @s = temp
 endfunction "
-
-" Background dark/light toggle and contrasts
-nnoremap <silent><Leader>b :<C-u>call <SID>toggle_background()<CR>
-nmap <silent> s- :<c-u>call <SID>toggle_contrast(-v:count1)<cr>
-nmap <silent> s= :<c-u>call <SID>toggle_contrast(+v:count1)<cr>
-
-function! s:toggle_background()
-  " Cater for color scheme
-  if ! exists('g:colors_name')
-    echomsg 'No colorscheme set'
-    return
-  endif
-  let l:scheme = g:colors_name
-
-  if l:scheme =~# 'dark' || l:scheme =~# 'light'
-    " Rotate between different theme backgrounds
-    execute 'colorscheme' (l:scheme =~# 'dark'
-        \ ? substitute(l:scheme, 'dark', 'light', '')
-        \ : substitute(l:scheme, 'light', 'dark', ''))
-  else
-    execute 'set background='.(&background ==# 'dark' ? 'light' : 'dark')
-    if ! exists('g:colors_name')
-      execute 'colorscheme' l:scheme
-      echomsg 'The colorscheme `'.l:scheme
-        \ .'` doesn''t have background variants!'
-    else
-      echo 'Set colorscheme to '.&background.' mode'
-    endif
-  endif
-endfunction
-
-function! s:toggle_contrast(delta)
-  let l:scheme = ''
-  if g:colors_name =~# 'solarized8'
-    let l:schemes = map(['_low', '_flat', '', '_high'],
-      \ '"solarized8_".(&background).v:val')
-    let l:contrast = ((a:delta + index(l:schemes, g:colors_name)) % 4 + 4) % 4
-    let l:scheme = l:schemes[l:contrast]
-  endif
-  if l:scheme !=# ''
-    execute 'colorscheme' l:scheme
-  endif
-endfunction
 
 " Location list movement
 nmap <Leader>j :lnext<CR>
@@ -259,6 +212,7 @@ noremap  mj :m+<CR>
 nmap <silent> <Leader>se :<C-u>execute 'SessionSave' fnamemodify(resolve(getcwd()), ':p:gs?/?_?')<CR>
 nmap <silent> <Leader>os :<C-u>execute 'source '.g:session_directory.'/'.fnamemodify(resolve(getcwd()), ':p:gs?/?_?').'.vim'<CR>
 
+" macOS
 if has('mac')
   " Open the macOS dictionary on current word
   nmap <Leader>? :!open dict://<cword><CR><CR>
@@ -276,22 +230,20 @@ if has('mac')
     autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
       \ nmap <silent><buffer> K :!open -g dash://"<cword>"&<CR><CR>
   endif
-
-" Use Zeal on Linux for context help
-elseif executable('zeal')
-  autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
-    \ nmap <silent><buffer> K :!zeal --query "<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
-  autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
-    \ nmap <silent><buffer> K :!zeal --query "<cword>"&<CR><CR>
+else
+  " Use Zeal for context help
+  if executable('zeal')
+    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
+      \ nmap <silent><buffer> K :!zeal --query "<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
+    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
+      \ nmap <silent><buffer> K :!zeal --query "<cword>"&<CR><CR>
+  endif
 endif
 
-" 
-
-" Display diff from last save 
+" Display diff from last save
 command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-" 
 
-" Append modeline to EOF 
+" Append modeline to EOF
 nnoremap <silent> <Leader>ml :call <SID>append_modeline()<CR>
 
 " Append modeline after last line in buffer
@@ -301,11 +253,9 @@ function! s:append_modeline() "
         \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
   let l:modeline = substitute(&commentstring, '%s', l:modeline, '')
   call append(line('$'), l:modeline)
-endfunction "
-" 
+endfunction
 
-" s: Windows and buffers 
-
+" s: Windows and buffers
 nnoremap <silent> [Window]v  :<C-u>split<CR>
 nnoremap <silent> [Window]g  :<C-u>vsplit<CR>
 nnoremap <silent> [Window]t  :tabnew<CR>

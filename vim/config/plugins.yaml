@@ -21,11 +21,21 @@
     let g:airline_theme = 'solarized'
 
 - repo: thinca/vim-localrc
-- repo: christoomey/vim-tmux-navigator
 - repo: junegunn/vim-peekaboo
 - repo: tpope/vim-sleuth
 - repo: tpope/vim-fugitive
 - repo: itchyny/vim-parenmatch
+- repo: cskeeters/vim-smooth-scroll
+- repo: christoomey/vim-tmux-navigator
+
+# Cursor-shape
+- repo: wincent/terminus
+
+# Disable hlsearch when done.
+- repo: romainl/vim-cool
+
+# QuickFix / Loclist Improvements
+- repo: romainl/vim-qf
 
 - repo: itchyny/vim-cursorword
   hook_add: |
@@ -134,7 +144,6 @@
   hook_source: |
     let g:javascript_plugin_jsdoc = 1
     let g:javascript_plugin_flow = 1
-    highlight! link jsFutureKeys PreProc
 
 - repo: othree/jspc.vim
   on_ft:
@@ -222,10 +231,6 @@
 - repo: StanAngeloff/php.vim
   on_ft: php
 
-- repo: shawncplus/phpcomplete.vim
-  on_ft: php
-  on_i: 1
-
 # Portfile
 - repo: jstrater/mpvim
   on_ft: portfile
@@ -282,6 +287,9 @@
 # ==========================================
 # Commands
 # --------
+- repo: haya14busa/dein-command.vim
+  on_cmd: Dein
+
 - repo: tpope/vim-commentary
   on_map: <Plug>Commentary
 
@@ -342,15 +350,6 @@
   hook_source: |
     source $VIMPATH/config/plugins/far.vim
 
-- repo: mzlogin/vim-markdown-toc
-  on_cmd:
-    - GenTocGFM
-    - GenTocRedcarpet
-    - GenTocGitLab
-    - UpdateToc
-  hook_source: |
-    let g:vmt_auto_update_on_save = 0
-
 - repo: easymotion/vim-easymotion
   on_map:
     n: <Plug>
@@ -367,6 +366,32 @@
     - Thesaurus
   hook_source: |
     let g:online_thesaurus_map_keys = 0
+
+# Markdown
+# See Previews
+- repo: euclio/vim-markdown-composer
+  if: executable('cargo')
+  build: |
+    if has('nvim')
+      cargo build --release
+    else
+      cargo build --release --no-default-features --features json-rpc
+    endif
+  on_cmd:
+    - ComposerStart
+    - ComposerUpdate
+    - ComposerOpen
+    - ComposerJob
+
+# Gen TOC
+- repo: mzlogin/vim-markdown-toc
+  on_cmd:
+    - GenTocGFM
+    - GenTocRedcarpet
+    - GenTocGitLab
+    - UpdateToc
+  hook_source: |
+    let g:vmt_auto_update_on_save = 0
 
 # ==========================================
 # Interface
@@ -390,6 +415,7 @@
 - repo: airblade/vim-gitgutter
   on_path: .*
   hook_source: |
+    let g:gitgutter_grep = 'rg'
     let g:gitgutter_map_keys = 0
     let g:gitgutter_sign_added = '+'
     let g:gitgutter_sign_modified = '*'
@@ -397,10 +423,6 @@
     let g:gitgutter_sign_removed_first_line = '--'
     let g:gitgutter_sign_modified_removed = '*-'
     let g:gitgutter_sh = $SHELL
-    highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
-    highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
-    highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-    highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
 
 - repo: nathanaelkane/vim-indent-guides
   on_cmd:
@@ -433,8 +455,6 @@
     let g:bookmark_auto_save_file = $DATAPATH.'/bookmarks'
     let g:bookmark_no_default_key_mappings = 1
     let g:bookmark_disable_ctrlp = 1
-    highlight! BookmarkSign            ctermfg=12 guifg=#4EA9D7
-    highlight! BookmarkAnnotationSign  ctermfg=11 guifg=#EACF49
 
 - repo: rhysd/committia.vim
   on_path: COMMIT_EDITMSG
@@ -462,7 +482,9 @@
     call echodoc#enable()
 
 - repo: mattn/emmet-vim
-  on_i: 1
+  on_event:
+    - autocmd
+    - InsertEnter
   on_ft:
     - html
     - css
@@ -476,7 +498,9 @@
     let g:user_emmet_mode = 'i'
 
 - repo: Raimondi/delimitMate
-  on_i: 1
+  on_event:
+    - autocmd
+    - InsertEnter
   hook_source: |
     let g:delimitMate_expand_cr = 1
     let g:delimitMate_excluded_ft = 'html, htmldjango, htmljinja'
@@ -503,7 +527,9 @@
 - repo: ternjs/tern_for_vim
   build: npm install
   if: executable('npm')
-  on_i: 1
+  on_event:
+    - autocmd
+    - InsertEnter
   on_ft:
     - javascript
     - javascript.jsx
@@ -515,6 +541,13 @@
     let g:tern_show_signature_in_pum = 0
   hook_post_source: |
     autocmd MyAutoCmd FileType javascript setlocal omnifunc=tern#Complete
+
+# PHP
+- repo: shawncplus/phpcomplete.vim
+  on_ft: php
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # Python
 - repo: davidhalter/jedi-vim
@@ -533,7 +566,7 @@
     let g:jedi#use_tag_stack = 0
 
 # Only NeoVim
-#------------------------------
+# ------------------------------
 - repo: Shougo/deoplete.nvim
   depends: context_filetype.vim
   if: has('nvim')
@@ -553,21 +586,28 @@
   if: has('nvim') && executable('go')
   build: make
   on_ft: go
-  on_i: 1
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # Haskell
 - repo: eagletmt/neco-ghc
   on_ft: haskell
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # Javascript
 - repo: carlitux/deoplete-ternjs
   build: npm install -g tern
   if: has('nvim') && executable('npm')
-  on_i: 1
   on_ft:
     - javascript
     - javascript.jsx
     - jsx
+  on_event:
+    - autocmd
+    - InsertEnter
   hook_source: |
     let g:tern_request_timeout = 1
     let g:tern_show_signature_in_pum = 0
@@ -576,29 +616,42 @@
 - repo: zchee/deoplete-jedi
   if: has('nvim')
   on_ft: python
-  on_i: 1
+  on_event:
+    - autocmd
+    - InsertEnter
   hook_source: |
     autocmd MyAutoCmd FileType python setlocal omnifunc=
 
 # Ruby
 - repo: fishbullet/deoplete-ruby
   on_ft: ruby
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # Tmux
 - repo: wellle/tmux-complete.vim
   if: has('nvim')
-  on_i: 1
   on_ft: tmux
+  on_event:
+    - autocmd
+    - InsertEnter
   hook_add: |
     let g:tmuxcomplete#trigger = ''
 
 # Vim
 - repo: Shougo/neco-vim
   on_ft: vim
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # ZSH
 - repo: zchee/deoplete-zsh
   on_ft: zsh
+  on_event:
+    - autocmd
+    - InsertEnter
 
 # ==========================================
 # Denite

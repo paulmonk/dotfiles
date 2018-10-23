@@ -1,4 +1,3 @@
-
 " Goyo
 " ----
 
@@ -19,7 +18,6 @@ function! s:goyo_enter()
   Limelight
 endfunction
 
-" 
 " s:goyo_leave() "
 " Enable visuals when leaving Goyo mode
 function! s:goyo_leave()
@@ -36,13 +34,13 @@ function! s:goyo_leave()
   " De-activate Limelight
   Limelight!
 endfunction
-" 
 
-" Goyo Commands 
-autocmd! User GoyoEnter
-autocmd! User GoyoLeave
-autocmd  User GoyoEnter nested call <SID>goyo_enter()
-autocmd  User GoyoLeave nested call <SID>goyo_leave()
-" 
+" Goyo Commands
+augroup goyo
+    autocmd! User GoyoEnter
+    autocmd! User GoyoLeave
+    autocmd  User GoyoEnter nested call <SID>goyo_enter()
+    autocmd  User GoyoLeave nested call <SID>goyo_leave()
+augroup end
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :

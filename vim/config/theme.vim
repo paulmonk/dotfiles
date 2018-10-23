@@ -1,6 +1,5 @@
 " Theme
 " -----
-
 " Enable 256 color terminal
 set t_Co=256
 
@@ -32,14 +31,6 @@ highlight! link pythonIndentError NONE
 highlight! link ExtraWhitespace  SpellBad
 highlight! WarningMsg ctermfg=100 guifg=#CCC566
 
-" Plugin: vim-gitgutter
-" ---------------------------------------------------------
-highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
-highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
-highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-
-
 " Plugin: denite
 " ---------------------------------------------------------
 highlight! clear WildMenu
@@ -50,17 +41,24 @@ highlight! link deniteMatchedRange Underlined
 highlight! link deniteMode Comment
 highlight! link deniteSource_QuickfixPosition qfLineNr
 
-
-" Plugin: vim-operator-flashy
-" ---------------------------------------------------------
-highlight! link Flashy DiffText
-
-
 " Plugin: vim-bookmarks
 " ---------------------------------------------------------
 highlight! BookmarkSign            ctermfg=12 guifg=#4EA9D7
 highlight! BookmarkAnnotationSign  ctermfg=11 guifg=#EACF49
-"
 
+" Plugin: vim-gitgutter
+" ---------------------------------------------------------
+highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
+highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
+highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
+highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
+
+" Plugin: vim-javascript
+" ---------------------------------------------------------
+highlight! link jsFutureKeys PreProc
+
+" Plugin: vim-operator-flashy
+" ---------------------------------------------------------
+highlight! link Flashy DiffText
 
 " vim: set foldmethod=marker ts=2 sw=0 tw=80 noet :
