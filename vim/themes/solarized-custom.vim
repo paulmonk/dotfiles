@@ -1,29 +1,29 @@
 " solarized-custom
 " =========================
 
-" UI elements 
+" UI elements
 " ---------------------------------------------------------
 set showbreak=↪
 set fillchars=vert:│,fold:─
 set listchars=tab:\—\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
 
 
-" Tabline 
+" Tabline
 " ---------------------------------------------------------
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#formatter = 'jsformatter'
-" 
+"
 
-" Statusline 
+" Statusline
 " Use vim-airline
 let g:airline_theme = 'solarized'
 let g:airline_solarized_bg = 'dark'
 let g:airline#extensions#branch#symbol = ''
-" 
+"
 
-" Highlights: General GUI 
+" Highlights: General GUI
 " ---------------------------------------------------------
 " highlight! Error  term=NONE cterm=NONE
 " highlight! link WarningMsg  Comment
@@ -32,9 +32,9 @@ highlight! link pythonIndentError NONE
 " highlight! link mkdLineBreak      NONE
 highlight! link ExtraWhitespace  SpellBad
 highlight! WarningMsg ctermfg=100 guifg=#CCC566
-" 
+"
 
-" Plugin: NERDTree icons and highlights 
+" Plugin: NERDTree icons and highlights
 " ---------------------------------------------------------
 let g:NERDTreeIndicatorMapCustom = {
   \ 'Modified':  '·',
@@ -91,27 +91,18 @@ augroup nerdtree-highlights
 augroup END
 "
 
-" Plugin: Tagbar icons 
+" Plugin: Tagbar icons
 " ---------------------------------------------------------
 let g:tagbar_iconchars = ['▷', '◢']
 "
 
-" Plugin: Neomake icons 
-" ---------------------------------------------------------
-"let g:neomake_error_sign = {'text': '!', 'texthl': 'ErrorMsg'}
-"let g:neomake_warning_sign = {'text': '!', 'texthl': 'WarningSyntax'}
-"let g:neomake_message_sign = {'text': '⌂', 'texthl': 'NeomakeMessageSign'}
-"let g:neomake_info_sign = {'text': '⍞', 'texthl': 'NeomakeInfoSign'}
-""
-"highlight! WarningSyntax ctermfg=58 guifg=#7d7629
-
-" Plugin: Ale Icons 
+" Plugin: Ale Icons
 " ---------------------------------------------------------
 let g:ale_sign_error = '!'
 let g:ale_sign_warning = '!'
 let g:ale_sign_info = 'ℹ'
 
-" Plugin: GitGutter icons 
+" Plugin: GitGutter icons
 " ---------------------------------------------------------
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '*'
@@ -120,15 +111,15 @@ let g:gitgutter_sign_removed_first_line = '--'
 let g:gitgutter_sign_modified_removed = '*-'
 "
 
-" Plugin: vim-gitgutter 
+" Plugin: vim-gitgutter
 " ---------------------------------------------------------
 highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
 highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
 highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
 highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-" 
+"
 
-" Plugin: denite 
+" Plugin: denite
 " ---------------------------------------------------------
 highlight! clear WildMenu
 highlight! link WildMenu CursorLine
@@ -137,20 +128,20 @@ highlight! link deniteMatchedChar Function
 highlight! link deniteMatchedRange Underlined
 highlight! link deniteMode Comment
 highlight! link deniteSource_QuickfixPosition qfLineNr
-" 
+"
 
-" Plugin: vim-operator-flashy 
+" Plugin: vim-operator-flashy
 " ---------------------------------------------------------
 highlight! link Flashy DiffText
-" 
+"
 
-" Plugin: vim-bookmarks 
+" Plugin: vim-bookmarks
 let g:bookmark_sign = '⚐'
 highlight! BookmarkSign            ctermfg=12 guifg=#4EA9D7
 highlight! BookmarkAnnotationSign  ctermfg=11 guifg=#EACF49
-" 
+"
 
-" Plugin: vim-choosewin 
+" Plugin: vim-choosewin
 " ---------------------------------------------------------
 let g:choosewin_label = 'SDFJKLZXCV'
 let g:choosewin_overlay_enable = 1
@@ -168,6 +159,6 @@ let g:choosewin_color_overlay = {
   \ 'cterm': [ 2, 10 ], 'gui': [ '#88A2A4' ] }
 let g:choosewin_color_overlay_current = {
   \ 'cterm': [ 72, 64 ], 'gui': [ '#7BB292' ] }
-" 
+"
 
 " vim: set foldmethod=marker ts=2 sw=0 tw=80 noet :

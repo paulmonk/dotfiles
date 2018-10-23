@@ -1,4 +1,3 @@
-
 " Theme
 " -----
 
@@ -12,31 +11,56 @@ endif
 
 " GUI
 if has('gui_running')
-  set background=dark
   set lines=40
   set columns=150
 endif
 
-" THEME
-function! s:theme_reload(name)
-  let theme_path = $VIMPATH.'/themes/'.a:name.'.vim'
-  if filereadable(theme_path)
-    execute 'source' fnameescape(theme_path)
-    " Persist theme
-    call writefile([g:colors_name], s:cache)
-  endif
-endfunction
+" COLORSCHEME
+set background=dark
+execute 'colorscheme' 'solarized8'
 
-" THEME NAME
-let g:theme_name = 'solarized-custom'
-autocmd MyAutoCmd ColorScheme * call s:theme_reload(g:theme_name)
+" UI elements
+set showbreak=↪
+set fillchars=vert:│,fold:─
+set listchars=tab:\—\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
 
-" COLORSCHEME NAME
-let s:cache = $CACHEPATH.'/theme.txt'
-if ! exists('g:colors_name')
-  set background=dark
-  execute 'colorscheme'
-    \ filereadable(s:cache) ? readfile(s:cache)[0] : 'solarized8'
-endif
 
-" vim: set ts=2 sw=2 tw=80 noet :
+" Highlights: General GUI
+" ---------------------------------------------------------
+highlight! link pythonSpaceError  NONE
+highlight! link pythonIndentError NONE
+highlight! link ExtraWhitespace  SpellBad
+highlight! WarningMsg ctermfg=100 guifg=#CCC566
+
+" Plugin: vim-gitgutter
+" ---------------------------------------------------------
+highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
+highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
+highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
+highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
+
+
+" Plugin: denite
+" ---------------------------------------------------------
+highlight! clear WildMenu
+highlight! link WildMenu CursorLine
+highlight! link deniteSelectedLine Type
+highlight! link deniteMatchedChar Function
+highlight! link deniteMatchedRange Underlined
+highlight! link deniteMode Comment
+highlight! link deniteSource_QuickfixPosition qfLineNr
+
+
+" Plugin: vim-operator-flashy
+" ---------------------------------------------------------
+highlight! link Flashy DiffText
+
+
+" Plugin: vim-bookmarks
+" ---------------------------------------------------------
+highlight! BookmarkSign            ctermfg=12 guifg=#4EA9D7
+highlight! BookmarkAnnotationSign  ctermfg=11 guifg=#EACF49
+"
+
+
+" vim: set foldmethod=marker ts=2 sw=0 tw=80 noet :

@@ -114,8 +114,6 @@ if dein#load_state(s:path)
     echomsg 'Error loading config/plugins.yaml...'
     echomsg 'Caught: ' v:exception
     if has('mac') && executable('brew')
-      echoerr 'Please run: pip3 install PyYAML'
-    else
       echoerr 'Please run: pip3 install --user PyYAML'
     endif
   endtry
