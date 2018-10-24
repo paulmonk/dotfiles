@@ -102,17 +102,12 @@ nnoremap < <<_
 nnoremap <expr> gp '`['.strpart(getregtype(), 0, 1).'`]'
 
 " Navigation in command line
-cnoremap <C-h> <Home>
-cnoremap <C-l> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
-cnoremap <C-d> <C-w>
-
-" Switch history search pairs, matching my bash shell
+" Bash like keys
+cnoremap <C-a>  <Home>
+cnoremap <C-e>  <End>
+cnoremap <C-k>  <C-U>
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
-cnoremap <Up>   <C-p>
-cnoremap <Down> <C-n>
 
 "
 " File operations
