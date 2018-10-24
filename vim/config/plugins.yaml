@@ -133,6 +133,13 @@
     let g:go_highlight_operators = 1
     let g:go_snippet_engine = 'neosnippet'
 
+# GraphQL
+- repo: jparise/vim-graphql
+  on_ft:
+    - gql
+    - graphql
+    - graphqls
+
 # HTML & Jinja
 # Omnicomplete and syntax
 - repo: othree/html5.vim
@@ -729,33 +736,41 @@
 # ==========================================
 # Denite
 # ------
+# Dark powered asynchronous unite all interfaces
 - repo: Shougo/denite.nvim
   on_cmd: Denite
   hook_source: source $VIMPATH/config/plugins/denite.vim
 
+# Denite location & quickfix lists
 - repo: chemzqm/unite-location
   on_source: denite.nvim
 
+# gitlog, gitstatus and gitchanged sources
 - repo: chemzqm/denite-git
   on_source: denite.nvim
 
+# Filter and browse Z (jump around) data file
 - repo: rafi/vim-denite-z
   on_source: denite.nvim
 
+# Browse and open sessions
 - repo: rafi/vim-denite-session
   on_source: denite.nvim
 
 # ==========================================
 # Operators
 # ---------
+# Define your own custom operators
 - repo: kana/vim-operator-user
   lazy: 1
 
+# Operator to replace text with register content
 - repo: kana/vim-operator-replace
   depends: vim-operator-user
   on_map:
     vnx: <Plug>
 
+# Operator to enclose text objects
 - repo: rhysd/vim-operator-surround
   depends:
     - vim-operator-user
@@ -763,6 +778,7 @@
   on_map:
     vnx: <Plug>
 
+# Highlight yanked area
 - repo: haya14busa/vim-operator-flashy
   depends: vim-operator-user
   on_map:
@@ -771,30 +787,11 @@
 # ==========================================
 # Text objects
 # ------------
+# Create your own text objects
 - repo: kana/vim-textobj-user
   on_func: textobj#user#
 
-- repo: terryma/vim-expand-region
-  on_map:
-    x: <Plug>
-
-- repo: AndrewRadev/sideways.vim
-  on_map:
-    ox: <Plug>Sideways
-
-- repo: AndrewRadev/splitjoin.vim
-  on_map:
-    n: <Plug>Splitjoin
-
-- repo: AndrewRadev/linediff.vim
-  on_cmd: Linediff
-
-- repo: AndrewRadev/dsf.vim
-  on_map:
-    n: <Plug>Dsf
-  hook_add: |
-    let g:dsf_no_mappings = 1
-
+# Handle bracket objects
 - repo: osyo-manga/vim-textobj-multiblock
   depends: vim-textobj-user
   on_map:
@@ -802,11 +799,38 @@
   hook_add: |
     let g:textobj_multiblock_no_default_key_mappings = 1
 
+# Text objects for functions
 - repo: kana/vim-textobj-function
   depends: vim-textobj-user
   on_map:
     ox: <Plug>
   hook_add: |
     let g:textobj_function_no_default_key_mappings = 1
+
+# Visually select increasingly larger regions of text
+- repo: terryma/vim-expand-region
+  on_map:
+    x: <Plug>
+
+# Match function arguments
+- repo: AndrewRadev/sideways.vim
+  on_map:
+    ox: <Plug>Sideways
+
+# Transition code between multi-line and single-line
+- repo: AndrewRadev/splitjoin.vim
+  on_map:
+    n: <Plug>Splitjoin
+
+# Perform diffs on blocks of code
+- repo: AndrewRadev/linediff.vim
+  on_cmd: Linediff
+
+# Delete surrounding function call
+- repo: AndrewRadev/dsf.vim
+  on_map:
+    n: <Plug>Dsf
+  hook_add: |
+    let g:dsf_no_mappings = 1
 
 #  vim: set ts=2 sw=2 tw=80 et :
