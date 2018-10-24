@@ -43,13 +43,6 @@ if [ "$(uname -s)" = "Darwin" ]; then
 
   # CPU
   CPU_CORES="$(sysctl -n hw.ncpu)"
-
-  # Android SDK and tools
-  if [ -d "${HOME}/Library/Android/sdk" ]; then
-    export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
-    export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
-    export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
-  fi
 else
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
@@ -57,21 +50,6 @@ else
 
   # CPU
   CPU_CORES="$(nproc)"
-
-  # Android SDK and tools
-  if [ -d "${XDG_CONFIG_HOME}/android" ]; then
-    export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
-    export ANDROID_EMULATOR_HOME="${ANDROID_SDK_HOME}/emulator"
-    export ANDROID_AVD_HOME="${ANDROID_EMULATOR_HOME}/avd"
-  fi
-  if [ -d "${XDG_DATA_HOME}/android/ndk" ]; then
-    export ANDROID_NDK_ROOT="${XDG_DATA_HOME}/android/ndk"
-  fi
-  if [ -d "${XDG_DATA_HOME}/android/sdk" ]; then
-    export ANDROID_SDK_ROOT="${XDG_DATA_HOME}/android/sdk"
-    export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
-    export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
-  fi
 
   # Aurutils
   export AUR_PAGER="${PREFIX}/bin/ranger"
