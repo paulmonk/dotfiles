@@ -16,7 +16,7 @@ endif
 
 " COLORSCHEME
 set background=dark
-execute 'colorscheme' 'solarized8'
+colorscheme solarized8
 
 " UI elements
 set showbreak=↪
