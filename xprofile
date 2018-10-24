@@ -1,6 +1,6 @@
 # Load user X resource config
-if [ -x "${XDG_CONFIG_HOME}/xorg/xresources" ]; then
-  xrdb -merge "${XDG_CONFIG_HOME}/xorg/Xresources"
+if [ -x "${XDG_CONFIG_HOME}/X11/xresources" ]; then
+  xrdb -merge "${XDG_CONFIG_HOME}/X11/Xresources"
 fi
 
 # X11 Key repeat (delay / rate)
