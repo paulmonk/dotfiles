@@ -41,20 +41,22 @@ if [ "$(uname -s)" = "Darwin" ]; then
   export BROWSER="open"
   export TERMINAL="open"
 
+  # CPU
+  CPU_CORES="$(sysctl -n hw.ncpu)"
+
   # Android SDK and tools
   if [ -d "${HOME}/Library/Android/sdk" ]; then
     export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
     export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
     export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
   fi
-
-  # Make
-  MAKEFLAGS="-j $(sysctl -n hw.ncpu)"
-  export MAKEFLAGS
 else
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
   export TERMINAL="${PREFIX}/bin/sakura"
+
+  # CPU
+  CPU_CORES="$(nproc)"
 
   # Android SDK and tools
   if [ -d "${XDG_CONFIG_HOME}/android" ]; then
@@ -76,10 +78,6 @@ else
 
   # GTK: Pull GTK2 RC files from the standard config location, similar to gtk-3.0
   export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
-
-  # Make
-  MAKEFLAGS="-j $(nproc)"
-  export MAKEFLAGS
 
   # Qt: Forces QT to use GTK icons
   export DESKTOP_SESSION="gnome"
@@ -169,6 +167,9 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/lesskey/output"
 # Lua user config
 export LUAROCKS_CONFIG="${XDG_CONFIG_HOME}/luarocks/config.lua"
 
+# Make
+export MAKEFLAGS="-j ${CPU_CORES}"
+
 # MariaDB / MySQL
 export MYSQL_HISTFILE="${XDG_DATA_HOME}/mysql/history"
 
@@ -223,12 +224,13 @@ export GEM_PATH=${GEM_HOME}
 export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
 export PATH="${PATH}:${GEM_HOME}/bin"
 
-# Rust Cargo configuration
+# Rust: Cargo configuration
+export CARGO_BUILD_JOBS="${CPU_CORES}"
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 export PATH="${PATH}:${CARGO_HOME}/bin"
 export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
 
-# sudo
+# Sudo
 export SUDO_PROMPT="sudo password for %p@[30;43m%h[m: "
 
 # sshrc
@@ -238,7 +240,7 @@ export SSHHOME="${XDG_CONFIG_HOME}/sshrc"
 export TASKDATA="${XDG_DATA_HOME}/task"
 export TASKRC="${XDG_CONFIG_HOME}/task/taskr"
 
-# tmux / tmuxp
+# Tmux
 export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
 export TMUXP_CONFIGDIR="${XDG_CONFIG_HOME}/tmuxp"
 
