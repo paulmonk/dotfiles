@@ -1,4 +1,3 @@
-
 " Vim Initialization
 " ------------------
 
@@ -27,15 +26,44 @@ endif
 
 " Ensure custom spelling directory
 if ! isdirectory(expand('$VIMPATH/spell'))
-	call mkdir(expand('$VIMPATH/spell'))
+  call mkdir(expand('$VIMPATH/spell'))
 endif
 
-" Load vault settings "
-if filereadable(expand('$VIMPATH/.vault.vim'))
-  execute 'source' expand('$VIMPATH/.vault.vim')
+" Protect sensitive information
+" ------------------
+" Don't backup files in temp directories or shm
+if exists('&backupskip')
+  set backupskip+=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
 endif
+
+" Don't keep swap files in temp directories or shm
+augroup swapskip
+  autocmd!
+  silent! autocmd BufNewFile,BufReadPre
+    \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+    \ setlocal noswapfile
+augroup END
+
+" Don't keep undo files in temp directories or shm
+if has('persistent_undo')
+  augroup undoskip
+    autocmd!
+    silent! autocmd BufWritePre
+      \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+      \ setlocal noundofile
+  augroup END
+endif
+
+" Don't keep viminfo for files in temp directories or shm
+augroup viminfoskip
+  autocmd!
+  silent! autocmd BufNewFile,BufReadPre
+    \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+    \ setlocal viminfo=
+augroup END
 
 " Setup dein
+" ------------------
 if &runtimepath !~# '/dein.vim'
   let s:dein_dir = expand('$DATAPATH/dein').'/repos/github.com/Shougo/dein.vim'
   if ! isdirectory(s:dein_dir)
@@ -46,7 +74,7 @@ if &runtimepath !~# '/dein.vim'
     \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 endif
 
-" Load less plugins while SSHing to remote machines 
+" Load less plugins while SSHing to remote machines
 if len($SSH_CLIENT)
   let $VIM_MINIMAL = 1
 endif
@@ -57,6 +85,7 @@ if has('gui_running')
 endif
 
 " Disable pre-bundled plugins
+" ------------------
 let g:loaded_getscript = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_gzip = 1

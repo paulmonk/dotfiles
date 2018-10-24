@@ -12,7 +12,7 @@ nmap      s [Window]
 map <Nul> <C-Space>
 map! <Nul> <C-Space>
 
-" Disable arrow movement, resize splits instead.
+" Easier resize splits instead.
 nnoremap <Up>    :resize +2<CR>
 nnoremap <Down>  :resize -2<CR>
 nnoremap <Left>  :vertical resize +2<CR>
@@ -212,33 +212,6 @@ noremap  mj :m+<CR>
 nmap <silent> <Leader>se :<C-u>execute 'SessionSave' fnamemodify(resolve(getcwd()), ':p:gs?/?_?')<CR>
 nmap <silent> <Leader>os :<C-u>execute 'source '.g:session_directory.'/'.fnamemodify(resolve(getcwd()), ':p:gs?/?_?').'.vim'<CR>
 
-" macOS
-if has('mac')
-  " Open the macOS dictionary on current word
-  nmap <Leader>? :!open dict://<cword><CR><CR>
-
-  " Use Marked for real-time Markdown preview
-  if executable('/Applications/Marked 2.app/Contents/MacOS/Marked 2')
-    autocmd MyAutoCmd FileType markdown
-      \ nmap <buffer><Leader>P :silent !open -a Marked\ 2.app '%:p'<CR>
-  endif
-
-  " Use Dash on Mac, for context help
-  if executable('/Applications/Dash.app/Contents/MacOS/Dash')
-    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
-      \ nmap <silent><buffer> K :!open -g dash://"<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
-    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
-      \ nmap <silent><buffer> K :!open -g dash://"<cword>"&<CR><CR>
-  endif
-else
-  " Use Zeal for context help
-  if executable('zeal')
-    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
-      \ nmap <silent><buffer> K :!zeal --query "<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
-    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
-      \ nmap <silent><buffer> K :!zeal --query "<cword>"&<CR><CR>
-  endif
-endif
 
 " Display diff from last save
 command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
@@ -304,5 +277,33 @@ function! OpenChangedFiles()
     exec 'sp ' . filename
   endfor
 endfunction
+
+" OS Specific
+if has('mac')
+  " Open the macOS dictionary on current word
+  nmap <Leader>? :!open dict://<cword><CR><CR>
+
+  " Use Marked for real-time Markdown preview
+  if executable('/Applications/Marked 2.app/Contents/MacOS/Marked 2')
+    autocmd MyAutoCmd FileType markdown
+      \ nmap <buffer><Leader>P :silent !open -a Marked\ 2.app '%:p'<CR>
+  endif
+
+  " Use Dash on Mac, for context help
+  if executable('/Applications/Dash.app/Contents/MacOS/Dash')
+    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
+      \ nmap <silent><buffer> K :!open -g dash://"<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
+    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
+      \ nmap <silent><buffer> K :!open -g dash://"<cword>"&<CR><CR>
+  endif
+else
+  " Use Zeal for context help
+  if executable('zeal')
+    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
+      \ nmap <silent><buffer> K :!zeal --query "<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
+    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
+      \ nmap <silent><buffer> K :!zeal --query "<cword>"&<CR><CR>
+  endif
+endif
 
 " vim: set ts=2 sw=2 tw=80 noet :

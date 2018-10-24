@@ -1,4 +1,3 @@
-
 " File-type Detection
 " ------------------------------------------------
 
@@ -7,7 +6,6 @@ if exists('did_load_filetypes')
 endif
 
 augroup filetypedetect
-
   autocmd BufNewFile,BufRead */inventory/*.{yml,yaml}    setfiletype ansible
   autocmd BufNewFile,BufRead */inventories/*.{yml,yaml}  setfiletype ansible
   autocmd BufNewFile,BufRead */playbooks/*.{yml,yaml}    setfiletype ansible
@@ -20,9 +18,6 @@ augroup filetypedetect
   autocmd BufNewFile,BufReadPost *.{feature,story} setfiletype cucumber
   autocmd BufNewFile,BufRead Jenkinsfile           setfiletype groovy
   autocmd BufNewFile,BufRead Tmuxfile,tmux/config  setfiletype tmux
-
-	" Set hugo projects to use go tmpl for HTML.
-  autocmd BufNewFile,BufRead */layouts/*.html    setfiletype gohtmltmpl
 augroup END
 
 " vim: set ts=2 sw=2 tw=80 noet :
