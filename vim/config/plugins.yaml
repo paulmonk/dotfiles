@@ -655,7 +655,6 @@
   if: has('nvim') && empty($VIM_MINIMAL)
   on_source:
     - deoplete.nvim
-    - neocomplete.vim
 
 # Go
 - repo: zchee/deoplete-go
