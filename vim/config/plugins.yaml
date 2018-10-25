@@ -170,7 +170,10 @@
 # HTML & Jinja
 # Omnicomplete and syntax
 - repo: othree/html5.vim
-  on_ft: html
+  on_ft:
+    - html
+    - htmldjango
+    - htmljinja
   hook_add: |
     let g:html5_aria_attributes_complete = 1
     let g:html5_event_handler_attributes_complete = 0
@@ -611,6 +614,14 @@
   hook_source: |
     let g:committia_min_window_width = 70
 
+# Highlights the matching HTML tag when the cursor is positioned on a tag
+- repo: gregsexton/MatchTag
+  on_ft:
+    - html
+    - htmldjango
+    - htmljinja
+    - xml
+
 # Distraction-free writing
 - repo: junegunn/goyo.vim
   if: empty($VIM_MINIMAL)
@@ -671,6 +682,8 @@
     - InsertEnter
   on_ft:
     - html
+    - htmldjango
+    - htmljinja
     - css
     - javascript
     - javascript.jsx
@@ -866,23 +879,68 @@
 # Dark powered asynchronous unite all interfaces
 - repo: Shougo/denite.nvim
   on_cmd: Denite
-  hook_source: source $VIMPATH/config/plugins/denite.vim
+  hook_add: |
+    nnoremap <silent><LocalLeader>r :<C-u>Denite -resume -refresh<CR>
+    nnoremap <silent><LocalLeader>f :<C-u>Denite file/rec<CR>
+    nnoremap <silent><LocalLeader>b :<C-u>Denite buffer file_old -default-action=switch<CR>
+    nnoremap <silent><LocalLeader>d :<C-u>Denite directory_rec -default-action=cd<CR>
+    nnoremap <silent><LocalLeader>v :<C-u>Denite register -buffer-name=register<CR>
+    xnoremap <silent><LocalLeader>v :<C-u>Denite register -buffer-name=register -default-action=replace<CR>
+    nnoremap <silent><LocalLeader>n :<C-u>Denite dein<CR>
+    nnoremap <silent><LocalLeader>g :<C-u>Denite grep<CR>
+    nnoremap <silent><LocalLeader>j :<C-u>Denite jump change file_point<CR>
+    nnoremap <silent><LocalLeader>o :<C-u>Denite outline<CR>
+    nnoremap <silent><expr> <LocalLeader>t &filetype == 'help' ? "g\<C-]>" :
+      \ ":\<C-u>DeniteCursorWord -buffer-name=tag
+      \  tag:include\<CR>"
+    nnoremap <silent><expr> <LocalLeader>p  &filetype == 'help' ?
+      \ ":\<C-u>pop\<CR>" : ":\<C-u>Denite -mode=normal jump\<CR>"
+    nnoremap <silent><LocalLeader>h :<C-u>Denite help<CR>
+    nnoremap <silent><LocalLeader>/ :<C-u>Denite line<CR>
+    nnoremap <silent><LocalLeader>* :<C-u>DeniteCursorWord line<CR>
+    nnoremap <silent><LocalLeader>; :<C-u>Denite command command_history<CR>
+    " Open Denite with word under cursor or selection
+    nnoremap <silent> <Leader>gf :DeniteCursorWord file/rec<CR>
+    nnoremap <silent> <Leader>gg :DeniteCursorWord grep<CR>
+    vnoremap <silent> <Leader>gg
+      \ :<C-u>call <SID>get_selection('/')<CR>
+      \ :execute 'Denite grep:::'.@/<CR><CR>
+
+    function! s:get_selection(cmdtype)
+      let temp = @s
+      normal! gv"sy
+      let @/ = substitute(escape(@s, '\'.a:cmdtype), '\n', '\\n', 'g')
+      let @s = temp
+    endfunction
+  hook_source: |
+    source $VIMPATH/config/plugins/denite.vim
 
 # Denite location & quickfix lists
 - repo: chemzqm/unite-location
   on_source: denite.nvim
+  hook_add: |
+    nnoremap <silent><LocalLeader>l :<C-u>Denite location_list -buffer-name=list<CR>
+    nnoremap <silent><LocalLeader>q :<C-u>Denite quickfix -buffer-name=list<CR>
 
 # gitlog, gitstatus and gitchanged sources
 - repo: chemzqm/denite-git
   on_source: denite.nvim
+  hook_add: |
+    nnoremap <silent> <Leader>gl :<C-u>Denite gitlog:all<CR>
+    nnoremap <silent> <Leader>gs :<C-u>Denite gitstatus<CR>
+    nnoremap <silent> <Leader>gc :<C-u>Denite gitbranch<CR>
 
 # Filter and browse Z (jump around) data file
 - repo: rafi/vim-denite-z
   on_source: denite.nvim
+  hook_add: |
+    nnoremap <silent><LocalLeader>z :<C-u>Denite z<CR>
 
 # Browse and open sessions
 - repo: rafi/vim-denite-session
   on_source: denite.nvim
+  hook_add: |
+    nnoremap <silent><LocalLeader>s :<C-u>Denite session -buffer-name=list<CR>
 
 # ==========================================
 # Operators
