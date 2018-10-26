@@ -251,34 +251,6 @@
     submodulesummary = true
     showUntrackedFiles = all
 
-[tig]
-    # [Global opts]
-    commit-order = topo
-    ignore-case = smart-case
-    line-graphics = utf-8
-    show-changes = false
-    split-view-height = 75%
-    tab-size = 4
-
-    # [View opts]
-    main-view-author-display = full
-    main-view-commit-title-graph = true
-    main-view-commit-title-refs = true
-    main-view-commit-title-overflow = false
-    main-view-date-display = relative
-    main-view-id-display = true
-
-[tig "bind"]
-    generic = <Backspace> view-close
-    generic = \\ scroll-line-up
-    generic = tw :toggle wrap-lines
-    main = C none
-    main = CP !g cp %(commit)
-    main = G move-last-line
-    main = P !git p
-    main = PU !git pu
-    status = C !git c
-
 [url "git@github.com:"]
     insteadOf = "gh:"
     pushInsteadOf = "github:"

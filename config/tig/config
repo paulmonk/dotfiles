@@ -1,0 +1,26 @@
+# Global
+set commit-order = topo
+set ignore-case = smart-case
+set line-graphics = utf-8
+set show-changes = false
+set split-view-height = 75%
+set tab-size = 8
+
+# Views
+set main-view-author-display = full
+set main-view-commit-title-graph = true
+set main-view-commit-title-refs = true
+set main-view-commit-title-overflow = false
+set main-view-date-display = relative
+set main-view-id-display = true
+
+# Binds
+bind generic <Backspace> view-close
+bind generic \\ scroll-line-up
+bind generic tw :toggle wrap-lines
+bind main C none
+bind main CP !g cp %(commit)
+bind main G move-last-line
+bind main P !git p
+bind main PU !git pu
+bind status C !git c
