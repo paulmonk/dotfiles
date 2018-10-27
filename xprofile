@@ -1,5 +1,5 @@
 # Load user X resource config
-if [ -x "${XDG_CONFIG_HOME}/X11/xresources" ]; then
+if [ -x "${XDG_CONFIG_HOME}/X11/Xresources" ]; then
   xrdb -merge "${XDG_CONFIG_HOME}/X11/Xresources"
 fi
 
