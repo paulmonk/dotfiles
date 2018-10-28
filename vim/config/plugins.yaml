@@ -470,13 +470,13 @@
 
 # Markdown: See Previews
 - repo: euclio/vim-markdown-composer
+  if: empty($VIM_MINIMAL) && executable('cargo')
   build: |
-    if has('nvim')
+    if command -v nvim; then
       cargo build --release
     else
       cargo build --release --no-default-features --features json-rpc
-    endif
-  if: empty($VIM_MINIMAL) && executable('cargo')
+    fi
   on_cmd:
     - ComposerStart
     - ComposerUpdate
