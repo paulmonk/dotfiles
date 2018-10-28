@@ -1,0 +1,5 @@
+program_options:
+  tray: auto
+  automount: true
+  notify: true
+  password_prompt: ["pass", "crypt/usb/{id_uuid}"]
