@@ -468,21 +468,6 @@
   hook_source: |
     let g:online_thesaurus_map_keys = 0
 
-# Markdown: See Previews
-- repo: euclio/vim-markdown-composer
-  if: empty($VIM_MINIMAL) && executable('cargo')
-  build: |
-    if command -v nvim; then
-      cargo build --release
-    else
-      cargo build --release --no-default-features --features json-rpc
-    fi
-  on_cmd:
-    - ComposerStart
-    - ComposerUpdate
-    - ComposerOpen
-    - ComposerJob
-
 # Markdown: Gen TOC
 - repo: mzlogin/vim-markdown-toc
   if: empty($VIM_MINIMAL)
@@ -563,6 +548,7 @@
     - IndentGuidesDisable
     - IndentGuidesToggle
   hook_add: |
+    let g:indent_guides_enable_on_vim_startup = 1
     nmap <silent><Leader>ti :<C-u>IndentGuidesToggle<CR>
   hook_source: |
     let g:indent_guides_color_change_percent = 3
@@ -794,8 +780,16 @@
 # Syntax source for deoplete
 - repo: Shougo/neco-syntax
   if: has('nvim') && empty($VIM_MINIMAL)
-  on_source:
+  depends:
     - deoplete.nvim
+
+# Emoji
+- repo: fszymanski/deoplete-emoji
+  if: has('nvim') && empty($VIM_MINIMAL)
+  on_ft:
+    - gitcommit
+    - markdown
+  on_event: InsertEnter
 
 # Go
 - repo: zchee/deoplete-go

@@ -12,11 +12,13 @@ nmap      s [Window]
 map <Nul> <C-Space>
 map! <Nul> <C-Space>
 
-" Easier resize splits instead.
-nnoremap <Up>    :resize +2<CR>
-nnoremap <Down>  :resize -2<CR>
-nnoremap <Left>  :vertical resize +2<CR>
-nnoremap <Right> :vertical resize -2<CR>
+" Disable arrow movement, resize splits instead.
+if get(g:, 'elite_mode')
+  nnoremap <Up>    :resize +2<CR>
+  nnoremap <Down>  :resize -2<CR>
+  nnoremap <Left>  :vertical resize +2<CR>
+  nnoremap <Right> :vertical resize -2<CR>
+endif
 
 " Double leader key for toggling visual-line mode
 nmap <silent> <Leader><Leader> V
