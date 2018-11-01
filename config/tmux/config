@@ -14,16 +14,15 @@ set-option -g default-command "${SHELL}"
 set-option -g default-shell "${SHELL}"
 
 # Make tmux display things in 256 colors
-set-option -g default-terminal "tmux-256color"
+set-option -g default-terminal "screen-256color"
 
-# Scrolling works as expected
-set-option -ga terminal-overrides ',*256color*:smcup@:rmcup@'
+# Enable true color & italics support
+# https://medium.com/@dubistkomisch/how-to-actually-get-italics-and-true-colour-to-work-in-iterm-tmux-vim-9ebe55ebc2be
+set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
 
-# :Tc adds TrueColor support.
-set-option -g terminal-overrides ',*256color:Tc'
-
-# Add cursor shapes
-set -ga terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
+# Enable cursor shape modification in vim
+# (https://github.com/neovim/neovim/wiki/FAQ)
+set -g -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 
 # Update the tmux environment
 # DBUS address needs updating as gpg requires it for pinentry.
@@ -118,7 +117,7 @@ bind-key ? split-window -h 'exec tmux list-keys | less'
 bind-key \ command-prompt -p 'Man>' "split-window -d -v 'exec man %%'"
 
 # Use Facebook PathPicker to select paths from buffer interactively
-bind-key f capture-pane \; save-buffer ${TMUX_TMPDIR}/tmux-buffer \; new-window -c "#{pane_current_path}" "sh -c 'cat ${TMUX_TMPDIR}/tmux-buffer | fpp && rm ${tmux_tmpdir}/tmux-buffer'"
+bind-key f capture-pane \; save-buffer ${TMUX_TMPDIR}/tmux-buffer \; new-window -c "#{pane_current_path}" "sh -c 'cat ${TMUX_TMPDIR}/tmux-buffer | fpp -c \"vim -O\" && rm ${TMUX_TMPDIR}/tmux-buffer'"
 
 # Use urlscan for displaying all links from buffer
 bind-key u capture-pane -J \; save-buffer ${TMUX_TMPDIR}/tmux-buffer \; split-window -l 10 "urlscan -c -d '${TMUX_TMPDIR}/tmux-buffer' && rm ${TMUX_TMPDIR}/tmux-buffer"
@@ -232,14 +231,6 @@ bind-key -T root C-WheelUpPane if-shell -F -t = "#{alternate_on}" "send-keys -M"
 bind-key -T copy-mode-vi C-WheelUpPane   send -X halfpage-up
 bind-key -T copy-mode-vi C-WheelDownPane send -X halfpage-down
 
-# Make mouse-drag work only with Ctrl
-# unbind -T root MouseDrag1Pane
-# unbind -T root MouseDragEnd1Pane
-# unbind -T copy-mode-vi MouseDrag1Pane
-# unbind -T copy-mode-vi MouseDragEnd1Pane
-# unbind -T copy-mode-vi M-MouseDrag1Pane
-# unbind -T copy-mode-vi C-MouseDrag1Pane
-
 bind-key -T copy-mode-vi MouseDrag1Pane send-keys -X begin-selection
 # Linux
 if-shell -b '[ $(uname -s) = "Linux" ]' \
@@ -247,11 +238,6 @@ if-shell -b '[ $(uname -s) = "Linux" ]' \
 # MacOS
 if-shell -b '[ $(uname -s) = "Darwin" ]' \
   "bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'pbcopy'"
-
-# bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xsel -ib --logfile $XDG_CACHE_HOME/xsel.log >/dev/null"
-
-# bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= "#{pane_in_mode}" "copy-mode -M" "send-keys -M"' 'copy-mode -M'
-# bind-key -n C-MouseDrag1Pane if -Ft= '#{mouse_any_flag}' 'if -Ft= \"#{pane_in_mode}\" \"copy-mode -M\" \"send-keys -M\"' 'copy-mode -M'
 
 # Toggle mouse on/off
 bind-key m set-option -g mouse on \; display 'Mouse: ON'
@@ -300,7 +286,7 @@ set-option -g status-right-fg black
 set-option -g status-right-bg brightblue
 set-option -g status-right-attr none
 set-option -g status-right-length 83
-set-option -g status-right "#[fg=green,bg=brightblack]  #(tmux-mem-cpu-load -g 0 -i 3) #[fg=brightblack,bg=brightyellow]  %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
+set-option -g status-right "#[fg=brightblack,bg=brightyellow]  %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
 
 set-window-option -g window-style ''
 set-window-option -g window-active-style ''
@@ -333,5 +319,16 @@ set-window-option -g clock-mode-colour green
 
 # bell
 set-window-option -g window-status-bell-style fg=black,bg=red
+
+#--------------------------------------------------------
+# Plugins
+#--------------------------------------------------------
+# Configure extrakto
+set-option -g @extrakto_grab_area "0"
+run-shell -b '${XDG_DATA_HOME}/tmux/plugins/extrakto/extrakto.tmux'
+
+set -g @scroll-without-changing-pane "on"
+set -g @scroll-speed-num-lines-per-scroll "1"
+run-shell -b '${XDG_DATA_HOME}/tmux/plugins/better-mouse/scroll_copy_mode.tmux'
 
 #  vim: set ft=tmux ts=2 sw=2 tw=80 noet :

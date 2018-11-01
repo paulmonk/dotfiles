@@ -1,0 +1,6 @@
+[submodule "config/tmux/plugins/extrakto"]
+	path = local/share/tmux/plugins/extrakto
+	url = https://github.com/laktak/extrakto/
+[submodule "config/tmux/plugins/better-mouse"]
+	path = local/share/tmux/plugins/better-mouse
+	url = https://github.com/nhdaly/tmux-better-mouse-mode/
