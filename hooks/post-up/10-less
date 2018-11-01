@@ -1,4 +1,4 @@
 #!/bin/sh
-if command -v lesskey && [ ! -f "${XDG_CONFIG_HOME}/less/lesskey/output" ]; then
+if command -v lesskey >/dev/null 2>&1 && [ ! -f "${XDG_CONFIG_HOME}/less/lesskey/output" ]; then
   lesskey -o "${XDG_CONFIG_HOME}/less/lesskey/output" "${XDG_CONFIG_HOME}/less/lesskey/input"
 fi
