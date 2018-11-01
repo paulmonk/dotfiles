@@ -1,1 +1,2 @@
 COPY_ALWAYS="config/repoctl/config.toml"
+EXCLUDES="README.md LICENSE Makefile"
