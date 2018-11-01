@@ -35,8 +35,10 @@ help:
 
 # MAIN
 #------------------------------
+RCRC ?= $(realpath ./config/rcm/rcrc)
+
 sync:
-	RCRC=$(realpath ./config/rcm/rcrc) rcup -d $(PWD) -f
+	RCRC=$(RCRC) rcup -d $(PWD) -f
 
 .PHONY: update-submodules
 update-submodules:
