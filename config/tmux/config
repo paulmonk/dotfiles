@@ -323,12 +323,19 @@ set-window-option -g window-status-bell-style fg=black,bg=red
 #--------------------------------------------------------
 # Plugins
 #--------------------------------------------------------
-# Configure extrakto
+# Config extrakto
 set-option -g @extrakto_grab_area "0"
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/extrakto/extrakto.tmux'
 
-set -g @scroll-without-changing-pane "on"
-set -g @scroll-speed-num-lines-per-scroll "1"
+# Config better-mouse
+set-option -g @scroll-speed-num-lines-per-scroll "1"
+set-option -g @scroll-without-changing-pane "on"
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/better-mouse/scroll_copy_mode.tmux'
+
+# Config resurrect
+# Only the following variables and special chars are allowed: $HOME, $HOSTNAME, and ~.
+set-option -g @resurrect-capture-pane-contents 'on'
+set-option -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
+run-shell -b '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
 #  vim: set ft=tmux ts=2 sw=2 tw=80 noet :

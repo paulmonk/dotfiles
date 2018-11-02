@@ -4,3 +4,6 @@
 [submodule "config/tmux/plugins/better-mouse"]
 	path = local/share/tmux/plugins/better-mouse
 	url = https://github.com/nhdaly/tmux-better-mouse-mode/
+[submodule "local/share/tmux/plugins/resurrect"]
+	path = local/share/tmux/plugins/resurrect
+	url = https://github.com/tmux-plugins/tmux-resurrect
