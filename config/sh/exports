@@ -3,10 +3,18 @@
 #------------------------------------------------------------------------------
 # This file contains most of our environment exports.
 #------------------------------------------------------------------------------
+# XDG directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+
 # macOS
 if [ "$(uname -s)" = "Darwin" ]; then
+  # Set Default PATH
+  export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+
   # Prefix
-  export PREFIX="${XDG_DATA_HOME}/homebrew"
+  export PREFIX="${HOME}/Library/Homebrew"
 
   # XDG
   export XDG_RUNTIME_DIR="/tmp/run"
@@ -29,12 +37,11 @@ if [ "$(uname -s)" = "Darwin" ]; then
   export HOMEBREW_UPGRADE_CLEANUP="1"
 
   # Use homebrew GNU tools instead of system BSD
-  for gnu_tool in "coreutils" "dateutils" "findutils" "moreutils" "gnu-sed"; do
-    export PATH="${PREFIX}/opt/${gnu_tool}/libexec/gnubin:${PATH}"
-    export MANPATH="${PREFIX}/opt/${gnu_tool}/libexec/gnuman:${MANPATH}"
-  done
+  export PATH="${PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
+  export MANPATH="${PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
 
   # Add homebrew bin
+  # Prefer to default installed old software.
   export PATH="${PREFIX}/bin:${PREFIX}/sbin:${PATH}"
 
   # Set defaults

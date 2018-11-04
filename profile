@@ -6,9 +6,9 @@
 
 # Source exports if BASH.
 # ZSH is handled in the .zshenv
-if [ -n "${BASH}" ] && [ -s "${XDG_CONFIG_HOME}/sh/exports" ]; then
+if [ -n "${BASH}" ] && [ -s "${HOME}/.config/sh/exports" ]; then
   # shellcheck source=/dev/null
-  . "${XDG_CONFIG_HOME}/sh/exports"
+  . "${HOME}/.config/sh/exports"
 
   # . bashrc if bash.
   if [ -s "${HOME}/.bashrc" ]; then

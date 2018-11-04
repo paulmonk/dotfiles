@@ -10,9 +10,9 @@ unsetopt GLOBAL_RCS
 unalias -m '*'
 
 # Source exports.
-if [[ -s "${XDG_CONFIG_HOME}/sh/exports" ]]; then
+if [[ -s "${HOME}/.config/sh/exports" ]]; then
   # shellcheck source=/dev/null
-  source "${XDG_CONFIG_HOME}/sh/exports"
+  source "${HOME}/.config/sh/exports"
 
   # ZSH Exports
   export ZCOMPDUMP="${XDG_CACHE_HOME}/zsh/compdump-${HOST}-${ZSH_VERSION}"
