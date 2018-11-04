@@ -74,4 +74,4 @@ fi
 # Use Ctrl+T to complete with FZF
 export FZF_COMPLETION_TRIGGER=""
 bindkey '^T' fzf-completion
-bindkey '^I' ${fzf_default_completion}
+# bindkey '^I' ${fzf_default_completion}
