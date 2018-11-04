@@ -23,9 +23,10 @@ if [[ -s "${XDG_CONFIG_HOME}/zsh/plugins" ]]; then
   export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
   export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
 
-  # Create antigen dirs if they do not exist.
+  # Create antigen dirs/files if they do not exist.
   [[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
   [[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
+  [[ -f "${XDG_DATA_HOME}/zsh/antigen/debug.log" ]] || touch "${XDG_DATA_HOME}/zsh/antigen/debug.log"
 
   antigen_repo_dir="${ADOTDIR}/repo"
   antigen_init_file="${antigen_repo_dir}/antigen.zsh"
