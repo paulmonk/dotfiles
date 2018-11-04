@@ -2,6 +2,6 @@
 autocmd MyAutoCmd CursorHold * if exists(':rshada') | rshada | wshada | endif
 
 " Search and use environments specifically made for Neovim.
-if isdirectory($DATAPATH.'/virtualenv')
-  let g:python3_host_prog = $DATAPATH.'/virtualenv/bin/python'
+if isdirectory($DATAPATH.'/virtualenvs/neovim')
+  let g:python3_host_prog = $DATAPATH.'/virtualenvs/neovim/bin/python'
 endif
