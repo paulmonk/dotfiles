@@ -18,7 +18,7 @@ XDG_CACHE_HOME ?= $(HOME)/.cache
 XDG_DATA_HOME ?= $(HOME)/.local/share
 
 VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
-VIM_VERSION := "${shell $(vim) --version}"
+VIM_VERSION := "${shell $(VIM_BIN) --version}"
 VIM_VENVS := ${XDG_DATA_HOME}/vim/virtualenvs
 
 $(VIM_VENVS)/neovim/bin/python:
@@ -36,7 +36,7 @@ ifeq ('$(VIM_BIN)','nvim')
 endif
 	@mkdir -vp "$(XDG_CACHE_HOME)/vim/"{backup,complete,session,swap,tags,undo} && \
 	mkdir -vp "$(XDG_DATA_HOME)/vim" && \
-	$(vim) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
+	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
 		-c "try | call dein#update() | finally | call confirm('') | qall! | endtry"
 
 .PHONY: update
@@ -44,7 +44,7 @@ update:
 ifeq ('$(VIM_BIN)','nvim')
 	@$(MAKE) virtualenv
 endif
-	@$(vim) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
+	@$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
 		-c "try | call dein#clear_state() | call dein#update() | call dein#recache_runtimepath() | finally | call confirm('') | qall! | endtry"
 
 .PHONY: upgrade
