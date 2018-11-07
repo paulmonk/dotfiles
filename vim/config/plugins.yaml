@@ -359,6 +359,16 @@
     nmap cgc <Plug>ChangeCommentary
     nmap gcu <Plug>Commentary<Plug>Commentary
 
+# Auto mkdir if needed on save.
+- repo: benizi/vim-automkdir
+  on_command: write
+
+# Move to root of project working directory.
+- repo: airblade/vim-rooter
+  on_command: Rooter
+  hook_source: |
+    let g:rooter_manual_only = 1
+
 # Choose window to use, like tmux's 'display-pane'
 - repo: t9md/vim-choosewin
   on_map:
@@ -640,8 +650,8 @@
     smap <silent>L     <Plug>(neosnippet_jump_or_expand)
     xmap <silent>L     <Plug>(neosnippet_expand_target)
   hook_source: |
-    let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#enable_completed_snippet = 1
+    let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#expand_word_boundary = 1
     autocmd MyAutoCmd CompleteDone * call neosnippet#complete_done()
     autocmd MyAutoCmd InsertLeave * NeoSnippetClearMarkers
@@ -776,12 +786,12 @@
   hook_source: |
     source $VIMPATH/config/plugins/deoplete.vim
     call deoplete#enable()
+  depends:
+    - neco-syntax
 
 # Syntax source for deoplete
 - repo: Shougo/neco-syntax
   if: has('nvim') && empty($VIM_MINIMAL)
-  depends:
-    - deoplete.nvim
 
 # Emoji
 - repo: fszymanski/deoplete-emoji
