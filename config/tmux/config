@@ -338,6 +338,11 @@ set-option -g @resurrect-capture-pane-contents 'on'
 set-option -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
+# Config continuum
+set-option -g @continuum-save-interval '15'
+set-option -g @continuum-restore 'on'
+run-shell -b '${XDG_DATA_HOME}/tmux/plugins/continuum/continuum.tmux'
+
 # 1password
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/1password/plugin.tmux'
 
