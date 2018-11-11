@@ -37,7 +37,7 @@
 
 # See the contents of registers
 - repo: junegunn/vim-peekaboo
-  hook_add:  |
+  hook_add: |
     nnoremap <buffer> <silent> " :<c-u>call peekaboo#peek(v:count1, 'quote',  0)<cr>
     xnoremap <buffer> <silent> " :<c-u>call peekaboo#peek(v:count1, 'quote',  1)<cr>
     nnoremap <buffer> <silent> @ :<c-u>call peekaboo#peek(v:count1, 'replay', 0)<cr>
@@ -45,6 +45,9 @@
 
 # Heuristically set buffer indent options
 - repo: tpope/vim-sleuth
+
+# Heuristically set options based on editorconfig
+- repo: editorconfig/editorconfig-vim
 
 # A Git wrapper so awesome, it should be illegal, lol.
 - repo: tpope/vim-fugitive
@@ -154,11 +157,18 @@
       \ | nmap <Leader>gor  <Plug>(go-run)
       \ | nmap <Leader>gov  <Plug>(go-vet)
   hook_source: |
-    let g:go_def_mapping_enabled = 0
-    let g:go_loaded_gosnippets = 1
+    let g:go_highlight_array_whitespace_error = 0
+    let g:go_highlight_chan_whitespace_error = 0
+    let g:go_highlight_space_tab_error = 0
+    let g:go_highlight_trailing_whitespace_error = 0
+    let g:go_highlight_build_constraints = 1
     let g:go_highlight_extra_types = 1
+    let g:go_highlight_fields = 0
+    let g:go_highlight_format_strings = 1
+    let g:go_highlight_functions = 1
+    let g:go_highlight_generate_tags = 1
     let g:go_highlight_operators = 1
-    let g:go_snippet_engine = 'neosnippet'
+    let g:go_highlight_string_spellcheck = 0
 
 # GraphQL
 - repo: jparise/vim-graphql
@@ -284,10 +294,6 @@
 - repo: StanAngeloff/php.vim
   on_ft: php
 
-# Portfile
-- repo: jstrater/mpvim
-  on_ft: portfile
-
 # Postgres
 - repo: exu/pgsql.vim
   on_ft: pgsql
@@ -345,6 +351,7 @@
 # Utility comamnds of dein.vim with rich completion.
 - repo: haya14busa/dein-command.vim
   on_cmd: Dein
+
 
 # Code commenting helper
 - repo: tpope/vim-commentary
@@ -894,16 +901,14 @@
     nnoremap <silent><LocalLeader>g :<C-u>Denite grep<CR>
     nnoremap <silent><LocalLeader>j :<C-u>Denite jump change file_point<CR>
     nnoremap <silent><LocalLeader>o :<C-u>Denite outline<CR>
-    nnoremap <silent><expr> <LocalLeader>t &filetype == 'help' ? "g\<C-]>" :
-      \ ":\<C-u>DeniteCursorWord -buffer-name=tag
-      \  tag:include\<CR>"
-    nnoremap <silent><expr> <LocalLeader>p  &filetype == 'help' ?
-      \ ":\<C-u>pop\<CR>" : ":\<C-u>Denite -mode=normal jump\<CR>"
+    nnoremap <silent><LocalLeader>t :<C-u>Denite -buffer-name=tag tag:include<CR>
+    nnoremap <silent><LocalLeader>p :<C-u>Denite -mode=normal jump<CR>
     nnoremap <silent><LocalLeader>h :<C-u>Denite help<CR>
     nnoremap <silent><LocalLeader>/ :<C-u>Denite line<CR>
     nnoremap <silent><LocalLeader>* :<C-u>DeniteCursorWord line<CR>
     nnoremap <silent><LocalLeader>; :<C-u>Denite command command_history<CR>
     " Open Denite with word under cursor or selection
+    nnoremap <silent> <Leader>gt :DeniteCursorWord -buffer-name=tag tag:include<CR>
     nnoremap <silent> <Leader>gf :DeniteCursorWord file/rec<CR>
     nnoremap <silent> <Leader>gg :DeniteCursorWord grep<CR>
     vnoremap <silent> <Leader>gg
