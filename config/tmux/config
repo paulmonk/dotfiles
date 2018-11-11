@@ -338,4 +338,7 @@ set-option -g @resurrect-capture-pane-contents 'on'
 set-option -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
+# 1password
+run-shell -b '${XDG_DATA_HOME}/tmux/plugins/1password/plugin.tmux'
+
 #  vim: set ft=tmux ts=2 sw=2 tw=80 noet :
