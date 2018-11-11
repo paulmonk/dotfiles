@@ -19,7 +19,7 @@ XDG_DATA_HOME ?= $(HOME)/.local/share
 
 VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
 VIM_VERSION := "${shell $(VIM_BIN) --version}"
-VIM_VENVS := ${XDG_DATA_HOME}/vim/virtualenvs
+VIM_VENVS := ${XDG_DATA_HOME}/nvim/virtualenvs
 
 $(VIM_VENVS)/neovim/bin/python:
 	@mkdir -p $(VIM_VENVS) && python3 -m venv "$(VIM_VENVS)/neovim"
@@ -34,8 +34,8 @@ install:
 ifeq ('$(VIM_BIN)','nvim')
 	@$(MAKE) virtualenv
 endif
-	@mkdir -vp "$(XDG_CACHE_HOME)/vim/"{backup,complete,session,swap,tags,undo} && \
-	mkdir -vp "$(XDG_DATA_HOME)/vim" && \
+	@mkdir -vp "$(XDG_CACHE_HOME)/nvim/"{backup,complete,session,swap,tags,undo} && \
+	mkdir -vp "$(XDG_DATA_HOME)/nvim" && \
 	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
 		-c "try | call dein#update() | finally | call confirm('') | qall! | endtry"
 
@@ -52,8 +52,8 @@ upgrade: update
 
 .PHONY: uninstall
 uninstall:
-	@rm -rf "$(XDG_CACHE_HOME)/vim"
-	@rm -rf "$(XDG_DATA_HOME)/vim"
+	@rm -rf "$(XDG_CACHE_HOME)/nvim"
+	@rm -rf "$(XDG_DATA_HOME)/nvim"
 
 .PHONY: test
 test:
@@ -66,16 +66,16 @@ else
 	$(info Testing VIM 7.4...)
 	$(if $(findstring 7.4,$(VIM_VERSION)),\
 		$(info OK),\
-		$(error   .. MISSING! Install newer $nvim version))
+		$(error   .. MISSING! Install newer nvim version))
 
 	$(info Testing +lua... )
 	$(if $(findstring +lua,$(VIM_VERSION)),\
 		$(info OK),\
-		$(error   .. MISSING! Install $nvim with "+lua" enabled))
+		$(error   .. MISSING! Install nvim with "+lua" enabled))
 
 	$(info Testing +python... )
 	$(if $(findstring +python,$(VIM_VERSION)),\
 		$(info OK),\
-		$(error .. MISSING! Install $nvim with "+python" enabled))
+		$(error .. MISSING! Install nvim with "+python" enabled))
 endif
 	@echo All tests passed, hooray!

@@ -74,11 +74,6 @@ if &runtimepath !~# '/dein.vim'
     \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 endif
 
-" Load less plugins while SSHing to remote machines
-if len($SSH_CLIENT)
-  let $VIM_MINIMAL = 1
-endif
-
 " Disable menu.vim
 if has('gui_running')
   set guioptions=Mc

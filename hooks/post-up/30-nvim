@@ -1,0 +1,6 @@
+#!/bin/sh
+ln -sf "${XDG_CONFIG_HOME}/nvim" "${HOME}/.vim"
+
+if ! [ -d "${XDG_DATA_HOME}/nvim/dein" ]; then
+  cd "${XDG_CONFIG_HOME}/nvim" && make install
+fi

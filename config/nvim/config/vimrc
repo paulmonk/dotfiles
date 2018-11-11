@@ -10,8 +10,8 @@ endif
 
 " Set main configuration directory, and where cache/data is stored.
 let $VIMPATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
-let $CACHEPATH = expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : '~/.cache').'/vim')
-let $DATAPATH = expand(($XDG_DATA_HOME ? $XDG_DATA_HOME : '~/.local/share').'/vim')
+let $CACHEPATH = expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : '~/.cache').'/nvim')
+let $DATAPATH = expand(($XDG_DATA_HOME ? $XDG_DATA_HOME : '~/.local/share').'/nvim')
 
 let g:dein#install_max_processes = 16
 let g:dein#install_progress_type = 'echo'
