@@ -43,14 +43,17 @@
     nnoremap <buffer> <silent> @ :<c-u>call peekaboo#peek(v:count1, 'replay', 0)<cr>
     inoremap <buffer> <silent> <c-r> <c-o>:call peekaboo#peek(1, 'ctrl-r',  0)<cr>
 
-# Heuristically set buffer indent options
-- repo: tpope/vim-sleuth
-
 # Heuristically set options based on editorconfig
 - repo: editorconfig/editorconfig-vim
 
+# Heuristically set buffer indent options
+- repo: tpope/vim-sleuth
+
 # A Git wrapper so awesome, it should be illegal, lol.
 - repo: tpope/vim-fugitive
+
+# Session States
+- repo: tpope/vim-obsession
 
 # Efficient alternative to the standard matchparen plugin
 - repo: itchyny/vim-parenmatch
