@@ -336,6 +336,8 @@ run-shell -b '${XDG_DATA_HOME}/tmux/plugins/better-mouse/scroll_copy_mode.tmux'
 # Only the following variables and special chars are allowed: $HOME, $HOSTNAME, and ~.
 set-option -g @resurrect-capture-pane-contents 'on'
 set-option -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
+set-option -g @resurrect-strategy-vim 'session'
+set-option -g @resurrect-strategy-nvim 'session'
 run-shell -b '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
 # Config continuum
