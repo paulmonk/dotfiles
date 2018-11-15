@@ -1,6 +1,9 @@
 ; vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
 
 [alias]
+    # https://twitter.com/TrevorBramble/status/774292970681937920
+    alias="!git config -l | grep ^alias | cut -c 7- | sort"
+
     # Branches
     #--------------------
     br = branch -v
@@ -19,21 +22,18 @@
     # Amend the currently staged files to the latest commit
     amend = "commit --amend --reuse-message=HEAD"
 
-    # List contributors with number of commits
-    contributors = shortlog --summary --numbered
-
     # Credit an author on the latest commit
     credit = "!f() { \
         git commit --amend --author \"$1 <$2>\" -C HEAD; \
     }; f"
 
+    # Undo the last commit.
+    undo = "!git reset HEAD~1 --mixed"
+
     # Checkout
     #--------------------
-    co = checkout
-    cob = checkout -b
-
     # Switch to a branch, creating it if necessary
-    cbgo = "!f() { \
+    co = "!f() { \
         git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; \
     }; f"
 
@@ -77,13 +77,20 @@
     }; f"
 
     # Find commits by commit message
-    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    fm = "!f() { \
+        git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; \
+    }; f"
 
     # Log
     #--------------------
     # View abbreviated SHA, description, and history graph of the latest 20 commits
     l = !"git --no-pager log --pretty=oneline -n 20 --graph --abbrev-commit"
-    log  = log --color=auto --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+    # Color graph log view
+    graph = log --graph --color --pretty=format:"%C(yellow)%H%C(green)%d%C(reset)%n%x20%cd%n%x20%cn%x20(%ce)%n%x20%s%n"
+
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered
 
     # Pull
     #--------------------
