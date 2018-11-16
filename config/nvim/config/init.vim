@@ -19,9 +19,13 @@ xnoremap m        <Nop>
 
 " Ensure cache directory
 if ! isdirectory(expand($CACHEPATH))
-  " Create missing dirs i.e. cache/{undo,backup}
+  " Create missing cache dirs
+  call mkdir(expand('$CACHEPATH/backup'), 'p')
+  call mkdir(expand('$CACHEPATH/complete'), 'p')
+  call mkdir(expand('$CACHEPATH/session'), 'p')
+  call mkdir(expand('$CACHEPATH/swap'), 'p')
+  call mkdir(expand('$CACHEPATH/tags'), 'p')
   call mkdir(expand('$CACHEPATH/undo'), 'p')
-  call mkdir(expand('$CACHEPATH/backup'))
 endif
 
 " Ensure custom spelling directory

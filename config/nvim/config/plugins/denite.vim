@@ -1,6 +1,39 @@
 " denite.nvim
 " -----------
 
+" Key shortcuts
+nnoremap <silent><LocalLeader>r :<C-u>Denite -resume -refresh<CR>
+nnoremap <silent><LocalLeader>f :<C-u>Denite file/rec<CR>
+nnoremap <silent><LocalLeader>b :<C-u>Denite buffer file_old -default-action=switch<CR>
+nnoremap <silent><LocalLeader>d :<C-u>Denite directory_rec -default-action=cd<CR>
+nnoremap <silent><LocalLeader>v :<C-u>Denite register -buffer-name=register<CR>
+xnoremap <silent><LocalLeader>v :<C-u>Denite register -buffer-name=register -default-action=replace<CR>
+nnoremap <silent><LocalLeader>n :<C-u>Denite dein<CR>
+nnoremap <silent><LocalLeader>g :<C-u>Denite grep<CR>
+nnoremap <silent><LocalLeader>j :<C-u>Denite jump change file_point<CR>
+nnoremap <silent><LocalLeader>o :<C-u>Denite outline<CR>
+nnoremap <silent><LocalLeader>t :<C-u>Denite -buffer-name=tag tag:include<CR>
+nnoremap <silent><LocalLeader>p :<C-u>Denite -mode=normal jump<CR>
+nnoremap <silent><LocalLeader>h :<C-u>Denite help<CR>
+nnoremap <silent><LocalLeader>/ :<C-u>Denite line<CR>
+nnoremap <silent><LocalLeader>* :<C-u>DeniteCursorWord line<CR>
+nnoremap <silent><LocalLeader>; :<C-u>Denite command command_history<CR>
+
+" Open Denite with word under cursor or selection
+nnoremap <silent> <Leader>gt :DeniteCursorWord -buffer-name=tag tag:include<CR>
+nnoremap <silent> <Leader>gf :DeniteCursorWord file/rec<CR>
+nnoremap <silent> <Leader>gg :DeniteCursorWord grep<CR>
+vnoremap <silent> <Leader>gg
+  \ :<C-u>call <SID>get_selection('/')<CR>
+  \ :execute 'Denite grep:::'.@/<CR><CR>
+
+function! s:get_selection(cmdtype)
+  let temp = @s
+  normal! gv"sy
+  let @/ = substitute(escape(@s, '\'.a:cmdtype), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
 " INTERFACE
 call denite#custom#option('_', {
   \ 'prompt': 'λ:',
@@ -17,11 +50,6 @@ call denite#custom#option('list', {})
 " MATCHERS
 " Default is 'matcher/fuzzy'
 call denite#custom#source('tag', 'matchers', ['matcher/substring'])
-if has('nvim') && &runtimepath =~# '\/cpsm'
-  call denite#custom#source(
-    \ 'buffer,file_mru,file_old,file/rec,grep,mpc,line',
-    \ 'matchers', ['matcher/cpsm', 'matcher/fuzzy'])
-endif
 
 " SORTERS
 " Default is 'sorter/rank'
