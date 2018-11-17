@@ -1,40 +1,120 @@
 #!/usr/bin/env zsh
 
 #------------------------------------------------------------------------------
-# Plugins - .antigenrc file.
+# Plugins - ZPLUG
 #------------------------------------------------------------------------------
-antigen use oh-my-zsh
+export ZPLUG_HOME="${XDG_DATA_HOME}/zsh/zplug"
+export ZPLUG_CACHE_DIR="${XDG_CACHE_HOME}/zsh/zplug"
 
-# Bundles
-antigen bundles <<EOBUNDLES
-    hlissner/zsh-autopair
-    marzocchi/zsh-notify
-    rupa/z
-    changyuheng/fz
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-syntax-highlighting
-    zsh-users/zsh-history-substring-search
-    zdharma/history-search-multi-word
-    mafredri/zsh-async
-EOBUNDLES
+# Install
+#----------------
+if [[ ! -d "${ZPLUG_HOME}" ]]; then
+  echo "zplug is missing. attempting install..."
+  git clone https://github.com/zplug/zplug "${ZPLUG_HOME}"
+fi
 
-# Set theme
-antigen theme "geometry-zsh/geometry"
-source "${XDG_CONFIG_HOME}/zsh/themes/geometry"
+# Init
+#----------------
+if [[ -f "${ZPLUG_HOME}/init.zsh" ]]; then
+  source "${ZPLUG_HOME}/init.zsh"
 
-# Tell Antigen that you're done.
-antigen apply
+  # Plugins
+  zplug "mafredri/zsh-async"
+  zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, as:theme
+  zplug "zsh-users/zsh-autosuggestions"
+  zplug "zsh-users/zsh-syntax-highlighting"
+  zplug "zsh-users/zsh-history-substring-search"
+  zplug "zdharma/history-search-multi-word"
+  zplug "hlissner/zsh-autopair"
+  zplug "marzocchi/zsh-notify"
+  zplug "rupa/z"
+  zplug "changyuheng/fz"
 
+  # Install plugins if there are plugins that have not been installed
+  if ! zplug check --verbose; then
+    printf "Install? [y/n]: "
+    if read -q; then
+        echo; zplug install
+    fi
+  fi
 
-# Plugins Config
-# ----------------
-# Z
-[[ -f "${XDG_DATA_HOME}/zsh/z" ]] || touch "${XDG_DATA_HOME}/zsh/z"
-export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
+  # ZPLUG breaks the zsh job management.
+  # https://github.com/zplug/zplug/issues/480
+  [[ -f $_zplug_lock ]] && rm -f $_zplug_lock
 
-# zsh-notify
-zstyle ':notify:*' command-complete-timeout 15
-zstyle ':notify:*' error-title 'Error'
-zstyle ':notify:*' success-title 'Success'
-zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/64x64/status/dialog-error.png'
-zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/64x64/status/dialog-information.png'
+  # Then, source plugins and add commands to $PATH
+  zplug load
+
+  # Prompt
+  #----------------
+  export SPACESHIP_PROMPT_DEFAULT_PREFIX=" "
+  export SPACESHIP_PROMPT_DEFAULT_SUFFIX=" "
+
+  export SPACESHIP_PROMPT_ORDER=(
+    time
+    user
+    dir
+    host
+    git_branch
+    git_status
+    venv
+    exec_time
+    line_sep
+    jobs
+    exit_code
+    char
+  )
+
+  # Char
+  export SPACESHIP_CHAR_COLOR_FAILURE=160
+  export SPACESHIP_CHAR_COLOR_SUCCESS=064
+  export SPACESHIP_CHAR_SYMBOL="$ "
+  export SPACESHIP_CHAR_SYMBOL_ROOT="# "
+
+  # Dir
+  export SPACESHIP_DIR_PREFIX="${SPACESHIP_PROMPT_DEFAULT_PREFIX}"
+  export SPACESHIP_DIR_TRUNC_PREFIX=".../"
+  export SPACESHIP_DIR_TRUNC_REPO="false"
+
+  # Exec Time
+  export SPACESHIP_EXEC_TIME_PREFIX="${SPACESHIP_PROMPT_DEFAULT_PREFIX}"
+
+  # Exit Code
+  export SPACESHIP_EXIT_CODE_COLOR=125
+  export SPACESHIP_EXIT_CODE_SHOW="true"
+
+  # Git
+  export SPACESHIP_GIT_PREFIX="${SPACESHIP_PROMPT_DEFAULT_PREFIX}"
+  export SPACESHIP_GIT_STATUS_COLOR=160
+
+  # Jobs
+  export SPACESHIP_JOBS_SYMBOL="+"
+
+  # Time
+  export SPACESHIP_TIME_SHOW="true"
+  export SPACESHIP_TIME_SUFFIX=""
+
+  # User
+  export SPACESHIP_USER_COLOR=254
+  export SPACESHIP_USER_ROOT_COLOR=064
+  export SPACESHIP_USER_PREFIX="${SPACESHIP_PROMPT_DEFAULT_PREFIX}"
+  export SPACESHIP_USER_SHOW="needed"
+
+  # Venv
+  export SPACESHIP_VENV_COLOR=254
+
+  # Config
+  #----------------
+  # Z
+  [[ -f "${XDG_DATA_HOME}/zsh/z" ]] || touch "${XDG_DATA_HOME}/zsh/z"
+  export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
+
+  # zsh-notify
+  zstyle ':notify:*' command-complete-timeout 15
+  zstyle ':notify:*' error-title 'Error'
+  zstyle ':notify:*' success-title 'Success'
+  zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/64x64/status/dialog-error.png'
+  zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/64x64/status/dialog-information.png'
+else
+  echo "WARNING: zplug init is missing."
+fi
