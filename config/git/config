@@ -176,6 +176,7 @@
     ca = !git add -A && git commit -av
     cl = clone --recursive
     cm = commit -vm
+    co = checkout
     cp = cherry-pick
     d = diff
     ds = diff --staged
@@ -214,9 +215,6 @@
     # a.k.a. ‘delete merged’
     brdm = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
 
-    # Switch to a branch, creating it if necessary
-    co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
 
@@ -234,6 +232,9 @@
 
     # Find commits by commit message
     fm = "!f() { git log --pretty=shorter --decorate --date=short --grep=$1; }; f"
+
+    # Switch to a branch, creating it if necessary
+    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
 
     # Checkout a pull request from origin (of a github repository)
     pr = !"f() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; f"
