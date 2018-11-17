@@ -39,3 +39,12 @@ sandbox_hook() {
   eval "$hook(){ sandbox $cmd; $hook \$@ }"
 }
 # ============================================================================
+
+# Pyenv config.
+sandbox_init_pyenv() {
+  eval "$(pyenv init -)"
+}
+
+sandbox_hook pyenv pyenv
+sandbox_hook pyenv python
+sandbox_hook pyenv python3
