@@ -1,163 +1,6 @@
-; vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
-
-[alias]
-    # https://twitter.com/TrevorBramble/status/774292970681937920
-    alias="!git config -l | grep ^alias | cut -c 7- | sort"
-
-    # Branches
-    #--------------------
-    br = branch -v
-
-    # Remove branches that have already been merged with master
-    # a.k.a. ‘delete merged’
-    brdm = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
-
-    # Commits
-    #--------------------
-    a = add
-    c = commit -v
-    ca = !"git add -A && git commit -av"
-    cm = commit -vm
-
-    # Amend the currently staged files to the latest commit
-    amend = "commit --amend --reuse-message=HEAD"
-
-    # Credit an author on the latest commit
-    credit = "!f() { \
-        git commit --amend --author \"$1 <$2>\" -C HEAD; \
-    }; f"
-
-    # Undo the last commit.
-    undo = "!git reset HEAD~1 --mixed"
-
-    # Checkout
-    #--------------------
-    # Switch to a branch, creating it if necessary
-    co = "!f() { \
-        git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; \
-    }; f"
-
-    # Clone
-    #--------------------
-    # Clone a repository including all submodules
-    cl = clone --recursive
-
-    # Cherry-pick
-    #--------------------
-    cp = cherry-pick
-
-    # Diff
-    #--------------------
-    # Show the diff between the latest commit and the current state
-    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-
-    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
-    di = !"d() { \
-        git diff --patch-with-stat HEAD~$1; \
-    }; git diff-index --quiet HEAD -- || clear; d"
-
-    # Useful for patch emails.
-    patch = !git --no-pager diff --no-color
-
-    # Find
-    #--------------------
-    # Find branches containing commit
-    fb = "!f() { \
-        git branch -a --contains $1; \
-    }; f"
-
-    # Find tags containing commit
-    ft = "!f() { \
-        git describe --always --contains $1; \
-    }; f"
-
-    # Find commits by source code
-    fc = "!f() { \
-        git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; \
-    }; f"
-
-    # Find commits by commit message
-    fm = "!f() { \
-        git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; \
-    }; f"
-
-    # Log
-    #--------------------
-    # View abbreviated SHA, description, and history graph of the latest 20 commits
-    l = !"git --no-pager log --pretty=oneline -n 20 --graph --abbrev-commit"
-
-    # Color graph log view
-    graph = log --graph --color --pretty=format:"%C(yellow)%H%C(green)%d%C(reset)%n%x20%cd%n%x20%cn%x20(%ce)%n%x20%s%n"
-
-    # List contributors with number of commits
-    contributors = shortlog --summary --numbered
-
-    # Pull
-    #--------------------
-    pu = pull
-
-    # Pull in remote changes for the current repository and all its submodules
-    pu-all = !"git pull; git submodule foreach git pull origin master"
-
-    # Push
-    #--------------------
-    p = push
-    pom = push origin master
-    poh = push origin head
-
-    # Rebase
-    #--------------------
-    # Interactive rebase with the given number of latest commits
-    reb = "!r() { \
-        git rebase -i HEAD~$1; \
-    }; r"
-
-    # Remotes
-    #--------------------
-    # Show verbose output about tags, branches or remotes
-    remotes = "remote -v"
-
-    # Stash
-    #--------------------
-    st = stash
-    stp = stash pop
-    st-all = stash save --include-untracked
-
-    # Take a snapshot of your current working tree without removing the
-    # changes from your tree.
-    # via http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
-    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-    snapshots = !git stash list --grep snapshot
-
-    # Status
-    #--------------------
-    s = status -sb
-
-    # Submodule
-    #--------------------
-    sm = submodule
-    smu = submodule foreach git pull origin master
-
-    # Tags
-    #--------------------
-    # Remove the old tag with this name and tag the latest commit with it.
-    retag = "!r() { \
-        git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; \
-    }; r"
-
-    sync-tags = fetch --prune origin '+refs/tags/*:refs/tags/*'
-
-    # Show verbose output about tags
-    tags = "tag -l"
-
-    # Whatchanged
-    #--------------------
-    w  = whatchanged --decorate
-    wp = whatchanged --decorate -p
-
 [core]
+    attributesfile = ~/.config/git/attributes
     excludesfile = ~/.config/git/ignore
-    pager = diff-so-fancy | less --tabs=4 -RFX
 
     # Prevent showing files whose names contain non-ASCII symbols as unversioned.
     # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
@@ -184,22 +27,35 @@
     ui = auto
 
 [color "branch"]
-    current = yellow reverse
-    local = yellow
-    remote = green
+    plain = yellow
+    current = magenta bold
+    local = blue bold
+    remote = white
+    upstream = green bold
 
 [color "diff"]
-    commit = yellow
-    frag = magenta
-    meta = yellow
-    new = green
+    plain = normal
     old = red
+    new = green
+    commit = yellow
+    meta = blue
+    frag = cyan
+    func = yellow bold
     whitespace = red reverse
 
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+
 [color "status"]
-    added = yellow
-    changed = green
-    untracked = cyan
+    header = 243
+    added = green bold
+    changed = red
+    untracked = blue bold
+    branch = green bold
+    nobranch = red
 
 [commit]
     gpgSign = true
@@ -209,7 +65,8 @@
     helper = cache --timeout=3600
 
 [diff]
-    # Detect copies as well as renames
+    algorithm = patience
+    mnemonicPrefix = true
     renames = copies
 
 [diff "bin"]
@@ -232,7 +89,6 @@
     # Include summaries of merged commits in newly created merge commit messages
     log = true
 
-    prompt = false
     tool = vimdiff
 
 [mergetool]
@@ -240,9 +96,15 @@
     keepBackup = true
     writeToTemp = true
 
+[pager]
+    diff = diff-so-fancy | less --tabs=1,3
+    show = diff-so-fancy | less --tabs=1,3
+    show-branch = true
+    status = true
+
 [pull]
     # Rebase all pulls by default, instead of merge
-    rebase= true
+    rebase = true
 
 [push]
     # Defines the action git push should take if no refspec is explicitly
@@ -254,13 +116,30 @@
     # Make `git push` push relevant annotated tags when pushing branches out.
     followTags = true
 
+[pretty]
+    log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
+    detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
+    shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
+    multiline = %C(blue)──────%Creset%n %C(auto)commit %h %C(auto) %D%Creset%n %C(cyan)%an%Creset | %Cgreen%cr%Creset%n%+B
+
 [rebase]
     autosquash = true
     autostash = true
 
+[rerere]
+    enabled = true
+
+[submodule]
+    fetchJobs = 4
+
 [status]
     submodulesummary = true
     showUntrackedFiles = all
+
+[transfer]
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=813157
+    # https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
+    fsckobjects = true
 
 [url "git@github.com:"]
     insteadOf = "gh:"
@@ -288,3 +167,109 @@
 
 [includeIf "gitdir:~/projects/streetteam/**/"]
     path = ~/.config/git/users/streetteam
+
+[alias]
+    a = add
+    br = branch -v
+    branches = branch -a
+    c = commit -v
+    ca = !git add -A && git commit -av
+    cl = clone --recursive
+    cm = commit -vm
+    cp = cherry-pick
+    d = diff
+    ds = diff --staged
+    dw = diff --color-words
+    dp = !git log --pretty=oneline | fzf | cut -d ' ' -f1 | xargs -o git show
+    l = log --pretty=log
+    lb = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
+    lg = log --graph --pretty=log --all
+    lgd = log --graph --pretty=log
+    lgw = !sh -c '"while true; do clear; git lg -15; sleep 5; done"'
+    lcp = diff @{1}..
+    lcrev = log --reverse --no-merges --stat @{1}..
+    patch = !git --no-pager diff --no-color
+    p = push
+    pu = !"git pull && git submodule foreach git pull origin master"
+    remotes = remote -v
+    s = status -sb
+    sm = submodule
+    smu = submodule foreach git pull origin master
+    st = stash
+    st-all = stash save --include-untracked
+    t = tag --column
+    tn = tag -n
+    tags = tag -l
+    w = whatchanged --decorate
+    wp = whatchanged --decorate -p
+
+    #===============================================
+    # Amend the currently staged files to the latest commit
+    amend = commit --amend --reuse-message=HEAD
+
+    # https://twitter.com/TrevorBramble/status/774292970681937920
+    alias = !git config -l | grep ^alias | cut -c 7- | sort
+
+    # Remove branches that have already been merged with master
+    # a.k.a. ‘delete merged’
+    brdm = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
+
+    # Switch to a branch, creating it if necessary
+    co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered
+
+    # Credit an author on the latest commit
+    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+    # Find branches containing commit
+    fb = "!f() { git branch -a --contains $1; }; f"
+
+    # Find tags containing commit
+    ft = "!f() { git describe --always --contains $1; }; f"
+
+    # Find commits by source code
+    fc = "!f() { git log --pretty=shorter --decorate --date=short -S$1; }; f"
+
+    # Find commits by commit message
+    fm = "!f() { git log --pretty=shorter --decorate --date=short --grep=$1; }; f"
+
+    # Checkout a pull request from origin (of a github repository)
+    pr = !"f() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; f"
+
+    # Interactive rebase with the given number of latest commits
+    reb = "!f() { git rebase -i HEAD~$1; }; f"
+
+    # Remove the old tag with this name and tag the latest commit with it.
+    retag = "!f() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; f"
+
+    # Sync all tags
+    sync-tags = fetch --prune origin '+refs/tags/*:refs/tags/*'
+
+    # Undo the last commit.
+    undo = !git reset HEAD~1 --mixed
+    #===============================================
+
+    #===============================================
+    # http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
+
+    # Sometimes you find you want to change a file that’s in a repository but
+    # by no means want to check in your edits.
+    assume   = update-index --assume-unchanged
+    unassume = update-index --no-assume-unchanged
+    assumed  = "!git ls-files -v | grep ^h | cut -c 3-"
+
+    # Often during a merge you know you want to take a file from one side wholesale.
+    # The following aliases expose the ours and theirs commands which will let you
+    # pick a file(s) from the current branch or the merged branch respectively:
+    ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
+    # Take a snapshot of your current working tree without removing the
+    # changes from your tree.
+    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    snapshots = !git stash list --grep snapshot
+    #===============================================
+
+# vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
