@@ -1,0 +1,8 @@
+---
+extends: default
+rules:
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+# vim: set ft=yaml ts=2 sw=2 tw=80 et :
