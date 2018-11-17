@@ -10,7 +10,7 @@
 
 # Opts
 #-------------------------
-[[ -s "${XDG_CONFIG_HOME}/zsh/opts" ]] && source "${XDG_CONFIG_HOME}/zsh/opts"
+source "${XDG_CONFIG_HOME}/zsh/opts"
 
 
 # Plugins
@@ -45,19 +45,19 @@ fi
 
 # Sh
 #-------------------------
-[[ -s "${XDG_CONFIG_HOME}/sh/aliases" ]] && source "${XDG_CONFIG_HOME}/sh/aliases"
-[[ -s "${XDG_CONFIG_HOME}/sh/colors" ]] && source "${XDG_CONFIG_HOME}/sh/colors"
-[[ -s "${XDG_CONFIG_HOME}/sh/gpg-agent" ]] && source "${XDG_CONFIG_HOME}/sh/gpg-agent"
+source "${XDG_CONFIG_HOME}/sh/aliases"
+source "${XDG_CONFIG_HOME}/sh/colors"
+source "${XDG_CONFIG_HOME}/sh/gpg-agent"
 
 
 # ZSH Keybindings
 #-------------------------
-[[ -s "${XDG_CONFIG_HOME}/zsh/keybindings" ]] && source "${XDG_CONFIG_HOME}/zsh/keybindings"
+source "${XDG_CONFIG_HOME}/zsh/keybindings"
 
 
 # ZSH Aliases
 #-------------------------
-[[ -s "${XDG_CONFIG_HOME}/zsh/aliases" ]] && source "${XDG_CONFIG_HOME}/zsh/aliases"
+source "${XDG_CONFIG_HOME}/zsh/aliases"
 
 
 # ZSH Functions
@@ -88,6 +88,11 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/commands" ]]; then
     fi
   done
 fi
+
+
+# ZSH Sandboxd
+#-------------------------
+source "${XDG_CONFIG_HOME}/zsh/sandboxd"
 
 
 # ZSH Completions
