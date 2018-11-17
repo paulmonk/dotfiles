@@ -4,7 +4,7 @@ GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"
 if [ "$(uname -s)" = "Darwin" ]; then
   # Force use of BSD installed variant.
   /usr/bin/sed -i "" -e \
-    "s#/usr/bin/pinentry-gnome3#${PREFIX}/bin/pinentry-mac#g" \
+    "s#/usr/bin/pinentry-curses#${PREFIX}/bin/pinentry-mac#g" \
     "${GNUPGHOME}/gpg-agent.conf"
 fi
 

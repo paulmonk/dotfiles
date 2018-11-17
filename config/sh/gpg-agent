@@ -18,6 +18,9 @@ if command -v gpg >/dev/null 2>&1; then
     SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
     export SSH_AUTH_SOCK
   fi
+
+  # add alias for ssh to update the tty
+  alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null && ssh"
 fi
 
 #  vim: set ft=sh ts=2 sw=4 tw=80 et :
