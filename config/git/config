@@ -179,9 +179,10 @@
     co = checkout
     cp = cherry-pick
     d = diff
+    dh = diff HEAD
+    dp = !git log --pretty=oneline | fzf | cut -d ' ' -f1 | xargs -o git show
     ds = diff --staged
     dw = diff --color-words
-    dp = !git log --pretty=oneline | fzf | cut -d ' ' -f1 | xargs -o git show
     l = log --pretty=log
     lb = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
     lg = log --graph --pretty=log --all
