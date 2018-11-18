@@ -12,9 +12,36 @@
 #-------------------------
 source "${XDG_CONFIG_HOME}/zsh/opts"
 
+
 # Plugins
 #-------------------------
-source "${XDG_CONFIG_HOME}/zsh/plugins"
+# Load antigen
+if [[ -s "${XDG_CONFIG_HOME}/zsh/plugins" ]]; then
+  # Antigen
+  export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
+  export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
+  export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
+  export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
+
+  # Create antigen dirs/files if they do not exist.
+  [[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
+  [[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
+  [[ -f "${XDG_DATA_HOME}/zsh/antigen/debug.log" ]] || touch "${XDG_DATA_HOME}/zsh/antigen/debug.log"
+
+  antigen_repo_dir="${ADOTDIR}/repo"
+  antigen_init_file="${antigen_repo_dir}/antigen.zsh"
+  antigen_status=1
+  if [[ ! -f "${antigen_init_file}" ]]; then
+    git clone https://github.com/zsh-users/antigen.git "${antigen_repo_dir}" || antigen_status=0
+  fi
+  if [[ ${antigen_status} == 1 ]]; then
+    source "${antigen_init_file}"
+    antigen init "${XDG_CONFIG_HOME}/zsh/plugins"
+  else
+    echo "Antigen install failed, no plugins available."
+  fi
+fi
+
 
 # Sh
 #-------------------------
@@ -22,13 +49,16 @@ source "${XDG_CONFIG_HOME}/sh/aliases"
 source "${XDG_CONFIG_HOME}/sh/colors"
 source "${XDG_CONFIG_HOME}/sh/gpg-agent"
 
+
 # ZSH Keybindings
 #-------------------------
 source "${XDG_CONFIG_HOME}/zsh/keybindings"
 
+
 # ZSH Aliases
 #-------------------------
 source "${XDG_CONFIG_HOME}/zsh/aliases"
+
 
 # ZSH Functions
 #-------------------------
@@ -46,6 +76,7 @@ for func in $^fpath/*(N-.x:t); do
   autoload -Uz "${func}";
 done
 
+
 # ZSH Commands
 # Source all shell command specific config
 #-------------------------
@@ -58,9 +89,11 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/commands" ]]; then
   done
 fi
 
+
 # ZSH Sandboxd
 #-------------------------
 source "${XDG_CONFIG_HOME}/zsh/sandboxd"
+
 
 # ZSH Completions
 #-------------------------
@@ -69,7 +102,7 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
     ${XDG_CONFIG_HOME}/zsh/completions
     ${fpath}
   )
-  if [[ ${OSTYPE} == "*darwin*" ]]; then
+  if [[ "$(uname -s)" == "Darwin" ]]; then
     fpath=(
       ${PREFIX}/share/zsh/site-functions
       ${fpath}
