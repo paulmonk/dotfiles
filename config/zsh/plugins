@@ -7,6 +7,7 @@ antigen use oh-my-zsh
 
 # Bundles
 antigen bundles <<EOBUNDLES
+    jreese/zsh-titles
     hlissner/zsh-autopair
     marzocchi/zsh-notify
     rupa/z
@@ -18,13 +19,33 @@ antigen bundles <<EOBUNDLES
     mafredri/zsh-async
 EOBUNDLES
 
+# Prompt
+# ----------------
 # Set theme
 antigen theme "geometry-zsh/geometry"
-source "${XDG_CONFIG_HOME}/zsh/themes/geometry"
 
-# Tell Antigen that you're done.
-antigen apply
+# Set geometry plugins.
+export GEOMETRY_PROMPT_PLUGINS=(exec_time jobs hostname virtualenv git)
 
+# Symbols
+export GEOMETRY_SYMBOL_PROMPT="$"                  # default prompt symbol
+export GEOMETRY_SYMBOL_RPROMPT=">"                 # multiline prompts
+export GEOMETRY_SYMBOL_EXIT_VALUE="!"              # displayed when exit value is != 0
+export GEOMETRY_SYMBOL_ROOT="#"                    # when logged in user is root
+
+# Colours
+export GEOMETRY_COLOR_EXIT_VALUE="magenta"         # prompt symbol color when exit value is != 0
+export GEOMETRY_COLOR_PROMPT="white"               # prompt symbol color
+export GEOMETRY_COLOR_ROOT="red"                   # root prompt symbol color
+export GEOMETRY_COLOR_DIR="blue"                   # current directory color
+
+# Misc
+export GEOMETRY_PROMPT_PREFIX=""                   # prefix prompt with a new line
+export GEOMETRY_PROMPT_SUFFIX=""                   # suffix prompt
+export GEOMETRY_PROMPT_PREFIX_SPACER=" "           # string to place between prefix and symbol
+export GEOMETRY_SYMBOL_SPACER=" "                  # string to place between symbol and directory
+export GEOMETRY_DIR_SPACER=" "                     # string to place between directory and suffix
+export GEOMETRY_PLUGIN_SEPARATOR=" "               # use ' ' to separate right prompt parts
 
 # Plugins Config
 # ----------------
@@ -36,5 +57,12 @@ export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
 zstyle ':notify:*' command-complete-timeout 15
 zstyle ':notify:*' error-title 'Error'
 zstyle ':notify:*' success-title 'Success'
-zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/64x64/status/dialog-error.png'
-zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/64x64/status/dialog-information.png'
+if [[ ! "${OSTYPE}" == "*darwin*" ]]; then
+  zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/256x256/status/dialog-error.png'
+  zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/256x256/status/dialog-information.png'
+fi
+
+# Plugins Finalize
+# ----------------
+# Tell Antigen that you're done.
+antigen apply
