@@ -1,8 +1,3 @@
-# Load user X resource config
-if [ -x "${XDG_CONFIG_HOME}/X11/Xresources" ]; then
-  xrdb -merge "${XDG_CONFIG_HOME}/X11/Xresources"
-fi
-
 # X11 Key repeat (delay / rate)
 xset r rate 230 35
 
