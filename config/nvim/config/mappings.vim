@@ -205,11 +205,6 @@ vnoremap mj :m'>+<CR>gv=gv
 noremap  mk :m-2<CR>
 noremap  mj :m+<CR>
 
-" Session management shortcuts
-nmap <silent> <Leader>se :<C-u>execute 'SessionSave' fnamemodify(resolve(getcwd()), ':p:gs?/?_?')<CR>
-nmap <silent> <Leader>os :<C-u>execute 'source '.g:session_directory.'/'.fnamemodify(resolve(getcwd()), ':p:gs?/?_?').'.vim'<CR>
-
-
 " Display diff from last save
 command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
@@ -279,12 +274,6 @@ endfunction
 if has('mac')
   " Open the macOS dictionary on current word
   nmap <Leader>? :!open dict://<cword><CR><CR>
-
-  " Use Marked for real-time Markdown preview
-  if executable('/Applications/Marked 2.app/Contents/MacOS/Marked 2')
-    autocmd MyAutoCmd FileType markdown
-      \ nmap <buffer><Leader>P :silent !open -a Marked\ 2.app '%:p'<CR>
-  endif
 
   " Use Dash on Mac, for context help
   if executable('/Applications/Dash.app/Contents/MacOS/Dash')
