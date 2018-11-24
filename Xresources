@@ -56,7 +56,6 @@
 
 ! To only apply colors to your terminal, for example, prefix
 ! the color assignment statement with its name. Example:
-!
 ! URxvt*background:            S_base03
 
 *background:              S_base03
@@ -84,10 +83,12 @@
 *color14:                 S_base1
 *color15:                 S_base3
 
-! Fonts settings
-Xft.autohint: 0
-Xft.lcdfilter: lcddefault
-Xft.hintstyle: hintslight
-Xft.hinting: 1
+! DPI / Fonts
+*dpi: 210
+
+Xft.dpi: 210
 Xft.antialias: 1
+Xft.hinting: 1
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
