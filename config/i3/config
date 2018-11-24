@@ -13,7 +13,9 @@ workspace_auto_back_and_forth yes
 # If focus should follow your mouse movements
 focus_follows_mouse no
 
-# By default, when switching focus to a client on a different output (e.g. focusing a client on workspace 3 on output VGA-1, coming from workspace 2 on LVDS-1), the mouse cursor is warped to the center of that client.
+# By default, when switching focus to a client on a different output
+# (e.g. focusing a client on workspace 3 on output VGA-1, coming from workspace 2 on LVDS-1),
+# the mouse cursor is warped to the center of that client.
 mouse_warping none
 
 # Be pixel stingy <none|vertical|horizontal|both>
@@ -177,44 +179,44 @@ set $vol_down                    "pamixer -d 5"
 set $vol_mute                    "pamixer -t"
 
 # The awesome rofi.
-bindsym --release $alt+Tab       exec --no-startup-id "pgrep -x rofi && killall rofi || rofi -normal-window -show window"
-bindsym --release $alt+r         exec --no-startup-id "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
-bindsym --release $alt+n         exec --no-startup-id "networkmanager_dmenu"
-bindsym --release $alt+p         exec --no-startup-id "passmenu"
+bindsym --release $alt+Tab       exec "pgrep -x rofi && killall rofi || rofi -normal-window -show window"
+bindsym --release $alt+c         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show calc"
+bindsym --release $alt+r         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
+bindsym --release $alt+n         exec "networkmanager_dmenu"
 
 # Screenshot
-bindsym Print                    exec --no-startup-id "flameshot gui"
+bindsym Print                    exec "flameshot gui"
 
 # XF86 keys
-bindsym XF86AudioPlay            exec --no-startup-id $media_play
-bindsym XF86AudioNext            exec --no-startup-id $media_next
-bindsym XF86AudioPrev            exec --no-startup-id $media_previous
-bindsym XF86AudioStop            exec --no-startup-id $media_stop
-bindsym XF86AudioRaiseVolume     exec --no-startup-id $vol_up
-bindsym XF86AudioLowerVolume     exec --no-startup-id $vol_down
-bindsym XF86AudioMute            exec --no-startup-id $vol_mute
+bindsym XF86AudioPlay            exec $media_play
+bindsym XF86AudioNext            exec $media_next
+bindsym XF86AudioPrev            exec $media_previous
+bindsym XF86AudioStop            exec $media_stop
+bindsym XF86AudioRaiseVolume     exec $vol_up
+bindsym XF86AudioLowerVolume     exec $vol_down
+bindsym XF86AudioMute            exec $vol_mute
 
 # Standard F-keys
-bindsym F8                       exec --no-startup-id $media_play
-bindsym F9                       exec --no-startup-id $media_next
-bindsym F7                       exec --no-startup-id $media_previous
-bindsym F12                      exec --no-startup-id $vol_up
-bindsym F11                      exec --no-startup-id $vol_down
-bindsym F10                      exec --no-startup-id $vol_mute
+bindsym F8                       exec $media_play
+bindsym F9                       exec $media_next
+bindsym F7                       exec $media_previous
+bindsym F12                      exec $vol_up
+bindsym F11                      exec $vol_down
+bindsym F10                      exec $vol_mute
 
 # Screen brightness controls
-bindsym XF86MonBrightnessUp      exec --no-startup-id "xbacklight -inc 10"
-bindsym XF86MonBrightnessDown    exec --no-startup-id "xbacklight -dec 10"
+bindsym XF86MonBrightnessUp      exec "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown    exec "xbacklight -dec 10"
 
 
 # Quick Actions
 # ------------
 # Apps
-bindsym $alt+Shift+b              exec --no-startup-id "${BROWSER}"
-bindsym $alt+Shift+e              exec --no-startup-id "${TERMINAL} -e neomutt"
-bindsym $alt+Shift+f              exec --no-startup-id "${TERMINAL} -e ranger"
-bindsym $alt+Shift+i              exec --no-startup-id "${TERMINAL} -e htop"
-bindsym $alt+Shift+t              exec --no-startup-id "${TERMINAL}"
+bindsym $alt+Shift+b              exec "${BROWSER}"
+bindsym $alt+Shift+e              exec "${TERMINAL} -e neomutt"
+bindsym $alt+Shift+f              exec "${TERMINAL} -e ranger"
+bindsym $alt+Shift+i              exec "${TERMINAL} -e htop"
+bindsym $alt+Shift+t              exec "${TERMINAL}"
 
 
 # Workspaces
@@ -326,24 +328,23 @@ bar {
 #==============================================================================
 # App window behavior →
 #------------------------------------------------------------------------------
-# Misc app behavior
-for_window [class="Cmst"] floating enable border normal
+for_window [class=".*"] sticky enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="^Preferences$"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
 for_window [class="Lxappearance"] floating enable border normal
-for_window [class="Nitrogen"] floating enable border normal
 for_window [class="Peek"] floating enable
-for_window [class="Pinentry"] sticky enable
+for_window [class="Pinentry"] floating enable
+for_window [title="^Qalculate!$"] floating enable
 for_window [class="Rofi"] floating enable
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Vlc"]     floating enable, border none
 for_window [class="zeal"]    floating enable, border none
 
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="^Preferences$"] floating enable
-for_window [window_role="task_dialog"] floating enable
-
 
 #==============================================================================
-# Modes → and their key bindings
+# Modes and their key bindings →
 #------------------------------------------------------------------------------
 # resize window (you can also use the mouse for that)
 set $resize_mode Resize: (hjkl) small, (arrows) normal
@@ -370,16 +371,29 @@ bindsym $mod+r mode "$resize_mode"
 set $i3exit ${XDG_CONFIG_HOME}/i3/bin/i3-exit
 set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $i3exit lock, mode "default"
-    bindsym e exec --no-startup-id $i3exit logout, mode "default"
-    bindsym s exec --no-startup-id $i3exit suspend, mode "default"
-    bindsym r exec --no-startup-id $i3exit reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id $i3exit shutdown, mode "default"
+    bindsym l exec $i3exit lock, mode "default"
+    bindsym e exec $i3exit logout, mode "default"
+    bindsym s exec $i3exit suspend, mode "default"
+    bindsym r exec $i3exit reboot, mode "default"
+    bindsym Shift+s exec $i3exit shutdown, mode "default"
 
     # Back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+Pause mode "$mode_system"
+
+#==============================================================================
+# Autostart →
+#------------------------------------------------------------------------------
+exec_always "killall compton; compton &"
+exec_always "hsetroot -solid '#333333' &"
+exec_always "numlockx &"
+exec_always "autorandr --change --default mobile"
+
+exec_always "pgrep -x usbguard-applet-qt || (usbguard-applet-qt &)"
+exec_always "pgrep -x udiskie || (udiskie --smart-tray &)"
+exec_always "pgrep -x dunst || (dunst &)"
+exec_always "pgrep -x redshift-gtk || (redshift-gtk &)"
 
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :
