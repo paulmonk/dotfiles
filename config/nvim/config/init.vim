@@ -17,17 +17,6 @@ xnoremap ;        <Nop>
 nnoremap m        <Nop>
 xnoremap m        <Nop>
 
-" Ensure cache directory
-if ! isdirectory(expand($CACHEPATH))
-  " Create missing cache dirs
-  call mkdir(expand('$CACHEPATH/backup'), 'p')
-  call mkdir(expand('$CACHEPATH/complete'), 'p')
-  call mkdir(expand('$CACHEPATH/session'), 'p')
-  call mkdir(expand('$CACHEPATH/swap'), 'p')
-  call mkdir(expand('$CACHEPATH/tags'), 'p')
-  call mkdir(expand('$CACHEPATH/undo'), 'p')
-endif
-
 " Ensure custom spelling directory
 if ! isdirectory(expand('$VIMPATH/spell'))
   call mkdir(expand('$VIMPATH/spell'))
