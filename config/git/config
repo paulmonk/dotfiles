@@ -183,7 +183,7 @@
     dp = !git log --pretty=oneline | fzf | cut -d ' ' -f1 | xargs -o git show
     ds = diff --staged
     dw = diff --color-words
-    l = log --pretty=log
+    l = log --pretty=log -n 20 --graph --abbrev-commit
     lb = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
     lg = log --graph --pretty=log --all
     lgd = log --graph --pretty=log
