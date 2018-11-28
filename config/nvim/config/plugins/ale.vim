@@ -1,5 +1,8 @@
 " ALE
 " ------------------------------
+let g:ale_sign_error = '!E'
+let g:ale_sign_warning = '!W'
+let g:ale_sign_info = 'ℹ'
 "
 " ------------------------------
 " History
@@ -20,14 +23,14 @@ let g:ale_max_buffer_history_size = 20
 let g:ale_lint_on_enter = 0
 
 " Whether to only enable the linters specified.
-let g:ale_linters_explicit = 0
+let g:ale_linters_explicit = 1
 
 " Set the ale linters to use for specifc filetypes.
 let g:ale_linters = {
 \   'graphql': ['gqlint'],
 \   'javascript': ['eslint'],
 \   'html': ['tidy'],
-\   'python': ['flake8', 'prospector'],
+\   'python': ['flake8', 'mypy', 'prospector'],
 \   'sh': ['shellcheck']
 \}
 
@@ -92,8 +95,8 @@ let g:ale_markdown_prettier_options = '--parser markdown'
 
 " Python
 "--------------
-let g:ale_python_black_options = '--line-length 80 --skip-string-normalization'
-let g:ale_python_flake8_options = '--max-line-length 80'
+let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
+let g:ale_python_flake8_options = '--max-line-length 90'
 
 " Shell
 "--------------

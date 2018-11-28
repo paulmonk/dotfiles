@@ -13,6 +13,7 @@
 # Lean & mean status/tabline for vim that's light as air
 - repo: vim-airline/vim-airline
   hook_add: |
+    let g:airline#extensions#ale#enabled = 1
     let g:airline#extensions#branch#symbol = ''
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#left_sep = ' '
@@ -92,9 +93,6 @@
 - repo: w0rp/ale
   if: empty($VIM_MINIMAL)
   hook_add: |
-    let g:ale_sign_error = '!E'
-    let g:ale_sign_warning = '!W'
-    let g:ale_sign_info = 'ℹ'
     source $VIMPATH/config/plugins/ale.vim
 
 # Lazy Loading
