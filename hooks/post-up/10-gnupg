@@ -20,3 +20,6 @@ if ! gpg  -k | grep "${MY_GPG_KEY_ID}" > /dev/null; then
           | gpg --import-ownertrust
     fi
 fi
+
+# Ensure permissions on GNUPGHOME
+chmod -R 700 "${GNUPGHOME}"
