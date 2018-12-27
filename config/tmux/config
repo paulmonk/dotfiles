@@ -286,7 +286,7 @@ set-option -g status-right-fg black
 set-option -g status-right-bg brightblue
 set-option -g status-right-attr none
 set-option -g status-right-length 83
-set-option -g status-right "#[fg=brightblack,bg=brightyellow]  %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
+set-option -g status-right "#[fg=brightblack,bg=brightyellow] %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
 
 set-window-option -g window-style ''
 set-window-option -g window-active-style ''
