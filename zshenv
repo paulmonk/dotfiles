@@ -11,9 +11,13 @@ unalias -m '*'
 
 # Source exports.
 if [[ -s "${HOME}/.config/sh/exports" ]]; then
-  # shellcheck source=/dev/null
   source "${HOME}/.config/sh/exports"
 
   # ZSH Exports
   export ZCOMPDUMP="${XDG_CACHE_HOME}/zsh/compdump-${HOST}-${ZSH_VERSION}"
+fi
+
+# Autoloads
+if (( $+commands[pyenv] )); then
+  eval "$(pyenv init -)"
 fi

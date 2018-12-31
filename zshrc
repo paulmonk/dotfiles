@@ -77,7 +77,7 @@ fi
 
 # ZSH Lazy-Loading
 #-------------------------
-source "${XDG_CONFIG_HOME}/zsh/sandboxd"
+# source "${XDG_CONFIG_HOME}/zsh/sandboxd"
 
 # ZSH Completions
 #-------------------------
