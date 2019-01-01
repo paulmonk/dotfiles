@@ -229,10 +229,10 @@
     ft = "!f() { git describe --always --contains $1; }; f"
 
     # Find commits by source code
-    fc = "!f() { git log --pretty=shorter --decorate --date=short -S$1; }; f"
+    fc = "!f() { git log --pretty=log --decorate --date=short -S$1; }; f"
 
     # Find commits by commit message
-    fm = "!f() { git log --pretty=shorter --decorate --date=short --grep=$1; }; f"
+    fm = "!f() { git log --pretty=log --decorate --date=short --grep=$1; }; f"
 
     # Switch to a branch, creating it if necessary
     go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
