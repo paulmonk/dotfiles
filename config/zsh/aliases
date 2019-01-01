@@ -149,8 +149,8 @@ fi
 
 # Youtube DL
 if (( $+commands[youtube-dl] )); then
-  alias yt="youtube-dl --add-metadata -ic" # Download video link
-  alias yta="yt -x -f bestaudio/best" # Download only audio
+  alias yt="youtube-dl --add-metadata --ignore-errors --continue --restrict-filenames" # Download video link
+  alias yta="yt --extract-audio --format bestaudio/best" # Download only audio
 fi
 
 # File Download
