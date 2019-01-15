@@ -1,0 +1,15 @@
+# Super useful readline config stolen from here:
+# http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
+
+# Incremental history searching
+ "\e[A": history-search-backward
+ "\e[B": history-search-forward
+ "\e[C": forward-char
+ "\e[D": backward-char
+
+ # Magic space
+$if Bash
+    Space: magic-space
+$endif
+
+"\M-o": "\C-p\C-a\M-f"
