@@ -94,6 +94,12 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
   fi
 fi
 
+# Add heroku completions - Linux.
+if [[ "${OSTYPE}" == "*linux*" ]]; then
+  HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME}/heroku/autocomplete/zsh_setup"
+  test -f "${HEROKU_AC_ZSH_SETUP_PATH}" && source "${HEROKU_AC_ZSH_SETUP_PATH}"
+fi
+
 # Load completions and bash completions
 autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
 autoload -Uz bashcompinit && bashcompinit
