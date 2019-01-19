@@ -20,7 +20,7 @@ zmodload zsh/terminfo
 typeset -A key
 
 # macOS
-if [[ "${OSTYPE}" == "darwin"* ]]; then
+if [[ "${KERNEL}" == "Darwin" ]]; then
     # iterm - remove K prefix
     key[Home]=${terminfo[home]}
     key[End]=${terminfo[end]}

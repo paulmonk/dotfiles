@@ -184,7 +184,7 @@ alias weather="curl -s wttr.in"
 
 # macOS aliases
 #-----------------------
-if [[ "${OSTYPE}" == "darwin"* ]]; then
+if [[ "${KERNEL}" == "Darwin" ]]; then
   # Lock the screen (when going AFK)
   alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 

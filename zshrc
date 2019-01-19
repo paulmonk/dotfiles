@@ -105,7 +105,7 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
     ${XDG_CONFIG_HOME}/zsh/completions
     ${fpath}
   )
-  if [[ "${OSTYPE}" == "*darwin*" ]]; then
+  if [[ "${KERNEL}" == "Darwin" ]]; then
     fpath=(
       ${PREFIX}/share/zsh/site-functions
       ${fpath}
@@ -114,7 +114,7 @@ if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
 fi
 
 # Add heroku completions - Linux.
-if [[ "${OSTYPE}" == "*linux*" ]]; then
+if [[ "${KERNEL}" == "Linux" ]]; then
   HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME}/heroku/autocomplete/zsh_setup"
   [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
 fi

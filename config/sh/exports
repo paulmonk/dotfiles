@@ -8,8 +8,12 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 
+# Set Kernel.
+KERNEL="$(uname -s)"
+export KERNEL
+
 # macOS
-if [ "$(uname -s)" = "Darwin" ]; then
+if [ "${KERNEL}" = "Darwin" ]; then
   # Set Default PATH
   export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
