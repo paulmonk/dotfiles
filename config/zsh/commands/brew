@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+alias brewi="brew install"
+alias brewo="brew update && brew outdated"
+alias brewup="brew upgrade && brew cask upgrade"
+alias brewr="brew uninstall"
+
+alias brewp="brew pin"
+alias brewpl="brew list --pinned"
+
+alias brewq="brew search"

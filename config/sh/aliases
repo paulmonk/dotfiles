@@ -17,4 +17,7 @@ if command -v wget >/dev/null 2>&1; then
   alias wget='wget --hsts-file="${XDG_CACHE_HOME}/wget-hsts"'
 fi
 
+# Reload any shell as a login shell
+alias reload='exec "${SHELL}" -l'
+
 #  vim: set ft=sh ts=2 sw=4 tw=80 et :

@@ -19,14 +19,11 @@ for com in "cp" "ln" "mv" "rm"; do
   alias $com="${aliases[$com]:-$com} -i"
 done
 
-# Reload zsh.
-alias zreload="source \${HOME}/.zshenv && source \${HOME}/.zshrc && echo '✱ ZSH reloaded'"
-
 # History
 # -------------------------
 # No log history.
 # Use a space at the beginning to prevent command entering history.
-for com in "clear" "exa" "exit" "fg" "history" "jobs" "ls" "pass" "pwd"; do
+for com in "clear" "exit" "fg" "history" "jobs" "pass" "pwd"; do
   alias $com=" ${aliases[$com]:-$com}";
 done
 
@@ -61,11 +58,12 @@ alias a="alias"
 alias as="alias | grep -i"
 alias afk="${XDG_CONFIG_HOME}/i3/bin/i3-exit lock"
 alias b="${(z)BROWSER}"
+alias clr='clear && echo "Currently logged in on ${TTY}, as ${LOGNAME} in directory ${PWD}"'
 alias df="df -kh"
 alias du="du -kh"
 alias e="${(z)VISUAL:-${(z)EDITOR}}"
 alias g="git"
-alias md="mkdir -p"
+alias md="mkdir -pv"
 alias o="open"
 alias p="${(z)PAGER}"
 alias r="ranger"
