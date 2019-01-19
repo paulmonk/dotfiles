@@ -1,0 +1,5 @@
+#!/bin/sh
+
+if command -v duti; then
+  duti "${XDG_CONFIG_HOME}/duti/config"
+fi

@@ -1,0 +1,8 @@
+# Use `mdls -name kMDItemCFBundleIdentifier -r /Applications/<app>.app` to identify applications.
+
+# Protect against Sparklegate
+# https://www.taoeffect.com/blog/2016/02/apologies-sky-kinda-falling-protecting-yourself-from-sparklegate/
+org.mozilla.firefox afp all
+org.mozilla.firefox ftp all
+org.mozilla.firefox nfs all
+org.mozilla.firefox dmb all
