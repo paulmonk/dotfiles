@@ -25,6 +25,11 @@ if [ "$(uname -s)" = "Darwin" ]; then
   export HOMEBREW_CASK_OPTS="--require-sha"
   # Force use of our curlrc
   export HOMEBREW_CURLRC="1"
+  # Force homebrew software
+  export HOMEBREW_FORCE_BREWED_CURL="1"
+  export HOMEBREW_FORCE_BREWED_GIT="1"
+  # brew upgrade always assumes --cleanup has been passed
+  export HOMEBREW_INSTALL_CLEANUP="1"
   # Disable anonymous statistics collections
   export HOMEBREW_NO_ANALYTICS="1"
   # Disable automatic updates to keep in control of brew updates
@@ -33,8 +38,6 @@ if [ "$(uname -s)" = "Darwin" ]; then
   export HOMEBREW_NO_GITHUB_API="1"
   # Avoid protocol downgrades from HTTPS to HTTP via redirect
   export HOMEBREW_NO_INSECURE_REDIRECT="1"
-  # brew upgrade always assumes --cleanup has been passed
-  export HOMEBREW_INSTALL_CLEANUP="1"
 
   # Use homebrew GNU tools instead of system BSD
   export PATH="${PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
