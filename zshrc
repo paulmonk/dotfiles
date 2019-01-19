@@ -15,23 +15,42 @@ source "${XDG_CONFIG_HOME}/zsh/opts"
 # Plugins
 #-------------------------
 # Load antigen
+# https://github.com/zsh-users/antigen/wiki/Configuration
 export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
-export ANTIGEN_BUNDLES="${XDG_DATA_HOME}/zsh/antigen/bundles"
-export ANTIGEN_CACHE="${XDG_CACHE_HOME}/zsh/antigen/init.zsh"
-export ANTIGEN_COMPDUMP="${XDG_CACHE_HOME}/zsh/antigen/compdump-${HOST}-${ZSH_VERSION}"
+export ANTIGEN_BUNDLES="${ADOTDIR}/bundles"
 
-if [[ ! -f "${ADOTDIR}/repo/antigen.zsh" ]]; then
-  echo "Antigen not found. Attempting Install..."
-  git clone https://github.com/zsh-users/antigen.git "${ADOTDIR}/repo/"
-fi
+# Note: These non export-vars below are not official exports
+ANTIGEN_CACHE_DIR="${XDG_CACHE_HOME}/zsh/antigen"
+ANTIGEN_REPO_DIR="${ADOTDIR}/repo"
+ANTIGEN_BIN="${ANTIGEN_REPO_DIR}/antigen.zsh"
+
+export ANTIGEN_CACHE="${ANTIGEN_CACHE_DIR}/init.zsh"
+export ANTIGEN_COMPDUMP="${ANTIGEN_CACHE_DIR}/compdump-${HOST}-${ZSH_VERSION}"
+export ANTIGEN_DEBUG_LOG="${ANTIGEN_CACHE_DIR}/debug.log"
+export ANTIGEN_LOCK="${ANTIGEN_CACHE_DIR}/lock"
 
 # Create antigen dirs/files if they do not exist.
-[[ -d "${XDG_CACHE_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh/antigen/"
-[[ -d "${XDG_DATA_HOME}/zsh/antigen/" ]] || mkdir -p "${XDG_DATA_HOME}/zsh/antigen/"
-[[ -f "${XDG_DATA_HOME}/zsh/antigen/debug.log" ]] || touch "${XDG_DATA_HOME}/zsh/antigen/debug.log"
+[[ -d "${ADOTDIR}" ]] || mkdir -p "${ADOTDIR}"
+[[ -d "${ANTIGEN_CACHE_DIR}" ]] || mkdir -p "${ANTIGEN_CACHE_DIR}"
+[[ -f "${ANTIGEN_DEBUG_LOG}" ]] || touch "${ANTIGEN_DEBUG_LOG}"
 
-source "${ADOTDIR}/repo/antigen.zsh"
-antigen init "${XDG_CONFIG_HOME}/zsh/plugins"
+# Attempt Install...
+if [[ ! -f "${ANTIGEN_BIN}" ]]; then
+  echo "Antigen not found here: "${ANTIGEN_BIN}". Attempting Install..."
+  git clone https://github.com/zsh-users/antigen.git "${ANTIGEN_REPO_DIR}"
+fi
+
+# Did it install correctly?
+if [[ -f "${ANTIGEN_BIN}" ]]; then
+  # Sometimes Antigen lock files get left around for whatever reason.
+  # Let's clean those up.
+  [[ -f "${ANTIGEN_LOCK}" ]] && rm -f "${ANTIGEN_LOCK}"
+
+  source "${ANTIGEN_BIN}"
+  antigen init "${XDG_CONFIG_HOME}/zsh/plugins"
+else
+  echo "WARNING: Antigen not found: ${ANTIGEN_BIN}. Skipping init."
+fi
 
 # Sh
 #-------------------------
@@ -97,7 +116,7 @@ fi
 # Add heroku completions - Linux.
 if [[ "${OSTYPE}" == "*linux*" ]]; then
   HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME}/heroku/autocomplete/zsh_setup"
-  test -f "${HEROKU_AC_ZSH_SETUP_PATH}" && source "${HEROKU_AC_ZSH_SETUP_PATH}"
+  [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
 fi
 
 # Load completions and bash completions
