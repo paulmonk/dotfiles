@@ -34,7 +34,7 @@ if [ "$(uname -s)" = "Darwin" ]; then
   # Avoid protocol downgrades from HTTPS to HTTP via redirect
   export HOMEBREW_NO_INSECURE_REDIRECT="1"
   # brew upgrade always assumes --cleanup has been passed
-  export HOMEBREW_UPGRADE_CLEANUP="1"
+  export HOMEBREW_INSTALL_CLEANUP="1"
 
   # Use homebrew GNU tools instead of system BSD
   export PATH="${PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
