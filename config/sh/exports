@@ -78,12 +78,12 @@ else
 
   # GTK 3: HiDPI.
   # Scale UI elements by a factor of two
-  export GDK_SCALE="2"
+  # export GDK_SCALE="2"
   # Undo text scaling.
-  export GDK_DPI_SCALE="0.5"
+  # export GDK_DPI_SCALE="0.5"
 
   # QT 5.6: HiDPI
-  export QT_AUTO_SCREEN_SCALE_FACTOR="1"
+  # export QT_AUTO_SCREEN_SCALE_FACTOR="1"
 
   # Qt: Forces QT to use GTK icons
   export DESKTOP_SESSION="gnome"
