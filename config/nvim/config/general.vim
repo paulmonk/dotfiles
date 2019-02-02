@@ -37,6 +37,21 @@ set sessionoptions-=help
 set sessionoptions-=buffers
 set sessionoptions+=tabpages
 
+if has('mac')
+  let g:clipboard = {
+    \   'name': 'macOS-clipboard',
+    \   'copy': {
+    \      '+': 'pbcopy',
+    \      '*': 'pbcopy',
+    \    },
+    \   'paste': {
+    \      '+': 'pbpaste',
+    \      '*': 'pbpaste',
+    \   },
+    \   'cache_enabled': 0,
+    \ }
+endif
+
 if has('clipboard')
   set clipboard& clipboard+=unnamedplus
 endif
@@ -129,13 +144,18 @@ set splitbelow splitright       " Splits open bottom right
 set switchbuf=useopen,usetab    " Jump to the first open window in any tab
 set switchbuf+=vsplit           " Switch buffer behavior to vsplit
 set backspace=indent,eol,start  " Intuitive backspacing in insert mode
-set diffopt=filler,iwhite       " Diff mode: show fillers, ignore white
+set diffopt=filler,iwhite       " Diff mode: show fillers, ignore whitespace
 set showfulltag                 " Show tag and tidy search in completion
 set complete=.                  " No wins, buffs, tags, include scanning
 set completeopt=menuone         " Show menu even for one item
 set completeopt+=noselect       " Do not select a match in the menu
+
 if has('patch-7.4.775')
   set completeopt+=noinsert
+endif
+
+if has('patch-8.1.0360')
+  set diffopt+=internal,algorithm:patience
 endif
 
 if exists('+inccommand')

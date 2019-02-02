@@ -114,14 +114,17 @@ let g:SimpleJsIndenter_CaseIndentLevel = -1
 " Markdown
 let g:markdown_fenced_languages = [
   \  'css',
+  \  'docker=Dockerfile',
   \  'javascript',
   \  'js=javascript',
   \  'json=javascript',
+  \  'make=Makefile',
   \  'python',
   \  'py=python',
   \  'sh',
   \  'sass',
   \  'xml',
+  \  'yaml',
   \  'vim'
   \]
 

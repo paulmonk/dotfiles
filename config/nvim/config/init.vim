@@ -91,5 +91,6 @@ let g:loaded_vimball = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zip = 1
 let g:loaded_zipPlugin = 1
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :

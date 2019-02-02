@@ -25,14 +25,14 @@ nmap <silent> <Leader><Leader> V
 vmap <Leader><Leader> <Esc>
 
 " Change current word in a repeatable manner
-nnoremap cn *``cgn
-nnoremap cN *``cgN
+nnoremap <leader>cn *``cgn
+nnoremap <leader>cN *``cgN
 
 " Change selected word in a repeatable manner
-vnoremap <expr> cn "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgn"
-vnoremap <expr> cN "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgN"
+vnoremap <expr> <leader>cn "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgn"
+vnoremap <expr> <leader>cN "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgN"
 
-nnoremap cp yap<S-}>p
+nnoremap <leader>cp yap<S-}>p
 nnoremap <leader>a =ip
 
 " xnoremap p  "0p
@@ -204,9 +204,6 @@ vnoremap mk :m-2<CR>gv=gv
 vnoremap mj :m'>+<CR>gv=gv
 noremap  mk :m-2<CR>
 noremap  mj :m+<CR>
-
-" Display diff from last save
-command! DiffOrig vert new | setlocal bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
 " Append modeline to EOF
 nnoremap <silent> <Leader>ml :call <SID>append_modeline()<CR>

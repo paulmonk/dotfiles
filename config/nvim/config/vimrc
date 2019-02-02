@@ -8,16 +8,36 @@ if &compatible
   set nocompatible
 endif
 
+" let $NVIM_PYTHON_LOG_FILE = '/tmp/nvim_log'
+" let $NVIM_PYTHON_LOG_LEVEL = 'DEBUG'
+
 " Set main configuration directory, and where cache/data is stored.
 let $VIMPATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 let $CACHEPATH = expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : '~/.cache').'/nvim')
 let $DATAPATH = expand(($XDG_DATA_HOME ? $XDG_DATA_HOME : '~/.local/share').'/nvim')
+
+" Constants
+let s:is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
 
 let g:dein#install_max_processes = 16
 let g:dein#install_progress_type = 'echo'
 let g:dein#enable_notification = 0
 let g:dein#install_log_filename = $CACHEPATH.'/dein.log'
 
+" Search and use environments specifically made for Neovim.
+if isdirectory($DATAPATH.'/virtualenvs/nvim')
+  let g:python3_host_prog = $DATAPATH.'/virtualenvs/nvim/bin/python'
+endif
+
+if has('pythonx')
+  if has('python3')
+    set pyxversion=3
+  elseif has('python')
+    set pyxversion=2
+  endif
+endif
+
+" Util functions
 function! s:dein_check_ruby() abort
   call system("ruby -e 'require \"json\"; require \"yaml\"'")
   return (v:shell_error == 0) ? 1 : 0
@@ -93,10 +113,7 @@ augroup END
 " Initialize base requirements
 if has('vim_starting')
   call s:source_file('init.vim')
-  if has('nvim')
-    " Neovim settings
-    call s:source_file('neovim.vim')
-  elseif ! has('gui_running') && ! has('win32') && ! has('win64')
+  if ! has('nvim') && ! has('gui_running') && ! has('win32') && ! has('win64')
     " Linux terminal settings
     call s:source_file('terminal.vim')
   endif
@@ -119,7 +136,9 @@ if dein#load_state(s:path)
     call dein#local(expand('$VIMPATH/dev'), {'frozen': 1, 'merged': 0})
   endif
   call dein#end()
-  call dein#save_state()
+  if ! s:is_sudo
+    call dein#save_state()
+  endif
   if dein#check_install()
     if ! has('nvim')
       set nomore
@@ -141,6 +160,24 @@ call s:source_file('general.vim')
 call s:source_file('filetype.vim')
 call s:source_file('mappings.vim')
 call s:source_file('theme.vim')
+
+if s:is_sudo
+  set noswapfile
+  set nobackup
+  set nowritebackup
+  set noundofile
+  if has('nvim')
+    set shada="NONE"
+  else
+    set viminfo="NONE"
+  endif
+endif
+
+" Load user custom local settings
+if filereadable(expand('$VIMPATH/config/local.vim'))
+  call s:source_file('local.vim')
+endif
+
 set secure
 
 " vim: set ts=2 sw=2 tw=80 noet :
