@@ -14,28 +14,40 @@ SHELL                   := /usr/bin/env bash
 #------------------------------
 # Variables
 #------------------------------
+KERNEL := $(shell uname -s)
 XDG_CACHE_HOME ?= $(HOME)/.cache
 XDG_DATA_HOME ?= $(HOME)/.local/share
 
 VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
-VIM_CACHE_DIR := $(XDG_CACHE_HOME)/$(VIM_BIN)
-VIM_DATA_DIR := $(XDG_DATA_HOME)/$(VIM_BIN)
 VIM_VERSION := "$(shell $(VIM_BIN) --version)"
-VIM_VENV_DIR := $(VIM_DATA_DIR)/virtualenvs
-VIM_VENV_NVIM := $(VIM_VENV_DIR)/$(VIM_BIN)
+VIM_CACHEDIR ?= $(XDG_CACHE_HOME)/$(VIM_BIN)
+VIM_DATADIR ?= $(XDG_DATA_HOME)/$(VIM_BIN)
+VIM_VENVDIR ?= $(VIM_DATADIR)/virtualenvs
+VIM_VENV := $(VIM_VENVDIR)/$(VIM_BIN)
+
+# OS Specific
+ifeq ($(KERNEL), Darwin)
+# Set PYTHON version to a symlink that is version indempotent so that
+# virtualenvs do not break on upgrade.
+PREFIX ?= $(HOME)/Library/Homebrew
+PYTHON := $(PREFIX)/opt/python/libexec/bin/python
+else
+PREFIX ?= /usr
+PYTHON := $(PREFIX)/bin/python
+endif
 
 #------------------------------
 # Targets
 #------------------------------
 # Only needed for neovim.
-$(VIM_VENV_NVIM)/bin/pip:
-	mkdir -p $(VIM_VENV_DIR) && python3 -m venv "$(VIM_VENV_NVIM)"
+$(VIM_VENV)/bin/pip:
+	mkdir -p $(VIM_VENVDIR) && $(PYTHON) -m venv "$(VIM_VENV)"
 
 .PHONY: virtualenv
-virtualenv: $(VIM_VENV_NVIM)/bin/pip
+virtualenv: $(VIM_VENV)/bin/pip
 ifeq ('$(VIM_BIN)','nvim')
-	$(VIM_VENV_NVIM)/bin/pip install -U pip
-	$(VIM_VENV_NVIM)/bin/pip install -U neovim PyYAML
+	$(VIM_VENV)/bin/pip install -U pip
+	$(VIM_VENV)/bin/pip install -U neovim PyYAML
 else
 	@echo "Neovim was not found. Not creating virtualenv."
 endif
@@ -43,8 +55,8 @@ endif
 .PHONY: install
 install:
 	$(MAKE) virtualenv
-	mkdir -vp "$(VIM_CACHE_DIR)/"{backup,complete,session,swap,tags,undo}
-	mkdir -vp "$(VIM_DATA_DIR)/shada"
+	mkdir -vp "$(VIM_CACHEDIR)/"{backup,complete,session,swap,tags,undo}
+	mkdir -vp "$(VIM_DATADIR)/shada"
 	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
 		-c "try | call dein#update() | finally | call confirm('') | qall! | endtry"
 
@@ -59,6 +71,6 @@ upgrade: update
 
 .PHONY: uninstall
 uninstall:
-	rm -rf "$(VIM_CACHE_DIR)"
-	rm -rf "$(VIM_DATA_DIR)"
-	rm -rf "$(VIM_VENV_DIR)"
+	rm -rf "$(VIM_CACHEDIR)"
+	rm -rf "$(VIM_DATADIR)"
+	rm -rf "$(VIM_VENVDIR)"
