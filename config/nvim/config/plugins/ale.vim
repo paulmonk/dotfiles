@@ -16,6 +16,9 @@ let g:ale_history_log_output = 1
 " How much history of commands to save.
 let g:ale_max_buffer_history_size = 20
 
+" Use global executables by default
+let g:ale_use_global_executables = 1
+
 " ------------------------------
 " Linting
 " ------------------------------
@@ -27,18 +30,28 @@ let g:ale_linters_explicit = 1
 
 " Set the ale linters to use for specifc filetypes.
 let g:ale_linters = {
-\   'graphql': ['gqlint'],
+\   'css': ['stylelint'],
+\   'dockerfile': ['hadolint'],
+\   'fish': ['fish'],
+\   'graphql': ['eslint'],
 \   'javascript': ['eslint'],
-\   'html': ['tidy'],
-\   'python': ['flake8', 'mypy', 'prospector'],
-\   'sh': ['shellcheck']
+\   'json': ['jsonlint'],
+\   'help': ['proselint'],
+\   'html': ['proselint', 'tidy'],
+\   'mail': ['proselint'],
+\   'markdown': ['proselint'],
+\   'python': ['bandit', 'mypy', 'prospector'],
+\   'sh': ['shellcheck'],
+\   'vim': ['vint'],
+\   'yaml': ['yamllint']
 \}
 
 " Linter aliases
 let g:ale_linter_aliases = {
-\   'zsh': 'sh',
+\   'htmldjango': 'html',
+\   'bash': 'sh',
 \   'csh': 'sh',
-\   'htmldjango': 'html'
+\   'zsh': 'sh'
 \}
 
 " ------------------------------
@@ -50,12 +63,14 @@ let g:ale_fix_on_save = 0
 
 " Set the ale fixers for specfic filetypes
 let g:ale_fixers = {
+\   'go': ['gofmt'],
 \   'graphql': ['prettier'],
 \   'javascript': ['prettier'],
 \   'json': ['prettier'],
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
-\   'sh': ['shfmt']
+\   'sh': ['shfmt'],
+\   'yaml': ['prettier']
 \}
 
 " Do not lint or fix minified files.
@@ -96,8 +111,12 @@ let g:ale_markdown_prettier_options = '--parser markdown'
 " Python
 "--------------
 let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
-let g:ale_python_flake8_options = '--max-line-length 90'
 
 " Shell
 "--------------
 let g:ale_sh_shfmt_options = '-i 2 -ci'
+
+" Yaml
+"--------------
+let g:ale_yaml_prettier_use_global = 1
+let g:ale_yaml_prettier_options = '--parser yaml'
