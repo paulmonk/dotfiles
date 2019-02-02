@@ -66,7 +66,7 @@
 
 -- Administration queries
 
-\set menu '\\i ~/.psqlrc'
+\set menu '\\i ~/.config/pg/psqlrc'
 
 \set settings 'SELECT name, setting,unit,context from pg_settings;'
 
