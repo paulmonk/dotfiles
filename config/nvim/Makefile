@@ -29,11 +29,9 @@ VIM_VENV := $(VIM_VENVDIR)/$(VIM_BIN)
 ifeq ($(KERNEL), Darwin)
 # Set PYTHON version to a symlink that is version indempotent so that
 # virtualenvs do not break on upgrade.
-PREFIX ?= $(HOME)/Library/Homebrew
-PYTHON := $(PREFIX)/opt/python/libexec/bin/python
+PYTHON ?= $(HOME)/Library/Homebrew/opt/python/libexec/bin/python
 else
-PREFIX ?= /usr
-PYTHON := $(PREFIX)/bin/python
+PYTHON ?= /usr/bin/python3
 endif
 
 #------------------------------
@@ -56,7 +54,6 @@ endif
 install:
 	$(MAKE) virtualenv
 	mkdir -vp "$(VIM_CACHEDIR)/"{backup,complete,session,swap,tags,undo}
-	mkdir -vp "$(VIM_DATADIR)/shada"
 	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
 		-c "try | call dein#update() | finally | call confirm('') | qall! | endtry"
 
