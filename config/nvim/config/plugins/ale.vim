@@ -1,9 +1,13 @@
 " ALE
+"
+" ------------------------------
+" General
 " ------------------------------
 let g:ale_sign_error = '⚠'
 let g:ale_sign_warning = '⌁'
 let g:ale_sign_info = '⊹'
-"
+
+
 " ------------------------------
 " History
 " ------------------------------
@@ -18,6 +22,7 @@ let g:ale_max_buffer_history_size = 20
 
 " Use global executables by default
 let g:ale_use_global_executables = 1
+
 
 " ------------------------------
 " Linting
@@ -54,6 +59,7 @@ let g:ale_linter_aliases = {
 \   'zsh': 'sh'
 \}
 
+
 " ------------------------------
 " Fixers
 " ------------------------------
@@ -81,6 +87,10 @@ let g:ale_pattern_options = {
 " If you configure g:ale_pattern_options outside of vimrc, you need this.
 let g:ale_pattern_options_enabled = 1
 
+
+" ------------------------------
+" Custom Options
+" ------------------------------
 " Dockerfile
 "--------------
 " If not installed locally, should we use the docker image available.
@@ -90,27 +100,24 @@ let g:ale_dockerfile_hadolint_use_docker = 'maybe'
 
 " GrpahQL
 "--------------
-let g:ale_graphql_prettier_use_global = 1
 let g:ale_graphql_prettier_options = '--parser graphql'
 
 " Javascript
 "--------------
-let g:ale_javascript_prettier_use_global = 1
 let g:ale_javascript_prettier_options = '--single-quote --no-bracket-spacing'
 
 " JSON
 "--------------
-let g:ale_json_prettier_use_global = 1
 let g:ale_json_prettier_options = '--parser json5'
 
 " Markdown
 "--------------
-let g:ale_markdown_prettier_use_global = 1
 let g:ale_markdown_prettier_options = '--parser markdown'
 
 " Python
 "--------------
 let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
+let g:ale_python_mypy_options = '–-ignore-missing-imports'
 
 " Shell
 "--------------
@@ -118,5 +125,4 @@ let g:ale_sh_shfmt_options = '-i 2 -ci'
 
 " Yaml
 "--------------
-let g:ale_yaml_prettier_use_global = 1
 let g:ale_yaml_prettier_options = '--parser yaml'
