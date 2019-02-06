@@ -45,7 +45,7 @@ let g:ale_linters = {
 \   'html': ['proselint', 'tidy'],
 \   'mail': ['proselint'],
 \   'markdown': ['proselint'],
-\   'python': ['bandit', 'mypy', 'prospector'],
+\   'python': ['bandit', 'flake8', 'mypy', 'prospector'],
 \   'sh': ['shellcheck'],
 \   'vim': ['vint'],
 \   'yaml': ['yamllint']
@@ -118,6 +118,8 @@ let g:ale_markdown_prettier_options = '--parser markdown'
 "--------------
 let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
 let g:ale_python_mypy_options = '–-ignore-missing-imports'
+" These tools will get run by flake8.
+let g:ale_python_prospector_options = '--max-line-length 90 --without-tool mccabe pyflakes'
 
 " Shell
 "--------------
