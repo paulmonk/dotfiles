@@ -1,0 +1,70 @@
+#!/usr/bin/env zsh
+
+# FZF and Tmux integration.
+if (( $+commands[fzf] )); then
+  # fe [FUZZY PATTERN] - Open the selected file with the default editor
+  fe() {
+    local query file
+
+    query="${1}"
+    file=$(fzf-tmux --query="${query}" --select-1 --exit-0)
+    [ -n "${file}" ] && "${EDITOR}" "${file}"
+  }
+
+
+  # fda - including hidden directories
+  fda() {
+    local dir
+
+    dir=$(find "${1:-.}" -type d 2> /dev/null | fzf-tmux +m) && cd "${dir}"
+  }
+
+
+  # cdf - cd into the directory of the selected file
+  cdf() {
+    local file dir
+
+    file=$(fzf-tmux +m -q "${1}") && dir=$(dirname "${file}") && cd "${dir}"
+  }
+
+
+  # fkill - kill process
+  fkill() {
+    ps -ef | sed 1d | fzf-tmux -m | awk '{print $2}' | xargs kill -${1:-9}
+  }
+
+
+  # ftpane - switch pane
+  ftpane() {
+    local panes current_window current_pane target target_window target_pane
+
+    panes="$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')"
+    current_pane="$(tmux display-message -p '#I:#P')"
+    current_window="$(tmux display-message -p '#I')"
+
+    target=$(echo "${panes}" | grep -v "${current_pane}" | fzf +m --reverse) || return
+
+    target_window=$(echo "${target}" | awk 'BEGIN{FS=":|-"} {print $1}')
+    target_pane=$(echo "${target}" | awk 'BEGIN{FS=":|-"} {print $2}' | cut -c 1)
+
+    if [[ "${current_window}" == "${target_window}" ]]; then
+      tmux select-pane -t "${target_window}.${target_pane}"
+    else
+      tmux select-pane -t "${target_window}.${target_pane}" &&
+      tmux select-window -t "${target_window}"
+    fi
+  }
+
+
+  # fts [FUZZY PATTERN] - Select selected tmux session
+  #   - Bypass fuzzy finder if there's only one match (--select-1)
+  #   - Exit if there's no match (--exit-0)
+  fts() {
+    local session query
+
+    query="${1}"
+    session=$(tmux list-sessions -F "#{session_name}" | fzf-tmux --query="${query}" --select-1 --exit-0) || return
+
+    tmux switch-client -t "${session}"
+  }
+fi

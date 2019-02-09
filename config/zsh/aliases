@@ -114,7 +114,6 @@ fi
 
 # process
 alias ps="ps -ax"
-alias psk="ps | fzf | cut -d " " -f1 | xargs -o kill"
 alias pst="pstree -g 3 -ws"
 
 # Systemd

@@ -13,6 +13,7 @@ if [[ -s "/usr/share/fzf/completion.zsh" ]]; then
   source "/usr/share/fzf/completion.zsh"
 fi
 
+
 # General
 #-------------------------
 # Default Command
@@ -42,6 +43,7 @@ export FZF_ALT_C_OPTS="--select-1 --exit-0"
 # Automatically select if only 1 and exit if list is empty.
 export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 export FZF_CTRL_T_OPTS="--select-1 --exit-0"
+
 
 # Keybindings
 #-------------------------
