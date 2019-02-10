@@ -69,6 +69,9 @@
   hook_add: |
    source $VIMPATH/config/plugins/ale.vim
 
+# Fades your inactive buffers and preserves syntax highlighting
+- repo: TaDaa/vimade
+
 # Vim8 only:
 - repo: roxma/vim-hug-neovim-rpc
   if: ! has('nvim')
