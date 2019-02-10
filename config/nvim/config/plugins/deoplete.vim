@@ -1,11 +1,12 @@
-" deoplete for nvim
-" ---
+" -------------------------------------------------
+" Deoplete
+" -------------------------------------------------
 
 " call deoplete#custom#option('profile', v:true)
 " call deoplete#enable_logging('DEBUG', 'deoplete.log')<CR>
 " call deoplete#custom#source('tern', 'debug_enabled', 1)<CR>
 
-" General settings " {{{
+" General settings
 " ---
 let g:deoplete#auto_complete_delay = 5  " Default is 50
 let g:deoplete#auto_refresh_delay = 30  " Default is 500
