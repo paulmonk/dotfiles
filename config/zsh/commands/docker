@@ -7,3 +7,6 @@ alias dogc='docker rmi $(docker images -qf "dangling=true")'
 alias dovc='docker volume ls -qf dangling=true | xargs docker volume rm'
 alias dotop='docker stats $(docker ps --format="{{.Names}}")'
 alias dolast='docker inspect --format "{{.State.Running}}" $(docker ps -lq)'
+
+# Clean up unused docker images, containers, networks and volumes
+alias doclean="docker system prune --volumes -f"
