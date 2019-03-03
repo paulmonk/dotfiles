@@ -192,11 +192,11 @@
     lcrev = log --reverse --no-merges --stat @{1}..
     patch = !git --no-pager diff --no-color
     p = push
-    pu = !"git pull && git submodule foreach git pull origin master"
+    pu = !"git pull && git smu"
     remotes = remote -v
     s = status -sb
     sm = submodule
-    smu = submodule foreach git pull origin master
+    smu = submodule update --init --recursive --remote --rebase
     st = stash
     st-all = stash save --include-untracked
     t = tag --column
