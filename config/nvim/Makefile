@@ -27,11 +27,9 @@ VIM_VENV := $(VIM_VENVDIR)/$(VIM_BIN)
 
 # OS Specific
 ifeq ($(KERNEL), Darwin)
-# Set PYTHON version to a symlink that is version indempotent so that
-# virtualenvs do not break on upgrade.
-PYTHON ?= $(HOME)/Library/Homebrew/opt/python/libexec/bin/python
+PREFIX ?= $(shell brew --prefix)
 else
-PYTHON ?= /usr/bin/python3
+PREFIX ?= /usr
 endif
 
 #------------------------------
@@ -39,7 +37,7 @@ endif
 #------------------------------
 # Only needed for neovim.
 $(VIM_VENV)/bin/pip:
-	mkdir -p $(VIM_VENVDIR) && $(PYTHON) -m venv "$(VIM_VENV)"
+	mkdir -p $(VIM_VENVDIR) && $(PREFIX)/bin/python3 -m venv "$(VIM_VENV)"
 
 .PHONY: virtualenv
 virtualenv: $(VIM_VENV)/bin/pip
