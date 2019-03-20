@@ -15,103 +15,24 @@
 # to add other keys to this hash, see: man 5 terminfo
 #
 #------------------------------------------------------------------------------
-
-zmodload zsh/terminfo
-typeset -A key
-
-# macOS
-if [[ "${KERNEL}" == "Darwin" ]]; then
-    # iterm - remove K prefix
-    key[Home]=${terminfo[home]}
-    key[End]=${terminfo[end]}
-    key[Insert]=${terminfo[ich1]}
-    key[Delete]=${terminfo[dch1]}
-    key[Up]=${terminfo[cuu1]}
-    key[Down]=${terminfo[cud1]}
-    key[Left]=${terminfo[cub1]}
-    key[Right]=${terminfo[cuf1]}
-    key[PageUp]=${terminfo[pp]}
-    key[PageDown]=${terminfo[np]}
-else
-    key[Home]=${terminfo[khome]}
-    key[End]=${terminfo[kend]}
-    key[Insert]=${terminfo[kich1]}
-    key[Delete]=${terminfo[kdch1]}
-    key[Up]=${terminfo[kcuu1]}
-    key[Down]=${terminfo[kcud1]}
-    key[Left]=${terminfo[kcub1]}
-    key[Right]=${terminfo[kcuf1]}
-    key[PageUp]=${terminfo[kpp]}
-    key[PageDown]=${terminfo[knp]}
-fi
-
-# beginning-of-line
-[[ -n ${key[Home]}     ]]  && bindkey "${key[Home]}" >/dev/null
-
-# end-of-line
-[[ -n ${key[End]}      ]]  && bindkey "${key[End]}" >/dev/null
-
-# overwrite-mode
-[[ -n ${key[Insert]}   ]]  && bindkey "${key[Insert]}" >/dev/null
-
-# delete-char
-[[ -n ${key[Delete]}   ]]  && bindkey "${key[Delete]}" >/dev/null
-
-# up-line-or-history
-[[ -n ${key[Up]}       ]]  && bindkey "${key[Up]}" >/dev/null
-
-# down-line-or-history
-[[ -n ${key[Down]}     ]]  && bindkey "${key[Down]}" >/dev/null
-
-# backward-char
-[[ -n ${key[Left]}     ]]  && bindkey "${key[Left]}" >/dev/null
-
-# forward-char
-[[ -n ${key[Right]}    ]]  && bindkey "${key[Right]}" >/dev/null
-
-# beginning-of-buffer-or-history
-[[ -n ${key[PageUp]}   ]]  && bindkey "${key[PageUp]}" >/dev/null
-
-# end-of-buffer-or-history
-[[ -n ${key[PageDown]} ]]  && bindkey "${key[PageDown]}" >/dev/null
-
-# Finally, make sure the terminal is in application mode, when zle is
-# active. Only then are the values from $terminfo valid.
-if (( $+terminfo[smkx] )) && (( $+terminfo[rmkx] )); then
-    function zle-line-init () {
-        echoti smkx
-    }
-    function zle-line-finish () {
-        echoti rmkx
-    }
-    zle -N zle-line-init
-    zle -N zle-line-finish
-fi
-
 # Ctrl-R => history-incremental-search-backward
-bindkey "^R" history-incremental-search-backward
+bindkey "$key_info[Control]R" history-incremental-search-backward
 
 # Ctrl+right => forward word
-bindkey "^[[1;5C" forward-word
+bindkey "$key_info[Control]$key_info[Right]" forward-word
 
 # Ctrl+left => backward word
-bindkey "^[[1;5D" backward-word
+bindkey "$key_info[Control]$key_info[Left]" backward-word
 
 # Ctrl+Backspace => delete a previous word
-bindkey '^H' backward-kill-word
+bindkey "$key_info[Control]$key_info[Backspace]" backward-kill-word
 
-# Ctrl-Z => Switch back to Vim
-fancy-ctrl-z () {
-  if [[ $#BUFFER == 0 ]]; then
-    BUFFER="fg"
-    zle accept-line
-  else
-    zle push-input
-    zle clear-screen
-  fi
-}
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
+# VI Keybindings
+# ----------------
+bindkey -M viins 'kj' vi-cmd-mode
 
 # View manpage while editing a command
 bindkey -M vicmd 'K' run-help
+
+# Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
+export KEYTIMEOUT=1

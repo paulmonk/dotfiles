@@ -9,11 +9,6 @@
 [[ $- != *i* ]] && return
 
 
-# Opts
-#-------------------------
-source "${XDG_CONFIG_HOME}/zsh/opts"
-
-
 # Plugins
 #-------------------------
 # Load antigen
@@ -53,6 +48,11 @@ if [[ -f "${_ANTIGEN_BIN}" ]]; then
 else
   echo "WARNING: Antigen not found: ${_ANTIGEN_BIN}. Skipping init."
 fi
+
+# Opts
+#-------------------------
+# When run after plugins some opts can be superseded here.
+source "${XDG_CONFIG_HOME}/zsh/opts"
 
 
 # SH Settings
@@ -127,5 +127,5 @@ if [[ "${KERNEL}" == "Linux" ]]; then
 fi
 
 # Load completions and bash completions
-autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
-autoload -Uz bashcompinit && bashcompinit
+# autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
+# autoload -Uz bashcompinit && bashcompinit

@@ -19,6 +19,7 @@ for com in "cp" "ln" "mv" "rm"; do
   alias $com="${aliases[$com]:-$com} -i"
 done
 
+
 # History
 # -------------------------
 # No log history.
@@ -30,6 +31,7 @@ done
 # Lists the ten most used commands.
 alias h="history"
 alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+
 
 # Open
 # -------------------------
@@ -45,11 +47,13 @@ for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
   fi
 done
 
+
 # Path
 # -------------------------
 # Show PATH info in a more readable format.
 alias fpath="echo \${FPATH} | tr ':' '\n' | nl"
 alias path="echo \${PATH} | tr ':' '\n' | nl"
+
 
 # General aliases
 # -------------------------
@@ -69,7 +73,7 @@ alias p="${(z)PAGER}"
 alias r="ranger"
 alias type="type -a"
 alias v="vi"
-alias x="extract"
+alias x="unarchive"
 
 # Carry over aliases to the root account when using sudo
 alias sudo="sudo "
@@ -80,6 +84,23 @@ alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
 
 # rsync sensible defaults.
 alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --human-readable --compress --partial"
+
+# Resursive copy by default.
+alias cp="${aliases[cp]:-cp} -r"
+
+# RM to trash, default to recursive and forced.
+# https://github.com/PhrozenByte/rmtrash (Linux)
+# https://github.com/ali-rantakari/trash (macOS)
+if (( $+commands[rmtrash] )); then
+  alias trash="rmtrash"
+fi
+if (( $+commands[trash] )); then
+  alias rm="trash -rf"
+  alias rm!="\rm -rf"
+else
+  alias rm="${aliases[rm]:-rm} -rf"
+fi
+
 
 # Alias cat to be bat.
 (( $+commands[bat] )) && alias cat=bat
@@ -94,6 +115,7 @@ alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --hum
 # ls alias is set in colors sh config.
 # If ls is set to exa. Some of these aliases will not work.
 # TODO: add checks for exa.
+alias sl='ls' # I often screw this up.
 if (( $+commands[exa] )); then
   alias ll="ls -l"
   alias la="ll"
@@ -102,14 +124,16 @@ if (( $+commands[exa] )); then
   alias lm="ll -s=modified"            # Sorted by modified date
   alias lc="ll --created -s=created"   # Sorted by created date
 else
-  alias ll="ls -lh"        # Lists human readable sizes.
-  alias la="ll -A"         # Lists human readable all
-  alias lr="ll -R"         # Lists human readable sizes, recursively.
-  alias lx="ll -XB"        # Lists sorted by extension (GNU only).
-  alias lk="ll -Sr"        # Lists sorted by size, largest last.
-  alias lt="ll -tr"        # Lists sorted by date, most recent last.
-  alias lc="lt -c"         # Lists sorted by date, most recent last, shows change time.
-  alias lu="lt -u"         # Lists sorted by date, most recent last, shows access time.
+  alias l="ls -1A"           # Lists in one column, hidden files.
+  alias ll="ls -lh"          # Lists human readable sizes.
+  alias lr="ll -R"           # Lists human readable sizes, recursively.
+  alias la="ll -A"           # Lists human readable sizes, hidden files.
+  alias lm='la | "${PAGER}"' # Lists human readable sizes, hidden files through pager.
+  alias lx="ll -XB"          # Lists sorted by extension (GNU only).
+  alias lk="ll -Sr"          # Lists sorted by size, largest last.
+  alias lt="ll -tr"          # Lists sorted by date, most recent last.
+  alias lc="lt -c"           # Lists sorted by date, most recent last, shows change time.
+  alias lu="lt -u"           # Lists sorted by date, most recent last, shows access time.
 fi
 
 # process
@@ -157,6 +181,7 @@ elif (( $+commands[wget] )); then
   alias get="wget --continue --progress=bar --timestamping"
 fi
 
+
 # Network aliases
 # -------------------------
 # IP addresses
@@ -168,12 +193,8 @@ alias ips="sudo ifconfig -a | grep -o 'inet6\\? \\(addr:\\)\\?\\s\\?\\(\\(\\([0-
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 
-# Serve content. Cater for both python versions.
-if (( $+commands[python3] )); then
-    alias http-serve="python3 -m http.server"
-else
-    alias http-serve="python -m SimpleHTTPServer"
-fi
+# Serve content
+alias http-serve="python3 -m http.server"
 
 # Misc aliases
 # -------------------------

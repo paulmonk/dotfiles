@@ -3,21 +3,20 @@
 #------------------------------------------------------------------------------
 # Plugins - .antigenrc file.
 #------------------------------------------------------------------------------
-antigen use oh-my-zsh
+antigen use prezto
 
 # Bundles
-antigen bundles <<EOBUNDLES
-    jreese/zsh-titles
+antigen bundles <<EOB
+    robbyrussell/oh-my-zsh plugins/encode64
+    robbyrussell/oh-my-zsh plugins/fancy-ctrl-z
     hlissner/zsh-autopair
     marzocchi/zsh-notify
+    jreese/zsh-titles
     rupa/z
     changyuheng/fz
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-syntax-highlighting
-    zsh-users/zsh-history-substring-search
-    zdharma/history-search-multi-word
     mafredri/zsh-async
-EOBUNDLES
+EOB
+
 
 # Prompt
 # ----------------
@@ -47,11 +46,36 @@ export GEOMETRY_SYMBOL_SPACER=" "                  # string to place between sym
 export GEOMETRY_DIR_SPACER=" "                     # string to place between directory and suffix
 export GEOMETRY_PLUGIN_SEPARATOR=" "               # use ' ' to separate right prompt parts
 
+
 # Plugins Config
 # ----------------
+# Prezto
+# Color output (auto set to 'no' on dumb terminals).
+zstyle ':prezto:*:*' color 'yes'
+
+# Set the Prezto modules to load (browse modules).
+# The order matters.
+zstyle ':prezto:load' pmodule \
+  'environment' \
+  'editor'      \
+  'history'     \
+  'directory'   \
+  'completion'  \
+  'archive' \
+  'syntax-highlighting' \
+  'history-substring-search' \
+  'autosuggestions'
+
+# Auto convert .... to ../..
+zstyle ':prezto:module:editor' dot-expansion 'yes'
+# Set the key mapping style to 'emacs' or 'vi'.
+zstyle ':prezto:module:editor' key-bindings 'vi'
+
+
 # Z
 [[ -f "${XDG_DATA_HOME}/zsh/z" ]] || touch "${XDG_DATA_HOME}/zsh/z"
 export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
+
 
 # zsh-notify
 zstyle ':notify:*' command-complete-timeout 15
@@ -61,6 +85,7 @@ if [[ ! "${KERNEL}" == "Darwin" ]]; then
   zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/256x256/status/dialog-error.png'
   zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/256x256/status/dialog-information.png'
 fi
+
 
 # Plugins Finalize
 # ----------------
