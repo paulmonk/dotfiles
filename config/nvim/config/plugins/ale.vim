@@ -67,12 +67,14 @@ let g:ale_fix_on_save = 0
 
 " Set the ale fixers for specfic filetypes
 let g:ale_fixers = {
+\   'css': ['prettier'],
 \   'go': ['gofmt'],
 \   'graphql': ['prettier'],
 \   'javascript': ['prettier'],
 \   'json': ['prettier'],
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
+\   'scss': ['prettier'],
 \   'sh': ['shfmt'],
 \   'yaml': ['prettier']
 \}
