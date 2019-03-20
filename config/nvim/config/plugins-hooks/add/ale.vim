@@ -44,7 +44,7 @@ let g:ale_linters = {
 \   'html': ['proselint', 'tidy'],
 \   'mail': ['proselint'],
 \   'markdown': ['proselint'],
-\   'python': ['bandit', 'flake8', 'mypy', 'prospector'],
+\   'python': ['bandit', 'flake8', 'mypy', 'pylint'],
 \   'sh': ['shellcheck'],
 \   'vim': ['vint'],
 \   'yaml': ['yamllint']
