@@ -113,10 +113,6 @@ augroup END
 " Initialize base requirements
 if has('vim_starting')
   call s:source_file('init.vim')
-  if ! has('nvim') && ! has('gui_running') && ! has('win32') && ! has('win64')
-    " Linux terminal settings
-    call s:source_file('terminal.vim')
-  endif
 endif
 
 " Initialize dein.vim (package manager)

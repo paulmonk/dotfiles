@@ -75,16 +75,6 @@ xnoremap s :s//g<Left><Left>
 nnoremap zl z5l
 nnoremap zh z5h
 
-" Improve scroll, credits: https://github.com/Shougo
-nnoremap <expr> zz (winline() == (winheight(0)+1) / 2) ?
-  \ 'zt' : (winline() == 1) ? 'zb' : 'zz'
-noremap <expr> <C-f> max([winheight(0) - 2, 1])
-  \ ."\<C-d>".(line('w$') >= line('$') ? "L" : "M")
-noremap <expr> <C-b> max([winheight(0) - 2, 1])
-  \ ."\<C-u>".(line('w0') <= 1 ? "H" : "M")
-noremap <expr> <C-e> (line("w$") >= line('$') ? "j" : "3\<C-e>")
-noremap <expr> <C-y> (line("w0") <= 1         ? "k" : "3\<C-y>")
-
 " Window control
 nnoremap <C-q> <C-w>
 nnoremap <C-x> <C-w>x
@@ -104,7 +94,7 @@ nnoremap < <<_
 nnoremap <expr> gp '`['.strpart(getregtype(), 0, 1).'`]'
 
 " Navigation in command line
-" Bash like keys
+" Bash like keys (emacs)
 cnoremap <C-a>  <Home>
 cnoremap <C-e>  <End>
 cnoremap <C-k>  <C-U>
