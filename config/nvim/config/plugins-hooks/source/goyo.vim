@@ -1,8 +1,6 @@
 " -------------------------------------------------
 " Goyo
 " -------------------------------------------------
-nnoremap <Leader>G :Goyo<CR>
-
 " s:goyo_enter() "
 " Disable visual candy in Goyo mode
 function! s:goyo_enter()
@@ -38,11 +36,9 @@ function! s:goyo_leave()
 endfunction
 
 " Goyo Commands
-augroup goyo
-    autocmd! User GoyoEnter
-    autocmd! User GoyoLeave
-    autocmd  User GoyoEnter nested call <SID>goyo_enter()
-    autocmd  User GoyoLeave nested call <SID>goyo_leave()
-augroup end
+autocmd! User GoyoEnter
+autocmd! User GoyoLeave
+autocmd  User GoyoEnter nested call <SID>goyo_enter()
+autocmd  User GoyoLeave nested call <SID>goyo_leave()
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :

@@ -1,4 +1,4 @@
 " -------------------------------------------------
-" Committia
+" vim-online-thesaurus
 " -------------------------------------------------
-let g:committia_min_window_width = 70
+nnoremap <silent> <Leader>K :<C-u>OnlineThesaurusCurrentWord<CR>

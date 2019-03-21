@@ -1,4 +1,4 @@
 " -------------------------------------------------
-" Committia
+" Goyo
 " -------------------------------------------------
-let g:committia_min_window_width = 70
+nnoremap <Leader>G :Goyo<CR>
