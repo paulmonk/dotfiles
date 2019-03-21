@@ -71,13 +71,6 @@
 # Fades your inactive buffers and preserves syntax highlighting
 - repo: TaDaa/vimade
 
-# Vim8 only:
-- repo: roxma/vim-hug-neovim-rpc
-  if: ! has('nvim')
-
-- repo: roxma/nvim-yarp
-  if: ! has('nvim')
-
 
 # Lazy Loading
 # ==========================================
@@ -105,6 +98,7 @@
    - html
    - htmldjango
    - htmljinja
+   - markdown
   hook_add: source $VIMPATH/config/plugins-hooks/add/html5.vim
 
 - repo: mitsuhiko/vim-jinja
@@ -144,13 +138,6 @@
   depends: vim-markdown
   on_ft: markdown
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-gfm-syntax.vim
-
-# Mutt
-- repo: neomutt/neomutt
-
-# Python: No-BS Python code folding
-- repo: tmhedberg/SimpylFold
-  on_ft: python
 
 # Python: requirements file format
 - repo: raimon49/requirements.txt.vim
@@ -196,28 +183,6 @@
    nx: <Plug>
   hook_add: source $VIMPATH/config/plugins-hooks/add/caw.vim
 
-# Open URIs
-- repo: tyru/open-browser.vim
-  on_map:
-   nxv: <Plug>(openbrowser)
-  on_cmd:
-   - OpenBrowser
-   - OpenBrowserSearch
-   - OpenBrowserSmartSearch
-
-# Opens Unicode character information quickly from Vim.
-- repo: tyru/open-browser-unicode.vim
-  depends: open-browser.vim
-  on_cmd: OpenBrowserUnicode
-
-# Opens GitHub URL of current file
-- repo: tyru/open-browser-github.vim
-  depends: open-browser.vim
-  on_cmd:
-   - OpenGithubFile
-   - OpenGithubIssue
-   - OpenGithubProject
-
 # Auto mkdir if needed on save.
 - repo: benizi/vim-automkdir
   on_command: write
@@ -237,10 +202,6 @@
   on_map:
    x: <Plug>
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-niceblock.vim
-
-# Display 256 xterm colors with their RGB equivalents
-- repo: guns/xterm-color-table.vim
-  on_cmd: XtermColorTable
 
 # Ultimate undo history visualizer
 - repo: mbbill/undotree
