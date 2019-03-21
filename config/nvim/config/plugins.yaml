@@ -64,6 +64,10 @@
 - repo: w0rp/ale
   hook_add: source $VIMPATH/config/plugins-hooks/add/ale.vim
 
+# Vim Language Pack
+- repo: sheerun/vim-polyglot
+  hook_add: source $VIMPATH/config/plugins-hooks/add/vim-polyglot.vim
+
 # Fades your inactive buffers and preserves syntax highlighting
 - repo: TaDaa/vimade
 
@@ -79,52 +83,11 @@
 # ==========================================
 # Syntax
 # ---------
-# Ansible
-- repo: pearofducks/ansible-vim
-  on_ft:
-   - ansible
-   - ansible_hosts
-   - ansible_template
-
 # CSS
 - repo: hail2u/vim-css3-syntax
-  on_ft: css
-
-- repo: cakebaker/scss-syntax.vim
-  on_ft:
-   - scss
-   - sass
-
-- repo: groenewege/vim-less
-  on_ft: less
 
 # CSS: Preview colors in source-code while editing
 - repo: ap/vim-css-color
-  on_ft:
-   - css
-   - scss
-   - sass
-
-# CSV
-- repo: chrisbra/csv.vim
-  on_ft: csv
-
-# Docker
-- repo: ekalinin/Dockerfile.vim
-  on_ft:
-   - Dockerfile
-   - docker-compose
-
-# Fish
-- repo: dag/vim-fish
-  on_ft: fish
-
-# Git
-- repo: tpope/vim-git
-  on_ft:
-   - gitcommit
-   - gitconfig
-   - gitrebase
 
 # Go
 - repo: fatih/vim-go
@@ -134,13 +97,6 @@
    - gohtmltmpl
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-go.vim
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-go.vim
-
-# GraphQL
-- repo: jparise/vim-graphql
-  on_ft:
-   - gql
-   - graphql
-   - graphqls
 
 # HTML & Jinja
 # Omnicomplete and syntax
@@ -156,10 +112,6 @@
    - htmljinja
    - jinja
 
-# i3
-- repo: mboughaba/i3config.vim
-  on_ft: i3config
-
 # JavaScript
 - repo: pangloss/vim-javascript
   on_ft:
@@ -167,13 +119,6 @@
    - javascript.jsx
    - jsx
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-javascript.vim
-
-# JavaScript: React JSX
-- repo: MaxMEllon/vim-jsx-pretty
-  on_ft:
-   - javascript
-   - javascript.jsx
-   - jsx
 
 # JavaScript: Generate JSDoc to your code
 - repo: heavenshell/vim-jsdoc
@@ -183,34 +128,14 @@
    - jsx
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-jsdoc.vim
 
-# JavaScript: Node workflow
-- repo: moll/vim-node
-  on_ft:
-   - javascript
-   - javascript.jsx
-   - jsx
-
-# JSON
-- repo: elzr/vim-json
-  on_ft: json
-
 # Logreview
 - repo: andreshazard/vim-logreview
-  on_ft: logreview
 
 # Logstash
 - repo: robbles/logstash.vim
-  on_ft: logstash
-
-# Lua
-- repo: tbastos/vim-lua
-  on_ft: lua
 
 # Markdown
 - repo: plasticboy/vim-markdown
-  depends:
-   - vim-json
-   - vim-toml
   on_ft: markdown
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-markdown.vim
 
@@ -222,28 +147,6 @@
 
 # Mutt
 - repo: neomutt/neomutt
-  on_ft:
-   - mail
-   - muttrc
-   - neomuttrc
-
-# Nginx
-- repo: othree/nginx-contrib-vim
-  on_ft: nginx
-
-# PHP
-# Change clone depth to avoid git integrity fsck error
-- repo: StanAngeloff/php.vim
-  type__depth: 1
-  on_ft: php
-
-# Postgres
-- repo: exu/pgsql.vim
-  on_ft: pgsql
-
-# Python
-- repo: vim-python/python-syntax
-  on_ft: python
 
 # Python: No-BS Python code folding
 - repo: tmhedberg/SimpylFold
@@ -253,21 +156,8 @@
 - repo: raimon49/requirements.txt.vim
   on_ft: requirements
 
-# Raml
-- repo: IN3D/vim-raml
-  on_ft: raml
-
-# Rust
-- repo: rust-lang/rust.vim
-  on_ft: rust
-
 # Salt
 - repo: saltstack/salt-vim
-  on_ft: sls
-
-# Swift
-- repo: toyamarinyon/vim-swift
-  on_ft: swift
 
 # Terraform
 - repo: hashivim/vim-terraform
@@ -278,12 +168,7 @@
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-terraform.vim
 
 # Tmux
-- repo: tmux-plugins/vim-tmux
-  on_ft: tmux
-
-# Toml
-- repo: cespare/vim-toml
-  on_ft: toml
+- repo: ericpruitt/tmux.vim
 
 # Vim
 - repo: vim-jp/syntax-vim-ex
@@ -362,10 +247,6 @@
   on_cmd: UndotreeToggle
   hook_add: source $VIMPATH/config/plugins-hooks/add/undotree.vim
 
-# Interactive Scratchpad
-- repo: metakirby5/codi.vim
-  on_cmd: Codi
-
 # Interactive command execution
 - repo: Shougo/vimproc.vim
   build: make
@@ -381,17 +262,6 @@
 # Display vim version numbers in docs
 - repo: tweekmonster/helpful.vim
   on_cmd: HelpfulVersion
-
-# Fast find and replace plugin
-- repo: brooth/far.vim
-  on_cmd:
-   - Far
-   - Farp
-   - Fardo
-   - Refar
-   - Farundo
-   - F
-  hook_add: source $VIMPATH/config/plugins-hooks/add/far.vim
 
 # Vim motions on speed
 - repo: easymotion/vim-easymotion
@@ -450,15 +320,6 @@
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-gitgutter.vim
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-gitgutter.vim
 
-# Visually display indent levels in code
-- repo: nathanaelkane/vim-indent-guides
-  on_cmd:
-   - IndentGuidesEnable
-   - IndentGuidesDisable
-   - IndentGuidesToggle
-  hook_add: source $VIMPATH/config/plugins-hooks/add/vim-indent-guides.vim
-  hook_post_source: source $VIMPATH/config/plugins-hooks/post-source/vim-indent-guides.vim
-
 # Bookmarks, works independently from vim marks
 - repo: MattesGroeger/vim-bookmarks
   on_path: .*
@@ -479,11 +340,6 @@
 
 # Highlights the matching HTML tag when the cursor is positioned on a tag
 - repo: gregsexton/MatchTag
-  on_ft:
-   - html
-   - htmldjango
-   - htmljinja
-   - xml
 
 # Distraction-free writing
 - repo: junegunn/goyo.vim
@@ -510,7 +366,6 @@
 
 # Standard snippets repository for neosnippet
 - repo: Shougo/neosnippet-snippets
-  lazy: 1
 
 
 # ==========================================
@@ -546,7 +401,6 @@
 
 # CSS
 - repo: othree/csscomplete.vim
-  on_ft: css
 
 # JavaScript
 - repo: ternjs/tern_for_vim
@@ -565,10 +419,6 @@
 
 # Parameter Completion
 - repo: othree/jspc.vim
-  on_ft:
-   - javascript
-   - javascript.jsx
-   - jsx
 
 # PHP
 - repo: shawncplus/phpcomplete.vim
@@ -613,7 +463,6 @@
 
 # Context Filetype Library for Vim Script
 - repo: Shougo/context_filetype.vim
-  lazy: 1
 
 # Emoji
 - repo: fszymanski/deoplete-emoji
@@ -724,7 +573,6 @@
 # ---------
 # Define your own custom operators
 - repo: kana/vim-operator-user
-  lazy: 1
 
 # Operator to replace text with register content
 - repo: kana/vim-operator-replace
@@ -754,7 +602,6 @@
 # ------------
 # Create your own text objects
 - repo: kana/vim-textobj-user
-  on_func: textobj#user#
 
 # Handle bracket objects
 - repo: osyo-manga/vim-textobj-multiblock
