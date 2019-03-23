@@ -1,0 +1,130 @@
+#!/usr/bin/env zsh
+
+# CREDITS:
+# Original location: https://github.com/romkatv/dotfiles-public/blob/master/.purepower.
+# If you copy this file, keep the link to the original and this sentence intact; you are encouraged
+# to change everything else.
+#
+# Remember that colors looks differently in different terminals. Use this script to choose what
+# works best for you.
+#
+#   for ((i = 0; i != 256; ++i)); do print -P "%F{${(l:3::0:)i}}${(l:3::0:)i} TEST%f"; done
+#
+# Keep in mind that some prompt segments can appear and disappear depending on the state of your
+# environment. Make sure colors work well in every situation. Neighboring segments should always
+# have distinct colors.
+
+typeset -ga POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+    dir_writable dir vcs)
+
+typeset -ga POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+    virtualenv status command_execution_time root_indicator background_jobs custom_rprompt time)
+
+# If you are using Powerlevel9k, this won't work because Powerlevel9k doesn't do parameter
+# expansion on POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX. You can replace the next two lines with
+# `local p=$vi_insert` to get a working prompt but it won't show you keymap status like
+# Powerlevel10k.
+vi_insert=$'\u276F'
+vi_cmd=$'\u276E'
+p="\${\${\${KEYMAP:-0}:#vicmd}:+${${vi_insert//\\/\\\\}//\}/\\\}}}"
+p+="\${\${\$((!\${#\${KEYMAP:-0}:#vicmd})):#0}:+${${vi_cmd//\\/\\\\}//\}/\\\}}}"
+typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%(?.%F{002}${p}%f.%F{009}${p}%f) "
+typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=$'\n'
+typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
+
+typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SEGMENT_SEPARATOR=''
+typeset -g POWERLEVEL9K_{LEFT,RIGHT}_SUBSEGMENT_SEPARATOR=' '
+typeset -g POWERLEVEL9K_WHITESPACE_BETWEEN_{LEFT,RIGHT}_SEGMENTS=''
+
+# Dir Writable
+typeset -g POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND=none
+typeset -g POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_VISUAL_IDENTIFIER_COLOR=166
+typeset -g POWERLEVEL9K_LOCK_ICON='[X]'
+
+# Dir
+typeset -g POWERLEVEL9K_DIR_{ETC,HOME,HOME_SUBFOLDER,DEFAULT}_BACKGROUND=none
+typeset -g POWERLEVEL9K_DIR_{ETC,DEFAULT}_FOREGROUND=136
+typeset -g POWERLEVEL9K_DIR_{HOME,HOME_SUBFOLDER}_FOREGROUND=033
+typeset -g POWERLEVEL9K_{ETC,FOLDER,HOME,HOME_SUB}_ICON=''
+
+# virtualenv
+typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=none
+typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=254
+
+# VCS
+# * Git prompt colors:
+#   * Grey: prompt is refreshing in the background (happens only in large repositories).
+#   * Green: clean (no stated or unstaged changes and no untracked files).
+#   * Yellow: dirty (some stated or unstaged changes).
+#   * Teal: some untracked files but otherwise clean (no staged or unstaged changes).
+# * Git prompt icons:
+#   * '@12345678' (git prompt color): detached HEAD at commit 12345678.
+#   * 'my-feature' (git prompt color): on branch my-feature.
+#   * 'my-feature|master' (git prompt color): on branch my-feature tracking remote branch master.
+#   * '#my-release' (git prompt color): on tag my-release.
+#   * '+' (yellow): staged changes.
+#   * '!' (yellow): unstaged changes.
+#   * '?' (teal): untracked files.
+#   * '⇡42' (green): 42 commits ahead of remote.
+#   * '⇣42' (green): 42 commits behind remote.
+#   * '*42' (green): 42 stashes.
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED,LOADING}_BACKGROUND=none
+typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=064
+typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=037
+typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=136
+typeset -g POWERLEVEL9K_VCS_LOADING_FOREGROUND=244
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_UNTRACKEDFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_UNSTAGEDFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_MODIFIED_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_STAGEDFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_MODIFIED_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_INCOMING_CHANGESFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_CLEAN_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_OUTGOING_CHANGESFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_CLEAN_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_STASHFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_CLEAN_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{CLEAN,UNTRACKED,MODIFIED}_ACTIONFORMAT_FOREGROUND=001
+typeset -g POWERLEVEL9K_VCS_LOADING_ACTIONFORMAT_FOREGROUND=$POWERLEVEL9K_VCS_LOADING_FOREGROUND
+typeset -g POWERLEVEL9K_VCS_{GIT,GIT_GITHUB,GIT_BITBUCKET,GIT_GITLAB,BRANCH}_ICON=''
+typeset -g POWERLEVEL9K_VCS_REMOTE_BRANCH_ICON=$'\b|'
+typeset -g POWERLEVEL9K_VCS_COMMIT_ICON='@'
+typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON=$'\b?'
+typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON=$'\b!'
+typeset -g POWERLEVEL9K_VCS_STAGED_ICON=$'\b+'
+typeset -g POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=$'\u21E3'
+typeset -g POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=$'\u21E1'
+typeset -g POWERLEVEL9K_VCS_STASH_ICON='*'
+typeset -g POWERLEVEL9K_VCS_TAG_ICON='#'
+
+# Status
+typeset -g POWERLEVEL9K_STATUS_OK=false
+typeset -g POWERLEVEL9K_STATUS_ERROR_BACKGROUND=none
+typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=160
+typeset -g POWERLEVEL9K_CARRIAGE_RETURN_ICON=''
+
+# Command Execution
+typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=none
+typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=037
+typeset -g POWERLEVEL9K_EXECUTION_TIME_ICON=''
+
+# Root Indicator
+typeset -g POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND=none
+typeset -g POWERLEVEL9K_ROOT_ICON='#'
+
+# Background Jobs
+typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=false
+typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=none
+typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_COLOR=002
+typeset -g POWERLEVEL9K_BACKGROUND_JOBS_ICON='%%'
+
+# Time
+typeset -g POWERLEVEL9K_TIME_BACKGROUND=none
+typeset -g POWERLEVEL9K_TIME_FOREGROUND=244
+typeset -g POWERLEVEL9K_TIME_ICON=''
+
+# Custom rprompt
+# If you type `custom_rprompt() { echo 'message' }`, you'll get 'message' shown on the right.
+# Useful to integrate with your scripts that change some sort of state/environment.
+typeset -g POWERLEVEL9K_CUSTOM_RPROMPT=custom_rprompt
+typeset -g POWERLEVEL9K_CUSTOM_RPROMPT_BACKGROUND=none
+typeset -g POWERLEVEL9K_CUSTOM_RPROMPT_FOREGROUND=012
+
+function custom_rprompt() {}  # redefine this to show stuff in custom_rprompt segment

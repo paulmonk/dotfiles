@@ -21,30 +21,10 @@ EOB
 # Prompt
 # ----------------
 # Set theme
-antigen theme "geometry-zsh/geometry"
+antigen theme "romkatv/powerlevel10k"
 
-# Set geometry plugins.
-export GEOMETRY_PROMPT_PLUGINS=(exec_time jobs hostname virtualenv git)
-
-# Symbols
-export GEOMETRY_SYMBOL_PROMPT="$"                  # default prompt symbol
-export GEOMETRY_SYMBOL_RPROMPT=">"                 # multiline prompts
-export GEOMETRY_SYMBOL_EXIT_VALUE="!"              # displayed when exit value is != 0
-export GEOMETRY_SYMBOL_ROOT="#"                    # when logged in user is root
-
-# Colours
-export GEOMETRY_COLOR_EXIT_VALUE="magenta"         # prompt symbol color when exit value is != 0
-export GEOMETRY_COLOR_PROMPT="white"               # prompt symbol color
-export GEOMETRY_COLOR_ROOT="red"                   # root prompt symbol color
-export GEOMETRY_COLOR_DIR="blue"                   # current directory color
-
-# Misc
-export GEOMETRY_PROMPT_PREFIX=""                   # prefix prompt with a new line
-export GEOMETRY_PROMPT_SUFFIX=""                   # suffix prompt
-export GEOMETRY_PROMPT_PREFIX_SPACER=" "           # string to place between prefix and symbol
-export GEOMETRY_SYMBOL_SPACER=" "                  # string to place between symbol and directory
-export GEOMETRY_DIR_SPACER=" "                     # string to place between directory and suffix
-export GEOMETRY_PLUGIN_SEPARATOR=" "               # use ' ' to separate right prompt parts
+# Theme config.
+source "${XDG_CONFIG_HOME}/zsh/theme"
 
 
 # Plugins Config
