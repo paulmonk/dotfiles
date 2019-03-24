@@ -1,4 +1,5 @@
 " -------------------------------------------------
-" vim-operator-replace
+" vim-operator-flashy
 " -------------------------------------------------
-xmap p <Plug>(operator-replace)
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
