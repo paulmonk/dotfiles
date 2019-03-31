@@ -6,10 +6,8 @@
 
 # OSX and Ubuntu/Debian bash completions aren't loaded automatically.
 if [[ "${KERNEL}" == "Darwin" ]]; then
-    if [[ -d "${PREFIX}/etc/bash_completion.d" ]]; then
-        for file in ${PREFIX}/etc/bash_completion.d; do
-            source "${file}"
-        done
+    if [[ -f "${PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+        source "${PREFIX}/etc/profile.d/bash_completion.sh"
     fi
 elif [[ -f "/etc/lsb-release" ]]; then
     if [[ -f "${PREFIX}/share/bash-completion/bash_completion" ]]; then
