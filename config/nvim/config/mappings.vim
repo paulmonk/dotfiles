@@ -44,13 +44,6 @@ nnoremap <CR> za
 " Focus the current fold by closing all others
 nnoremap <S-Return> zMza
 
-" Use backspace key for matchit.vim
-nmap <BS> %
-xmap <BS> %
-
-nmap <Tab>  <C-w>w
-nmap <S-Tab>  <C-w>W
-
 "
 " Global niceties
 " ---------------
@@ -87,8 +80,8 @@ xnoremap > >gv|
 " Use tab for indenting in visual mode
 vnoremap <Tab> >gv|
 vnoremap <S-Tab> <gv
-nnoremap > >>_
-nnoremap < <<_
+nnoremap >> >>_
+nnoremap << <<_
 
 " Select last paste
 nnoremap <expr> gp '`['.strpart(getregtype(), 0, 1).'`]'

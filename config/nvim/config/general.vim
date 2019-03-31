@@ -64,11 +64,11 @@ if has('wildmenu')
   set wildmode=list:longest,full
   set wildoptions=tagfile
   set wildignorecase
-  set wildignore+=.git,.hg,.svn,.stversions,*.pyc,*.spl,*.o,*.out,*~,%*
+  set wildignore+=.git,.hg,.svn,.stversions,*.spl,*.o,*.out,*~,%*
   set wildignore+=*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store
-  set wildignore+=**/node_modules/**,**/bower_modules/**,*/.sass-cache/*
+  set wildignore+=**/node_modules/**,**/bower_modules/**,*/.sass-cache/*,.yarn_cache
   set wildignore+=application/vendor/**,**/vendor/ckeditor/**,media/vendor/**
-  set wildignore+=__pycache__,*.egg-info
+  set wildignore+=*.pyc,__pycache__,*.egg-info,.pytest_cache,.venv,.virtualenv
 endif
 
 "
@@ -176,7 +176,9 @@ set lazyredraw          " Do not redraw uneccessarily
 
 set showtabline=2       " Always show the tabs line
 set winwidth=30         " Minimum width for active window
-set winheight=1         " Minimum height for active window
+set winminwidth=10      " Minimum width for inactive window
+set winheight=4         " Minimum height for active window
+set winminheight=2      " Minimum height for inactive window
 set pumheight=15        " Pop-up menu's line height
 set helpheight=12       " Minimum help window height
 set previewheight=12    " Completion preview height
@@ -203,6 +205,13 @@ endif
 " For snippet_complete marker
 if has('conceal') && v:version >= 703
   set conceallevel=2 concealcursor=niv
+endif
+
+" Enables pseudo-transparency for the popup-menu. Valid values are in
+" the range of 0 for fully opaque popupmenu (disabled) to 100 for fully
+" transparent background. Values between 0-30 are typically most useful.
+if exists('&pumblend')
+  set pumblend=20
 endif
 
 "
