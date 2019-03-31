@@ -337,6 +337,12 @@
   on_event: CompleteDone
   hook_post_source: source $VIMPATH/config/plugins-hooks/post-source/echodoc.vim
 
+# Manages your tag files
+- repo: ludovicchabant/vim-gutentags
+  if: executable('ctags')
+  on_path: .*
+  hook_add: source $VIMPATH/config/plugins-hooks/add/vim-gutentags.vim
+
 # Provides support for expanding abbreviations alá emmet
 - repo: mattn/emmet-vim
   on_event:
