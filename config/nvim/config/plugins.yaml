@@ -231,6 +231,12 @@
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-easymotion.vim
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-easymotion.vim
 
+# Displays tags in a window, ordered by scope
+- repo: majutsushi/tagbar
+  on_cmd: TagbarToggle
+  hook_add: source $VIMPATH/config/plugins-hooks/add/tagbar.vim
+  hook_source: source $VIMPATH/config/plugins-hooks/source/tagbar.vim
+
 # Look up words in an online thesaurus
 - repo: beloglazov/vim-online-thesaurus
   on_cmd:
