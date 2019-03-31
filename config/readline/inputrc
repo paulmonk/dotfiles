@@ -1,11 +1,58 @@
+# =============================
+# READLINE
+# =============================
+
+# Ring the bell, let other programs handle it (urxvt, tmux, etc.)
+set bell-style audible
+
+# Ignore case when matching and completing paths
+set completion-ignore-case On
+
+# Treat underscores and hyphens the same way for completion purposes
+set completion-map-case On
+
+# Show me up to 5,000 completion items, don't be shy
+set completion-query-items 5000
+
+# Don't display control characters like ^C if I input them
+set echo-control-characters Off
+
+# Expand tilde to full path on completion
+set expand-tilde On
+
+# Preserve caret position while browsing through history lines
+set history-preserve-point On
+
+# When completing directories, add a trailing slash
+set mark-directories On
+
+# Do the same for symlinked directories
+set mark-symlinked-directories On
+
+# on menu-complete, first display the common prefix, then cycle through the
+# options when hitting TAB
+set menu-complete-display-prefix On
+
+# Don't paginate possible completions
+set page-completions Off
+
+# Show multiple completions on first tab press
+set show-all-if-ambiguous On
+
+# Don't re-complete already completed text in the middle of a word
+set skip-completed-text On
+
+# Show extra file information when completing, like `ls -F` does
+set visible-stats on
+
 # Super useful readline config stolen from here:
 # http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
 
 # Incremental history searching
- "\e[A": history-search-backward
- "\e[B": history-search-forward
- "\e[C": forward-char
- "\e[D": backward-char
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char
+"\e[D": backward-char
 
  # Magic space
 $if Bash
@@ -13,3 +60,43 @@ $if Bash
 $endif
 
 "\M-o": "\C-p\C-a\M-f"
+
+# vi mode
+set editing-mode vi
+$if mode=vi
+    # Insert mode settings
+    # ------------------------
+    set keymap vi-insert
+
+    # Clear screen
+    "\C-l": clear-screen
+
+    # Ctrl+left/right for word movement
+    "\e\e[C": forward-word
+    "\e\e[D": backward-word
+    "\e[1;5C": forward-word
+    "\e[1;5D": backward-word
+
+    # Disable left and right cursor movement
+    # "\e[C": redraw-current-line
+    # "\e[D": redraw-current-line
+
+    # Command mode settings
+    # ------------------------
+    set keymap vi-command
+
+    "gg": beginning-of-history
+    "G": end-of-history
+
+    # Ctrl+left/right for word movement
+    "\e\e[C": forward-word
+    "\e\e[D": backward-word
+    "\e[1;5C": forward-word
+    "\e[1;5D": backward-word
+
+    # Disable left and right cursor movement
+    # "\e[C": redraw-current-line
+    # "\e[D": redraw-current-line
+$endif
+
+# vim: set ft=readline ts=2 sw=2 tw=80 noet :
