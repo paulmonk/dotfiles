@@ -1,0 +1,38 @@
+#!/usr/bin/env zsh
+
+# Label: Curl Inspect
+# Description: Inspect remote file with default editor.
+# Parameters: $1 (required) - The URL.
+curli() {
+  if [[ "$1" ]]; then
+    local file=$(mktemp -t suspicious_curl_file) || { printf "%s\n" "ERROR: Unable to create temporary file."; return; }
+    curl --location --fail --silent --show-error "$1" > $file || { printf "%s\n" "Failed to curl file."; return; }
+    $EDITOR --wait $file || { printf "Unable to open temporary curl file.\n"; return; }
+    rm -f $file;
+  else
+    printf "%s\n" "ERROR: URL must be supplied."
+    return 1
+  fi
+}
+
+# Label: Curl Diagnostics
+# Description: Curl with diagnostic information for request.
+# Parameters: $1 (required) - The URL.
+curld() {
+  local url="$1"
+
+  printf -v diagnostics "%s\n" "\n" \
+                               "HTTP Version:   %{http_version}" \
+                               "HTTP Status:    %{http_code}" \
+                               "Content Type:   %{content_type}" \
+                               "DNS Lookup:     %{time_namelookup} seconds" \
+                               "Connect:        %{time_connect} seconds" \
+                               "App Connect:    %{time_appconnect} seconds" \
+                               "Pre-Transfer:   %{time_pretransfer} seconds" \
+                               "Start Transfer: %{time_starttransfer} seconds" \
+                               "Speed:          %{speed_upload}↑ %{speed_download}↓ bytes/second" \
+                               "Total Time:     %{time_total} seconds" \
+                               "Total Size:     %{size_download} bytes"
+
+  curl --write-out "$diagnostics" --url "$url"
+}
