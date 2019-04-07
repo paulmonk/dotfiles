@@ -22,7 +22,7 @@
 \set VERBOSITY verbose
 \set HISTFILE ~/.cache/psql_history
 \set HISTCONTROL ignoredups
-\set PAGER always
+\set PAGER pspg
 \set HISTSIZE 2000
 \set ECHO_HIDDEN OFF
 
