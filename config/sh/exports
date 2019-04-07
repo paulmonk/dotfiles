@@ -179,6 +179,9 @@ export MAKEFLAGS="-j ${CPU_CORES}"
 # MariaDB / MySQL
 export MYSQL_HISTFILE="${XDG_DATA_HOME}/mysql/history"
 
+# MPV
+export MPV_HOME="${XDG_CONFIG_HOME}/mpv"
+
 # Ncurses
 # Look for terminfo files under data
 if [ -d "${XDG_DATA_HOME}/terminfo" ]; then
