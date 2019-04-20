@@ -186,7 +186,7 @@ bindsym --release $alt+r         exec "pgrep -x rofi && killall rofi || rofi -no
 bindsym Print exec "maim -q 100 | xsel --clipboard -t image/png"
 
 # Screenshot with selection
-bindsym $mod+Print exec "maim -q 100 -s | xsel --clipboard -t image/png"
+bindsym $super+Print exec "maim -q 100 -s | xsel --clipboard -t image/png"
 
 # Screenshot current focused window
 bindsym Shift+Print exec "maim -q 100 -i $(xdotool getactivewindow) | xsel --clipboard -t image/png"
