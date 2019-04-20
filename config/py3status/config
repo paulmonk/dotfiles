@@ -15,15 +15,16 @@ general {
 }
 
 order += 'diskdata'
-order += 'sysdata'
+order += 'group cpu'
+order += 'group ram'
 order += 'net_rate'
 order += 'wireless _first_'
-order += 'ethernet _first_'
 order += 'file_status VPN'
-order += 'keyboard_layout'
+order += 'xrandr'
 order += 'backlight'
 order += 'volume_status'
 order += 'battery_level'
+order += 'keyboard_layout'
 order += 'clock'
 order += 'do_not_disturb'
 
@@ -42,7 +43,9 @@ battery_level {
   color_charging = '#fabd2f'
   format = '{icon}  {percent}%'
   hide_seconds = true
+  measurement_mode = 'sys'
   notify_low_level = true
+  on_udev_power_supply = 'refresh'
   threshold_bad = 20
 }
 
@@ -62,18 +65,64 @@ do_not_disturb {
   format = '[\?if=state&color=bad |\?color=good ]'
 }
 
-ethernet _first_ {
-  # if you use %speed, i3status requires root privileges
-  format_up = ''
-  format_down = ''
-}
-
 file_status VPN {
   # path exists when a VPN tunnel launched by nmcli/nm-applet is active
   cache_timeout = -1
   format='\?color=path  VPN|'
   paths = '/proc/sys/net/ipv4/conf/tun0'
 }
+
+# group cpu {
+#   button_next = 1
+#   button_prev = 0
+#
+#   sysdata {
+#     cache_timeout = 1
+#     thresholds = { 'cpu': [(0, 'good'), (25, 'degraded'), (80, 'bad')] }
+#     format = '[\?color=cpu 󰀐   {cpu_usage:.0f}%]'
+#   }
+#
+#   conky {
+#     format = '󰀐  {top name 1} {top cpu 1}%'
+#   }
+# }
+#
+# group ram {
+#   button_next = 1
+#   button_prev = 0
+#
+#   sysdata {
+#     cache_timeout = 1
+#     mem_unit = 'GiB'
+#     thresholds = { 'mem': [(0, 'good'), (60, 'degraded'), (80, 'bad')] }
+#     format = '[\?color=mem 󰀌   {mem_used_percent:.0f}%]'
+#   }
+#
+#   conky {
+#     format = '󰀌  {top_mem name 1} {top_mem mem 1}%'
+#   }
+# }
+#
+# group wifi {
+#   button_next = 1
+#   button_prev = 0
+#
+#   wifi brief {
+#     cache_timeout = -1
+#     signal_bad = 0
+#     bitrate_bad = 0
+#     bitrate_degraded = 0
+#     format = '󰀆|󰀆'
+#   }
+#
+#   wifi detailed {
+#     cache_timeout = -1
+#     signal_bad = 0
+#     bitrate_bad = 0
+#     bitrate_degraded = 0
+#     format = '{ssid}  ({signal_percent})|󰀆'
+#   }
+# }
 
 keyboard_layout {
   cache_timeout = 1
@@ -102,17 +151,23 @@ sysdata {
   }
 }
 
-wireless _first_ {
-  format_up = ' %essid - %quality'
-  format_down = ''
-}
-
 volume_status {
   cache_timeout = 1
   command = 'pamixer'
   device = '@DEFAULT_SINK@'
   format = ' {percentage}%'
   format_muted = ' MUTE'
+  on_udev_sound = 'refresh'
   thresholds = [(0, 'bad'), (1, 'good'), (101, 'degraded')]
   volume_delta = 5
+}
+
+wireless _first_ {
+  format_up = ' %essid - %quality'
+  format_down = ''
+}
+
+xrandr {
+  fixed_width = false
+  hide_if_single_combination = true
 }
