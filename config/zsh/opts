@@ -64,6 +64,10 @@ setopt PATH_DIRS             # Path search even on cmd bins with slashes.
 # This 'rehash' can be set to happen automatically as below.
 zstyle ':completion:*' rehash true
 
+# Use caching to make completion for commands such as dpkg and apt usable.
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME}/zsh"
+
 
 # Jobs
 # ----------------------
