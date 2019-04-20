@@ -2,12 +2,10 @@
 
 pre_lock() {
   killall compton
-  usbguard set-parameter InsertedDevicePolicy reject
   sudo systemctl stop pcscd.service
 }
 
 post_lock() {
-  usbguard set-parameter InsertedDevicePolicy apply-policy
   compton -b &
 }
 
