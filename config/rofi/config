@@ -5,7 +5,7 @@ rofi.kb-remove-char-back: BackSpace,Shift+BackSpace,Control+h
 rofi.kb-move-word-back: Alt+b,Ctrl+Left
 rofi.kb-move-word-forward: Alt+f,Ctrl+Right
 rofi.matching: fuzzy
-rofi.modi: drun,window,calc:rofi-calc
+rofi.modi: drun,window
 rofi.show-icons: true
 rofi.show-match: false
 rofi.sort: true

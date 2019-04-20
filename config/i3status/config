@@ -14,18 +14,18 @@ general {
   interval = 1
 }
 
-order += 'yubikey'
 order += 'diskdata'
 order += 'sysdata'
 order += 'net_rate'
 order += 'wireless _first_'
 order += 'ethernet _first_'
 order += 'file_status VPN'
+order += 'keyboard_layout'
 order += 'backlight'
 order += 'volume_status'
 order += 'battery_level'
-order += 'do_not_disturb'
 order += 'clock'
+order += 'do_not_disturb'
 
 backlight {
   brightness_delta = 10
@@ -53,10 +53,9 @@ clock {
 }
 
 diskdata {
-  disk = '/dev/mapper/vgcrypt-root'
   format = '\?color=free  {free} GB'
   format_space = '{value:.0f}'
-  thresholds = {'free': [(0, 'bad'), (2, 'degraded'), (5, 'good')]}
+  thresholds = {'free': [(0, 'bad'), (2, 'degraded'), (5, 'hidden')]}
 }
 
 do_not_disturb {
@@ -71,15 +70,22 @@ ethernet _first_ {
 
 file_status VPN {
   # path exists when a VPN tunnel launched by nmcli/nm-applet is active
-  cache_timeout = 5
+  cache_timeout = -1
   format='\?color=path  VPN|'
   paths = '/proc/sys/net/ipv4/conf/tun0'
+}
+
+keyboard_layout {
+  cache_timeout = 1
+  button_prev = None
+  button_next = None
+  color_gb = '#ebdbb2'
 }
 
 net_rate {
   format = '\?color=total  {total}'
   format_value = '{value:.0f} {unit}'
-  thresholds = {'total': [(0, 'good'), (1499500, 'degraded'), (14995000, 'bad')]} # 8 mbit, 80 mbit
+  thresholds = {'total': [(0, 'hidden'), (1499500, 'degraded'), (14995000, 'bad')]} # 8 mbit, 80 mbit
   hide_if_zero = true
   unit = 'MB/s'
 }
@@ -109,8 +115,4 @@ volume_status {
   format_muted = ' MUTE'
   thresholds = [(0, 'bad'), (1, 'good'), (101, 'degraded')]
   volume_delta = 5
-}
-
-yubikey {
-  format = '[[\?if=is_gpg ][\?if=is_u2f ]  ]'
 }

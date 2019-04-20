@@ -5,7 +5,7 @@
 #------------------------------------------------------------------------------
 # Default vars
 set $alt Mod1
-set $mod Mod4
+set $super Mod4
 
 # i3 behavior
 workspace_auto_back_and_forth yes
@@ -35,55 +35,55 @@ default_orientation vertical
 #==============================================================================
 # i3 gaps behavior →
 #------------------------------------------------------------------------------
-# Gaps will only work correctly if you disable window titlebars entirely.
-# Unfortunately this is necessary due to the way i3 creates such bars on windows.
-for_window [class="^.*"] border pixel 0
-
-gaps inner 5
-gaps outer 5
-
-# Gaps are only used if more than one container on the workspace
-smart_gaps on
-
-# Draw borders around a container only if it is not the only container in this workspace
-smart_borders on
-
-set $mode_gaps Gaps: (o) outer, (i) inner
-set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
-
-mode "$mode_gaps" {
-    bindsym o           mode "$mode_gaps_outer"
-    bindsym i           mode "$mode_gaps_inner"
-    bindsym Return      mode "default"
-    bindsym Escape      mode "default"
-}
-
-mode "$mode_gaps_inner" {
-    bindsym plus        gaps inner current plus 5
-    bindsym minus       gaps inner current minus 5
-    bindsym 0           gaps inner current set 0
-
-    bindsym Shift+plus  gaps inner all plus 5
-    bindsym Shift+minus gaps inner all minus 5
-    bindsym Shift+0     gaps inner all set 0
-
-    bindsym Return      mode "default"
-    bindsym Escape      mode "default"
-}
-mode "$mode_gaps_outer" {
-    bindsym plus        gaps outer current plus 4
-    bindsym minus       gaps outer current minus 4
-    bindsym -1          gaps outer current set 0
-
-    bindsym Shift+plus  gaps outer all plus 4
-    bindsym Shift+minus gaps outer all minus 4
-    bindsym Shift+-1    gaps outer all set 0
-
-    bindsym Return      mode "default"
-    bindsym Escape      mode "default"
-}
+# # Gaps will only work correctly if you disable window titlebars entirely.
+# # Unfortunately this is necessary due to the way i3 creates such bars on windows.
+# for_window [class="^.*"] border pixel 0
+#
+# gaps inner 5
+# gaps outer 5
+#
+# # Gaps are only used if more than one container on the workspace
+# smart_gaps on
+#
+# # Draw borders around a container only if it is not the only container in this workspace
+# smart_borders on
+#
+# set $mode_gaps Gaps: (o) outer, (i) inner
+# set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+# set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+# bindsym $super+Shift+g mode "$mode_gaps"
+#
+# mode "$mode_gaps" {
+#     bindsym o           mode "$mode_gaps_outer"
+#     bindsym i           mode "$mode_gaps_inner"
+#     bindsym Return      mode "default"
+#     bindsym Escape      mode "default"
+# }
+#
+# mode "$mode_gaps_inner" {
+#     bindsym plus        gaps inner current plus 5
+#     bindsym minus       gaps inner current minus 5
+#     bindsym 0           gaps inner current set 0
+#
+#     bindsym Shift+plus  gaps inner all plus 5
+#     bindsym Shift+minus gaps inner all minus 5
+#     bindsym Shift+0     gaps inner all set 0
+#
+#     bindsym Return      mode "default"
+#     bindsym Escape      mode "default"
+# }
+# mode "$mode_gaps_outer" {
+#     bindsym plus        gaps outer current plus 4
+#     bindsym minus       gaps outer current minus 4
+#     bindsym -1          gaps outer current set 0
+#
+#     bindsym Shift+plus  gaps outer all plus 4
+#     bindsym Shift+minus gaps outer all minus 4
+#     bindsym Shift+-1    gaps outer all set 0
+#
+#     bindsym Return      mode "default"
+#     bindsym Escape      mode "default"
+# }
 
 #==============================================================================
 # Workspaces →
@@ -115,10 +115,10 @@ bindsym $alt+k focus up
 bindsym $alt+l focus right
 
 # Alternative focus
-bindsym $mod+Left  focus left
-bindsym $mod+Down  focus down
-bindsym $mod+Up    focus up
-bindsym $mod+Right focus right
+bindsym $super+Left  focus left
+bindsym $super+Down  focus down
+bindsym $super+Up    focus up
+bindsym $super+Right focus right
 
 # Move focused window
 bindsym $alt+Ctrl+h move left
@@ -127,10 +127,10 @@ bindsym $alt+Ctrl+k move up
 bindsym $alt+Ctrl+l move right
 
 # Alternatively, you can use the Super+Shift+Arrows:
-bindsym $mod+Shift+Left  move left
-bindsym $mod+Shift+Down  move down
-bindsym $mod+Shift+Up    move up
-bindsym $mod+Shift+Right move right
+bindsym $super+Shift+Left  move left
+bindsym $super+Shift+Down  move down
+bindsym $super+Shift+Up    move up
+bindsym $super+Shift+Right move right
 
 # Vert/horiz orientation and fullscreen
 bindsym $alt+f fullscreen
@@ -157,15 +157,15 @@ bindsym $alt+Ctrl+r restart
 bindsym $alt+Ctrl+Delete exec "i3-nagbar -t warning -m 'exit i3? This will end your X session.' -b 'Yes' 'i3-msg exit'"
 
 # Change container layout (stacked, tabbed, toggle split)
-bindsym $mod+d layout stacking
-bindsym $mod+f layout tabbed
-bindsym $mod+g layout toggle split
+bindsym $super+d layout stacking
+bindsym $super+f layout tabbed
+bindsym $super+g layout toggle split
 
 # Toggle between stacking/tabbed/split (Use Super+x!)
-bindsym $mod+x layout toggle
+bindsym $super+x layout toggle
 
 # Toggle border modes (Use Super+b!)
-bindsym $mod+b border toggle
+bindsym $super+b border toggle
 
 # Utils
 # ------------
@@ -180,12 +180,16 @@ set $vol_mute                    "pamixer -t"
 
 # The awesome rofi.
 bindsym --release $alt+Tab       exec "pgrep -x rofi && killall rofi || rofi -normal-window -show window"
-bindsym --release $alt+c         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show calc"
 bindsym --release $alt+r         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
-bindsym --release $alt+n         exec "networkmanager_dmenu"
 
-# Screenshot
-bindsym Print                    exec "flameshot gui"
+# Screenshot fullscreen
+bindsym Print exec "maim -q 100 | xsel --clipboard -t image/png"
+
+# Screenshot with selection
+bindsym $mod+Print exec "maim -q 100 -s | xsel --clipboard -t image/png"
+
+# Screenshot current focused window
+bindsym Shift+Print exec "maim -q 100 -i $(xdotool getactivewindow) | xsel --clipboard -t image/png"
 
 # XF86 keys
 bindsym XF86AudioPlay            exec $media_play
@@ -205,15 +209,14 @@ bindsym F11                      exec $vol_down
 bindsym F10                      exec $vol_mute
 
 # Screen brightness controls
-bindsym XF86MonBrightnessUp      exec "light -A 10"
-bindsym XF86MonBrightnessDown    exec "light -U 10"
+bindsym XF86MonBrightnessUp      exec "brightnessctl -q set +10"
+bindsym XF86MonBrightnessDown    exec "brightnessctl -q set -10"
 
 
 # Quick Actions
 # ------------
 # Apps
 bindsym $alt+Shift+b              exec "${BROWSER}"
-bindsym $alt+Shift+e              exec "${TERMINAL} -e neomutt"
 bindsym $alt+Shift+f              exec "${TERMINAL} -e ranger"
 bindsym $alt+Shift+i              exec "${TERMINAL} -e htop"
 bindsym $alt+Shift+t              exec "${TERMINAL}"
@@ -310,8 +313,6 @@ bar {
     position          top
     separator_symbol  " | "
     status_command    py3status --dbus-notify
-    # Tray icons may look weird as Gnome like to break things.
-    # https://github.com/i3/i3/issues/3335#issuecomment-419815719
     tray_output       primary
     tray_padding      5px
 }
@@ -329,18 +330,27 @@ bar {
 # App window behavior →
 #------------------------------------------------------------------------------
 for_window [class=".*"] sticky enable
+for_window [window_role="About"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="^Preferences$"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
-for_window [class="Lxappearance"] floating enable border normal
+for_window [class="Code"] floating enable
+for_window [class="Firefox"] floating enable
+for_window [class="Gimp"] floating enable
+for_window [class="Google-chrome"] floating enable
+for_window [class="Keybase"] floating enable
+for_window [title="^Qalculate!$"] floating enable
 for_window [class="Peek"] floating enable
 for_window [class="Pinentry"] floating enable
-for_window [title="^Qalculate!$"] floating enable
 for_window [class="Rofi"] floating enable
+for_window [class="Slack"] floating enable
+for_window [class="Tor Browser"] floating enable
 for_window [class="(?i)virtualbox"] floating enable border normal
-for_window [class="Vlc"]     floating enable, border none
-for_window [class="zeal"]    floating enable, border none
+for_window [class="vlc"] floating enable
+for_window [class="Wine"] floating enable
+for_window [class="Wireshark"] floating enable
+for_window [class="zeal"] floating enable, border none
 
 
 #==============================================================================
@@ -365,7 +375,7 @@ mode "$resize_mode" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+r mode "$resize_mode"
+bindsym $super+r mode "$resize_mode"
 
 # Logout confirm
 set $i3exit ${XDG_CONFIG_HOME}/i3/bin/i3-exit
@@ -381,19 +391,35 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Pause mode "$mode_system"
+bindsym $super+Pause mode "$mode_system"
 
 #==============================================================================
 # Autostart →
 #------------------------------------------------------------------------------
-exec_always "killall compton; compton &"
-exec_always "hsetroot -solid '#333333' &"
-exec_always "numlockx &"
-exec_always "autorandr --change --default mobile"
+# Make caps lock another escape
+exec --no-startup-id "setxkbmap -option caps:escape"
+# Key repeat (delay / rate)
+exec --no-startup-id "xset r rate 230 35"
+# DPMS monitor setting (Standby -> Suspend -> Off, in seconds)
+exec --no-startup-id "xset dpms 500 700 900"
+# Disable PC speaker beeps
+exec --no-startup-id "xset -b"
+# Colours etc...
+exec --no-startup-id "xrdb -merge ${HOME}/.Xresources"
 
-exec_always "pgrep -x usbguard-applet-qt || (usbguard-applet-qt &)"
-exec_always "pgrep -x udiskie || (udiskie --smart-tray &)"
-exec_always "pgrep -x dunst || (dunst &)"
+# Numlock On
+exec --no-startup-id "numlockx &"
+
+# Compositor
+exec_always --no-startup-id "killall compton; compton &"
+
+# Background
+exec_always --no-startup-id "hsetroot -solid '#333333' &"
+
+# Notifications daemon
+exec_always --no-startup-id "pgrep -x dunst || (dunst &)"
+
+# f.lux / night shift
 exec_always "pgrep -x redshift-gtk || (redshift-gtk &)"
 
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :
