@@ -1,4 +1,8 @@
 #!/bin/sh
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
 ln -sf "${XDG_CONFIG_HOME}/nvim" "${HOME}/.vim"
 
 if ! [ -d "${XDG_DATA_HOME}/nvim/dein" ]; then

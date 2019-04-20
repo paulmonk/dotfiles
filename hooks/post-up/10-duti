@@ -1,5 +1,6 @@
 #!/bin/sh
 
 if command -v duti >/dev/null 2>&1; then
+  XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
   duti "${XDG_CONFIG_HOME}/duti/config"
 fi

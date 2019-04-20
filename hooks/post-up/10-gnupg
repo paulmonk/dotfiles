@@ -1,5 +1,6 @@
 #!/bin/sh
-GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"
+
+GNUPGHOME="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg"
 
 if [ "$(uname -s)" = "Darwin" ]; then
   # Force use of BSD installed variant.
