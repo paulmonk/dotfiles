@@ -65,13 +65,10 @@ if [ "${KERNEL}" = "Darwin" ]; then
 else
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
-  export TERMINAL="${PREFIX}/bin/alacritty"
+  export TERMINAL="${PREFIX}/bin/sakura"
 
   # CPU
   CPU_CORES="$(nproc)"
-
-  # Aurutils
-  export AUR_PAGER="${PREFIX}/bin/ranger"
 
   # GTK 2: Pull GTK2 RC files from the standard config location, similar to gtk-3.0
   export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
@@ -100,7 +97,6 @@ fi
 
 # Defaults
 export LANG="en_GB.UTF-8"
-export MAIL="mutt"
 export PAGER="less"
 
 # Defaults: Editor

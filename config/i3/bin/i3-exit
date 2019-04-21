@@ -5,33 +5,39 @@ pre_lock() {
   sudo systemctl stop pcscd.service
 }
 
-post_lock() {
-  compton -b &
+lock() {
+  # xsecurelock is not yet in the APT repo so may not be installed. Fallback
+  # to i3lock in this case.
+  if command -v xsecurelock; then
+    xsecurelock
+  else
+    i3lock
+  fi
 }
 
-stop_vpn() {
-  nmcli con show --active | grep vpn | cut -d' ' -f1 | xargs -n1 nmcli con down
+post_lock() {
+  compton -b & disown
 }
 
 case "$1" in
   lock)
     pre_lock
-    xsecurelock
+    lock
     post_lock
     ;;
   logout)
     i3-msg exit
     ;;
   suspend)
-    stop_vpn
+    pre_lock
     systemctl suspend
+    lock
+    post_lock
     ;;
   reboot)
-    stop_vpn
     systemctl reboot
     ;;
   shutdown)
-    stop_vpn
     systemctl poweroff
     ;;
   *)

@@ -350,6 +350,7 @@ for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="vlc"] floating enable
 for_window [class="Wine"] floating enable
 for_window [class="Wireshark"] floating enable
+for_window [class="Zoom"] floating enable, border none
 for_window [class="zeal"] floating enable, border none
 
 
@@ -400,6 +401,8 @@ bindsym $super+Pause mode "$mode_system"
 exec --no-startup-id "setxkbmap -option caps:escape"
 # Key repeat (delay / rate)
 exec --no-startup-id "xset r rate 230 35"
+# Inital DPI
+exec --no-startup-id "xrandr --dpi 210"
 # DPMS monitor setting (Standby -> Suspend -> Off, in seconds)
 exec --no-startup-id "xset dpms 500 700 900"
 # Disable PC speaker beeps
@@ -407,19 +410,22 @@ exec --no-startup-id "xset -b"
 # Colours etc...
 exec --no-startup-id "xrdb -merge ${HOME}/.Xresources"
 
-# Numlock On
-exec --no-startup-id "numlockx &"
-
 # Compositor
-exec_always --no-startup-id "killall compton; compton &"
+exec_always --no-startup-id "killall compton && compton &"
 
 # Background
 exec_always --no-startup-id "hsetroot -solid '#333333' &"
+
+# Numlock On
+exec --no-startup-id "numlockx &"
+
+# Unclutter (hide cursor)
+exec_always --no-startup-id "unclutter || (unclutter &)"
 
 # Notifications daemon
 exec_always --no-startup-id "pgrep -x dunst || (dunst &)"
 
 # f.lux / night shift
-exec_always "pgrep -x redshift-gtk || (redshift-gtk &)"
+exec_always --no-startup-id "pgrep -x redshift-gtk || (redshift-gtk &)"
 
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :

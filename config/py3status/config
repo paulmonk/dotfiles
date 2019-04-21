@@ -1,5 +1,4 @@
-# i3status configuration file.
-# see 'man i3status' for documentation.
+# py3status configuration file.
 
 # It is important that this file is edited as UTF-8.
 # The following line should contain a sharp s:
@@ -18,13 +17,11 @@ order += 'diskdata'
 order += 'group cpu'
 order += 'group ram'
 order += 'net_rate'
-order += 'wireless _first_'
 order += 'file_status VPN'
 order += 'xrandr'
 order += 'backlight'
 order += 'volume_status'
 order += 'battery_level'
-order += 'keyboard_layout'
 order += 'clock'
 order += 'do_not_disturb'
 
@@ -37,7 +34,7 @@ backlight {
 }
 
 battery_level {
-  blocks = '󰀖  '
+  blocks = '   '
   cache_timeout = 1
   charging_character = ''
   color_charging = '#fabd2f'
@@ -65,70 +62,63 @@ do_not_disturb {
   format = '[\?if=state&color=bad |\?color=good ]'
 }
 
+# path exists when a VPN tunnel launched by nmcli/nm-applet is active
 file_status VPN {
-  # path exists when a VPN tunnel launched by nmcli/nm-applet is active
   cache_timeout = -1
   format='\?color=path  VPN|'
   paths = '/proc/sys/net/ipv4/conf/tun0'
 }
 
-# group cpu {
-#   button_next = 1
-#   button_prev = 0
-#
-#   sysdata {
-#     cache_timeout = 1
-#     thresholds = { 'cpu': [(0, 'good'), (25, 'degraded'), (80, 'bad')] }
-#     format = '[\?color=cpu 󰀐   {cpu_usage:.0f}%]'
-#   }
-#
-#   conky {
-#     format = '󰀐  {top name 1} {top cpu 1}%'
-#   }
-# }
-#
-# group ram {
-#   button_next = 1
-#   button_prev = 0
-#
-#   sysdata {
-#     cache_timeout = 1
-#     mem_unit = 'GiB'
-#     thresholds = { 'mem': [(0, 'good'), (60, 'degraded'), (80, 'bad')] }
-#     format = '[\?color=mem 󰀌   {mem_used_percent:.0f}%]'
-#   }
-#
-#   conky {
-#     format = '󰀌  {top_mem name 1} {top_mem mem 1}%'
-#   }
-# }
-#
-# group wifi {
-#   button_next = 1
-#   button_prev = 0
-#
-#   wifi brief {
-#     cache_timeout = -1
-#     signal_bad = 0
-#     bitrate_bad = 0
-#     bitrate_degraded = 0
-#     format = '󰀆|󰀆'
-#   }
-#
-#   wifi detailed {
-#     cache_timeout = -1
-#     signal_bad = 0
-#     bitrate_bad = 0
-#     bitrate_degraded = 0
-#     format = '{ssid}  ({signal_percent})|󰀆'
-#   }
-# }
+group cpu {
+  button_next = 1
+  button_prev = 0
 
-keyboard_layout {
-  cache_timeout = 1
-  button_prev = None
-  button_next = None
-  color_gb = '#ebdbb2'
+  sysdata {
+    cache_timeout = 1
+    thresholds = { 'cpu': [(0, 'good'), (25, 'degraded'), (80, 'bad')] }
+    format = '[\?color=cpu    {cpu_usage:.0f}%]'
+  }
+
+  conky {
+    format = '  {top name 1} {top cpu 1}%'
+  }
+}
+
+group ram {
+  button_next = 1
+  button_prev = 0
+
+  sysdata {
+    cache_timeout = 1
+    mem_unit = 'GiB'
+    thresholds = { 'mem': [(0, 'good'), (60, 'degraded'), (80, 'bad')] }
+    format = '[\?color=mem   {mem_used_percent:.0f}%]'
+  }
+
+  conky {
+    format = '  {top_mem name 1} {top_mem mem 1}%'
+  }
+}
+
+group wifi {
+  button_next = 1
+  button_prev = 0
+
+  wifi brief {
+    cache_timeout = -1
+    signal_bad = 0
+    bitrate_bad = 0
+    bitrate_degraded = 0
+    format = '|󰀆'
+  }
+
+  wifi detailed {
+    cache_timeout = -1
+    signal_bad = 0
+    bitrate_bad = 0
+    bitrate_degraded = 0
+    format = '{ssid}  ({signal_percent})|󰀆'
+  }
 }
 
 net_rate {
@@ -137,18 +127,6 @@ net_rate {
   thresholds = {'total': [(0, 'hidden'), (1499500, 'degraded'), (14995000, 'bad')]} # 8 mbit, 80 mbit
   hide_if_zero = true
   unit = 'MB/s'
-}
-
-sysdata {
-  cache_timeout = 1
-  format = '[\?color=cpu  {cpu_usage:.0f}%]      [\?color=temp  {cpu_temp:.0f}°C]      [\?color=mem  {mem_used_percent:.0f}%]'
-  mem_unit = 'GiB'
-  temp_unit = 'C'
-  thresholds = {
-    'cpu': [(0, 'good'), (25, 'degraded'), (80, 'bad')],
-    'mem': [(0, 'good'), (60, 'degraded'), (80, 'bad')],
-    'temp': [(0, 'good'), (70, 'degraded'), (80, 'bad')],
-  }
 }
 
 volume_status {
@@ -160,11 +138,6 @@ volume_status {
   on_udev_sound = 'refresh'
   thresholds = [(0, 'bad'), (1, 'good'), (101, 'degraded')]
   volume_delta = 5
-}
-
-wireless _first_ {
-  format_up = ' %essid - %quality'
-  format_down = ''
 }
 
 xrandr {
