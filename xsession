@@ -3,6 +3,9 @@
 # ==============================
 # Xsession
 # ==============================
+# Set DPI
+# Some apps look in Xresources and other from the Xserver,
+xrandr --dpi 96
 
 # Make caps lock another escape
 setxkbmap -option caps:escape
