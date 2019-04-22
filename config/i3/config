@@ -18,8 +18,8 @@ focus_follows_mouse no
 # the mouse cursor is warped to the center of that client.
 mouse_warping none
 
-# Be pixel stingy <none|vertical|horizontal|both>
-hide_edge_borders vertical
+# Be pixel stingy <none|vertical|horizontal|both|smart>
+hide_edge_borders smart
 
 # Use Mouse+$alt to drag and resize floating windows
 floating_modifier $alt
@@ -100,9 +100,7 @@ set $ws9  "9 "
 set $ws10 "10 "
 
 # Force workspaces to specific output monitor
-#workspace "$ws1" output DFP10
-#workspace "$ws2" output DFP1
-#workspace "$ws3" output DFP9
+# workspace "$ws1" output DP1
 
 
 #==============================================================================
@@ -170,56 +168,58 @@ bindsym $super+b border toggle
 # Utils
 # ------------
 # Commands
+set $brightness_up               "brightnessctl -q set +10"
+set $brightness_down             "brightnessctl -q set -10"
 set $media_play                  "playerctl play-pause"
 set $media_next                  "playerctl next"
 set $media_previous              "playerctl previous"
 set $media_stop                  "playerctl stop"
-set $vol_up                      "pamixer -i 5"
-set $vol_down                    "pamixer -d 5"
-set $vol_mute                    "pamixer -t"
+set $vol_mute                    "py3-cmd click 1 volume_status"
+set $vol_up                      "py3-cmd click 4 volume_status"
+set $vol_down                    "py3-cmd click 5 volume_status"
 
 # The awesome rofi.
 bindsym --release $alt+Tab       exec "pgrep -x rofi && killall rofi || rofi -normal-window -show window"
 bindsym --release $alt+r         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
 
 # Screenshot fullscreen
-bindsym Print exec "maim -q 100 | xsel --clipboard -t image/png"
+bindsym Print                    exec "maim -q 100 | xsel --clipboard -t image/png"
 
 # Screenshot with selection
-bindsym $super+Print exec "maim -q 100 -s | xsel --clipboard -t image/png"
+bindsym $super+Print             exec "maim -q 100 -s | xsel --clipboard -t image/png"
 
 # Screenshot current focused window
-bindsym Shift+Print exec "maim -q 100 -i $(xdotool getactivewindow) | xsel --clipboard -t image/png"
+bindsym Shift+Print              exec "maim -q 100 -i $(xdotool getactivewindow) | xsel --clipboard -t image/png"
 
 # XF86 keys
+bindsym XF86AudioPrev            exec $media_previous
 bindsym XF86AudioPlay            exec $media_play
 bindsym XF86AudioNext            exec $media_next
-bindsym XF86AudioPrev            exec $media_previous
 bindsym XF86AudioStop            exec $media_stop
-bindsym XF86AudioRaiseVolume     exec $vol_up
-bindsym XF86AudioLowerVolume     exec $vol_down
 bindsym XF86AudioMute            exec $vol_mute
+bindsym XF86AudioLowerVolume     exec $vol_down
+bindsym XF86AudioRaiseVolume     exec $vol_up
 
 # Standard F-keys
+bindsym F7                       exec $media_previous
 bindsym F8                       exec $media_play
 bindsym F9                       exec $media_next
-bindsym F7                       exec $media_previous
-bindsym F12                      exec $vol_up
-bindsym F11                      exec $vol_down
 bindsym F10                      exec $vol_mute
+bindsym F11                      exec $vol_down
+bindsym F12                      exec $vol_up
 
 # Screen brightness controls
-bindsym XF86MonBrightnessUp      exec "brightnessctl -q set +10"
-bindsym XF86MonBrightnessDown    exec "brightnessctl -q set -10"
+bindsym XF86MonBrightnessUp      exec $brightness_up
+bindsym XF86MonBrightnessDown    exec $brightness_down
 
 
 # Quick Actions
 # ------------
 # Apps
-bindsym $alt+Shift+b              exec "${BROWSER}"
-bindsym $alt+Shift+f              exec "${TERMINAL} -e ranger"
-bindsym $alt+Shift+i              exec "${TERMINAL} -e htop"
-bindsym $alt+Shift+t              exec "${TERMINAL}"
+bindsym $alt+Shift+b             exec "$BROWSER"
+bindsym $alt+Shift+f             exec "$TERMINAL -e ranger"
+bindsym $alt+Shift+i             exec "$TERMINAL -e htop"
+bindsym $alt+Return              exec "$TERMINAL"
 
 
 # Workspaces
@@ -269,29 +269,29 @@ bindsym $alt+Ctrl+8 move container to workspace $ws8
 # Use the otf version: otf-font-awesome.
 # https://bugs.archlinux.org/task/56899
 # font pango: Noto Sans, FontAwesome 11
-font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 11
+font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 9
 
 # Borders
 new_window pixel 2
 new_float pixel 0
 
 # Solarized Colors
-set $base03    #002b36
-set $base02    #073642
-set $base01    #586e75
-set $base00    #657b83
-set $base0     #839496
-set $base1     #93a1a1
-set $base2     #eee8d5
-set $base3     #fdf6e3
-set $yellow    #b58900
-set $orange    #cb4b16
-set $red       #dc322f
-set $magenta   #d33682
-set $violet    #6c71c4
-set $blue      #268bd2
-set $cyan      #2aa198
-set $green     #859900
+set_from_resource $base03  color8  #000000
+set_from_resource $base02  color0  #000000
+set_from_resource $base01  color10 #000000
+set_from_resource $base00  color11 #000000
+set_from_resource $base0   color12 #000000
+set_from_resource $base1   color14 #000000
+set_from_resource $base2   color7  #000000
+set_from_resource $base3   color15 #000000
+set_from_resource $yellow  color3  #000000
+set_from_resource $orange  color9  #000000
+set_from_resource $red     color1  #000000
+set_from_resource $magenta color5  #000000
+set_from_resource $violet  color13 #000000
+set_from_resource $blue    color4  #000000
+set_from_resource $cyan    color6  #000000
+set_from_resource $green   color2  #000000
 
 # Class                  Border   Backgr.  Text    Indicator
 client.focused           $green   $green   $base3  $violet
@@ -301,20 +301,21 @@ client.urgent            $magenta $magenta $base3  $red
 
 bar {
     colors {
-        background          $base03
-        statusline          $base2
+        background          $base02
         separator           $base01
-        # workspace         Border     Backgr     text
+        statusline          $base2
+
+        # workspace type    Border     Backgr     text
         focused_workspace   $base3     $green     $base3
         active_workspace    $base3     $violet    $base3
         inactive_workspace  $base3     $base1     $base03
         urgent_workspace    $magenta   $magenta   $base3
     }
     position          top
-    separator_symbol  " | "
+    separator_symbol  "  |  "
     status_command    py3status --dbus-notify
     tray_output       primary
-    tray_padding      5px
+    tray_padding      3px
 }
 
 #==============================================================================
@@ -397,35 +398,27 @@ bindsym $super+Pause mode "$mode_system"
 #==============================================================================
 # Autostart →
 #------------------------------------------------------------------------------
-# Make caps lock another escape
-exec --no-startup-id "setxkbmap -option caps:escape"
-# Key repeat (delay / rate)
-exec --no-startup-id "xset r rate 230 35"
-# Inital DPI
-exec --no-startup-id "xrandr --dpi 210"
-# DPMS monitor setting (Standby -> Suspend -> Off, in seconds)
-exec --no-startup-id "xset dpms 500 700 900"
-# Disable PC speaker beeps
-exec --no-startup-id "xset -b"
-# Colours etc...
-exec --no-startup-id "xrdb -merge ${HOME}/.Xresources"
+# Handle Monitors
+exec_always "autorandr --change &"
 
 # Compositor
-exec_always --no-startup-id "killall compton && compton &"
+exec_always "compton -b &"
 
-# Background
-exec_always --no-startup-id "hsetroot -solid '#333333' &"
+# Set Background
+exec_always "hsetroot -solid '#839496' &"
 
 # Numlock On
-exec --no-startup-id "numlockx &"
+exec_always "numlockx &"
 
 # Unclutter (hide cursor)
-exec_always --no-startup-id "unclutter || (unclutter &)"
+# Hide mouse and allow jitter
+# Dont send pseudo events - prevents flickering on top of some GTK apps
+exec_always "pgrep -x unclutter || (unclutter -idle 3 -jitter 5 -noevents &)"
 
 # Notifications daemon
-exec_always --no-startup-id "pgrep -x dunst || (dunst &)"
+exec_always "pgrep -x dunst || (dunst &)"
 
 # f.lux / night shift
-exec_always --no-startup-id "pgrep -x redshift-gtk || (redshift-gtk &)"
+exec_always "pgrep -x redshift-gtk || (redshift-gtk &)"
 
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :

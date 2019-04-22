@@ -6,22 +6,24 @@
 # If the above line is not correctly displayed, fix your editor first!
 
 general {
-  colors = true
+  colors = True
   color_good = '#eee8d5'
   color_degraded = '#b58900'
   color_bad = '#dc322f'
   interval = 1
 }
 
+order += 'file_status VPN'
 order += 'diskdata'
 order += 'group cpu'
 order += 'group ram'
 order += 'net_rate'
-order += 'file_status VPN'
 order += 'xrandr'
+order += 'group wifi'
 order += 'backlight'
 order += 'volume_status'
 order += 'battery_level'
+order += 'keyboard_layout'
 order += 'clock'
 order += 'do_not_disturb'
 
@@ -31,17 +33,18 @@ backlight {
   command = 'xbacklight'
   format = '\?color=good ☼ {level}%'
   low_tune_threshold = 10
+  on_udev_backlight = 'refresh_and_freeze'
 }
 
 battery_level {
   blocks = '   '
-  cache_timeout = 1
+  cache_timeout = 60
   charging_character = ''
   color_charging = '#fabd2f'
   format = '{icon}  {percent}%'
-  hide_seconds = true
+  hide_seconds = True
   measurement_mode = 'sys'
-  notify_low_level = true
+  notify_low_level = True
   on_udev_power_supply = 'refresh'
   threshold_bad = 20
 }
@@ -49,7 +52,7 @@ battery_level {
 clock {
   blocks = ''
   format = '{Local}'
-  format_time = '{icon} %Y-%m-%d %H:%M:%S  '
+  format_time = '{icon} %Y-%m-%d %H:%M:%S'
 }
 
 diskdata {
@@ -58,14 +61,15 @@ diskdata {
   thresholds = {'free': [(0, 'bad'), (2, 'degraded'), (5, 'hidden')]}
 }
 
+# Extra spaces are for separation from applets.
 do_not_disturb {
-  format = '[\?if=state&color=bad |\?color=good ]'
+  format = '[\?if=state&color=bad |\?color=good ]  '
 }
 
-# path exists when a VPN tunnel launched by nmcli/nm-applet is active
+# Path exists when a VPN tunnel launched by nmcli/nm-applet is active
 file_status VPN {
   cache_timeout = -1
-  format='\?color=path  VPN|'
+  format='\?color=path  VPN'
   paths = '/proc/sys/net/ipv4/conf/tun0'
 }
 
@@ -109,7 +113,7 @@ group wifi {
     signal_bad = 0
     bitrate_bad = 0
     bitrate_degraded = 0
-    format = '|󰀆'
+    format = ''
   }
 
   wifi detailed {
@@ -117,21 +121,29 @@ group wifi {
     signal_bad = 0
     bitrate_bad = 0
     bitrate_degraded = 0
-    format = '{ssid}  ({signal_percent})|󰀆'
+    format = '{ssid}  ({signal_percent})'
   }
+}
+
+keyboard_layout {
+  cache_timeout = -1
+  button_prev = None
+  button_next = None
+  color_gb = '#eee8d5'
+  format = '  {layout}'
 }
 
 net_rate {
   format = '\?color=total  {total}'
   format_value = '{value:.0f} {unit}'
   thresholds = {'total': [(0, 'hidden'), (1499500, 'degraded'), (14995000, 'bad')]} # 8 mbit, 80 mbit
-  hide_if_zero = true
+  hide_if_zero = True
   unit = 'MB/s'
 }
 
 volume_status {
   cache_timeout = 1
-  command = 'pamixer'
+  command = 'pactl'
   device = '@DEFAULT_SINK@'
   format = ' {percentage}%'
   format_muted = ' MUTE'
@@ -141,6 +153,7 @@ volume_status {
 }
 
 xrandr {
-  fixed_width = false
-  hide_if_single_combination = true
+  format = '  {output}'
+  fixed_width = False
+  hide_if_single_combination = True
 }

@@ -63,6 +63,9 @@ if [ "${KERNEL}" = "Darwin" ]; then
   # CPU
   CPU_CORES="$(sysctl -n hw.ncpu)"
 else
+  # Prefix
+  export PREFIX="/usr"
+
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
   export TERMINAL="${PREFIX}/bin/sakura"
