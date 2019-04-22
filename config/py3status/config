@@ -18,7 +18,6 @@ order += 'diskdata'
 order += 'group cpu'
 order += 'group ram'
 order += 'net_rate'
-order += 'xrandr'
 order += 'group wifi'
 order += 'backlight'
 order += 'volume_status'
@@ -150,10 +149,4 @@ volume_status {
   on_udev_sound = 'refresh'
   thresholds = [(0, 'bad'), (1, 'good'), (101, 'degraded')]
   volume_delta = 5
-}
-
-xrandr {
-  format = '  {output}'
-  fixed_width = False
-  hide_if_single_combination = True
 }
