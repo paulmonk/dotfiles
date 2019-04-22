@@ -35,55 +35,55 @@ default_orientation vertical
 #==============================================================================
 # i3 gaps behavior →
 #------------------------------------------------------------------------------
-# # Gaps will only work correctly if you disable window titlebars entirely.
-# # Unfortunately this is necessary due to the way i3 creates such bars on windows.
-# for_window [class="^.*"] border pixel 0
-#
-# gaps inner 5
-# gaps outer 5
-#
-# # Gaps are only used if more than one container on the workspace
-# smart_gaps on
-#
-# # Draw borders around a container only if it is not the only container in this workspace
-# smart_borders on
-#
-# set $mode_gaps Gaps: (o) outer, (i) inner
-# set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-# set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-# bindsym $super+Shift+g mode "$mode_gaps"
-#
-# mode "$mode_gaps" {
-#     bindsym o           mode "$mode_gaps_outer"
-#     bindsym i           mode "$mode_gaps_inner"
-#     bindsym Return      mode "default"
-#     bindsym Escape      mode "default"
-# }
-#
-# mode "$mode_gaps_inner" {
-#     bindsym plus        gaps inner current plus 5
-#     bindsym minus       gaps inner current minus 5
-#     bindsym 0           gaps inner current set 0
-#
-#     bindsym Shift+plus  gaps inner all plus 5
-#     bindsym Shift+minus gaps inner all minus 5
-#     bindsym Shift+0     gaps inner all set 0
-#
-#     bindsym Return      mode "default"
-#     bindsym Escape      mode "default"
-# }
-# mode "$mode_gaps_outer" {
-#     bindsym plus        gaps outer current plus 4
-#     bindsym minus       gaps outer current minus 4
-#     bindsym -1          gaps outer current set 0
-#
-#     bindsym Shift+plus  gaps outer all plus 4
-#     bindsym Shift+minus gaps outer all minus 4
-#     bindsym Shift+-1    gaps outer all set 0
-#
-#     bindsym Return      mode "default"
-#     bindsym Escape      mode "default"
-# }
+# Gaps will only work correctly if you disable window titlebars entirely.
+# Unfortunately this is necessary due to the way i3 creates such bars on windows.
+for_window [class="^.*"] border pixel 0
+
+gaps inner 5
+gaps outer 5
+
+# Gaps are only used if more than one container on the workspace
+smart_gaps on
+
+# Draw borders around a container only if it is not the only container in this workspace
+smart_borders on
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $super+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+    bindsym o           mode "$mode_gaps_outer"
+    bindsym i           mode "$mode_gaps_inner"
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
+
+mode "$mode_gaps_inner" {
+    bindsym plus        gaps inner current plus 5
+    bindsym minus       gaps inner current minus 5
+    bindsym 0           gaps inner current set 0
+
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     gaps inner all set 0
+
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
+mode "$mode_gaps_outer" {
+    bindsym plus        gaps outer current plus 4
+    bindsym minus       gaps outer current minus 4
+    bindsym -1          gaps outer current set 0
+
+    bindsym Shift+plus  gaps outer all plus 4
+    bindsym Shift+minus gaps outer all minus 4
+    bindsym Shift+-1    gaps outer all set 0
+
+    bindsym Return      mode "default"
+    bindsym Escape      mode "default"
+}
 
 #==============================================================================
 # Workspaces →
@@ -269,7 +269,7 @@ bindsym $alt+Ctrl+8 move container to workspace $ws8
 # Use the otf version: otf-font-awesome.
 # https://bugs.archlinux.org/task/56899
 # font pango: Noto Sans, FontAwesome 11
-font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 9
+font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 11
 
 # Borders
 new_window pixel 2
@@ -341,6 +341,7 @@ for_window [class="Firefox"] floating enable
 for_window [class="Gimp"] floating enable
 for_window [class="Google-chrome"] floating enable
 for_window [class="Keybase"] floating enable
+for_window [class="mpv"] floating enable
 for_window [title="^Qalculate!$"] floating enable
 for_window [class="Peek"] floating enable
 for_window [class="Pinentry"] floating enable
