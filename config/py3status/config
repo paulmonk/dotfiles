@@ -13,7 +13,6 @@ general {
   interval = 1
 }
 
-order += 'file_status VPN'
 order += 'diskdata'
 order += 'group cpu'
 order += 'group ram'
@@ -63,13 +62,6 @@ diskdata {
 # Extra spaces are for separation from applets.
 do_not_disturb {
   format = '[\?if=state&color=bad |\?color=good ]  '
-}
-
-# Path exists when a VPN tunnel launched by nmcli/nm-applet is active
-file_status VPN {
-  cache_timeout = -1
-  format='\?color=path  VPN'
-  paths = '/proc/sys/net/ipv4/conf/tun0'
 }
 
 group cpu {
@@ -143,7 +135,6 @@ net_rate {
 volume_status {
   cache_timeout = 1
   command = 'pactl'
-  device = '@DEFAULT_SINK@'
   format = ' {percentage}%'
   format_muted = ' MUTE'
   on_udev_sound = 'refresh'
