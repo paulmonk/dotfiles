@@ -406,7 +406,7 @@ exec_always "autorandr --change &"
 exec_always "compton -b &"
 
 # Set Background
-exec_always "hsetroot -solid '#839496' &"
+exec_always "hsetroot -solid '#040d24' &"
 
 # Numlock On
 exec_always "numlockx &"
@@ -420,6 +420,6 @@ exec_always "pgrep -x unclutter || (unclutter -idle 3 -jitter 5 -noevents &)"
 exec_always "pgrep -x dunst || (dunst &)"
 
 # f.lux / night shift
-exec_always "pgrep -x redshift-gtk || (redshift-gtk &)"
+exec_always "pgrep -x redshift || (redshift &)"
 
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :
