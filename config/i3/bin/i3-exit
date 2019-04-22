@@ -2,7 +2,6 @@
 
 pre_lock() {
   killall compton
-  sudo systemctl stop pcscd.service
 }
 
 lock() {
@@ -11,7 +10,7 @@ lock() {
   if command -v xsecurelock; then
     xsecurelock
   else
-    i3lock
+    i3lock -c "#040d24"
   fi
 }
 
