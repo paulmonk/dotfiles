@@ -422,4 +422,7 @@ exec_always "pgrep -x dunst || (dunst &)"
 # f.lux / night shift
 exec_always "pgrep -x redshift || (redshift &)"
 
+# Network Management
+exec_always "pgrep -x nm-applet || (nm-applet &)"
+
 # vim: set ft=i3config ts=2 sw=4 tw=80 et :
