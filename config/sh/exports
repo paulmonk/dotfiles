@@ -68,7 +68,7 @@ else
 
   # Set defaults
   export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
-  export TERMINAL="${PREFIX}/bin/sakura"
+  export TERMINAL="${PREFIX}/bin/kitty"
 
   # CPU
   CPU_CORES="$(nproc)"
