@@ -88,17 +88,23 @@ alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --hum
 # Resursive copy by default.
 alias cp="${aliases[cp]:-cp} -r"
 
-# RM to trash, default to recursive and forced.
+# RM Default.
+alias rm="${aliases[rm]:-rm} -rf"
+alias rm!="\rm -rf"
+
 # https://github.com/PhrozenByte/rmtrash (Linux)
-# https://github.com/ali-rantakari/trash (macOS)
 if (( $+commands[rmtrash] )); then
   alias trash="rmtrash"
-fi
-if (( $+commands[trash] )); then
   alias rm="trash -rf"
-  alias rm!="\rm -rf"
-else
-  alias rm="${aliases[rm]:-rm} -rf"
+
+# Fallback to trash-put as default.
+elif (( $+commands[trash-put] )); then
+  alias trash="trash-put"
+  alias rm="trash -rf"
+
+# https://github.com/ali-rantakari/trash (macOS)
+elif (( $+commands[trash] )); then
+  alias rm="trash -rf"
 fi
 
 
@@ -224,7 +230,7 @@ if [[ "${KERNEL}" == "Darwin" ]]; then
     "
 
   # Hide/show all desktop icons (useful when presenting)
-  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool falsel && killall Finder"
+  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
   alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
   # Clean up LaunchServices to remove duplicates in the “Open With” menu
