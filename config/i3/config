@@ -269,7 +269,7 @@ bindsym $alt+Ctrl+8 move container to workspace $ws8
 # Use the otf version: otf-font-awesome.
 # https://bugs.archlinux.org/task/56899
 # font pango: Noto Sans, FontAwesome 11
-font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 11
+font pango: Noto Sans, Font Awesome 5 Free, Font Awesome 5 Brands 12
 
 # Borders
 new_window pixel 2
@@ -315,16 +315,14 @@ bar {
     separator_symbol  "  |  "
     status_command    py3status --dbus-notify
     tray_output       primary
-    tray_padding      3px
+    tray_padding      5px
 }
 
 #==============================================================================
 # Workspace → App assignment
 #------------------------------------------------------------------------------
-# Media
-#assign [class="Vlc"] → $w2
-#assign [class="mpv"] → $w2
-#assign [class="Google-chrome-stable"] → $w3
+# assign [class="zoom"] → $w1
+# assign [class="slack"] → $w2
 
 
 #==============================================================================
@@ -336,6 +334,7 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="^Preferences$"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
+for_window [class="Chromium"] floating enable
 for_window [class="Code"] floating enable
 for_window [class="Firefox"] floating enable
 for_window [class="Gimp"] floating enable
@@ -346,13 +345,11 @@ for_window [title="^Qalculate!$"] floating enable
 for_window [class="Peek"] floating enable
 for_window [class="Pinentry"] floating enable
 for_window [class="Rofi"] floating enable
-for_window [class="Slack"] floating enable
 for_window [class="Tor Browser"] floating enable
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="vlc"] floating enable
 for_window [class="Wine"] floating enable
 for_window [class="Wireshark"] floating enable
-for_window [class="Zoom"] floating enable, border none
 for_window [class="zeal"] floating enable, border none
 
 
@@ -415,12 +412,6 @@ exec_always "numlockx &"
 # Hide mouse and allow jitter
 # Dont send pseudo events - prevents flickering on top of some GTK apps
 exec_always "pgrep -x unclutter || (unclutter -idle 3 -jitter 5 -noevents &)"
-
-# Notifications daemon
-exec_always "pgrep -x dunst || (dunst &)"
-
-# f.lux / night shift
-exec_always "pgrep -x redshift || (redshift &)"
 
 # Network Management
 exec_always "pgrep -x nm-applet || (nm-applet &)"
