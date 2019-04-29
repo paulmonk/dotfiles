@@ -105,7 +105,7 @@
     #   %n  progress value if set without any extra characters
     #   %%  Literal %
     # Markup is allowed
-    format = "%I<b>%s</b>\n%b %p"
+    format = "<b>%s</b>\n%b %p"
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -142,7 +142,7 @@
     icon_position = left
 
     # Scale larger icons down to this size, set to 0 to disable
-    max_icon_size = 64
+    max_icon_size = 128
 
     # Paths to icons.
     icon_path = /usr/share/icons/hicolor/scalable/apps:/usr/share/icons/hicolor/128x128/apps:/usr/share/icons/hicolor/256x256/apps
