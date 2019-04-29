@@ -152,7 +152,7 @@ bindsym $alt+minus scratchpad show
 bindsym $alt+Ctrl+q kill
 bindsym $alt+Ctrl+e reload
 bindsym $alt+Ctrl+r restart
-bindsym $alt+Ctrl+Delete exec "i3-nagbar -t warning -m 'exit i3? This will end your X session.' -b 'Yes' 'i3-msg exit'"
+bindsym $alt+Ctrl+Delete exec "i3-nagbar -t warning -m 'exit i3? This will end your X session.' -B 'Yes' 'i3-msg exit'"
 
 # Change container layout (stacked, tabbed, toggle split)
 bindsym $super+d layout stacking
