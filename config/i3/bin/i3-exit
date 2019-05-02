@@ -4,7 +4,7 @@ pre_lock() {
   killall compton
 
   # Prevent notifications showing on the lock screen
-  systemctl --user stop dunst.service
+  killall -SIGUSR1 dunst
 }
 
 lock() {
@@ -21,7 +21,7 @@ post_lock() {
   compton -b & disown
 
   # Reinstate notifications
-  systemctl --user start dunst.service
+  killall -SIGUSR2 dunst
 }
 
 case "$1" in
