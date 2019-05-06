@@ -12,6 +12,11 @@ if command -v tmux >/dev/null 2>&1; then
   alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/config"'
 fi
 
+# Vim-Vint
+if command -v vim-vint >/dev/null 2>&1; then
+  alias vint='vim-vint'
+fi
+
 # Wget
 if command -v wget >/dev/null 2>&1; then
   alias wget='wget --hsts-file="${XDG_CACHE_HOME}/wget-hsts"'
