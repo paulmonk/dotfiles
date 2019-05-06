@@ -44,11 +44,14 @@ if [ "${KERNEL}" = "Darwin" ]; then
   export HOMEBREW_NO_INSECURE_REDIRECT="1"
 
   # Use homebrew GNU tools instead of system BSD
-  export PATH="${PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
-  export MANPATH="${PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
+  IFS=" "
+  for bin in "coreutils findutils gnu-sed"; do
+    export PATH="${PREFIX}/opt/${bin}/libexec/gnubin:${PATH}"
+    export MANPATH="${PREFIX}/opt/${bin}/libexec/gnuman:${MANPATH}"
+  done
+  unset bin
 
   # Add homebrew bin
-  # Prefer to default installed old software.
   export PATH="${PREFIX}/bin:${PREFIX}/sbin:${PATH}"
 
   # BUILD Flags
@@ -152,6 +155,10 @@ export FPP_DIR="${XDG_CACHE_HOME}/fpp"
 
 # GCC
 export GCC_COLORS="1"
+
+# Git
+# This is used in multiple aliases in the config file.
+export GIT_REVIEW_BASE="master"
 
 # GNUPG
 export GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"
