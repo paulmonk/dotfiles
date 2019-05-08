@@ -7,9 +7,6 @@
 [submodule "local/share/tmux/plugins/resurrect"]
 	path = local/share/tmux/plugins/resurrect
 	url = https://github.com/tmux-plugins/tmux-resurrect
-[submodule "local/share/tmux/plugins/1password"]
-	path = local/share/tmux/plugins/1password
-	url = https://github.com/yardnsm/tmux-1password
 [submodule "local/share/tmux/plugins/continuum"]
 	path = local/share/tmux/plugins/continuum
 	url = https://github.com/tmux-plugins/tmux-continuum
