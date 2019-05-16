@@ -11,7 +11,6 @@ antigen bundles <<EOB
     robbyrussell/oh-my-zsh plugins/fancy-ctrl-z
     hlissner/zsh-autopair
     marzocchi/zsh-notify
-    jreese/zsh-titles
     rupa/z
     changyuheng/fz
     mafredri/zsh-async
