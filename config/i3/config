@@ -216,6 +216,7 @@ set $workspace5 workspace number 5
 set $workspace6 workspace number 6
 set $workspace7 workspace number 7
 set $workspace8 workspace number 8
+set $workspace8 workspace number 9
 
 # Force workspaces to specific output monitor
 # "$workspace1" output DP1
@@ -238,6 +239,7 @@ bindsym $alt+5 $workspace5
 bindsym $alt+6 $workspace6
 bindsym $alt+7 $workspace7
 bindsym $alt+8 $workspace8
+bindsym $alt+9 $workspace9
 
 # Move focused container to workspace
 bindsym $alt+Ctrl+1 move container to $workspace1
@@ -248,9 +250,38 @@ bindsym $alt+Ctrl+5 move container to $workspace5
 bindsym $alt+Ctrl+6 move container to $workspace6
 bindsym $alt+Ctrl+7 move container to $workspace7
 bindsym $alt+Ctrl+8 move container to $workspace8
+bindsym $alt+Ctrl+9 move container to $workspace9
 
 # Automatically rename workspaces
 exec_always ${XDG_CONFIG_HOME}/i3/bin/i3-autoname-workspaces &
+
+
+#==============================================================================
+# App window behavior →
+#------------------------------------------------------------------------------
+for_window [class=".*"]                    sticky enable
+for_window [window_role="About"]           floating enable
+for_window [window_role="pop-up"]          floating enable
+for_window [window_role="^Preferences$"]   floating enable
+for_window [window_role="task_dialog"]     floating enable
+
+for_window [class="Gimp"]                  floating enable
+for_window [class="Keybase"]               floating enable
+for_window [class="mpv"]                   floating enable
+for_window [title="^Qalculate!$"]          floating enable
+for_window [class="Peek"]                  floating enable
+for_window [class="Pinentry"]              floating enable
+for_window [class="Rofi"]                  floating enable
+for_window [class="(?i)virtualbox"]        floating enable border normal
+for_window [class="vlc"]                   floating enable
+for_window [class="Wine"]                  floating enable
+for_window [class="Wireshark"]             floating enable
+for_window [class="zeal"]                  floating enable, border none
+
+for_window [class="Chromium"]              move container to $workspace2
+for_window [class="Slack"]                 move container to $workspace3
+for_window [class="Firefox"]               move container to $workspace4
+for_window [class="zoomus"]                move container to $workspace9
 
 
 #==============================================================================
@@ -317,39 +348,6 @@ bar {
     tray_padding      5px
 }
 
-#==============================================================================
-# Workspace → App assignment
-#------------------------------------------------------------------------------
-# assign [class="zoom"] → $w1
-# assign [class="slack"] → $w2
-
-
-#==============================================================================
-# App window behavior →
-#------------------------------------------------------------------------------
-for_window [class=".*"] sticky enable
-for_window [window_role="About"] floating enable
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="^Preferences$"] floating enable
-for_window [window_role="task_dialog"] floating enable
-
-# for_window [class="Chromium"] floating enable
-# for_window [class="Firefox"] floating enable
-for_window [class="Gimp"] floating enable
-# for_window [class="Google-chrome"] floating enable
-for_window [class="Keybase"] floating enable
-for_window [class="mpv"] floating enable
-for_window [title="^Qalculate!$"] floating enable
-for_window [class="Peek"] floating enable
-for_window [class="Pinentry"] floating enable
-for_window [class="Rofi"] floating enable
-# for_window [class="Tor Browser"] floating enable
-for_window [class="(?i)virtualbox"] floating enable border normal
-for_window [class="vlc"] floating enable
-for_window [class="Wine"] floating enable
-for_window [class="Wireshark"] floating enable
-for_window [class="zeal"] floating enable, border none
-
 
 #==============================================================================
 # Modes and their key bindings →
@@ -398,7 +396,7 @@ bindsym $super+Pause mode "$mode_system"
 exec_always "autorandr --change &"
 
 # Compositor
-exec_always "compton -b &"
+exec_always "killall compton && compton &"
 
 # Set Background
 exec_always "hsetroot -solid '#040d24' &"

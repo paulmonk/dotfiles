@@ -4,6 +4,7 @@ import re
 import signal
 import subprocess
 import sys
+from typing import Optional
 
 import i3ipc
 
@@ -24,69 +25,70 @@ WINDOW_ICONS = {
 DEFAULT_ICON = ''
 
 
-def xprop(win_id, win_property):
+def xprop(win_id: int, win_prop: str) -> Optional[list]:
     win_id = str(win_id)
     try:
-        prop = subprocess.check_output(
-            ['xprop', '-id', win_id, win_property],
+        win_prop_val = subprocess.check_output(
+            ['xprop', '-id', win_id, win_prop],
             stderr=subprocess.DEVNULL
         )
-        prop = prop.decode('utf-8')
-        return re.findall(r'"([^"]+)"', prop)
+        win_prop_val = win_prop_val.decode('utf-8')
+        return re.findall(r'"([^"]+)"', win_prop_val)
     except subprocess.CalledProcessError:
         sys.stdout.write(f'Unable to get property for window `{win_id}`')
     return None
 
 
-def icon_for_window(window):
-    wm_classes = xprop(window.window, 'WM_CLASS')
-    for wm in wm_classes:
-        wm = wm.lower()
-        if wm in WINDOW_ICONS:
-            return WINDOW_ICONS[wm]
+def icon_for_window(window) -> str:
+    wm_classes = xprop(win_id=window.window, win_prop='WM_CLASS')
+    for wm_cls in wm_classes:
+        wm_cls = wm_cls.lower()
+
+        if wm_cls in WINDOW_ICONS:
+            return WINDOW_ICONS[wm_cls]
     return DEFAULT_ICON
 
 
-def parse_workspace_name(name):
+def parse_workspace_name(name: str) -> dict:
     return re.match(
         r'(?P<num>\d+):?(?P<shortname>\w+)? ?(?P<icons>.+)?', name
     ).groupdict()
 
 
-def construct_workspace_name(parts):
-    new_name = str(parts['num'])
-    if parts['shortname'] or parts['icons']:
-        new_name += ':'
+def construct_workspace_name(name_group: dict) -> str:
+    ws_name = str(name_group['num'])
+    if name_group['shortname'] or name_group['icons']:
+        ws_name += ':'
 
-        if parts['shortname']:
-            new_name += parts['shortname']
+        if name_group['shortname']:
+            ws_name += name_group['shortname']
 
-        if parts['icons']:
-            new_name += ' ' + parts['icons']
+        if name_group['icons']:
+            ws_name += ' ' + name_group['icons']
 
-    return new_name
+    return ws_name
 
 
-def rename_workspaces(i3, undo=False):
+def rename_workspaces(i3: i3ipc.Connection, undo: bool = False):
     workspaces = i3.get_tree().workspaces()
     for workspace in workspaces:
-        name_parts = parse_workspace_name(workspace.name)
+        name_group = parse_workspace_name(workspace.name)
 
         # Reset icons on undo
         if undo:
-            name_parts['icons'] = None
+            name_group['icons'] = None
         else:
-            name_parts['icons'] = (
+            name_group['icons'] = (
                 '  '.join([
                     icon_for_window(w) for w in workspace.leaves()
                 ]) + ' '
             )
 
-        new_name = construct_workspace_name(name_parts)
-        i3.command(f'rename workspace "{workspace.name}" to "{new_name}"')
+        ws_name = construct_workspace_name(name_group)
+        i3.command(f'rename workspace "{workspace.name}" to "{ws_name}"')
 
 
-def undo_window_renaming(i3):
+def undo_window_renaming(i3: i3ipc.Connection):
     rename_workspaces(i3, undo=True)
     i3.main_quit()
     sys.exit(0)
@@ -101,7 +103,7 @@ if __name__ == '__main__':
     for sig in [signal.SIGINT, signal.SIGTERM]:
         signal.signal(sig, lambda signal, frame: undo_window_renaming(i3))
 
-    def window_event_handler(i3, event):
+    def window_event_handler(i3: i3ipc.Connection, event: i3ipc.Event):
         """
         Event handler for window events.
         """
