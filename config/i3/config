@@ -85,23 +85,6 @@ mode "$mode_gaps_outer" {
     bindsym Escape      mode "default"
 }
 
-#==============================================================================
-# Workspaces →
-#------------------------------------------------------------------------------
-set $ws1  "1 "
-set $ws2  "2 "
-set $ws3  "3 "
-set $ws4  "4 "
-set $ws5  "5 "
-set $ws6  "6 "
-set $ws7  "7 "
-set $ws8  "8 "
-set $ws9  "9 "
-set $ws10 "10 "
-
-# Force workspaces to specific output monitor
-# workspace "$ws1" output DP1
-
 
 #==============================================================================
 # Key bindings →
@@ -183,13 +166,13 @@ bindsym --release $alt+Tab       exec "pgrep -x rofi && killall rofi || rofi -no
 bindsym --release $alt+r         exec "pgrep -x rofi && killall rofi || rofi -normal-window -show drun"
 
 # Screenshot fullscreen
-bindsym Print                    exec "maim -q 100 | xsel --clipboard -t image/png"
+bindsym Print                    exec "maim -q 100 | xsel -ib"
 
 # Screenshot with selection
-bindsym $super+Print             exec "maim -q 100 -s | xsel --clipboard -t image/png"
+bindsym $super+Print             exec "maim -q 100 -s | xsel -ib"
 
 # Screenshot current focused window
-bindsym Shift+Print              exec "maim -q 100 -i $(xdotool getactivewindow) | xsel --clipboard -t image/png"
+bindsym Shift+Print              exec "maim -q 100 -i $(xdotool getactivewindow) | xsel -ib"
 
 # XF86 keys
 bindsym XF86AudioPrev            exec $media_previous
@@ -222,8 +205,21 @@ bindsym $alt+Shift+i             exec "$TERMINAL -e htop"
 bindsym $alt+Return              exec "$TERMINAL"
 
 
-# Workspaces
-# ----------
+#==============================================================================
+# Workspaces →
+#------------------------------------------------------------------------------
+set $workspace1 workspace number 1
+set $workspace2 workspace number 2
+set $workspace3 workspace number 3
+set $workspace4 workspace number 4
+set $workspace5 workspace number 5
+set $workspace6 workspace number 6
+set $workspace7 workspace number 7
+set $workspace8 workspace number 8
+
+# Force workspaces to specific output monitor
+# "$workspace1" output DP1
+
 # Helpful: Rename workspaces on-the-fly
 bindsym $alt+Ctrl+a              exec i3-input -F 'rename workspace to %s' -P 'New name: '
 
@@ -234,24 +230,24 @@ bindsym $alt+Ctrl+Home           move container to output left
 bindsym $alt+Ctrl+End            move container to output right
 
 # Switch to workspace
-bindsym $alt+1 workspace $ws1
-bindsym $alt+2 workspace $ws2
-bindsym $alt+3 workspace $ws3
-bindsym $alt+4 workspace $ws4
-bindsym $alt+5 workspace $ws5
-bindsym $alt+6 workspace $ws6
-bindsym $alt+7 workspace $ws7
-bindsym $alt+8 workspace $ws8
+bindsym $alt+1 $workspace1
+bindsym $alt+2 $workspace2
+bindsym $alt+3 $workspace3
+bindsym $alt+4 $workspace4
+bindsym $alt+5 $workspace5
+bindsym $alt+6 $workspace6
+bindsym $alt+7 $workspace7
+bindsym $alt+8 $workspace8
 
 # Move focused container to workspace
-bindsym $alt+Ctrl+1 move container to workspace $ws1
-bindsym $alt+Ctrl+2 move container to workspace $ws2
-bindsym $alt+Ctrl+3 move container to workspace $ws3
-bindsym $alt+Ctrl+4 move container to workspace $ws4
-bindsym $alt+Ctrl+5 move container to workspace $ws5
-bindsym $alt+Ctrl+6 move container to workspace $ws6
-bindsym $alt+Ctrl+7 move container to workspace $ws7
-bindsym $alt+Ctrl+8 move container to workspace $ws8
+bindsym $alt+Ctrl+1 move container to $workspace1
+bindsym $alt+Ctrl+2 move container to $workspace2
+bindsym $alt+Ctrl+3 move container to $workspace3
+bindsym $alt+Ctrl+4 move container to $workspace4
+bindsym $alt+Ctrl+5 move container to $workspace5
+bindsym $alt+Ctrl+6 move container to $workspace6
+bindsym $alt+Ctrl+7 move container to $workspace7
+bindsym $alt+Ctrl+8 move container to $workspace8
 
 # Automatically rename workspaces
 exec_always ${XDG_CONFIG_HOME}/i3/bin/i3-autoname-workspaces &
@@ -337,18 +333,17 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="^Preferences$"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
-for_window [class="Chromium"] floating enable
-for_window [class="Code"] floating enable
-for_window [class="Firefox"] floating enable
+# for_window [class="Chromium"] floating enable
+# for_window [class="Firefox"] floating enable
 for_window [class="Gimp"] floating enable
-for_window [class="Google-chrome"] floating enable
+# for_window [class="Google-chrome"] floating enable
 for_window [class="Keybase"] floating enable
 for_window [class="mpv"] floating enable
 for_window [title="^Qalculate!$"] floating enable
 for_window [class="Peek"] floating enable
 for_window [class="Pinentry"] floating enable
 for_window [class="Rofi"] floating enable
-for_window [class="Tor Browser"] floating enable
+# for_window [class="Tor Browser"] floating enable
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="vlc"] floating enable
 for_window [class="Wine"] floating enable
