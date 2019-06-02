@@ -253,6 +253,9 @@ bindsym $alt+Ctrl+6 move container to workspace $ws6
 bindsym $alt+Ctrl+7 move container to workspace $ws7
 bindsym $alt+Ctrl+8 move container to workspace $ws8
 
+# Automatically rename workspaces
+exec_always ${XDG_CONFIG_HOME}/i3/bin/i3-autoname-workspaces &
+
 
 #==============================================================================
 # Look 'n Feel →
