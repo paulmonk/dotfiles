@@ -3,7 +3,7 @@
 "---------------------------------------------------------
 " General
 set mouse=nv                 " Disable mouse in command-line mode
-set modeline                 " automatically setting options from modelines
+set nomodeline               " Do not use modelines, they are a security risk.
 set report=0                 " Don't report on line changes
 set errorbells               " Trigger bell on error
 set visualbell               " Use visual bell instead of beeping
