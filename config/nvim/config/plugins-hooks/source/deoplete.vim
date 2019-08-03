@@ -62,12 +62,12 @@ let g:deoplete#sources#ternjs#docs = 1
 " let g:deoplete#omni#functions.javascript =
 "   \ [ 'tern#Complete', 'jspc#omni', 'javascriptcomplete#CompleteJS' ]
 
-let g:deoplete#omni_patterns = get(g:, 'deoplete#omni_patterns', {})
-call deoplete#custom#option('omni_patterns', {
-\ 'complete_method': 'omnifunc',
-\ 'terraform': '[^ *\t"{=$]\w*',
-\})
+" let g:deoplete#omni_patterns = get(g:, 'deoplete#omni_patterns', {})
 " let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
+" call deoplete#custom#option('omni_patterns', {
+"\ 'complete_method': 'omnifunc',
+"\ 'terraform': '[^ *\t"{=$]\w*',
+"\})
 
 " let g:deoplete#omni_patterns.html = '<[^>]*'
 " let g:deoplete#omni_patterns.javascript = '[^. *\t]\.\w*'
@@ -140,8 +140,11 @@ call deoplete#custom#source('_', 'converters', [
   \ 'matcher_length',
   \ 'converter_truncate_abbr',
   \ 'converter_truncate_menu',
-  \ 'converter_auto_delimiter',
   \ ])
+
+
+call deoplete#custom#source('denite', 'matchers',
+  \ ['matcher_full_fuzzy', 'matcher_length'])
 
 " }}}
 " Key-mappings and Events " {{{

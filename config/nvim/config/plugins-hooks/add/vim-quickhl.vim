@@ -1,5 +1,5 @@
 " -------------------------------------------------
 " Vim-Quickhl
 " -------------------------------------------------
-nmap <Leader>, <Plug>(quickhl-manual-this)
-xmap <Leader>, <Plug>(quickhl-manual-this)
+nmap mt <Plug>(quickhl-manual-this)
+xmap mt <Plug>(quickhl-manual-this)

@@ -19,7 +19,6 @@
 
 # See the contents of registers
 - repo: junegunn/vim-peekaboo
-  hook_add: source $VIMPATH/config/plugins-hooks/add/vim-peekaboo.vim
 
 # Heuristically set options based on editorconfig
 - repo: sgur/vim-editorconfig
@@ -75,6 +74,10 @@
 # Lazy Loading
 # ==========================================
 # Syntax
+# Only use plugins manually if they are not included with vim-polyglot or
+# vim-polyglot does not load functionality we want.
+# In the case of the latter remember to update the polyglot_disabled config
+# value
 # ---------
 # CSS
 - repo: hail2u/vim-css3-syntax
@@ -92,27 +95,10 @@
   hook_source: source $VIMPATH/config/plugins-hooks/source/vim-go.vim
 
 # HTML & Jinja
-# Omnicomplete and syntax
-- repo: othree/html5.vim
-  on_ft:
-   - html
-   - htmldjango
-   - htmljinja
-   - markdown
-  hook_add: source $VIMPATH/config/plugins-hooks/add/html5.vim
-
 - repo: mitsuhiko/vim-jinja
   on_ft:
    - htmljinja
    - jinja
-
-# JavaScript
-- repo: pangloss/vim-javascript
-  on_ft:
-   - javascript
-   - javascript.jsx
-   - jsx
-  hook_source: source $VIMPATH/config/plugins-hooks/source/vim-javascript.vim
 
 # JavaScript: Generate JSDoc to your code
 - repo: heavenshell/vim-jsdoc
@@ -121,12 +107,6 @@
    - javascript.jsx
    - jsx
   hook_add: source $VIMPATH/config/plugins-hooks/add/vim-jsdoc.vim
-
-# Logreview
-- repo: andreshazard/vim-logreview
-
-# Logstash
-- repo: robbles/logstash.vim
 
 # Markdown
 - repo: plasticboy/vim-markdown
@@ -146,14 +126,6 @@
 # Salt
 - repo: saltstack/salt-vim
 
-# Terraform
-- repo: hashivim/vim-terraform
-  on_ft: terraform
-  on_cmd:
-   - Terraform
-   - TerraformFmt
-  hook_source: source $VIMPATH/config/plugins-hooks/source/vim-terraform.vim
-
 # Tmux
 - repo: ericpruitt/tmux.vim
 
@@ -171,7 +143,9 @@
 
 # suda is a plugin to read or write files with sudo command.
 - repo: lambdalisue/suda.vim
+  on_event: BufRead
   on_path: 'suda://'
+  hook_add: let g:suda_smart_edit = 1
 
 # Code commenting helper
 # - repo: tpope/vim-commentary
@@ -182,6 +156,10 @@
   on_map:
    nx: <Plug>
   hook_add: source $VIMPATH/config/plugins-hooks/add/caw.vim
+
+# Displays available keybindings in popup
+- repo: liuchengxu/vim-which-key
+  on_cmd: WhichKey
 
 # Auto mkdir if needed on save.
 - repo: benizi/vim-automkdir
@@ -407,7 +385,7 @@
   hook_source: source $VIMPATH/config/plugins-hooks/source/jedi-vim.vim
 
 # Ruby
-- repo: osyo-manga/vim-monster
+- repo: vim-ruby/vim-ruby
   on_ft: ruby
 
 # Terraform

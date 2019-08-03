@@ -63,7 +63,7 @@ cnoreabbrev bD bd
 inoremap <S-Return> <C-o>o
 
 " Quick substitute within selected area
-xnoremap s :s//g<Left><Left>
+xnoremap sg :s//g<Left><Left>
 
 nnoremap zl z5l
 nnoremap zh z5h
@@ -77,9 +77,9 @@ nnoremap <silent><C-w>z :vert resize<CR>:resize<CR>:normal! ze<CR>
 xnoremap < <gv
 xnoremap > >gv|
 
-" Use tab for indenting in visual mode
-vnoremap <Tab> >gv|
-vnoremap <S-Tab> <gv
+" Use tab for indenting
+xnoremap <Tab> >gv|
+xnoremap <S-Tab> <gv
 nnoremap >> >>_
 nnoremap << <<_
 

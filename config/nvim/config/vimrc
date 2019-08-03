@@ -19,11 +19,6 @@ let $DATAPATH = expand(($XDG_DATA_HOME ? $XDG_DATA_HOME : '~/.local/share').'/nv
 " Constants
 let s:is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
 
-let g:dein#install_max_processes = 16
-let g:dein#install_progress_type = 'echo'
-let g:dein#enable_notification = 0
-let g:dein#install_log_filename = $CACHEPATH.'/dein.log'
-
 " Search and use environments specifically made for Neovim.
 if isdirectory($DATAPATH.'/virtualenvs/nvim')
   let g:python3_host_prog = $DATAPATH.'/virtualenvs/nvim/bin/python'

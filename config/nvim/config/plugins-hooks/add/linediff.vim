@@ -1,7 +1,7 @@
 " -------------------------------------------------
 " Linediff
 " -------------------------------------------------
-vnoremap ,df :Linediff<CR>
-vnoremap ,da :LinediffAdd<CR>
-nnoremap ,ds :<C-u>LinediffShow<CR>
-nnoremap ,dr :<C-u>LinediffReset<CR>
+vnoremap mdf :Linediff<CR>
+vnoremap mda :LinediffAdd<CR>
+nnoremap mds :<C-u>LinediffShow<CR>
+nnoremap mdr :<C-u>LinediffReset<CR>

@@ -82,7 +82,7 @@ set viewdir=$CACHEPATH/view/
 set nospell spellfile=$VIMPATH/spell/en.utf-8.add
 
 " History saving
-set history=2000
+set history=1000
 if has('nvim')
   "  ShaDa/viminfo:
   "   ' - Maximum number of previously edited files marks
@@ -113,7 +113,7 @@ set shiftround      " Round indent to multiple of 'shiftwidth'
 " ------
 set timeout ttimeout
 set timeoutlen=750  " Time out on mappings
-set updatetime=1000 " Idle time to write swap and trigger CursorHold
+set updatetime=400 " Idle time to write swap and trigger CursorHold
 
 " Time out on key codes
 set ttimeoutlen=10
@@ -212,6 +212,11 @@ endif
 " transparent background. Values between 0-30 are typically most useful.
 if exists('&pumblend')
   set pumblend=20
+endif
+
+" Local to the window
+if exists('&winblend')
+  set winblend=20
 endif
 
 "
