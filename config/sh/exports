@@ -93,6 +93,7 @@ else
 
   # XSECURELOCK
   export XSECURELOCK_FONT="-misc-roboto-medium-r-normal--0-0-0-0-p-0-iso10646-1"
+  export XSECURELOCK_PASSWORD_PROMPT=time_hex
   export XSECURELOCK_SHOW_HOSTNAME="0"
   export XSECURELOCK_SHOW_USERNAME="0"
   export XSECURELOCK_WANT_FIRST_KEYPRESS="1"
