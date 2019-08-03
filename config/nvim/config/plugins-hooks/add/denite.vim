@@ -12,7 +12,7 @@ nnoremap <silent><LocalLeader>g :<C-u>Denite grep -buffer-name=search<CR>
 nnoremap <silent><LocalLeader>j :<C-u>Denite jump change file/point -buffer-name=jump<CR>
 nnoremap <silent><LocalLeader>o :<C-u>Denite outline<CR>
 nnoremap <silent><LocalLeader>t :<C-u>Denite -buffer-name=tag tag:include<CR>
-nnoremap <silent><LocalLeader>p :<C-u>Denite jump -buffer-name=jump -mode=normal<CR>
+nnoremap <silent><LocalLeader>p :<C-u>Denite jump -buffer-name=jump<CR>
 nnoremap <silent><LocalLeader>h :<C-u>Denite help<CR>
 nnoremap <silent><LocalLeader>/ :<C-u>Denite line -start-filter<CR>
 nnoremap <silent><LocalLeader>* :<C-u>DeniteCursorWord line<CR>
@@ -22,16 +22,16 @@ nnoremap <silent><LocalLeader>; :<C-u>Denite command command_history<CR>
 nnoremap <silent><LocalLeader>l :<C-u>Denite location_list -buffer-name=list<CR>
 nnoremap <silent><LocalLeader>q :<C-u>Denite quickfix -buffer-name=list<CR>
 
-" Git
-nnoremap <silent><Leader>gl :<C-u>Denite gitlog:all -buffer-name=git<CR>
-nnoremap <silent><Leader>gs :<C-u>Denite gitstatus -buffer-name=git<CR>
-nnoremap <silent><Leader>gc :<C-u>Denite gitbranch -buffer-name=git<CR>
+" Sessions
+nnoremap <silent><LocalLeader>s :<C-u>Denite session -buffer-name=list<CR>
 
 " Z
 nnoremap <silent><LocalLeader>z :<C-u>Denite z<CR>
 
-" Sessions
-nnoremap <silent><LocalLeader>s :<C-u>Denite session -buffer-name=list<CR>
+" Git
+nnoremap <silent><Leader>gl :<C-u>Denite gitlog:all -buffer-name=git<CR>
+nnoremap <silent><Leader>gs :<C-u>Denite gitstatus -buffer-name=git<CR>
+nnoremap <silent><Leader>gc :<C-u>Denite gitbranch -buffer-name=git<CR>
 
 " Open Denite with word under cursor or selection
 nnoremap <silent> <Leader>gt :DeniteCursorWord tag:include -buffer-name=tag -immediately<CR>
