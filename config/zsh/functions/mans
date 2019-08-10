@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+# Interactive man pages
+# https://github.com/rothgar/mastering-zsh/blob/master/docs/helpers/functions.md#interactive-man-search
+
+man -k . \
+| fzf -n1,2 --preview "echo {} \
+| cut -d' ' -f1 \
+| sed 's# (#.#' \
+| sed 's#)##' \
+| xargs -I% man %" --bind "enter:execute: \
+  (echo {} \
+  | cut -d' ' -f1 \
+  | sed 's# (#.#' \
+  | sed 's#)##' \
+  | xargs -I% man % \
+  | less -R)"
