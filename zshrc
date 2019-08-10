@@ -129,3 +129,10 @@ fi
 # Load completions and bash completions
 # autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
 # autoload -Uz bashcompinit && bashcompinit
+
+
+# ZSH - Source any local overrides
+#-------------------------
+if [[ -f "${ZDOTDIR}/zshrc.local" ]]; then
+  source "${ZDOTDIR}/zshrc.local"
+fi

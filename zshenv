@@ -15,6 +15,7 @@ if [[ -s "${HOME}/.config/sh/exports" ]]; then
 
   # ZSH Exports
   export ZCOMPDUMP="${XDG_CACHE_HOME}/zsh/compdump-${HOST}-${ZSH_VERSION}"
+  export ZDOTDIR="${HOME}"
 fi
 
 # Autoloads
