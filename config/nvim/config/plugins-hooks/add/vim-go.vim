@@ -1,7 +1,7 @@
 " -------------------------------------------------
 " Vim-Go
 " -------------------------------------------------
-autocmd MyAutoCmd FileType go
+autocmd user_events FileType go
   \   nmap <C-]> <Plug>(go-def)
   \ | nmap <Leader>god  <Plug>(go-describe)
   \ | nmap <Leader>goc  <Plug>(go-callees)

@@ -1,4 +1,4 @@
 " -------------------------------------------------
 " Deoplete-jedi
 " -------------------------------------------------
-autocmd MyAutoCmd FileType python setlocal omnifunc=
+autocmd user_events FileType python setlocal omnifunc=

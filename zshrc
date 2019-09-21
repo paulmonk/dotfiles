@@ -9,53 +9,18 @@
 [[ $- != *i* ]] && return
 
 
-# Plugins
+# ZSH Plugins
 #-------------------------
-# Load antigen
-# https://github.com/zsh-users/antigen/wiki/Configuration
-export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
-export ANTIGEN_BUNDLES="${ADOTDIR}/bundles"
+source "${XDG_CONFIG_HOME}/zsh/plugins"
 
-# Note: These non export-vars below are not official exports
-_ANTIGEN_CACHE_DIR="${XDG_CACHE_HOME}/zsh/antigen"
-_ANTIGEN_REPO_DIR="${ADOTDIR}/repo"
-_ANTIGEN_BIN="${_ANTIGEN_REPO_DIR}/antigen.zsh"
 
-export ANTIGEN_CACHE="${_ANTIGEN_CACHE_DIR}/init.zsh"
-export ANTIGEN_COMPDUMP="${_ANTIGEN_CACHE_DIR}/compdump-${HOST}-${ZSH_VERSION}"
-export ANTIGEN_DEBUG_LOG="${_ANTIGEN_CACHE_DIR}/debug.log"
-export ANTIGEN_LOCK="${_ANTIGEN_CACHE_DIR}/lock"
-
-# Create antigen dirs/files if they do not exist.
-[[ -d "${ADOTDIR}" ]] || mkdir -p "${ADOTDIR}"
-[[ -d "${_ANTIGEN_CACHE_DIR}" ]] || mkdir -p "${_ANTIGEN_CACHE_DIR}"
-[[ -f "${ANTIGEN_DEBUG_LOG}" ]] || touch "${ANTIGEN_DEBUG_LOG}"
-
-# Attempt Install...
-if [[ ! -f "${_ANTIGEN_BIN}" ]]; then
-  echo "Antigen not found here: "${_ANTIGEN_BIN}". Attempting Install..."
-  git clone https://github.com/zsh-users/antigen.git "${_ANTIGEN_REPO_DIR}"
-fi
-
-# Did it install correctly?
-if [[ -f "${_ANTIGEN_BIN}" ]]; then
-  # Sometimes Antigen lock files get left around for whatever reason.
-  # Let's clean those up.
-  [[ -f "${ANTIGEN_LOCK}" ]] && rm -f "${ANTIGEN_LOCK}"
-
-  source "${_ANTIGEN_BIN}"
-  antigen init "${XDG_CONFIG_HOME}/zsh/plugins"
-else
-  echo "WARNING: Antigen not found: ${_ANTIGEN_BIN}. Skipping init."
-fi
-
-# Opts
+# ZSH Opts
 #-------------------------
 # When run after plugins some opts can be superseded here.
 source "${XDG_CONFIG_HOME}/zsh/opts"
 
 
-# SH Settings
+# Additional SH Settings
 #-------------------------
 source "${XDG_CONFIG_HOME}/sh/aliases"
 source "${XDG_CONFIG_HOME}/sh/colors"
@@ -102,7 +67,7 @@ fi
 
 # ZSH Lazy-Loading
 #-------------------------
-# source "${XDG_CONFIG_HOME}/zsh/sandboxd"
+source "${XDG_CONFIG_HOME}/zsh/sandboxd"
 
 
 # ZSH Completions
@@ -127,8 +92,8 @@ if [[ "${KERNEL}" == "Linux" ]]; then
 fi
 
 # Load completions and bash completions
-# autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
-# autoload -Uz bashcompinit && bashcompinit
+autoload -Uz compinit && compinit -i -d "${ZCOMPDUMP}"
+autoload -Uz bashcompinit && bashcompinit
 
 
 # ZSH - Source any local overrides

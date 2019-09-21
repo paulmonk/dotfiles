@@ -18,10 +18,7 @@ call denite#custom#option('_', {
   \ 'vertical_preview': 1,
   \ })
 
-if has('nvim')
-  call denite#custom#option('_', { 'split': 'floating' })
-endif
-
+call denite#custom#option('_', { 'split': 'floating' })
 call denite#custom#option('git', { 'start_filter': 0 })
 call denite#custom#option('jump', { 'start_filter': 0 })
 call denite#custom#option('list', { 'start_filter': 0 })
@@ -29,11 +26,11 @@ call denite#custom#option('search', { 'start_filter': 0, 'no_empty': 1 })
 
 " MATCHERS
 " Default is 'matcher/fuzzy'
-call denite#custom#source('tag', 'matchers', ['matcher/substring'])
+" call denite#custom#source('tag', 'matchers', ['matcher/substring'])
 
 " SORTERS
 " Default is 'sorter/rank'
-call denite#custom#source('file/rec,grep', 'sorters', ['sorter/sublime'])
+" call denite#custom#source('file/rec,grep', 'sorters', ['sorter/sublime'])
 call denite#custom#source('z', 'sorters', ['sorter_z'])
 
 " CONVERTERS
@@ -42,7 +39,7 @@ call denite#custom#source(
   \ 'buffer,file_mru,file_old',
   \ 'converters', ['converter_relative_word'])
 
-" FIND and GREP COMMAND
+" FIND and GREP COMMANDS
 if executable('rg')
   " Ripgrep
   call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
@@ -70,9 +67,22 @@ elseif executable('ag')
 endif
 
 " KEY MAPPINGS
-autocmd MyAutoCmd FileType denite call s:denite_settings()
+augroup user_plugin_denite
+  autocmd!
+
+  autocmd FileType denite call s:denite_settings()
+  autocmd FileType denite-filter call s:denite_filter_settings()
+
+  autocmd VimResized * call denite#custom#option('_', {
+    \   'winwidth': &columns,
+    \   'winheight': &lines / 3,
+    \   'winrow': (&lines - 3) - (&lines / 3),
+    \ })
+augroup END
+
 function! s:denite_settings() abort
-  " highlight! link CursorLine Visual
+  setlocal signcolumn=no cursorline
+
   nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
   nnoremap <silent><buffer><expr> i    denite#do_map('open_filter_buffer')
   nnoremap <silent><buffer><expr> /    denite#do_map('open_filter_buffer')
@@ -90,8 +100,10 @@ function! s:denite_settings() abort
   nnoremap <silent><buffer><expr><nowait> <Space> denite#do_map('toggle_select').'j'
 endfunction
 
-autocmd MyAutoCmd FileType denite-filter call s:denite_filter_settings()
 function! s:denite_filter_settings() abort
+  setlocal signcolumn=yes nocursorline nonumber norelativenumber
+  call deoplete#custom#buffer_option('auto_complete', v:false)
+
   nnoremap <silent><buffer><expr> <Esc>  denite#do_map('quit')
   " inoremap <silent><buffer><expr> <Esc>  denite#do_map('quit')
   nnoremap <silent><buffer><expr> q      denite#do_map('quit')

@@ -7,6 +7,7 @@ set nomodeline               " Do not use modelines, they are a security risk.
 set report=0                 " Don't report on line changes
 set errorbells               " Trigger bell on error
 set visualbell               " Use visual bell instead of beeping
+set signcolumn=yes           " Always show signs column
 set hidden                   " hide buffers when abandoned instead of unload
 set fileformats=unix,dos,mac " Use Unix as the standard file type
 set magic                    " For regular expressions turn magic on
@@ -22,6 +23,11 @@ endif
 if has('vim_starting')
   set encoding=utf-8
   scriptencoding utf-8
+endif
+
+" Enables 24-bit RGB color in the TUI
+if has('termguicolors')
+  set termguicolors
 endif
 
 " What to save for views:
@@ -75,11 +81,11 @@ endif
 " Vim Directories
 " ---------------
 set undofile swapfile nobackup
-set directory=$CACHEPATH/swap//,$CACHEPATH,~/tmp,/var/tmp,/tmp
-set undodir=$CACHEPATH/undo//,$CACHEPATH,~/tmp,/var/tmp,/tmp
-set backupdir=$CACHEPATH/backup/,$CACHEPATH,~/tmp,/var/tmp,/tmp
-set viewdir=$CACHEPATH/view/
-set nospell spellfile=$VIMPATH/spell/en.utf-8.add
+set directory=$DATA_PATH/swap//,$DATA_PATH,~/tmp,/var/tmp,/tmp
+set undodir=$DATA_PATH/undo//,$DATA_PATH,~/tmp,/var/tmp,/tmp
+set backupdir=$DATA_PATH/backup/,$DATA_PATH,~/tmp,/var/tmp,/tmp
+set viewdir=$DATA_PATH/view/
+set nospell spellfile=$VIM_PATH/spell/en.utf-8.add
 
 " History saving
 set history=1000
@@ -92,8 +98,38 @@ if has('nvim')
   "   h - Disable the effect of 'hlsearch' when loading the shada
   set shada='300,<50,@100,s10,h
 else
-  set viminfo='300,<10,@50,h,n$CACHEPATH/viminfo
+  set viminfo='300,<10,@50,h,n$DATA_PATH/viminfo
 endif
+
+" If sudo, disable vim swap/backup/undo/shada/viminfo writing
+if $SUDO_USER !=# '' && $USER !=# $SUDO_USER
+    \ && $HOME !=# expand('~'.$USER)
+    \ && $HOME ==# expand('~'.$SUDO_USER)
+
+  set noswapfile
+  set nobackup
+  set nowritebackup
+  set noundofile
+  if has('nvim')
+    set shada="NONE"
+  else
+    set viminfo="NONE"
+  endif
+endif
+
+" Secure sensitive information, disable backup files in temp directories
+if exists('&backupskip')
+  set backupskip+=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*
+  set backupskip+=.vault.vim
+endif
+
+" Disable swap/undo/viminfo/shada files in temp directories or shm
+augroup user_secure
+  autocmd!
+  silent! autocmd BufNewFile,BufReadPre
+    \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim
+    \ setlocal noswapfile noundofile nobackup nowritebackup viminfo= shada=
+augroup END
 
 "
 " Tabs and Indents
@@ -131,6 +167,19 @@ set showmatch       " Jump to matching bracket
 set matchpairs+=<:> " Add HTML brackets to pair matching
 set matchtime=1     " Tenths of a second to show the matching paren
 set cpoptions-=m    " showmatch will wait 0.5s or until a char is typed
+set showfulltag     " Show tag and tidy search in completion
+
+if exists('+inccommand')
+  set inccommand=nosplit
+endif
+
+if executable('rg')
+  set grepformat=%f:%l:%m
+  let &grepprg = 'rg --vimgrep' . (&smartcase ? ' --smart-case' : '')
+elseif executable('ag')
+  set grepformat=%f:%l:%m
+  let &grepprg = 'ag --vimgrep' . (&smartcase ? ' --smart-case' : '')
+endif
 
 "
 " Behavior
@@ -191,6 +240,18 @@ set laststatus=2        " Always show a status line
 set colorcolumn=80      " Highlight the 80th character limit
 set display=lastline
 
+if has('folding')
+  set foldenable
+  set foldmethod=syntax
+  set foldlevelstart=99
+endif
+
+" UI Symbols
+" icons:  ▏│ ¦ ╎ ┆ ⋮ ⦙ ┊ 
+set showbreak=↪
+set listchars=tab:\▏\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
+"set fillchars=vert:▉,fold:─
+
 " Do not display completion messages
 " Patch: https://groups.google.com/forum/#!topic/vim_dev/WeBBjkXE8H8
 if has('patch-7.4.314')
@@ -214,57 +275,7 @@ if exists('&pumblend')
   set pumblend=20
 endif
 
-" Local to the window
+" Enables pseudo-transparency for floating window
 if exists('&winblend')
   set winblend=20
 endif
-
-"
-" Folds
-" -----
-
-" FastFold
-" Credits: https://github.com/Shougo/shougo-s-github
-autocmd MyAutoCmd TextChangedI,TextChanged *
-  \ if &l:foldenable && &l:foldmethod !=# 'manual' |
-  \   let b:foldmethod_save = &l:foldmethod |
-  \   let &l:foldmethod = 'manual' |
-  \ endif
-
-autocmd MyAutoCmd BufWritePost *
-  \ if &l:foldmethod ==# 'manual' && exists('b:foldmethod_save') |
-  \   let &l:foldmethod = b:foldmethod_save |
-  \   execute 'normal! zx' |
-  \ endif
-
-if has('folding')
-  set foldenable
-  set foldmethod=syntax
-  set foldlevelstart=99
-  set foldtext=FoldText()
-endif
-
-" Improved Vim fold-text
-" See: http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/
-function! FoldText()
-  " Get first non-blank line
-  let fs = v:foldstart
-  while getline(fs) =~? '^\s*$' | let fs = nextnonblank(fs + 1)
-  endwhile
-  if fs > v:foldend
-    let line = getline(v:foldstart)
-  else
-    let line = substitute(getline(fs), '\t', repeat(' ', &tabstop), 'g')
-  endif
-
-  let w = winwidth(0) - &foldcolumn - (&number ? 8 : 0)
-  let foldSize = 1 + v:foldend - v:foldstart
-  let foldSizeStr = ' ' . foldSize . ' lines '
-  let foldLevelStr = repeat('+--', v:foldlevel)
-  let lineCount = line('$')
-  let foldPercentage = printf('[%.1f', (foldSize*1.0)/lineCount*100) . '%] '
-  let expansionString = repeat('.', w - strwidth(foldSizeStr.line.foldLevelStr.foldPercentage))
-  return line . expansionString . foldSizeStr . foldPercentage . foldLevelStr
-endfunction
-
-" vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
