@@ -118,7 +118,6 @@ cmap W!! w !sudo tee % >/dev/null
 
 " I like to :quit with 'q', shrug.
 nnoremap <silent> q :<C-u>:quit<CR>
-autocmd MyAutoCmd FileType man nnoremap <silent><buffer> q :<C-u>:quit<CR>
 
 " Macros
 nnoremap Q q
@@ -144,9 +143,6 @@ nnoremap <silent> <A-j> :<C-U>tabnext<CR>
 nnoremap <silent> <A-k> :<C-U>tabprevious<CR>
 nnoremap <silent> <C-Tab> :<C-U>tabnext<CR>
 nnoremap <silent> <C-S-Tab> :<C-U>tabprevious<CR>
-" Uses g:lasttab set on TabLeave in MyAutoCmd
-let g:lasttab = 1
-nmap <silent> \\ :execute 'tabn '.g:lasttab<CR>
 
 "
 " Totally Custom
@@ -166,9 +162,11 @@ function! s:get_selection(cmdtype) "
   let @s = temp
 endfunction "
 
-" Location list movement
-nmap <Leader>j :lnext<CR>
-nmap <Leader>k :lprev<CR>
+" Location/quickfix list movement
+nmap ]c :lnext<CR>
+nmap [c :lprev<CR>
+nmap ]q :cnext<CR>
+nmap [q :cprev<CR>
 
 " Duplicate lines
 nnoremap <Leader>d m`YP``
@@ -240,14 +238,16 @@ endfunction
 " OpenChangedFiles COMMAND
 " Open a split for each dirty file in git
 function! OpenChangedFiles()
-  only " Close all windows, unless they're modified
+  slient only " Close all windows, unless they're modified
   let status =
     \ system('git status -s | grep "^ \?\(M\|A\|UU\)" | sed "s/^.\{3\}//"')
   let filenames = split(status, "\n")
   exec 'edit ' . filenames[0]
-  for filename in filenames[1:]
-    exec 'sp ' . filename
-  endfor
+  if ! empty(filenames)
+    for filename in filenames[1:]
+      exec 'sp ' . filename
+    endfor
+  endif
 endfunction
 
 " OS Specific
@@ -257,17 +257,17 @@ if has('mac')
 
   " Use Dash on Mac, for context help
   if executable('/Applications/Dash.app/Contents/MacOS/Dash')
-    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
+    autocmd user_events FileType ansible,go,php,css,less,html,markdown
       \ nmap <silent><buffer> K :!open -g dash://"<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
-    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
+    autocmd user_events FileType javascript,javascript.jsx,sql,ruby,conf,sh
       \ nmap <silent><buffer> K :!open -g dash://"<cword>"&<CR><CR>
   endif
 else
   " Use Zeal for context help
   if executable('zeal')
-    autocmd MyAutoCmd FileType ansible,go,php,css,less,html,markdown
+    autocmd user_events FileType ansible,go,php,css,less,html,markdown
       \ nmap <silent><buffer> K :!zeal --query "<C-R>=split(&ft, '\.')[0]<CR>:<cword>"&<CR><CR>
-    autocmd MyAutoCmd FileType javascript,javascript.jsx,sql,ruby,conf,sh
+    autocmd user_events FileType javascript,javascript.jsx,sql,ruby,conf,sh
       \ nmap <silent><buffer> K :!zeal --query "<cword>"&<CR><CR>
   endif
 endif

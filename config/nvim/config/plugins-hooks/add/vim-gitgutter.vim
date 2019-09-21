@@ -1,8 +1,8 @@
 " -------------------------------------------------
 " Vim-Gitgutter
 " -------------------------------------------------
-nmap <Leader>hj <Plug>GitGutterNextHunk
-nmap <Leader>hk <Plug>GitGutterPrevHunk
-nmap <Leader>hs <Plug>GitGutterStageHunk
-nmap <Leader>hr <Plug>GitGutterUndoHunk
-nmap <Leader>hp <Plug>GitGutterPreviewHunk
+nmap ]g <Plug>(GitGutterNextHunk)
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap gS <Plug>(GitGutterStageHunk)
+nmap <Leader>gr <Plug>(GitGutterUndoHunk)
+nmap gs <Plug>(GitGutterPreviewHunk)

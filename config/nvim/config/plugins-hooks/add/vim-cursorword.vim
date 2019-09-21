@@ -1,7 +1,10 @@
 " -------------------------------------------------
 " Vim-Cursorword
 " -------------------------------------------------
-autocmd MyAutoCmd FileType denite,qf let b:cursorword=0
-autocmd MyAutoCmd WinEnter * if &diff | let b:cursorword=0 | endif
-autocmd MyAutoCmd InsertEnter * let b:cursorword=0
-autocmd MyAutoCmd InsertLeave * let b:cursorword=1
+augroup user_plugin_cursorword
+  autocmd!
+  autocmd FileType denite,qf,easygitblame let b:cursorword = 0
+  autocmd WinEnter * if &diff | let b:cursorword = 0 | endif
+  autocmd InsertEnter * let b:cursorword = 0
+  autocmd InsertLeave * let b:cursorword = 1
+augroup END

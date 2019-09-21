@@ -1,8 +1,21 @@
 #!/usr/bin/env zsh
 
 #------------------------------------------------------------------------------
-# Plugins - .antigenrc file.
+# Plugins
 #------------------------------------------------------------------------------
+# Load antigen
+# https://github.com/zsh-users/antigen/wiki/Configuration
+export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
+export ANTIGEN_COMPDUMP="${ADOTDIR}/.zcompdump-${HOST}-${ZSH_VERSION}"
+
+# Init ZSH
+if [[ "${KERNEL}" == "Darwin" ]]; then
+  source "${PREFIX}/share/antigen/antigen.zsh"
+else
+  source "${PREFIX}/share/zsh/share/antigen.zsh"
+fi
+
+# Setup
 antigen use prezto
 
 # Bundles
@@ -52,7 +65,9 @@ zstyle ':prezto:module:editor' key-bindings 'vi'
 
 
 # Z
-[[ -f "${XDG_DATA_HOME}/zsh/z" ]] || touch "${XDG_DATA_HOME}/zsh/z"
+if [[ ! -f "${XDG_DATA_HOME}/zsh/z" ]]; then
+  touch "${XDG_DATA_HOME}/zsh/z"
+fi
 export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
 
 
@@ -66,7 +81,7 @@ if [[ ! "${KERNEL}" == "Darwin" ]]; then
 fi
 
 
-# Plugins Finalize
+# Finalize
 # ----------------
 # Tell Antigen that you're done.
 antigen apply

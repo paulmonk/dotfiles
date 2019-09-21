@@ -16,14 +16,11 @@ SHELL                   := /usr/bin/env bash
 #------------------------------
 KERNEL := $(shell uname -s)
 XDG_CACHE_HOME ?= $(HOME)/.cache
-XDG_DATA_HOME ?= $(HOME)/.local/share
 
 VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
 VIM_VERSION := "$(shell $(VIM_BIN) --version)"
-VIM_CACHEDIR ?= $(XDG_CACHE_HOME)/$(VIM_BIN)
-VIM_DATADIR ?= $(XDG_DATA_HOME)/$(VIM_BIN)
-VIM_VENVDIR ?= $(VIM_DATADIR)/virtualenvs
-VIM_VENV := $(VIM_VENVDIR)/$(VIM_BIN)
+VIM_DATADIR ?= $(XDG_CACHE_HOME)/$(VIM_BIN)
+VIM_VENV := $(VIM_DATADIR)/virtualenv
 
 # OS Specific
 ifeq ($(KERNEL), Darwin)
@@ -37,7 +34,7 @@ endif
 #------------------------------
 # Only needed for neovim.
 $(VIM_VENV)/bin/pip:
-	mkdir -p $(VIM_VENVDIR) && $(PREFIX)/bin/python3 -m venv "$(VIM_VENV)"
+	$(PREFIX)/bin/python3 -m venv "$(VIM_VENV)"
 
 .PHONY: virtualenv
 virtualenv: $(VIM_VENV)/bin/pip
@@ -45,27 +42,42 @@ ifeq ('$(VIM_BIN)','nvim')
 	$(VIM_VENV)/bin/pip install -U pip
 	$(VIM_VENV)/bin/pip install -U pynvim PyYAML Send2Trash
 else
-	@echo "Neovim was not found. Not creating virtualenv."
+	$(error .. Neovim was not found. Not creating virtualenv.)
 endif
 
 .PHONY: install
-install:
-	$(MAKE) virtualenv
-	mkdir -vp "$(VIM_CACHEDIR)/"{backup,complete,session,swap,tags,undo}
-	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
-		-c "try | call dein#update() | finally | call confirm('') | qall! | endtry"
+install: virtualenv
+	mkdir -vp "$(VIM_DATADIR)/"{backup,complete,session,swap,tags,undo}
+	$(VIM_BIN) -N -u config/init.vim -c "set nomore | try | call dein#update() | finally | messages | qall! | endtry" -V1 -es
 
 .PHONY: update
-update:
-	$(MAKE) virtualenv
-	$(VIM_BIN) --cmd 'set t_ti= t_te= nomore' -N -U NONE -i NONE \
-		-c "try | call dein#clear_state() | call dein#update() | call dein#recache_runtimepath() | finally | call confirm('') | qall! | endtry"
+update: virtualenv
+	$(VIM_BIN) -N -u config/init.vim -c "set nomore | try | call dein#clear_state() | call dein#update() | finally | messages | qall! | endtry" -V1 -es
 
 .PHONY: upgrade
 upgrade: update
 
 .PHONY: uninstall
 uninstall:
-	rm -rf "$(VIM_CACHEDIR)"
 	rm -rf "$(VIM_DATADIR)"
-	rm -rf "$(VIM_VENVDIR)"
+	rm -rf "$(VIM_VENV)"
+
+.PHONY: test
+test:
+ifeq ('$(VIM_BIN)','nvim')
+	$(info Testing NVIM 0.4+...)
+	$(if $(shell echo "$(VIM_VERSION)" | egrep "NVIM v0\.[4-9]"),\
+		$(info OK),\
+		$(error .. You need Neovim 0.4.x or newer))
+else
+	$(info Testing VIM 8.x...)
+	$(if $(shell echo "$(VIM_VERSION)" | egrep "VIM .* 8\."),\
+		$(info OK),\
+		$(error .. You need Vim 8.x or newer))
+
+	$(info Testing +python3... )
+	$(if $(findstring +python3,$(VIM_VERSION)),\
+		$(info OK),\
+		$(error .. MISSING! Install Vim 8.x or newer, with "+python3" enabled))
+endif
+	@echo All tests passed, hooray!

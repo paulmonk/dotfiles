@@ -23,6 +23,6 @@ function! InitCaw() abort
   endif
 endfunction
 
-autocmd MyAutoCmd FileType * call InitCaw()
+autocmd user_events FileType * call InitCaw()
 
 call InitCaw()
