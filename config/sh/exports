@@ -70,7 +70,7 @@ else
   export PREFIX="/usr"
 
   # Set defaults
-  export BROWSER="${PREFIX}/bin/firefox -P default --private-window"
+  export BROWSER="${PREFIX}/bin/chromium"
   export TERMINAL="${PREFIX}/bin/kitty"
 
   # CPU

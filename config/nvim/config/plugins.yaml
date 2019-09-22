@@ -212,8 +212,8 @@
 - repo: liuchengxu/vista.vim
   on_cmd: Vista
   hook_source: |
-    let g:vista#renderer#enable_icon = 1
-    let g:vista_echo_cursor_strategy = 'scroll'
+   let g:vista#renderer#enable_icon = 1
+   let g:vista_echo_cursor_strategy = 'scroll'
 
 # ==========================================
 # Interface
@@ -221,9 +221,14 @@
 # Preview colors in source-code while editing
 - repo: RRethy/vim-hexokinase
   build: make hexokinase
-  on_ft: [css, scss, sass, stylus, vim]
+  on_ft:
+   - css
+   - scss
+   - sass
+   - stylus
+   - vim
   hook_add: |
-    let g:Hexokinase_ftAutoload = ['css', 'scss', 'sass', 'stylus']
+   let g:Hexokinase_ftAutoload = ['css', 'scss', 'sass', 'stylus']
 
 # Improved * motions
 - repo: haya14busa/vim-asterisk

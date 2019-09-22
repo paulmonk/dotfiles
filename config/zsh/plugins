@@ -12,7 +12,7 @@ export ANTIGEN_COMPDUMP="${ADOTDIR}/.zcompdump-${HOST}-${ZSH_VERSION}"
 if [[ "${KERNEL}" == "Darwin" ]]; then
   source "${PREFIX}/share/antigen/antigen.zsh"
 else
-  source "${PREFIX}/share/zsh/share/antigen.zsh"
+  source "${PREFIX}/share/zsh-antigen/antigen.zsh"
 fi
 
 # Setup

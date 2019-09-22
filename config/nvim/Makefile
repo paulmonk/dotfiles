@@ -48,11 +48,11 @@ endif
 .PHONY: install
 install: virtualenv
 	mkdir -vp "$(VIM_DATADIR)/"{backup,complete,session,swap,tags,undo}
-	$(VIM_BIN) -N -u config/init.vim -c "set nomore | try | call dein#update() | finally | messages | qall! | endtry" -V1 -es
+	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#update() | finally | echomsg '' | qall! | endtry"
 
 .PHONY: update
 update: virtualenv
-	$(VIM_BIN) -N -u config/init.vim -c "set nomore | try | call dein#clear_state() | call dein#update() | finally | messages | qall! | endtry" -V1 -es
+	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#clear_state() | call dein#update() | finally | qall! | endtry"
 
 .PHONY: upgrade
 upgrade: update
