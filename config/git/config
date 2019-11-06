@@ -192,7 +192,7 @@
     lcrev = log --reverse --no-merges --stat @{1}..
     patch = !git --no-pager diff --no-color
     p = push
-	pf = push --force-with-lease
+    pf = push --force-with-lease
     pu = !"git pull && git smu"
     remotes = remote -v
     s = status -sb
@@ -297,6 +297,19 @@
     # instead of opening all files:
     # git reviewone foo.js bar.js
     reviewone = !vim -p +\"tabdo Gdiff $GIT_REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$GIT_REVIEW_BASE'\"
+    #===============================================
+
+    #===============================================
+    # https://stackoverflow.com/questions/9301782/need-to-reset-git-branch-to-origin-version/33244119#33244119
+    #
+    # Since reset is a potentially dangerous call (especially with the --hard option, you will lose any uncommitted changes),
+    # it first tells you what it's about to do.
+    # For example if you're on branch dev-container with remote called qcpp/dev-container and you enter git catchup, you'll be prompted:
+    #
+    # reset dev-container to qcpp/dev-container? (Y/n)
+    #
+    # If you then type y or just hit return, it will perform the reset. If you enter anything else the reset will not be carried out.
+    catchup = "!f(){ echo -n \"reset \\033[0;33m$(git symbolic-ref -q --short HEAD)\\033[0m to \\033[0;33m$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))\\033[0m? (Y/n) \"; read -r ans; if [ \"$ans\" = \"y\" -o \"$ans\" = \"Y\" -o -z \"$ans\" ]; then git reset --hard $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); else echo \"catchup aborted\"; fi }; f"
     #===============================================
 
 # vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
