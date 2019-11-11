@@ -98,6 +98,6 @@ autoload -Uz bashcompinit && bashcompinit
 
 # ZSH - Source any local overrides
 #-------------------------
-if [[ -f "${ZDOTDIR}/zshrc.local" ]]; then
-  source "${ZDOTDIR}/zshrc.local"
+if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
+  source "${ZDOTDIR}/.zshrc.local"
 fi
