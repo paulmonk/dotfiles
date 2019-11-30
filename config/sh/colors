@@ -4,7 +4,7 @@
 if command -v dircolors >/dev/null 2>&1; then
   # Prefer exa if available
   if command -v exa >/dev/null 2>&1; then
-    ls="exa --group-directories-first --all"
+    ls="exa --group --git --group-directories-first --all"
   else
     ls="LC_COLLATE=C ls --group-directories-first --all"
   fi
