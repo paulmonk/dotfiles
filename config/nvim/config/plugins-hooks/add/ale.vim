@@ -77,6 +77,7 @@ let g:ale_fixers = {
 \   'python': ['isort', 'black'],
 \   'scss': ['prettier'],
 \   'sh': ['shfmt'],
+\   'sql': ['sqlformat'],
 \   'yaml': ['prettier']
 \}
 
@@ -114,6 +115,9 @@ let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
 let g:ale_python_mypy_options = '–-ignore-missing-imports'
 " These tools will get run by flake8.
 let g:ale_python_prospector_options = '--max-line-length 90 --without-tool mccabe pyflakes'
+
+" SQL
+let g:ale_sql_sqlformat_options = '--keywords upper --use_space_around_operators --wrap_after 90 --reindent --indent_width 4'
 
 " Shell
 let g:ale_sh_shfmt_options = '-i 2 -ci'
