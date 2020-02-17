@@ -116,7 +116,7 @@ call deoplete#custom#source('denite', 'matchers',
 
 "" Key-mappings and Events " {{{
 " ---
-" augroup user_plugin_deoplete
+augroup user_plugin_deoplete
   autocmd!
   autocmd CompleteDone * silent! pclose!
 augroup END
