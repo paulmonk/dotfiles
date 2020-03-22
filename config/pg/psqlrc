@@ -56,6 +56,7 @@
 \echo '\t\t\t:dbsize\t\t-- Database Size'
 \echo '\t\t\t:tablesize\t-- Tables Size'
 \echo '\t\t\t:uselesscol\t-- Useless columns'
+\echo '\t\t\t:tablecachehr\t-- Table Cache Hit Ratio'
 \echo '\t\t\t:uptime\t\t-- Server uptime'
 \echo '\t\t\t:menu\t\t-- Help Menu'
 \echo '\t\t\t\\h\t\t-- Help with SQL commands'
@@ -89,6 +90,8 @@
 \set uselesscol 'SELECT nspname, relname, attname, typname, (stanullfrac*100)::int AS null_percent, case when stadistinct &gt;= 0 then stadistinct else abs(stadistinct)*reltuples end AS \"distinct\", case 1 when stakind1 then stavalues1 when stakind2 then stavalues2 end AS \"values\" FROM pg_class c JOIN pg_namespace ns ON (ns.oid=relnamespace) JOIN pg_attribute ON (c.oid=attrelid) JOIN pg_type t ON (t.oid=atttypid) JOIN pg_statistic ON (c.oid=starelid AND staattnum=attnum) WHERE nspname NOT LIKE E\'pg\\\\_%\' AND nspname != \'information_schema\' AND relkind=\'r\' AND NOT attisdropped AND attstattarget != 0 AND reltuples &gt;= 100 AND stadistinct BETWEEN 0 AND 1 ORDER BY nspname, relname, attname;'
 
 \set uptime 'SELECT now() - pg_postmaster_start_time() AS uptime;'
+
+\set tablecachehr 'SELECT sum(heap_blks_read) as heap_read, sum(heap_blks_hit) as heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio FROM pg_statio_user_tables;'
 
 -- Development queries:
 
