@@ -205,7 +205,7 @@ alias http-serve="python3 -m http.server"
 # Misc aliases
 # -------------------------
 # Weather
-alias weather="curl -s wttr.in"
+alias weather="curl -s https://wttr.in"
 
 
 # macOS aliases
