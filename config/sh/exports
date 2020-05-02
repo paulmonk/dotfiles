@@ -12,47 +12,46 @@ export XDG_DATA_HOME="${HOME}/.local/share"
 KERNEL="$(uname -s)"
 export KERNEL
 
+
+# Homebrew opts
+# Abort installation of cask if no checksum is defined
+export HOMEBREW_CASK_OPTS="--require-sha"
+# Force use of our curlrc
+export HOMEBREW_CURLRC="1"
+# Force homebrew software
+export HOMEBREW_FORCE_BREWED_CURL="1"
+export HOMEBREW_FORCE_BREWED_GIT="1"
+# brew upgrade always assumes --cleanup has been passed
+export HOMEBREW_INSTALL_CLEANUP="1"
+# Disable anonymous statistics collections
+export HOMEBREW_NO_ANALYTICS="1"
+# Disable automatic updates to keep in control of brew updates
+export HOMEBREW_NO_AUTO_UPDATE="1"
+# When checking out a public repository, by default, your username is always sent, not now.
+export HOMEBREW_NO_GITHUB_API="1"
+# Avoid protocol downgrades from HTTPS to HTTP via redirect
+export HOMEBREW_NO_INSECURE_REDIRECT="1"
+
 # macOS
 if [ "${KERNEL}" = "Darwin" ]; then
   # Set Default PATH
   export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
   # Prefix
-  export PREFIX="${HOME}/Library/Homebrew"
+  export BREW_PREFIX="${HOME}/Library/Homebrew"
+  export PREFIX="${BREW_PREFIX}"
 
   # XDG
   export XDG_RUNTIME_DIR="/tmp/run"
   [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -m 0700 "${XDG_RUNTIME_DIR}"
 
-  # Homebrew opts
-  # Abort installation of cask if no checksum is defined
-  export HOMEBREW_CASK_OPTS="--require-sha"
-  # Force use of our curlrc
-  export HOMEBREW_CURLRC="1"
-  # Force homebrew software
-  export HOMEBREW_FORCE_BREWED_CURL="1"
-  export HOMEBREW_FORCE_BREWED_GIT="1"
-  # brew upgrade always assumes --cleanup has been passed
-  export HOMEBREW_INSTALL_CLEANUP="1"
-  # Disable anonymous statistics collections
-  export HOMEBREW_NO_ANALYTICS="1"
-  # Disable automatic updates to keep in control of brew updates
-  export HOMEBREW_NO_AUTO_UPDATE="1"
-  # When checking out a public repository, by default, your username is always sent, not now.
-  export HOMEBREW_NO_GITHUB_API="1"
-  # Avoid protocol downgrades from HTTPS to HTTP via redirect
-  export HOMEBREW_NO_INSECURE_REDIRECT="1"
-
   # Use homebrew GNU tools instead of system BSD
   IFS=" "
   for bin in "coreutils findutils gnu-sed"; do
-    export PATH="${PREFIX}/opt/${bin}/libexec/gnubin:${PATH}"
-    export MANPATH="${PREFIX}/opt/${bin}/libexec/gnuman:${MANPATH}"
+    export PATH="${BREW_PREFIX}/opt/${bin}/libexec/gnubin:${PATH}"
+    export MANPATH="${BREW_PREFIX}/opt/${bin}/libexec/gnuman:${MANPATH}"
   done
   unset bin
-
-  # Add homebrew bin
-  export PATH="${PREFIX}/bin:${PREFIX}/sbin:${PATH}"
 
   # BUILD Flags
   # Ensure CommandLineTools SDK is used correctly
@@ -67,6 +66,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   CPU_CORES="$(sysctl -n hw.ncpu)"
 else
   # Prefix
+  export BREW_PREFIX="${XDG_DATA_HOME}/Homebrew"
   export PREFIX="/usr"
 
   # Set defaults
@@ -101,6 +101,9 @@ else
   # Zeal: https://github.com/zealdocs/zeal/issues/172
   export QT_QPA_PLATFORMTHEME="gtk2"
 fi
+
+# Add homebrew bin
+export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 
 # Defaults
 export LANG="en_GB.UTF-8"
