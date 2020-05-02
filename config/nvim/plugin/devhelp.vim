@@ -5,30 +5,32 @@
 " - Map `gK` for selected filetypes
 
 if exists('g:loaded_devhelp') && g:loaded_devhelp
-  finish
+	finish
 endif
 let g:loaded_devhelp = 1
 
 augroup plugin_devhelp
-  autocmd!
+	autocmd!
 
-  autocmd FileType yaml.ansible,php,css,less,html,markdown,vim,sql,ruby
-    \ nmap <silent><buffer> gK :call <SID>show_help(expand('<cword>'), &ft)<CR>
+	autocmd FileType yaml.ansible,php,css,less,html,markdown,vim,sql,ruby
+		\ nmap <silent><buffer> gK :call <SID>show_help(expand('<cword>'))<CR>
 
-  autocmd FileType javascript,javascriptreact,conf
-    \ nmap <silent><buffer> gK :call <SID>show_help(expand('<cword>'), '')<CR>
+	autocmd FileType javascript,javascriptreact,conf
+		\ nmap <silent><buffer> gK :call <SID>show_help(expand('<cword>'), '')<CR>
 
 augroup END
 
 function! s:show_help(word, ...)
-  let l:word = a:word
-  let l:lang = a:0 > 0 && a:1 ? a:1 : &filetype
-  let l:expr = split(l:lang, '\.')[-1] . ':' . l:word
+	" Open Dash/Zeal on word
+	" Arguments: word, filetype
+	let l:word = a:word
+	let l:lang = a:0 > 0 && a:1 ? a:1 : &filetype
+	let l:expr = split(l:lang, '\.')[-1] . ':' . l:word
 
-  if executable('/Applications/Dash.app/Contents/MacOS/Dash')
-    execute '!open -g dash://' . l:expr
-  elseif executable('zeal')
-    execute '!zeal --query "' . l:expr . '"'
-  endif
-  redraw!
+	if executable('/Applications/Dash.app/Contents/MacOS/Dash')
+		execute '!open -g dash://' . l:expr
+	elseif executable('zeal')
+		execute '!zeal --query "' . l:expr . '"'
+	endif
+	redraw!
 endfunction

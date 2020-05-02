@@ -1,60 +1,54 @@
 " Theme
-" -----
-" Enable 256 color terminal
-set t_Co=256
+" ---
+"
+" Autoloads theme according to user selected colorschemes
 
-" Enable true color
-if has('termguicolors')
-  set termguicolors
-endif
+function! s:theme_init()
+	" Load cached colorscheme or hybrid by default
+	let l:default = 'hybrid'
+	let l:cache = s:theme_cache_file()
+	if ! exists('g:colors_name')
+		set background=dark
+		let l:scheme = filereadable(l:cache) ? readfile(l:cache)[0] : l:default
+		silent! execute 'colorscheme' l:scheme
+	endif
+endfunction
 
-" GUI
-if has('gui_running')
-  set lines=40
-  set columns=150
-endif
+function! s:theme_autoload()
+	if exists('g:colors_name')
+		let theme_path = $VIM_PATH . '/themes/' . g:colors_name . '.vim'
+		if filereadable(theme_path)
+			execute 'source' fnameescape(theme_path)
+		endif
+		" Persist theme
+		call writefile([g:colors_name], s:theme_cache_file())
+	endif
+endfunction
 
-" COLORSCHEME
-set background=dark
-colorscheme solarized8
+function! s:theme_cache_file()
+	return $DATA_PATH . '/theme.txt'
+endfunction
 
-" UI elements
-set showbreak=↪
-set fillchars=vert:│,fold:─
-set listchars=tab:\—\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
+function! s:theme_cached_scheme(default)
+	let l:cache_file = s:theme_cache_file()
+	return filereadable(l:cache_file) ? readfile(l:cache_file)[0] : a:default
+endfunction
 
+function! s:theme_cleanup()
+	if ! exists('g:colors_name')
+		return
+	endif
+	highlight clear
+endfunction
 
-" Highlights: General GUI
-" ---------------------------------------------------------
-highlight! link pythonSpaceError  NONE
-highlight! link pythonIndentError NONE
-highlight! link ExtraWhitespace  SpellBad
-highlight! WarningMsg ctermfg=100 guifg=#CCC566
+augroup user_theme
+	autocmd!
+	autocmd ColorScheme * call s:theme_autoload()
+	if has('patch-8.0.1781') || has('nvim-0.3.2')
+		autocmd ColorSchemePre * call s:theme_cleanup()
+	endif
+augroup END
 
-" Plugin: denite
-" ---------------------------------------------------------
-highlight! clear WildMenu
-highlight! link WildMenu CursorLine
-highlight! link deniteSelectedLine Type
-highlight! link deniteMatchedChar Function
-highlight! link deniteMatchedRange Underlined
-highlight! link deniteMode Comment
-highlight! link deniteSource_QuickfixPosition qfLineNr
+call s:theme_init()
 
-" Plugin: vim-signatures
-" ---------------------------------------------------------
-highlight! SignatureMarkText    ctermfg=11 guifg=#756207 ctermbg=234 guibg=#1c1c1c
-highlight! SignatureMarkerText  ctermfg=12 guifg=#4EA9D7 ctermbg=234 guibg=#1c1c1c
-
-" Plugin: vim-gitgutter
-" ---------------------------------------------------------
-highlight! GitGutterAdd ctermfg=22 guifg=#006000 ctermbg=NONE guibg=NONE
-highlight! GitGutterChange ctermfg=58 guifg=#5F6000 ctermbg=NONE guibg=NONE
-highlight! GitGutterDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-highlight! GitGutterChangeDelete ctermfg=52 guifg=#600000 ctermbg=NONE guibg=NONE
-
-" Plugin: vim-operator-flashy
-" ---------------------------------------------------------
-highlight! link Flashy DiffText
-
-" vim: set foldmethod=marker ts=2 sw=0 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :

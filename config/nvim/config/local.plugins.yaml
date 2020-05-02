@@ -1,0 +1,22 @@
+# Disabled, due to Git repo issues.
+- repo: StanAngeloff/php.vim
+  on_ft: php
+  if: 0
+- repo: vim-scripts/python_match.vim
+  on_ft: python
+  if: 0
+- repo: kchmck/vim-coffee-script
+  on_ft: [coffee, litcoffee]
+  if: 0
+- repo: vimwiki/vimwiki
+  if: 0
+
+# Status bar
+# Lean & mean status/tabline for vim that's light as air
+- repo: vim-airline/vim-airline
+- repo: vim-airline/vim-airline-themes
+  depends: vim-airline
+
+# Terminus enhances Vim's and Neovim's integration with the terminal
+# cursor shape, mouse support, focus reporting, bracketed paste
+- repo: wincent/terminus

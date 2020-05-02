@@ -12,46 +12,35 @@ SHELL                   := /usr/bin/env bash
 .DEFAULT_GOAL           := install
 
 #------------------------------
-# Variables
+# Globals
 #------------------------------
 KERNEL := $(shell uname -s)
 XDG_CACHE_HOME ?= $(HOME)/.cache
 
 VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
-VIM_VERSION := "$(shell $(VIM_BIN) --version)"
-VIM_DATADIR ?= $(XDG_CACHE_HOME)/$(VIM_BIN)
-VIM_VENV := $(VIM_DATADIR)/virtualenv
+VIM_VERSION := '${shell $(VIM_BIN) --version}'
+VIM_CACHEDIR ?= $(XDG_CACHE_HOME)/vim
+VIM_VENV ?= $(VIM_CACHEDIR)/venv
 
-# OS Specific
-ifeq ($(KERNEL), Darwin)
-PREFIX ?= $(shell brew --prefix)
-else
-PREFIX ?= /usr
-endif
 
 #------------------------------
 # Targets
 #------------------------------
-# Only needed for neovim.
-$(VIM_VENV)/bin/pip:
-	$(PREFIX)/bin/python3 -m venv "$(VIM_VENV)"
-
-.PHONY: virtualenv
-virtualenv: $(VIM_VENV)/bin/pip
+.PHONY: venv
+venv:
 ifeq ('$(VIM_BIN)','nvim')
-	$(VIM_VENV)/bin/pip install -U pip wheel setuptools
-	$(VIM_VENV)/bin/pip install -U pynvim PyYAML Send2Trash
+	bash $(CURDIR)/venv.sh
 else
-	$(error .. Neovim was not found. Not creating virtualenv.)
+	$(info .. Neovim was not found. Not attempting to create a venv.)
 endif
 
 .PHONY: install
-install: virtualenv
-	mkdir -vp "$(VIM_DATADIR)/"{backup,complete,session,swap,tags,undo}
+install: venv
+	@mkdir -vp "$(VIM_CACHEDIR)/"{backup,session,swap,tags,undo}; \
 	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#update() | finally | echomsg '' | qall! | endtry"
 
 .PHONY: update
-update: virtualenv
+update: venv
 	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#clear_state() | call dein#update() | finally | qall! | endtry"
 
 .PHONY: upgrade
@@ -59,8 +48,8 @@ upgrade: update
 
 .PHONY: uninstall
 uninstall:
-	rm -rf "$(VIM_DATADIR)"
 	rm -rf "$(VIM_VENV)"
+	rm -rf "$(VIM_CACHEDIR)"
 
 .PHONY: test
 test:

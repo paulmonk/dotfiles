@@ -1,104 +1,109 @@
 " File Types
-"-------------------------------------------------
+" ===
 
 augroup user_plugin_filetype " {{{
-  autocmd!
+	autocmd!
 
-  " Reload vim config automatically
-  autocmd BufWritePost $VIM_PATH/{*.vim,*.yaml,vimrc} nested
-    \ source $MYVIMRC | redraw
+	" Reload vim config automatically
+	autocmd BufWritePost $VIM_PATH/{*.vim,*.yaml,vimrc} nested
+		\ source $MYVIMRC | redraw
 
-  " Highlight current line only on focused window
-  autocmd WinEnter,InsertLeave * if &ft !~# 'denite' | set cursorline | endif
-  autocmd WinLeave,InsertEnter * if &ft !~# 'denite' | set nocursorline | endif
+	" Highlight current line only on focused window
+	autocmd WinEnter,InsertLeave * if &ft !~# '^\(denite\|clap_\)' |
+		\ set cursorline | endif
+	autocmd WinLeave,InsertEnter * if &ft !~# '^\(denite\|clap_\)' |
+		\ set nocursorline | endif
 
-  " Automatically set read-only for files being edited elsewhere
-  autocmd SwapExists * nested let v:swapchoice = 'o'
+	" Automatically set read-only for files being edited elsewhere
+	autocmd SwapExists * nested let v:swapchoice = 'o'
 
-  " Equalize window dimensions when resizing vim window
-  autocmd VimResized * tabdo wincmd =
+	" Equalize window dimensions when resizing vim window
+	autocmd VimResized * tabdo wincmd =
 
-  " Force write shada on leaving nvim
-  autocmd VimLeave * if has('nvim') | wshada! | else | wviminfo! | endif
+	" Force write shada on leaving nvim
+	autocmd VimLeave * if has('nvim') | wshada! | else | wviminfo! | endif
 
-  " Check if file changed when its window is focus, more eager than 'autoread'
-  autocmd FocusGained * checktime
+	" Check if file changed when its window is focus, more eager than 'autoread'
+	autocmd FocusGained * checktime
 
-  autocmd Syntax * if line('$') > 5000 | syntax sync minlines=200 | endif
+	autocmd Syntax * if line('$') > 5000 | syntax sync minlines=200 | endif
 
-  " Update filetype on save if empty
-  autocmd BufWritePost * nested
-    \ if &l:filetype ==# '' || exists('b:ftdetect')
-    \ |   unlet! b:ftdetect
-    \ |   filetype detect
-    \ | endif
+	" Update filetype on save if empty
+	autocmd BufWritePost * nested
+		\ if &l:filetype ==# '' || exists('b:ftdetect')
+		\ |   unlet! b:ftdetect
+		\ |   filetype detect
+		\ | endif
 
-  " Reload Vim script automatically if setlocal autoread
-  autocmd BufWritePost,FileWritePost *.vim nested
-    \ if &l:autoread > 0 | source <afile> |
-    \   echo 'source '.bufname('%') |
-    \ endif
+	" Reload Vim script automatically if setlocal autoread
+	autocmd BufWritePost,FileWritePost *.vim nested
+		\ if &l:autoread > 0 | source <afile> |
+		\   echo 'source ' . bufname('%') |
+		\ endif
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  autocmd BufReadPost *
-    \ if &ft !~# 'commit' && ! &diff &&
-    \      line("'\"") >= 1 && line("'\"") <= line("$")
-    \|   execute 'normal! g`"zvzz'
-    \| endif
+	" When editing a file, always jump to the last known cursor position.
+	" Don't do it when the position is invalid or when inside an event handler
+	autocmd BufReadPost *
+		\ if &ft !~# 'commit' && ! &diff &&
+		\      line("'\"") >= 1 && line("'\"") <= line("$")
+		\|   execute 'normal! g`"zvzz'
+		\| endif
 
-  autocmd FileType crontab setlocal nobackup nowritebackup
+	autocmd FileType crontab setlocal nobackup nowritebackup
 
-  autocmd FileType yaml.docker-compose setlocal expandtab
+	autocmd FileType yaml.docker-compose setlocal expandtab
 
-  autocmd FileType gitcommit setlocal spell
+	autocmd FileType gitcommit setlocal spell
 
-  autocmd FileType gitcommit,qfreplace setlocal nofoldenable
+	autocmd FileType gitcommit,qfreplace setlocal nofoldenable
 
-  " https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
-  autocmd FileType css,javascript,javascriptreact setlocal backupcopy=yes
+	" https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
+	autocmd FileType css,javascript,javascriptreact setlocal backupcopy=yes
 
-  autocmd FileType php
-    \ setlocal matchpairs-=<:> iskeyword+=\\ path+=/usr/local/share/pear
-"    \ | setlocal formatoptions=qroct " Correct indent after opening a phpdocblock
+	autocmd FileType php
+		\ setlocal matchpairs-=<:> iskeyword+=\\ path+=/usr/local/share/pear
 
-  autocmd FileType python
-    \ setlocal foldmethod=indent expandtab smarttab nosmartindent
-    \ | setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80
+	autocmd FileType python
+		\ setlocal expandtab smarttab nosmartindent
+		\ | setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80
 
-  autocmd FileType zsh setlocal foldenable foldmethod=marker
+	autocmd FileType html setlocal path+=./;/
 
-  autocmd FileType html setlocal path+=./;/
+	autocmd FileType markdown
+		\ setlocal expandtab spell conceallevel=0
+		\ | setlocal autoindent formatoptions=tcroqn2 comments=n:>
 
-  autocmd FileType markdown
-    \ setlocal expandtab spell conceallevel=0
-    \ | setlocal autoindent formatoptions=tcroqn2 comments=n:>
+	autocmd FileType apache setlocal path+=./;/
 
-  autocmd FileType apache setlocal path+=./;/
+augroup END " }}}
 
-  autocmd FileType cam setlocal nonumber synmaxcol=10000
-
-  " autocmd FileType go highlight default link goErr WarningMsg |
-  "   \ match goErr /\<err\>/
-
-augroup END
-
-" Internal Plugin Settings
+" Internal Plugin Settings  {{{
 " ------------------------
-" PHP
+
+" PHP {{{
 let g:PHP_removeCRwhenUnix = 0
 
-" Python
+" }}}
+" Python {{{
 let g:python_highlight_all = 1
+" let g:python_highlight_builtins = 1
+" let g:python_highlight_exceptions = 1
+" let g:python_highlight_string_format = 1
+" let g:python_highlight_doctests = 1
+" let g:python_highlight_class_vars = 1
+" let g:python_highlight_operators = 1
 
-" Vim
+" }}}
+" Vim {{{
 let g:vimsyntax_noerror = 1
-let g:vim_indent_count = &shiftwidth
+let g:vim_indent_cont = &shiftwidth
 
-" Bash
+" }}}
+" Bash {{{
 let g:is_bash = 1
 
-" Java
+" }}}
+" Java {{{
 let g:java_highlight_functions = 'style'
 let g:java_highlight_all = 1
 let g:java_highlight_debug = 1
@@ -106,28 +111,17 @@ let g:java_allow_cpp_keywords = 1
 let g:java_space_errors = 1
 let g:java_highlight_functions = 1
 
-" JavaScript
+" }}}
+" JavaScript {{{
 let g:SimpleJsIndenter_BriefMode = 1
 let g:SimpleJsIndenter_CaseIndentLevel = -1
 
-" Markdown
-let g:markdown_fenced_languages = [
-  \  'css',
-  \  'docker=Dockerfile',
-  \  'javascript',
-  \  'js=javascript',
-  \  'json=javascript',
-  \  'make=Makefile',
-  \  'python',
-  \  'py=python',
-  \  'sh',
-  \  'sass',
-  \  'xml',
-  \  'yaml',
-  \  'vim'
-  \]
+" }}}
+" Ruby {{{
+let g:ruby_no_expensive = 1
 
-" Folding
+" }}}
+" Folding {{{
 " augroup: a
 " function: f
 let g:vimsyn_folding = 'af'
@@ -136,5 +130,7 @@ let g:xml_syntax_folding = 1
 let g:php_folding = 2
 let g:php_phpdoc_folding = 1
 let g:perl_fold = 1
+" }}}
+" }}}
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
