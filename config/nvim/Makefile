@@ -39,7 +39,7 @@ $(VIM_VENV)/bin/pip:
 .PHONY: virtualenv
 virtualenv: $(VIM_VENV)/bin/pip
 ifeq ('$(VIM_BIN)','nvim')
-	$(VIM_VENV)/bin/pip install -U pip
+	$(VIM_VENV)/bin/pip install -U pip wheel setuptools
 	$(VIM_VENV)/bin/pip install -U pynvim PyYAML Send2Trash
 else
 	$(error .. Neovim was not found. Not creating virtualenv.)
