@@ -106,6 +106,7 @@ fi
 export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 
 # Defaults
+export LC_ALL="en_GB.UTF-8"
 export LANG="en_GB.UTF-8"
 export PAGER="less"
 
