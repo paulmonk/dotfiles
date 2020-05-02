@@ -20,3 +20,7 @@
 # Terminus enhances Vim's and Neovim's integration with the terminal
 # cursor shape, mouse support, focus reporting, bracketed paste
 - repo: wincent/terminus
+
+# Vim Syntax for Homebrew formulae
+- repo: xu-cheng/brew.vim
+  on_ft: ruby
