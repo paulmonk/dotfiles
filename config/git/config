@@ -74,6 +74,8 @@
     textconv = hexdump -v -C
 
 [fetch]
+    # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
+    fsckObjects = true
     prune = true
     recurseSubmodules = true
 
@@ -122,6 +124,10 @@
     shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
     multiline = %C(blue)──────%Creset%n %C(auto)commit %h %C(auto) %D%Creset%n %C(cyan)%an%Creset | %Cgreen%cr%Creset%n%+B
 
+[receive]
+    # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
+    fsckObjects = true
+
 [rebase]
     autosquash = true
     autostash = true
@@ -139,6 +145,7 @@
 [transfer]
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=813157
     # https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
+    # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
     fsckobjects = true
 
 [url "git@github.com:"]
