@@ -1,17 +1,24 @@
 # Warn when if an undefined variable is used mainly to catch misspelled variables
-MAKEFLAGS               += --warn-undefined-variables
-SHELL                   := /bin/bash
+MAKEFLAGS += --warn-undefined-variables
+
+# This disables the bewildering array of built in rules to automatically build
+# Yacc grammars out of your data if you accidentally add the wrong file suffix.
+# Rules: https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html
+MAKEFLAGS += --no-builtin-rules
+
+# Force Makefile to use Bash over Sh.
+SHELL := /bin/bash
 
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 # The -c flag is in the default value of .SHELLFLAGS and we must preserve it,
 # because it is how make passes the script to be executed to bash.
-.SHELLFLAGS             := -euo pipefail -c
+.SHELLFLAGS := -euo pipefail -c
 
 # Cancel out as not needed here.
 .SUFFIXES:
 
 # If no target is provided default to help.
-.DEFAULT_GOAL           := help
+.DEFAULT_GOAL := help
 
 # HELP
 #------------------------------
