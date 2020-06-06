@@ -171,6 +171,7 @@ let g:ale_linters = {
 \   'mail': ['proselint'],
 \   'markdown': ['proselint'],
 \   'python': ['bandit', 'flake8', 'mypy', 'pylint'],
+\   'typescript': ['eslint'],
 \   'sh': ['shellcheck'],
 \   'sql': ['sqlint'],
 \   'vim': ['vint'],
@@ -201,6 +202,7 @@ let g:ale_fixers = {
 \   'json': ['prettier'],
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
+\   'typescript': ['prettier'],
 \   'scss': ['prettier'],
 \   'sh': ['shfmt'],
 \   'sql': ['sqlformat'],
@@ -209,8 +211,9 @@ let g:ale_fixers = {
 
 " Do not lint or fix minified files.
 let g:ale_pattern_options = {
-\   '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
 \   '\.min\.css$': {'ale_linters': [], 'ale_fixers': []},
+\   '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
+\   '\.min\.ts$': {'ale_linters': [], 'ale_fixers': []},
 \}
 " If you configure g:ale_pattern_options outside of vimrc, you need this.
 let g:ale_pattern_options_enabled = 1
@@ -241,6 +244,9 @@ let g:ale_python_black_options = '--line-length 90 --skip-string-normalization'
 let g:ale_python_mypy_options = '–-ignore-missing-imports'
 " These tools will get run by flake8.
 let g:ale_python_prospector_options = '--max-line-length 90 --without-tool mccabe pyflakes'
+
+" typescript
+let g:ale_typescript_prettier_options = '--single-quote --no-bracket-spacing'
 
 " SQL
 let g:ale_sql_sqlformat_options = '--keywords upper --use_space_around_operators --wrap_after 90 --reindent --indent_width 4'
