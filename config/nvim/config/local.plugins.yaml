@@ -1,4 +1,8 @@
-# Disabled, due to Git repo issues.
+---
+# =====================
+# Disabled
+# =====================
+# Due to Git repo issues.
 - repo: StanAngeloff/php.vim
   on_ft: php
   if: 0
@@ -11,6 +15,11 @@
 - repo: vimwiki/vimwiki
   if: 0
 
+# Not used.
+
+# =====================
+# Additions
+# =====================
 # Status bar
 # Lean & mean status/tabline for vim that's light as air
 - repo: vim-airline/vim-airline
@@ -24,3 +33,7 @@
 # Vim Syntax for Homebrew formulae
 - repo: xu-cheng/brew.vim
   on_ft: ruby
+
+# GraphQL Syntax
+- repo: jparise/vim-graphql
+  on_ft: graphql
