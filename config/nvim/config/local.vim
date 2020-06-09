@@ -172,6 +172,7 @@ let g:ale_linters = {
 \   'markdown': ['proselint'],
 \   'python': ['bandit', 'flake8', 'mypy', 'pylint'],
 \   'typescript': ['eslint'],
+\   'typescriptreact': ['eslint'],
 \   'sh': ['shellcheck'],
 \   'sql': ['sqlint'],
 \   'vim': ['vint'],
@@ -203,6 +204,7 @@ let g:ale_fixers = {
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
 \   'typescript': ['prettier'],
+\   'typescriptreact': ['prettier'],
 \   'scss': ['prettier'],
 \   'sh': ['shfmt'],
 \   'sql': ['sqlformat'],
@@ -231,7 +233,7 @@ let g:ale_dockerfile_hadolint_use_docker = 'maybe'
 let g:ale_graphql_prettier_options = '--parser graphql'
 
 " Javascript
-let g:ale_javascript_prettier_options = '--single-quote --no-bracket-spacing'
+let g:ale_javascript_prettier_options = '--single-quote'
 
 " JSON
 let g:ale_json_prettier_options = '--parser json5'
@@ -246,7 +248,8 @@ let g:ale_python_mypy_options = '–-ignore-missing-imports'
 let g:ale_python_prospector_options = '--max-line-length 90 --without-tool mccabe pyflakes'
 
 " typescript
-let g:ale_typescript_prettier_options = '--single-quote --no-bracket-spacing'
+let g:ale_typescript_prettier_options = '--single-quote'
+let g:ale_typescriptreact_prettier_options = '--single-quote'
 
 " SQL
 let g:ale_sql_sqlformat_options = '--keywords upper --use_space_around_operators --wrap_after 90 --reindent --indent_width 4'
