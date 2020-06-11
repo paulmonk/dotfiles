@@ -17,12 +17,6 @@ set number                  " Show line numbers
 " https://webpack.js.org/guides/development/#adjusting-your-text-editor
 autocmd FileType css,javascript,javascriptreact,typescript,typescriptreact setlocal backupcopy=yes
 
-augroup FiletypeGroup
-    autocmd!
-    au BufNewFile,BufRead *.tsx set filetype=typescript.jsx
-augroup END
-
-
 " ---------------------------------------------------------
 " Theme
 " ---------------------------------------------------------
@@ -177,6 +171,7 @@ let g:ale_linters = {
 \   'fish': ['fish'],
 \   'graphql': ['eslint'],
 \   'javascript': ['eslint'],
+\   'javascriptreact': ['eslint'],
 \   'json': ['jsonlint'],
 \   'help': ['proselint', 'alex'],
 \   'html': ['proselint', 'tidy', 'alex'],
@@ -186,6 +181,7 @@ let g:ale_linters = {
 \   'sh': ['shellcheck'],
 \   'sql': ['sqlint'],
 \   'typescript': ['eslint', 'tsserver'],
+\   'typescriptreact': ['eslint', 'tsserver'],
 \   'vim': ['vint'],
 \   'yaml': ['yamllint']
 \}
@@ -213,6 +209,7 @@ let g:ale_fixers = {
 \   'go': ['gofmt'],
 \   'graphql': ['prettier'],
 \   'javascript': ['prettier'],
+\   'javascriptreact': ['prettier'],
 \   'json': ['prettier'],
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
@@ -220,6 +217,7 @@ let g:ale_fixers = {
 \   'sh': ['shfmt'],
 \   'sql': ['sqlformat'],
 \   'typescript': ['prettier'],
+\   'typescriptreact': ['prettier'],
 \   'yaml': ['prettier']
 \}
 
@@ -246,6 +244,7 @@ let g:ale_graphql_prettier_options = '--parser graphql'
 
 " Javascript
 let g:ale_javascript_prettier_options = '--single-quote'
+let g:ale_javascriptreact_prettier_options = '--single-quote'
 
 " JSON
 let g:ale_json_prettier_options = '--parser json5'
