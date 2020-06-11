@@ -37,3 +37,11 @@
 # GraphQL Syntax
 - repo: jparise/vim-graphql
   on_ft: graphql
+
+# React / JS / Typescript
+- repo: styled-components/vim-styled-components
+  on_ft:
+    - javascript
+    - javascriptreact
+    - typescript
+    - typescriptreact

@@ -12,6 +12,18 @@ set number                  " Show line numbers
 
 
 " ---------------------------------------------------------
+" Filetype
+" ---------------------------------------------------------
+" https://webpack.js.org/guides/development/#adjusting-your-text-editor
+autocmd FileType css,javascript,javascriptreact,typescript,typescriptreact setlocal backupcopy=yes
+
+augroup FiletypeGroup
+    autocmd!
+    au BufNewFile,BufRead *.tsx set filetype=typescript.jsx
+augroup END
+
+
+" ---------------------------------------------------------
 " Theme
 " ---------------------------------------------------------
 " Enable 256 color terminal
@@ -166,25 +178,26 @@ let g:ale_linters = {
 \   'graphql': ['eslint'],
 \   'javascript': ['eslint'],
 \   'json': ['jsonlint'],
-\   'help': ['proselint'],
-\   'html': ['proselint', 'tidy'],
+\   'help': ['proselint', 'alex'],
+\   'html': ['proselint', 'tidy', 'alex'],
 \   'mail': ['proselint'],
-\   'markdown': ['proselint'],
+\   'markdown': ['proselint', 'alex'],
 \   'python': ['bandit', 'flake8', 'mypy', 'pylint'],
-\   'typescript': ['eslint'],
-\   'typescriptreact': ['eslint'],
 \   'sh': ['shellcheck'],
 \   'sql': ['sqlint'],
+\   'typescript': ['eslint', 'tsserver'],
 \   'vim': ['vint'],
 \   'yaml': ['yamllint']
 \}
 
 " Linter aliases
 let g:ale_linter_aliases = {
-\   'htmldjango': 'html',
-\   'bash': 'sh',
-\   'csh': 'sh',
-\   'zsh': 'sh'
+\   'bash': ['sh'],
+\   'csh': ['sh'],
+\   'htmldjango': ['html'],
+\   'javascriptreact': ['javascript'],
+\   'typescriptreact': ['typescript'],
+\   'zsh': ['sh']
 \}
 
 
@@ -203,11 +216,10 @@ let g:ale_fixers = {
 \   'json': ['prettier'],
 \   'markdown': ['prettier'],
 \   'python': ['isort', 'black'],
-\   'typescript': ['prettier'],
-\   'typescriptreact': ['prettier'],
 \   'scss': ['prettier'],
 \   'sh': ['shfmt'],
 \   'sql': ['sqlformat'],
+\   'typescript': ['prettier'],
 \   'yaml': ['prettier']
 \}
 
