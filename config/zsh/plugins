@@ -29,16 +29,6 @@ antigen bundles <<EOB
     mafredri/zsh-async
 EOB
 
-
-# Prompt
-# ----------------
-# Set theme
-antigen theme "romkatv/powerlevel10k"
-
-# Theme config.
-source "${XDG_CONFIG_HOME}/zsh/theme"
-
-
 # Plugins Config
 # ----------------
 # Prezto
@@ -48,6 +38,7 @@ zstyle ':prezto:*:*' color 'yes'
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
+  'prompt' \
   'environment' \
   'editor'      \
   'history'     \
@@ -57,6 +48,9 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history-substring-search' \
   'autosuggestions'
+
+# Set theme
+zstyle ':prezto:module:prompt' theme 'powerlevel10k'
 
 # Auto convert .... to ../..
 zstyle ':prezto:module:editor' dot-expansion 'yes'
