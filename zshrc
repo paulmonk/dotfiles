@@ -19,7 +19,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source "${XDG_CONFIG_HOME}/zsh/plugins"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/plugins"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -28,20 +28,20 @@ source "${XDG_CONFIG_HOME}/zsh/plugins"
 # ZSH Opts
 #-------------------------
 # When run after plugins some opts can be superseded here.
-source "${XDG_CONFIG_HOME}/zsh/opts"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/opts"
 
 
 # Additional SH Settings
 #-------------------------
-source "${XDG_CONFIG_HOME}/sh/aliases"
-source "${XDG_CONFIG_HOME}/sh/colors"
-source "${XDG_CONFIG_HOME}/sh/gpg-agent"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/sh/aliases"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/sh/colors"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/sh/gpg-agent"
 
 
 # ZSH Settings
 #-------------------------
-source "${XDG_CONFIG_HOME}/zsh/keybindings"
-source "${XDG_CONFIG_HOME}/zsh/aliases"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/keybindings"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/aliases"
 
 
 # ZSH Functions
@@ -50,9 +50,9 @@ source "${XDG_CONFIG_HOME}/zsh/aliases"
 # symlinks) that have the executable bit on (the executable bit is not
 # necessary, but gives you an easy way to stop the autoloading of a
 # particular shell function). $fpath should not be empty for this to work.
-if [[ -d "${XDG_CONFIG_HOME}/zsh/functions" ]]; then
+if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions" ]]; then
   fpath=(
-    ${XDG_CONFIG_HOME}/zsh/functions
+    ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/functions
     ${fpath}
   )
 fi
@@ -65,8 +65,8 @@ unset func
 # ZSH Commands
 # Source all shell command specific config
 #-------------------------
-if [[ -d "${XDG_CONFIG_HOME}/zsh/commands" ]]; then
-  for bin in ${XDG_CONFIG_HOME}/zsh/commands/*; do
+if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/commands" ]]; then
+  for bin in ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/commands/*; do
     cmd=$(basename "${bin}")
     if (( $+commands[$cmd] )) && [[ -s "${bin}" ]]; then
       source "${bin}";
@@ -78,14 +78,14 @@ fi
 
 # ZSH Lazy-Loading
 #-------------------------
-source "${XDG_CONFIG_HOME}/zsh/sandboxd"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/sandboxd"
 
 
 # ZSH Completions
 #-------------------------
-if [[ -d "${XDG_CONFIG_HOME}/zsh/completions" ]]; then
+if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions" ]]; then
   fpath=(
-    ${XDG_CONFIG_HOME}/zsh/completions
+    ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions
     ${fpath}
   )
   if [[ "${KERNEL}" == "Darwin" ]]; then
@@ -98,7 +98,7 @@ fi
 
 # Add heroku completions - Linux.
 if [[ "${KERNEL}" == "Linux" ]]; then
-  HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME}/heroku/autocomplete/zsh_setup"
+  HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME:-$HOME/.cache}/heroku/autocomplete/zsh_setup"
   [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
 fi
 
