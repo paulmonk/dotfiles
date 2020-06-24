@@ -1,0 +1,11 @@
+# jl2json JSON line file to JSON file converter
+#
+# Usage: ./jl2json.sh sample.jsonl sample.json
+#
+if [[ -f "${2}" ]]; then
+  echo "Detected ${2} exists, appending to ${2}"
+  sed '1s/^/[/;$!s/$/,/;$s/$/]/' "${1}" >> "${2}"
+else
+  echo "$2 does not exist, writing to ${2}"
+  sed '1s/^/[/;$!s/$/,/;$s/$/]/' "${1}" > "${2}"
+fi
