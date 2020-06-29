@@ -196,6 +196,10 @@ let g:ale_linter_aliases = {
 \   'zsh': ['sh']
 \}
 
+" Python Pylint Import Resolution Fix
+" See: https://github.com/dense-analysis/ale/issues/208
+let g:ale_python_pylint_options = "--init-hook='import sys; sys.path.append(\".\")'"
+
 
 " Ale: Fixer
 " ------------------------------
