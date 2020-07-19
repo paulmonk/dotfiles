@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 _try_pyenv() {
-    local name='' src=''
+    local name='' src='' python_version=''
     if hash pyenv 2>/dev/null; then
         echo '===> pyenv found, searching virtualenvs...'
         name="neovim"
@@ -10,7 +10,9 @@ _try_pyenv() {
             echo "===> pyenv virtualenv found '${name}'"
         else
             echo "===> pyenv virtualenv not found, creating... '${name}'"
-            pyenv virtualenv neovim
+            python_version="3.7.7"
+            pyenv install "${python_version}"
+            pyenv virtualenv "${python_version}" neovim
         fi
         # Symlink virtualenv for easy access
         src="$(pyenv prefix "${name}")"
@@ -46,6 +48,7 @@ main() {
         echo -e '\nConsider using pyenv with its virtualenv plugin:'
         echo '- https://github.com/pyenv/pyenv'
         echo '- https://github.com/pyenv/pyenv-virtualenv'
+        exit 1
     fi
 }
 
