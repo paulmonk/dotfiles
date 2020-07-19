@@ -47,7 +47,8 @@ if [ "${KERNEL}" = "Darwin" ]; then
 
   # Use homebrew GNU tools instead of system BSD
   IFS=" "
-  for bin in "coreutils findutils gnu-sed"; do
+  _GNU_TOOLS="coreutils findutils gnu-sed"
+  for bin in $_GNU_TOOLS; do
     export PATH="${BREW_PREFIX}/opt/${bin}/libexec/gnubin:${PATH}"
     export MANPATH="${BREW_PREFIX}/opt/${bin}/libexec/gnuman:${MANPATH}"
   done
@@ -56,7 +57,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   # Xcode
   # BUILD Flags
   # Ensure CommandLineTools SDK is used correctly
-  CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
+  CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I/usr/local/include"
   export CFLAGS
 
   # Android

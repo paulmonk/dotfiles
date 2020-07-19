@@ -11,11 +11,11 @@ run-shell "tmux set-environment -g TMUX_VERSION $(tmux -V | cut -c 6-)"
 #--------------------------------------------------------
 # Must set default-command to $SHELL, in order to not source ~/.profile
 # Start a non-login shell
-set-option -g default-command "${SHELL}"
-set-option -g default-shell "${SHELL}"
+set -g default-command "${SHELL}"
+set -g default-shell "${SHELL}"
 
 # Make tmux display things in 256 colors
-set-option -g default-terminal "screen-256color"
+set -g default-terminal "screen-256color"
 
 # Enable true color & italics support
 # https://medium.com/@dubistkomisch/how-to-actually-get-italics-and-true-colour-to-work-in-iterm-tmux-vim-9ebe55ebc2be
@@ -28,39 +28,39 @@ set -g -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 # Update the tmux environment
 # DBUS address needs updating as gpg requires it for pinentry.
 # https://unix.stackexchange.com/questions/396712/pinentry-not-showing-in-tmux
-set-option -g update-environment "DBUS_SESSION_BUS_ADDRESS DISPLAY GPG_TTY SSH_AUTH_SOCK XAUTHORITY"
+set -g update-environment "DBUS_SESSION_BUS_ADDRESS DISPLAY GPG_TTY SSH_AUTH_SOCK XAUTHORITY"
 
 # scrollback buffer size increase
-set-option -g history-limit 50000
+set -g history-limit 50000
 
 # Limit buffer stack
-set-option -g buffer-limit 20
+set -g buffer-limit 20
 
 # Address vim mode switching delay (http://superuser.com/a/252717/65504)
-set-option -s escape-time 0
+set -s escape-time 0
 
 # tmux messages are displayed for 2 seconds
-set-option -g display-time 2000
+set -g display-time 2000
 
 # Allow the arrow key to be used immediately after changing windows, default is 500
-set-option -g repeat-time 300
+set -g repeat-time 300
 
 # focus events enabled for terminals that support them
-set-option -g focus-events on
+set -g focus-events on
 
 # Visual notifications
-set-option -g visual-bell off
-set-option -g visual-activity off
-set-option -g visual-silence off
+set -g visual-bell off
+set -g visual-activity off
+set -g visual-silence off
 
 # This will generate xterm style function key sequences included to indicate
 # modifiers such as Shift, Alt or Ctrl.
 set-window-option -g xterm-keys on
 
 # Turn on window titles
-set-option -g set-titles on
+set -g set-titles on
 
-# set-option window title string
+# set window title string
 #  #H  Hostname of local host
 #  #I  Current window index
 #  #P  Current pane index
@@ -68,8 +68,8 @@ set-option -g set-titles on
 #  #T  Current window title
 #  #W  Current window name
 #  #   A literal ‘#’
-#set-option -g set-titles-string '#(whoami)@#H: #W'
-set-option -g set-titles-string '#T #S:#I.#P #W'
+#set -g set-titles-string '#(whoami)@#H: #W'
+set -g set-titles-string '#T #S:#I.#P #W'
 
 # rename window to reflect current program
 set-window-option -g automatic-rename on
@@ -79,11 +79,11 @@ set-window-option -g monitor-activity on
 set-window-option -g monitor-silence 0
 
 # Start windows and panes from 1
-set-option -g base-index 1
+set -g base-index 1
 set-window-option -g pane-base-index 1
 
 # Renumber windows automatically.
-set-option -g renumber-windows on
+set -g renumber-windows on
 
 # Super useful when using "grouped sessions" and multi-monitor setup
 # Rather than constraining window size to the maximum size of any client
@@ -95,7 +95,7 @@ if-shell -b '[ ! "${KERNEL}" = "Darwin" ]' \
 
 # Allow copy/paste on macOS. This was fixed in tmux 2.6
 if-shell -b '[ "${KERNEL}" = "Darwin" ] && [ "$(echo "${TMUX_VERSION} < 2.6" | bc)" = 1 ]' \
-  "set-option -g default-command 'reattach-to-user-namespace ${SHELL}'"
+  "set -g default-command 'reattach-to-user-namespace ${SHELL}'"
 
 
 #--------------------------------------------------------
@@ -112,7 +112,7 @@ set-hook -g session-closed "run-shell ${XDG_CONFIG_HOME}/tmux/bin/renumber-sessi
 # set ` (tic) as the default prefix key combination
 # and unbind C-b to free it up
 unbind C-b
-set-option -g prefix `
+set -g prefix `
 
 # use send-prefix to pass ` (tic) through to application
 bind-key ` send-prefix
@@ -231,7 +231,7 @@ bind @ command-prompt -p session "attach-session -t '%%'"
 # Mouse (tmux >= 2.1)
 #--------------------------------------------------------
 # Allows scrolling and selecting in copy-mode
-set-option -g -q mouse on
+set -g -q mouse on
 
 # Enable mouse copy-mode scrolling
 bind-key -T root WheelUpPane   if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; copy-mode -e; send-keys -M"
@@ -251,20 +251,20 @@ if-shell -b '[ "${KERNEL}" = "Darwin" ]' \
   "bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel 'pbcopy'"
 
 # Toggle mouse on/off
-bind-key m set-option -g mouse on \; display 'Mouse: ON'
-bind-key M set-option -g mouse off \; display 'Mouse: OFF'
+bind-key m set -g mouse on \; display 'Mouse: ON'
+bind-key M set -g mouse off \; display 'Mouse: OFF'
 
 #--------------------------------------------------------
 # Status
 #--------------------------------------------------------
-set-option -g status on
-set-option -g status-position top
-set-option -g status-justify left
+set -g status on
+set -g status-position top
+set -g status-justify left
 
-set-option -g status-keys vi
+set -g status-keys vi
 
 # refresh 'status-left' and 'status-right' more often
-set-option -g status-interval 3
+set -g status-interval 3
 
 #---------------------------------------
 # Theme
@@ -286,14 +286,14 @@ set-option -g status-interval 3
 # cyan      cyan
 # green     green
 #---------------------------------------
-set-option -g status-style bg=black,fg=yellow,none
+set -g status-style bg=black,fg=yellow,none
 
-set-option -g status-left-length 15
-set-option -g status-left '#{?client_prefix,#[fg=white],#[bg=brightblack]} #S '
+set -g status-left-length 15
+set -g status-left '#{?client_prefix,#[fg=white],#[bg=brightblack]} #S '
 
-set-option -g status-right-style fg=black,bg=brightblue,none
-set-option -g status-right-length 83
-set-option -g status-right "#[fg=brightblack,bg=brightyellow] %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
+set -g status-right-style fg=black,bg=brightblue,none
+set -g status-right-length 83
+set -g status-right "#[fg=brightblack,bg=brightyellow] %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
 
 set-window-option -g window-style ""
 set-window-option -g window-active-style ""
@@ -306,15 +306,15 @@ set-window-option -g window-status-current-style fg=brightred,bg=brightblack,bri
 set-window-option -g window-status-current-format "#[fg=white,bg=blue] #I#[fg=white,bg=blue]#F#[fg=white,bg=blue] #W "
 
 # pane border
-set-option -g pane-border-style fg=black
-set-option -g pane-active-border-style fg=brightgreen
+set -g pane-border-style fg=black
+set -g pane-active-border-style fg=brightgreen
 
 # message text
-set-option -g message-style bg=black,fg=brightred
+set -g message-style bg=black,fg=brightred
 
 # pane number display
-set-option -g display-panes-active-colour blue
-set-option -g display-panes-colour brightred
+set -g display-panes-active-colour blue
+set -g display-panes-colour brightred
 
 # clock
 set-window-option -g clock-mode-colour green
@@ -326,36 +326,43 @@ set-window-option -g window-status-bell-style fg=black,bg=red
 # Plugins
 #--------------------------------------------------------
 # Config extrakto
-set-option -g @extrakto_grab_area '0'
-set-option -g @extrakto_split_size '12'
+set -g @extrakto_key 'tab'
+set -g @extrakto_grab_area '0'
+set -g @extrakto_split_size '12'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/extrakto/extrakto.tmux'
 
 # Config better-mouse
-set-option -g @scroll-speed-num-lines-per-scroll '1'
-set-option -g @scroll-without-changing-pane 'on'
+set -g @scroll-speed-num-lines-per-scroll '1'
+set -g @scroll-without-changing-pane 'on'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/better-mouse/scroll_copy_mode.tmux'
 
 # Config fingers
 unbind-key f
-set-option -g @fingers-key f
-set-option -g @fingers-compact-hints 0
+set -g @fingers-key f
+set -g @fingers-ctrl-action ':open:'
+set -g @fingers-shift-action ':paste:'
+set -g @fingers-hint-position 'right'
+set -g @fingers-hint-format '#[fg=yellow,bold]%s'
+set -g @fingers-highlight-format '#[fg=blue,bold,dim]%s'
+set -g @fingers-selected-hint-format '#[fg=green,bold]%s'
+set -g @fingers-selected-highlight-format '#[fg=red,bold]%s'
 if-shell '[ "${KERNEL}" = "Darwin" ]' \
-  "set-option -g @fingers-copy-command 'pbcopy'"
+  "set -g @fingers-copy-command 'pbcopy'"
 if-shell '[ "${KERNEL}" = "Linux" ]' \
-  "set-option -g @fingers-copy-command 'xsel -ib'"
+  "set -g @fingers-copy-command 'xsel -ib'"
 run-shell '${XDG_DATA_HOME}/tmux/plugins/fingers/tmux-fingers.tmux'
 
 # Config resurrect
 # Only the following variables and special chars are allowed: $HOME, $HOSTNAME, and ~.
-set-option -g @resurrect-capture-pane-contents 'on'
-set-option -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
-set-option -g @resurrect-strategy-vim 'off'
-set-option -g @resurrect-strategy-nvim 'off'
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-dir '$HOME/.local/share/tmux/resurrect-sessions'
+set -g @resurrect-strategy-vim 'off'
+set -g @resurrect-strategy-nvim 'off'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
 # Config continuum
-set-option -g @continuum-save-interval '15'
-set-option -g @continuum-restore 'on'
+set -g @continuum-save-interval '15'
+set -g @continuum-restore 'on'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/continuum/continuum.tmux'
 
 #  vim: set ft=tmux ts=2 sw=2 tw=80 noet :

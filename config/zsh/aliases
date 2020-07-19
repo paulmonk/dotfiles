@@ -107,7 +107,6 @@ elif (( $+commands[trash] )); then
   alias rm="trash -rf"
 fi
 
-
 # Alias cat to be bat.
 (( $+commands[bat] )) && alias cat=bat
 
@@ -121,17 +120,16 @@ fi
 # ls alias is set in colors sh config.
 # If ls is set to exa. Some of these aliases will not work.
 # TODO: add checks for exa.
-alias sl='ls' # I often screw this up.
 if (( $+commands[exa] )); then
-  alias ll="ls -l"
+  alias ll="${aliases[ls]:-ls} -l"
   alias la="ll"
   alias lr="ll -R"                     # recursively.
   alias lk="ll -s=size"                # Sorted by size
   alias lm="ll -s=modified"            # Sorted by modified date
   alias lc="ll --created -s=created"   # Sorted by created date
 else
-  alias l="ls -1A"           # Lists in one column, hidden files.
-  alias ll="ls -lh"          # Lists human readable sizes.
+  alias l="${aliases[ls]:-ls} -1A"           # Lists in one column, hidden files.
+  alias ll="${aliases[ls]:-ls} -lh"          # Lists human readable sizes.
   alias lr="ll -R"           # Lists human readable sizes, recursively.
   alias la="ll -A"           # Lists human readable sizes, hidden files.
   alias lm='la | "${PAGER}"' # Lists human readable sizes, hidden files through pager.
@@ -241,4 +239,13 @@ if [[ "${KERNEL}" == "Darwin" ]]; then
 
   # No `sha1sum`, so use `shasum` as a fallback
   (( $+commands[sha1sum] )) || alias sha1sum="shasum"
+else
+  # open, pbcopy and pbpaste on linux
+  if (( $+commands[xclip] )); then
+    alias pbcopy="xclip -selection clipboard"
+    alias pbpaste="xclip -selection clipboard -o"
+  elif (( $+commands[xsel] )); then
+    alias pbcopy="xsel --clipboard --input"
+    alias pbpaste="xsel --clipboard --output"
+  fi
 fi
