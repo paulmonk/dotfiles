@@ -40,9 +40,6 @@ help:
 # Globals
 #------------------------------
 KERNEL := $(shell uname -s)
-UID := $(shell id -u)
-GROUP := $(shell id -g -n)
-HOSTNAME := $(shell hostname)
 
 XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_CACHE_HOME ?= $(HOME)/.cache
@@ -54,28 +51,20 @@ XDG_DATA_HOME ?= $(HOME)/.local/share
 #------------------------------
 # Use a different prefix on macOS
 ifeq ($(KERNEL), Darwin)
-BREW_PREFIX ?= $(HOME)/Library/Homebrew
-PREFIX ?= $(BREW_PREFIX)
+BREW_PREFIX := /usr/local/homebrew
 else
-BREW_PREFIX ?= $(XDG_DATA_HOME)/Homebrew
-PREFIX ?= "/usr"
+BREW_PREFIX := $(XDG_DATA_HOME)/homebrew
 endif
 
 # Update PATH to include brew binaries. Subshells can now use just 'brew'.
-PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
+PATH := $(BREW_PREFIX)/bin:/$(BREW_PREFIX)/sbin:$(PATH)
+export PATH
 
-# Ensure prefix exists.
-$(BREW_PREFIX):
-	mkdir -vp $@
+$(BREW_PREFIX)/bin/brew:
+	mkdir -vp $(BREW_PREFIX) && \
+	curl -L https://github.com/Homebrew/brew/tarball/master | \
+		tar xz --strip 1 -C $(BREW_PREFIX) && \
+			$(BREW_PREFIX)/bin/brew update
 
-# Install Homebrew
-$(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
-	curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(BREW_PREFIX) && $@ update
-
-# Brewfile
-.PHONY: brew-bundle
-brew-bundle: Brewfile | $(BREW_PREFIX)/bin/brew
-	brew bundle
-
-
-#  vim: set ts=8 sw=8 tw=80 noet :
+.PHONY: install
+install: $(BREW_PREFIX)/bin/brew
