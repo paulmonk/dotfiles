@@ -46,13 +46,18 @@ if [ "${KERNEL}" = "Darwin" ]; then
   [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -m 0700 "${XDG_RUNTIME_DIR}"
 
   # Use homebrew GNU tools instead of system BSD
-  IFS=" "
-  _GNU_TOOLS="coreutils findutils gnu-sed"
-  for bin in $_GNU_TOOLS; do
-    export PATH="${BREW_PREFIX}/opt/${bin}/libexec/gnubin:${PATH}"
-    export MANPATH="${BREW_PREFIX}/opt/${bin}/libexec/gnuman:${MANPATH}"
-  done
-  unset bin
+  # =============
+  # Coreutils
+  export PATH="${BREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
+  export MANPATH="${BREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
+
+  # Findutils
+  export PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:${PATH}"
+  export MANPATH="${BREW_PREFIX}/opt/findutils/libexec/gnuman:${MANPATH}"
+
+  # Sed
+  export PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:${PATH}"
+  export MANPATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnuman:${MANPATH}"
 
   # Xcode
   # BUILD Flags
