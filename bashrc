@@ -49,3 +49,4 @@ PROMPT_COMMAND='history -a; echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 # Source bash completions
 [[ -s "${XDG_CONFIG_HOME}/bash/completions" ]] && source "${XDG_CONFIG_HOME}/bash/completions"
+[[ -s "${XDG_CONFIG_HOME}/bash/dbt-completions" ]] && source "${XDG_CONFIG_HOME}/bash/dbt-completions"
