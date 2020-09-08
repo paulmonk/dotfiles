@@ -27,6 +27,7 @@ augroup filetypedetect "{{{
 	autocmd BufNewFile,BufRead Jenkinsfile*         setfiletype groovy
 	autocmd BufNewFile,BufRead Tmuxfile,tmux/config setfiletype tmux
 	autocmd BufNewFile,BufRead Brewfile             setfiletype ruby
+	autocmd BufNewFile,BufRead *.lkml             setfiletype sql
 
 augroup END
 " }}}
