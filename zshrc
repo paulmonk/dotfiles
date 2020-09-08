@@ -86,14 +86,9 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/sandboxd"
 if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions" ]]; then
   fpath=(
     ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions
+    ${BREW_PREFIX}/share/zsh/site-functions
     ${fpath}
   )
-  if [[ "${KERNEL}" == "Darwin" ]]; then
-    fpath=(
-      ${PREFIX}/share/zsh/site-functions
-      ${fpath}
-    )
-  fi
 fi
 
 # Add heroku completions - Linux.
