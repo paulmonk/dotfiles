@@ -101,8 +101,12 @@ fi
 autoload -Uz +X compinit && compinit -i -d "${ZCOMPDUMP}"
 autoload -Uz +X bashcompinit && bashcompinit
 
-# Additonal Bash completions
+# Additional Bash completions
+# =======
+# dbt
 source "${XDG_CONFIG_HOME:-$HOME/.config}/bash/dbt-completions"
+# asdf
+source "${HOME}/.asdf/completions/asdf.bash"
 
 
 # ZSH - Source any local overrides
