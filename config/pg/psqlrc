@@ -58,6 +58,7 @@
 \echo '\t\t\t:uselesscol\t-- Useless columns'
 \echo '\t\t\t:tablecachehr\t-- Table Cache Hit Ratio'
 \echo '\t\t\t:uptime\t\t-- Server uptime'
+\echo '\t\t\t:waltime\t-- WAL Log Last Replay Timestamp'
 \echo '\t\t\t:menu\t\t-- Help Menu'
 \echo '\t\t\t\\h\t\t-- Help with SQL commands'
 \echo '\t\t\t\\?\t\t-- Help with psql commands\n'
@@ -92,6 +93,8 @@
 \set uptime 'SELECT now() - pg_postmaster_start_time() AS uptime;'
 
 \set tablecachehr 'SELECT sum(heap_blks_read) as heap_read, sum(heap_blks_hit) as heap_hit, sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio FROM pg_statio_user_tables;'
+
+\set waltime 'select pg_last_xact_replay_timestamp();'
 
 -- Development queries:
 
