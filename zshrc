@@ -106,7 +106,7 @@ autoload -Uz +X bashcompinit && bashcompinit
 # dbt
 source "${XDG_CONFIG_HOME:-$HOME/.config}/bash/dbt-completions"
 # asdf
-source "${HOME}/.asdf/completions/asdf.bash"
+source "${ASDF_DATA_DIR:-$HOME/.asdf}/completions/asdf.bash"
 
 
 # ZSH - Source any local overrides
