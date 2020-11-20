@@ -27,4 +27,6 @@ if (( $+commands[pyenv] )); then
 fi
 
 # Asdf
-source "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh"
+if [[ -s "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh" ]]; then
+  source "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh"
+fi
