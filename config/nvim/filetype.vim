@@ -7,6 +7,8 @@ endif
 
 augroup filetypedetect "{{{
 
+	autocmd BufNewFile,BufRead */.config/git/users/* setfiletype gitconfig
+
 	autocmd BufNewFile,BufRead */playbooks/*.{yml,yaml} setfiletype yaml.ansible
 	autocmd BufNewFile,BufRead */inventory/*            setfiletype ansible_hosts
 	" autocmd BufNewFile,BufRead */templates/*.{yaml,tpl} setfiletype yaml.gotexttmpl
@@ -27,7 +29,6 @@ augroup filetypedetect "{{{
 	autocmd BufNewFile,BufRead Jenkinsfile*         setfiletype groovy
 	autocmd BufNewFile,BufRead Tmuxfile,tmux/config setfiletype tmux
 	autocmd BufNewFile,BufRead Brewfile             setfiletype ruby
-	autocmd BufNewFile,BufRead *.lkml             setfiletype sql
 
 augroup END
 " }}}

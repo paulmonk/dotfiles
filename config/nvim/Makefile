@@ -1,72 +1,46 @@
-# Warn me when I use an undefined variable so I catch misspelled variables
-MAKEFLAGS               += --warn-undefined-variables
-SHELL                   := /usr/bin/env bash
-
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-# The -c flag is in the default value of .SHELLFLAGS and we must preserve it,
-# because it is how make passes the script to be executed to bash.
-.SHELLFLAGS             := -euo pipefail -c
-
-.SUFFIXES:
-
-.DEFAULT_GOAL           := install
-
-#------------------------------
-# Globals
-#------------------------------
-KERNEL := $(shell uname -s)
+SHELL = /bin/bash
+vim := $(if $(shell which nvim),nvim,$(shell which vim))
+vim_version := '${shell $(vim) --version}'
 XDG_CACHE_HOME ?= $(HOME)/.cache
 
-VIM_BIN := $(if $(shell command -v nvim),nvim,$(shell command -v vim))
-VIM_VERSION := '${shell $(VIM_BIN) --version}'
-VIM_CACHEDIR ?= $(XDG_CACHE_HOME)/vim
-VIM_VENV ?= $(VIM_CACHEDIR)/venv
+default: install
 
+install: create-dirs update-plugins
 
-#------------------------------
-# Targets
-#------------------------------
-.PHONY: venv
-venv:
-ifeq ('$(VIM_BIN)','nvim')
-	bash $(CURDIR)/venv.sh
-else
-	$(info .. Neovim was not found. Not attempting to create a venv.)
-endif
+update: update-repo update-plugins
 
-.PHONY: install
-install: venv
-	@mkdir -vp "$(VIM_CACHEDIR)/"{backup,session,swap,tags,undo}; \
-	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#update() | finally | echomsg '' | qall! | endtry"
-
-.PHONY: update
-update: venv
-	$(VIM_BIN) -V1 -es -i NONE -N -u config/init.vim -c "try | call dein#clear_state() | call dein#update() | finally | qall! | endtry"
-
-.PHONY: upgrade
 upgrade: update
 
-.PHONY: uninstall
-uninstall:
-	rm -rf "$(VIM_VENV)"
-	rm -rf "$(VIM_CACHEDIR)"
+create-dirs:
+	@mkdir -vp "$(XDG_CACHE_HOME)/vim/"{backup,session,swap,tags,undo}
 
-.PHONY: test
+update-repo:
+	git pull --ff --ff-only
+
+update-plugins:
+	$(vim) -V1 -es -i NONE -N --noplugin -u config/init.vim \
+		-c "try | call dein#clear_state() | call dein#update() | finally | messages | qall! | endtry"
+
+uninstall:
+	rm -rf "$(XDG_CACHE_HOME)/vim"
+
 test:
-ifeq ('$(VIM_BIN)','nvim')
-	$(info Testing NVIM 0.4+...)
-	$(if $(shell echo "$(VIM_VERSION)" | egrep "NVIM v0\.[4-9]"),\
+ifeq ('$(vim)','nvim')
+	$(info Testing NVIM 0.5+...)
+	$(if $(shell echo "$(vim_version)" | egrep "NVIM v0\.[5-9]"),\
 		$(info OK),\
-		$(error .. You need Neovim 0.4.x or newer))
+		$(error   .. You need Neovim 0.5.x or newer))
 else
 	$(info Testing VIM 8.x...)
-	$(if $(shell echo "$(VIM_VERSION)" | egrep "VIM .* 8\."),\
+	$(if $(shell echo "$(vim_version)" | egrep "VIM .* 8\."),\
 		$(info OK),\
-		$(error .. You need Vim 8.x or newer))
+		$(error   .. You need Vim 8.x))
 
 	$(info Testing +python3... )
-	$(if $(findstring +python3,$(VIM_VERSION)),\
+	$(if $(findstring +python3,$(vim_version)),\
 		$(info OK),\
-		$(error .. MISSING! Install Vim 8.x or newer, with "+python3" enabled))
+		$(error .. MISSING! Install Vim 8.x with "+python3" enabled))
 endif
 	@echo All tests passed, hooray!
+
+.PHONY: install create-dirs update-repo update-plugins uninstall test
