@@ -79,6 +79,9 @@
     # Use `hexdump` to diff binary files
     textconv = hexdump -v -C
 
+[diff "nodiff"]
+    command = /usr/bin/true
+
 [fetch]
     # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
     fsckObjects = true
