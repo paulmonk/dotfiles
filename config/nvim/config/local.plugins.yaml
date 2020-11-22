@@ -57,3 +57,9 @@
     - javascriptreact
     - typescript
     - typescriptreact
+
+# Ale linter/fixer
+# Disable LSP config as this is handled by vim-lsp
+- repo: dense-analysis/ale
+  hook_source: |
+    let g:ale_disable_lsp = 1
