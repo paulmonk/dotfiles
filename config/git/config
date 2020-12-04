@@ -80,7 +80,7 @@
     textconv = hexdump -v -C
 
 [diff "nodiff"]
-    command = /usr/bin/true
+    command = /usr/bin/true || /bin/true
 
 [fetch]
     # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
