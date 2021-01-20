@@ -60,11 +60,22 @@ endif
 PATH := $(BREW_PREFIX)/bin:/$(BREW_PREFIX)/sbin:$(PATH)
 export PATH
 
+# Grant permissions needed on macOS.
+ifeq ($(KERNEL), Darwin)
 $(BREW_PREFIX)/bin/brew:
+	sudo chown -R $${LOGNAME}:admin $(dir $(BREW_PREFIX))/* && \
+	sudo chmod -R g+rwx $(dir $(BREW_PREFIX))/* && \
 	mkdir -vp $(BREW_PREFIX) && \
-	curl -L https://github.com/Homebrew/brew/tarball/master | \
+		curl -L https://github.com/Homebrew/brew/tarball/master | \
 		tar xz --strip 1 -C $(BREW_PREFIX) && \
 			$(BREW_PREFIX)/bin/brew update
+else
+$(BREW_PREFIX)/bin/brew:
+	mkdir -vp $(BREW_PREFIX) && \
+		curl -L https://github.com/Homebrew/brew/tarball/master | \
+		tar xz --strip 1 -C $(BREW_PREFIX) && \
+			$(BREW_PREFIX)/bin/brew update
+endif
 
 .PHONY: install
 install: $(BREW_PREFIX)/bin/brew
