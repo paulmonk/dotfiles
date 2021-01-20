@@ -205,11 +205,12 @@ cask "fantastical"
 cask "karabiner-elements"
 cask "osxfuse"
 cask "safari-technology-preview"
+cask "signal"
 cask "sonos"
 cask "veracrypt"
 cask "virtualbox"
 cask "virtualbox-extension-pack"
-cask "zoomus"
+cask "zoom"
 mas "Amphetamine", id: 937984704
 mas "Bear", id: 1091189122
 mas "Key Codes", id: 414568915
