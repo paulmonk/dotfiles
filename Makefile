@@ -63,9 +63,9 @@ export PATH
 # Grant permissions needed on macOS.
 ifeq ($(KERNEL), Darwin)
 $(BREW_PREFIX)/bin/brew:
-	sudo chown -R $${LOGNAME}:admin $(dir $(BREW_PREFIX))/* && \
-	sudo chmod -R g+rwx $(dir $(BREW_PREFIX))/* && \
-	mkdir -vp $(BREW_PREFIX) && \
+	sudo mkdir -vp $(BREW_PREFIX) && \
+	sudo chown -R "$${LOGNAME}":admin $(BREW_PREFIX) && \
+	sudo chmod -R g+rwx $(BREW_PREFIX) && \
 		curl -L https://github.com/Homebrew/brew/tarball/master | \
 		tar xz --strip 1 -C $(BREW_PREFIX) && \
 			$(BREW_PREFIX)/bin/brew update
