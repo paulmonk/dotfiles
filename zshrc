@@ -91,6 +91,12 @@ if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions" ]]; then
   )
 fi
 
+# macOS add gcloud completions
+if [[ "${KERNEL}" == "Darwin" ]]; then
+  GCLOUD_COMPLETIONS_SETUP_PATH="${BREW_PREFIX}/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+  [[ -f "${GCLOUD_COMPLETIONS_SETUP_PATH}" ]] && source "${GCLOUD_COMPLETIONS_SETUP_PATH}"
+fi
+
 # Add heroku completions - Linux.
 if [[ "${KERNEL}" == "Linux" ]]; then
   HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME:-$HOME/.cache}/heroku/autocomplete/zsh_setup"
@@ -105,6 +111,7 @@ autoload -Uz +X bashcompinit && bashcompinit
 # =======
 # dbt
 source "${XDG_CONFIG_HOME:-$HOME/.config}/bash/dbt-completions"
+
 # asdf
 source "${ASDF_DATA_DIR:-$HOME/.asdf}/completions/asdf.bash"
 

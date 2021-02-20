@@ -45,9 +45,16 @@ XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_CACHE_HOME ?= $(HOME)/.cache
 XDG_DATA_HOME ?= $(HOME)/.local/share
 
+# Update PATH to include brew binaries. Subshells can now use just 'brew'.
+PATH := $(BREW_PREFIX)/bin:/$(BREW_PREFIX)/sbin:$(PATH)
+
+export PATH
+export XDG_CACHE_HOME
+export XDG_CONFIG_HOME
+export XDG_DATA_HOME
 
 #------------------------------
-# Homebrew
+# Targets
 #------------------------------
 # Use a different prefix on macOS
 ifeq ($(KERNEL), Darwin)
@@ -56,26 +63,27 @@ else
 BREW_PREFIX := $(XDG_DATA_HOME)/homebrew
 endif
 
-# Update PATH to include brew binaries. Subshells can now use just 'brew'.
-PATH := $(BREW_PREFIX)/bin:/$(BREW_PREFIX)/sbin:$(PATH)
-export PATH
-
+# Ensure prefix exists.
 # Grant permissions needed on macOS.
 ifeq ($(KERNEL), Darwin)
-$(BREW_PREFIX)/bin/brew:
+$(BREW_PREFIX):
 	sudo mkdir -vp $(BREW_PREFIX) && \
 	sudo chown -R "$${LOGNAME}":admin $(BREW_PREFIX) && \
-	sudo chmod -R g+rwx $(BREW_PREFIX) && \
-		curl -L https://github.com/Homebrew/brew/tarball/master | \
-		tar xz --strip 1 -C $(BREW_PREFIX) && \
-			$(BREW_PREFIX)/bin/brew update
+	sudo chmod -R g+rwx $(BREW_PREFIX)
 else
-$(BREW_PREFIX)/bin/brew:
-	mkdir -vp $(BREW_PREFIX) && \
-		curl -L https://github.com/Homebrew/brew/tarball/master | \
-		tar xz --strip 1 -C $(BREW_PREFIX) && \
-			$(BREW_PREFIX)/bin/brew update
+$(BREW_PREFIX):
+	mkdir -vp $@
 endif
 
-.PHONY: install
-install: $(BREW_PREFIX)/bin/brew
+# Update PATH to include brew binaries. Subshells can now use just 'brew'.
+PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
+
+# Install Homebrew
+$(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
+	curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(BREW_PREFIX) && $@ update
+
+.PHONY: brew-install
+brew-install: $(BREW_PREFIX)/bin/brew
+
+.PHONY: brew-bundle
+brew-bundle: $(BREW_PREFIX)/bin/brew bundle --verbose

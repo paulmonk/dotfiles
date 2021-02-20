@@ -18,6 +18,12 @@ if [[ -s "${HOME}/.config/sh/exports" ]]; then
   export ZDOTDIR="${HOME}"
 fi
 
+# macOS add gcloud CLI to PATH
+if [[ "${KERNEL}" == "Darwin" ]]; then
+  GCLOUD_SETUP_PATH="${BREW_PREFIX}/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+  [[ -f "${GCLOUD_SETUP_PATH}" ]] && source "${GCLOUD_SETUP_PATH}"
+fi
+
 # Autoloads
 # ============
 # Pyenv

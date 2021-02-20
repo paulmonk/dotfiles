@@ -59,6 +59,8 @@ if [ "${KERNEL}" = "Darwin" ]; then
   export PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:${PATH}"
   export MANPATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnuman:${MANPATH}"
 
+  # Use homebrew tools for build support
+  # =============
   # Openssl
   export PATH="${BREW_PREFIX}/opt/openssl/bin:${PATH}"
   export LDFLAGS="-L${BREW_PREFIX}/opt/openssl/lib ${LDFLAGS}"
