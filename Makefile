@@ -59,6 +59,10 @@ else
 BREW_PREFIX := $(XDG_DATA_HOME)/homebrew
 endif
 
+# Update PATH to include brew binaries. Subshells can now use just 'brew'.
+PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
+export PATH
+
 # Ensure prefix exists.
 # Grant permissions needed on macOS.
 ifeq ($(KERNEL), Darwin)
@@ -71,10 +75,6 @@ $(BREW_PREFIX):
 	mkdir -vp $@
 endif
 
-# Update PATH to include brew binaries. Subshells can now use just 'brew'.
-PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
-export PATH
-
 # Install Homebrew
 $(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
 	curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(BREW_PREFIX) && $@ update
@@ -83,7 +83,8 @@ $(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
 brew-install: $(BREW_PREFIX)/bin/brew
 
 .PHONY: brew-bundle
-brew-bundle: $(BREW_PREFIX)/bin/brew bundle --verbose
+brew-bundle: brew-install
+	$(BREW_PREFIX)/bin/brew bundle --verbose
 
 # rcup options used:
 # -d directory to install dotfiles from
