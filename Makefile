@@ -45,10 +45,6 @@ XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_CACHE_HOME ?= $(HOME)/.cache
 XDG_DATA_HOME ?= $(HOME)/.local/share
 
-# Update PATH to include brew binaries. Subshells can now use just 'brew'.
-PATH := $(BREW_PREFIX)/bin:/$(BREW_PREFIX)/sbin:$(PATH)
-
-export PATH
 export XDG_CACHE_HOME
 export XDG_CONFIG_HOME
 export XDG_DATA_HOME
@@ -77,6 +73,7 @@ endif
 
 # Update PATH to include brew binaries. Subshells can now use just 'brew'.
 PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
+export PATH
 
 # Install Homebrew
 $(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
@@ -87,3 +84,12 @@ brew-install: $(BREW_PREFIX)/bin/brew
 
 .PHONY: brew-bundle
 brew-bundle: $(BREW_PREFIX)/bin/brew bundle --verbose
+
+# rcup options used:
+# -d directory to install dotfiles from
+# -f Force RC file creation
+# -k Run pre and post hooks
+# -x Do not install files which match the exclude pattern
+.PHONY: install
+install: brew-bundle
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -x
