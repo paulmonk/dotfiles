@@ -1,1 +1,1 @@
-EXCLUDES="README.md LICENSE Makefile Brewfile Brewfile.lock.json"
+EXCLUDES="README.md LICENSE Brewfile Brewfile.lock.json"

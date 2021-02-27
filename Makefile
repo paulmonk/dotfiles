@@ -90,7 +90,6 @@ brew-bundle: brew-install
 # -d directory to install dotfiles from
 # -f Force RC file creation
 # -k Run pre and post hooks
-# -x Do not install files which match the exclude pattern
 .PHONY: install
 install: brew-bundle
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -x
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f
