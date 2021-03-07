@@ -26,13 +26,15 @@ fi
 
 # Autoloads
 # ============
-# Pyenv
-if (( $+commands[pyenv] )); then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
-
 # Asdf
-if [[ -s "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh" ]]; then
-  source "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh"
+if (( $+commands[asdf] )); then
+  if [[ -s "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh" ]]; then
+    source "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh"
+  fi
+else
+  # Pyenv
+  if (( $+commands[pyenv] )); then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
