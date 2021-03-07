@@ -196,6 +196,7 @@
     cl = clone --recursive
     cm = commit -vm
     co = checkout
+    cv= commit --no-verify
     cpc = cherry-pick
     d = diff
     dh = diff HEAD
