@@ -12,7 +12,6 @@ export XDG_DATA_HOME="${HOME}/.local/share"
 KERNEL="$(uname -s)"
 export KERNEL
 
-
 # Homebrew opts
 # Abort installation of cask if no checksum is defined
 export HOMEBREW_CASK_OPTS="--require-sha"
@@ -38,7 +37,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
   # Prefix
-  export BREW_PREFIX="/usr/local/homebrew"
+  export BREW_PREFIX="/usr/local"
   export PREFIX="${BREW_PREFIX}"
 
   # XDG
@@ -94,7 +93,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   CPU_CORES="$(sysctl -n hw.ncpu)"
 else
   # Prefix
-  export BREW_PREFIX="${XDG_DATA_HOME}/Homebrew"
+  export BREW_PREFIX="/home/linuxbrew/.linuxbrew"
   export PREFIX="/usr"
 
   # Set defaults

@@ -54,30 +54,23 @@ export XDG_DATA_HOME
 #------------------------------
 # Use a different prefix on macOS
 ifeq ($(KERNEL), Darwin)
-BREW_PREFIX := /usr/local/homebrew
+BREW_PREFIX := /usr/local
 else
-BREW_PREFIX := $(XDG_DATA_HOME)/homebrew
+BREW_PREFIX := /home/linuxbrew/.linuxbrew
 endif
 
 # Update PATH to include brew binaries. Subshells can now use just 'brew'.
 PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
 export PATH
 
-# Ensure prefix exists.
-# Grant permissions needed on macOS.
-ifeq ($(KERNEL), Darwin)
-$(BREW_PREFIX):
-	sudo mkdir -vp $(BREW_PREFIX) && \
-	sudo chown -R "$${LOGNAME}":admin $(BREW_PREFIX) && \
-	sudo chmod -R g+rwx $(BREW_PREFIX)
-else
-$(BREW_PREFIX):
-	mkdir -vp $@
-endif
-
 # Install Homebrew
-$(BREW_PREFIX)/bin/brew: | $(BREW_PREFIX)
-	curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(BREW_PREFIX) && $@ update
+$(BREW_PREFIX)/bin/brew:
+	@read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
+	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
+	   [[ "$$0" == "$${BASH_SOURCE}" ]] && exit 1 || return 1; \
+	fi; \
+	echo; \
+	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 .PHONY: brew-install
 brew-install: $(BREW_PREFIX)/bin/brew
