@@ -64,6 +64,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   export PATH="${BREW_PREFIX}/opt/openssl/bin:${PATH}"
   export LDFLAGS="-L${BREW_PREFIX}/opt/openssl/lib ${LDFLAGS}"
   export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl/include ${CPPFLAGS}"
+  export OPENSSL_ROOT_DIR="${BREW_PREFIX}/opt/openssl/"
 
   # Zlib
   export LDFLAGS="-L${BREW_PREFIX}/opt/zlib/lib ${LDFLAGS}"
