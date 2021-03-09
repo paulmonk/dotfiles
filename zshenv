@@ -28,8 +28,8 @@ fi
 # ============
 # Asdf
 if (( $+commands[asdf] )); then
-  if [[ -s "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh" ]]; then
-    source "${ASDF_DATA_DIR:-$HOME/.asdf}/asdf.sh"
+  if [[ -s "${ASDF_DATA_DIR:-$BREW_PREFIX/opt/asdf}/asdf.sh" ]]; then
+    source "${ASDF_DATA_DIR:-$BREW_PREFIX/opt/asdf}/asdf.sh"
   fi
 else
   # Pyenv
