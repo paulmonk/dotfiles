@@ -21,5 +21,3 @@ fi
 if [ -z "${DISPLAY}" ] && [ "$(tty)" = "/dev/tty1" ]; then
   exec startx
 fi
-
-#  vim: set ft=sh ts=2 sw=2 tw=80 et :

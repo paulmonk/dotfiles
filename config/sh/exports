@@ -60,24 +60,34 @@ if [ "${KERNEL}" = "Darwin" ]; then
 
   # Use homebrew tools for build support
   # =============
-  # Openssl
-  export PATH="${BREW_PREFIX}/opt/openssl/bin:${PATH}"
-  export LDFLAGS="-L${BREW_PREFIX}/opt/openssl/lib ${LDFLAGS}"
-  export CPPFLAGS="-I${BREW_PREFIX}/opt/openssl/include ${CPPFLAGS}"
-  export OPENSSL_ROOT_DIR="${BREW_PREFIX}/opt/openssl/"
-
-  # Zlib
-  export LDFLAGS="-L${BREW_PREFIX}/opt/zlib/lib ${LDFLAGS}"
-  export CPPFLAGS="-I${BREW_PREFIX}/opt/zlib/include ${CPPFLAGS}"
-
   # Memcached
   export LIBMEMCACHED="${BREW_PREFIX}"
+
+  # Openssl
+  export PATH="${BREW_PREFIX}/opt/openssl@1.1/bin:${PATH}"
+  export OPENSSL_ROOT_DIR="${BREW_PREFIX}/opt/openssl@1.1/"
+  CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@1.1/include ${CPPFLAGS}"
+  LDFLAGS="-L${BREW_PREFIX}/opt/openssl@1.1/lib ${LDFLAGS}"
+
+  # Zlib
+  CPPFLAGS="-I${BREW_PREFIX}/opt/zlib/include ${CPPFLAGS}"
+  LDFLAGS="-L${BREW_PREFIX}/opt/zlib/lib ${LDFLAGS}"
+
+  # Bzip2
+  CPPFLAGS="-I${BREW_PREFIX}/opt/bzip2/include ${CPPFLAGS}"
+  LDFLAGS="-L${BREW_PREFIX}/opt/bzip2/lib ${LDFLAGS}"
+
+  # Readline
+  CPPFLAGS="-I${BREW_PREFIX}/opt/readline/include ${CPPFLAGS}"
+  LDFLAGS="-L${BREW_PREFIX}/opt/readline/lib ${LDFLAGS}"
 
   # Xcode
   # BUILD Flags
   # Ensure CommandLineTools SDK is used correctly
   CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I/usr/local/include"
   export CFLAGS
+  export CPPFLAGS
+  export LDFLAGS
 
   # Android
   export ANDROID_HOME="${HOME}/Library/Android/sdk"

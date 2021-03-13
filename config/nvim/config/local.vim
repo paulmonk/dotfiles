@@ -193,6 +193,7 @@ let g:ale_linter_aliases = {
 \   'htmldjango': ['html'],
 \   'javascriptreact': ['javascript'],
 \   'typescriptreact': ['typescript'],
+\   'yaml.ansible': ['yaml'],
 \   'zsh': ['sh']
 \}
 
