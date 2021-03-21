@@ -184,11 +184,6 @@ fi
 # Docker
 export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
 
-# Docker version 1.8 introduced Content Trust, which allows you to verify the
-# authenticity, integrity, and publication date of Docker images that are made
-# available on the Docker Hub Registry. Set this to 1 to enabled.
-export DOCKER_CONTENT_TRUST="1"
-
 if command -v docker-machine >/dev/null 2>&1; then
   export MACHINE_STORAGE_PATH="${XDG_DATA_HOME}/docker-machine"
 fi
