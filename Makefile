@@ -83,6 +83,10 @@ brew-bundle: brew-install
 # -d directory to install dotfiles from
 # -f Force RC file creation
 # -k Run pre and post hooks
+# -v verbosity
+.PHONY: dotfiles-install
+dotfiles-install:
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+
 .PHONY: install
-install: brew-bundle
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f
+install: brew-bundle dotfiles-install
