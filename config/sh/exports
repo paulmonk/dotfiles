@@ -261,14 +261,17 @@ export PGPASSFILE="${XDG_CONFIG_HOME}/pg/pgpass"
 export PGSERVICEFILE="${XDG_CONFIG_HOME}/pg/pg_service.conf"
 
 # Python
+export VIRTUAL_ENV_DISABLE_PROMPT="1"
 export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
 export JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME}/jupyter"
-export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export PYLINTHOME="${XDG_CACHE_HOME}/pylint"
 export PYTHON_EGG_CACHE="${XDG_CACHE_HOME}/python_eggs"
+
 export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
-export VIRTUAL_ENV_DISABLE_PROMPT="1"
 export PATH="${PATH}:${PYTHONUSERBASE}/bin"
+
+export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+export PATH="${PYENV_ROOT}/shims:${PATH}"
 
 # RCM
 export RCRC="${XDG_CONFIG_HOME}/rcm/rcrc"
