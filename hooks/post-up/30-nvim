@@ -2,5 +2,11 @@
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
+# Symlink additional local config for nvim config
+ln -sf "${XDG_CONFIG_HOME}/nvim-local/local.vim" "${XDG_CONFIG_HOME}/nvim/config/local.vim"
+ln -sf "${XDG_CONFIG_HOME}/nvim-local/local.plugins.yaml" "${XDG_CONFIG_HOME}/nvim/config/local.plugins.yaml"
+
+# Symlink nvim to vim config for compat
 ln -sf "${XDG_CONFIG_HOME}/nvim" "${HOME}/.vim"
+
 cd "${XDG_CONFIG_HOME}/nvim" && make test && make install
