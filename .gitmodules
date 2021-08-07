@@ -13,3 +13,6 @@
 [submodule "local/share/tmux/plugins/fingers"]
 	path = local/share/tmux/plugins/fingers
 	url = https://github.com/Morantron/tmux-fingers
+[submodule "config/nvim"]
+	path = config/nvim
+	url = https://github.com/rafi/vim-config
