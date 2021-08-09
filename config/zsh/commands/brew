@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
 alias brewi="brew install"
-alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated && echo '\nOutdated Casks:' && brew outdated --cask"
-alias brewup="brew upgrade && brew cask upgrade"
+alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated --formula && echo '\nOutdated Casks:' && brew outdated --cask --greedy"
+alias brewup="brew upgrade && brew upgrade --cask"
 alias brewr="brew uninstall"
 
 alias brewp="brew pin"
