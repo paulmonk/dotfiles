@@ -103,6 +103,8 @@
     # Include summaries of merged commits in newly created merge commit messages
     log = true
 
+    renameLimit = 3000
+
     tool = vimdiff
 
 [mergetool]
@@ -242,6 +244,9 @@
 
     # Credit an author on the latest commit
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+    # Find deleted files
+    deleted = "log --diff-filter=D --stat"
 
     # Find branches containing commit
     fb = "!f() { git branch -a --contains $1; }; f"
