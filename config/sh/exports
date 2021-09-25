@@ -279,6 +279,9 @@ export RCRC="${XDG_CONFIG_HOME}/rcm/rcrc"
 # Readline
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
+# Ripgrep
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/rc"
+
 # Ruby: Always install ruby gems local to the user
 export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
 GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
