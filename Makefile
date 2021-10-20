@@ -77,7 +77,11 @@ brew-install: $(BREW_PREFIX)/bin/brew
 
 .PHONY: brew-bundle
 brew-bundle: brew-install
-	$(BREW_PREFIX)/bin/brew bundle --verbose
+	$(BREW_PREFIX)/bin/brew bundle --cleanup --verbose --zap
+
+# Dump current contents to Brewfile excl MAS packages.
+brew-bundle-dump:
+	HOMEBREW_BUNDLE_MAS_SKIP="1" brew bundle dump --describe --force --verbose
 
 # rcup options used:
 # -d directory to install dotfiles from
@@ -89,4 +93,5 @@ dotfiles-install:
 	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
 
 .PHONY: install
-install: brew-bundle dotfiles-install
+install: brew-bundle
+	$(MAKE) dotfiles-install
