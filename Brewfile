@@ -14,12 +14,8 @@ tap "warrensbox/tap"
 brew "act"
 # Library for command-line editing
 brew "readline"
-# Command-line interface for SQLite
-brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # Automate deployment, configuration, and upgrading
 brew "ansible"
 # Plugin manager for zsh, inspired by oh-my-zsh and vundle
@@ -28,20 +24,16 @@ brew "antigen"
 brew "gcc"
 # Library for processing command-line flags
 brew "gflags"
-# Next generation open source RPC library and framework
-brew "grpc"
-# Package for scientific computing with Python
-brew "numpy"
-# Framework for scalable cross-language services development
-brew "thrift"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
-# C library implementing the SSH2 protocol
-brew "libssh2"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Record and share terminal sessions
 brew "asciinema"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Extendable version manager with support for Ruby, Node.js, Erlang & more
+brew "asdf"
 # Archival front-end
 brew "atool"
 # Official Amazon AWS command-line interface
@@ -78,14 +70,8 @@ brew "chafa"
 brew "checkbashisms"
 # Color-highlighted diff(1) output
 brew "colordiff"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
 # Top-like interface for container metrics
 brew "ctop"
-# HTTP/2 C Library
-brew "nghttp2"
-# Open source suite of directory software
-brew "openldap"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Tools to manipulate dates with a focus on financial data
@@ -104,8 +90,6 @@ brew "diffutils"
 brew "direnv"
 # Tools for browsing and manipulating docker registries
 brew "docker-ls"
-# Text processing system for reStructuredText
-brew "docutils"
 # Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
 # Select default apps for documents and URL schemes on macOS
@@ -122,16 +106,10 @@ brew "exa"
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
 brew "exiftool"
+# XML 1.0 parser
+brew "expat"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
-# Validating, recursive, caching DNS resolver
-brew "unbound"
-# Generate introspection data for GObject libraries
-brew "gobject-introspection"
-# OpenType text shaping engine
-brew "harfbuzz"
-# Subtitle renderer for the ASS/SSA subtitle format
-brew "libass"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Fast web fuzzer written in Go
@@ -144,8 +122,6 @@ brew "findutils"
 brew "fish"
 # Lint your Python code for style and logical errors
 brew "flake8"
-# Collection of reusable C++ library artifacts developed at Facebook
-brew "folly"
 # Infamous electronic fortune-cookie generator
 brew "fortune"
 # Scriptable ping program for checking if multiple hosts are up
@@ -162,10 +138,6 @@ brew "gawk"
 brew "geos"
 # Framework for scientific data networking
 brew "libdap"
-# Postgres C API library
-brew "libpq"
-# Libraries for security-enabled client and server applications
-brew "nss"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler-qt5"
 # Geospatial Data Abstraction Library
@@ -198,8 +170,6 @@ brew "gnupg"
 brew "gpgme"
 # Image processing tools collection
 brew "graphicsmagick"
-# Framework for layout and rendering of i18n text
-brew "pango"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -236,8 +206,6 @@ brew "iperf3"
 brew "ipython"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Library for JSON, based on GLib
-brew "json-glib"
 # JSON parser and validator with a CLI
 brew "jsonlint"
 # Modern load testing tool, using Go and JavaScript
@@ -248,16 +216,12 @@ brew "kakoune"
 brew "kubernetes-cli", link: false
 # Lazier way to manage everything docker
 brew "lazydocker"
-# DNS library written in C
-brew "ldns"
 # Pager program similar to more
 brew "less"
 # Input filter for the pager less
 brew "lesspipe"
 # Terminal file manager
 brew "lf"
-# Provides library functionality for FIDO U2F & FIDO 2.0, including USB
-brew "libfido2"
 # C and C++ client library to the memcached server
 brew "libmemcached"
 # Host-side of the Universal 2nd Factor (U2F) protocol
@@ -290,10 +254,10 @@ brew "multitail"
 brew "mycli"
 # Virtual environments for Node.js
 brew "nave"
-# Parser generator tool and incremental parsing library
-brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim", args: ["HEAD"]
+# HTTP/2 C Library
+brew "nghttp2"
 # Port scanning utility for large networks
 brew "nmap"
 # Convert OpenDocument files to plain text
@@ -360,8 +324,6 @@ brew "rkhunter"
 brew "rmlint"
 # Utility that provides fast incremental file transfer
 brew "rsync"
-# Powerful, clean, object-oriented scripting language
-brew "ruby"
 # Safe, concurrent, practical language
 brew "rust"
 # Static analysis and lint tool, for (ba)sh scripts
@@ -458,45 +420,84 @@ cask "1password"
 cask "1password-cli"
 # JDK from the Java User Group (JUG)
 cask "adoptopenjdk"
+# Application launcher and productivity software
+cask "alfred"
+# Tools for building Android applications
+cask "android-studio"
+# Application uninstaller
+cask "appcleaner"
 # Securely stores and accesses AWS credentials in a development environment
 cask "aws-vault"
+# Tool to flash OS images to SD cards & USB drives
+cask "balenaetcher"
+# API documentation browser and code snippet manager
+cask "dash"
+# App to build and share containerized applications and microservices
+cask "docker"
+# Web browser
+cask "firefox"
+# Web browser
+cask "firefox-developer-edition"
+cask "font-fira-code"
+# Web browser
+cask "google-chrome"
+# Web browser
+cask "google-chrome-canary"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
+# System monitoring app
+cask "istat-menus"
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"
+# Keyboard customizer
+cask "karabiner-elements"
+# Open-source keystroke visualizer
+cask "keycastr"
+# Link-Layer MAC spoofing GUI for macOS
+cask "linkliar"
+# Host-based application firewall
+cask "little-snitch"
+# File system integration
+cask "macfuse"
+# Monitors and reports any microphone and camera activity
+cask "micro-snitch"
+# Silence embarrassing notifications while screensharing
+cask "muzzle"
+# Retro video game emulation
+cask "openemu"
+# File system integration
+cask "osxfuse"
+# Free and open source web app scanner
+cask "owasp-zap"
+# Web browser
+cask "safari-technology-preview"
+# Instant messaging application focusing on security
+cask "signal"
+# Team communication and collaboration software
+cask "slack"
+# Displays all open files and sockets in use by all running processes
+cask "sloth"
+# Control your Sonos system
+cask "sonos"
 # Native GUI tool for relational databases
 cask "tableplus"
-
-cask "alfred"
-cask "android-studio"
-cask "appcleaner"
-cask "balenaetcher"
-cask "bartender"
-cask "dash"
-cask "docker"
-cask "firefox"
-cask "firefox-developer-edition"
-cask "google-chrome"
-cask "google-chrome-canary"
-cask "iterm2"
-cask "karabiner-elements"
-cask "keycastr"
-cask "linkliar"
-cask "little-snitch"
-cask "micro-snitch"
-cask "muzzle"
-cask "openemu"
-cask "osxfuse"
-cask "owasp-zap"
-cask "safari-technology-preview"
-cask "signal"
-cask "slack"
-cask "sloth"
-cask "sonos"
+# Free and open-source OpenVPN client
 cask "tunnelblick"
+# Disk encryption software focusing on security based on TrueCrypt
 cask "veracrypt"
-cask "vlc"
+# Free and open-source hosted hypervisor for x86 virtualization
 cask "virtualbox"
+# AMD64/Intel64 and x86 virtualization
 cask "virtualbox-extension-pack"
+# Open-source code editor
 cask "visual-studio-code"
-cask "wireshark"
+# Multimedia player
+cask "vlc"
+# Desktop client for WhatsApp
 cask "whatsapp"
+# Network protocol analyzer
+cask "wireshark"
+# Video communication and virtual meeting platform
 cask "zoom"
+mas "Amphetamine", id: 937984704
+mas "Xcode", id: 497799835
