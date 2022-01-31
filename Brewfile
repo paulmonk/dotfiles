@@ -14,6 +14,8 @@ tap "warrensbox/tap"
 brew "act"
 # Library for command-line editing
 brew "readline"
+# Command-line interface for SQLite
+brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
 # Automate deployment, configuration, and upgrading
@@ -24,16 +26,16 @@ brew "antigen"
 brew "gcc"
 # Library for processing command-line flags
 brew "gflags"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.9"
+# Package for scientific computing with Python
+brew "numpy"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
 # Download with resuming and segmented downloading
 brew "aria2"
 # Record and share terminal sessions
 brew "asciinema"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
-# Extendable version manager with support for Ruby, Node.js, Erlang & more
-brew "asdf"
 # Archival front-end
 brew "atool"
 # Official Amazon AWS command-line interface
@@ -70,6 +72,8 @@ brew "chafa"
 brew "checkbashisms"
 # Color-highlighted diff(1) output
 brew "colordiff"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
 # Top-like interface for container metrics
 brew "ctop"
 # Get a file from an HTTP, HTTPS or FTP server
@@ -80,6 +84,8 @@ brew "dateutils"
 brew "go"
 # Go dependency management tool
 brew "dep"
+# Enterprise friendly way of detecting and preventing secrets in code
+brew "detect-secrets"
 # Utility to replace problematic characters in filenames
 brew "detox"
 # Good-lookin' diffs with diff-highlight and more
@@ -90,6 +96,8 @@ brew "diffutils"
 brew "direnv"
 # Tools for browsing and manipulating docker registries
 brew "docker-ls"
+# Text processing system for reStructuredText
+brew "docutils"
 # Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
 # Select default apps for documents and URL schemes on macOS
@@ -110,6 +118,10 @@ brew "exiftool"
 brew "expat"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# Generate introspection data for GObject libraries
+brew "gobject-introspection"
+# OpenType text shaping engine
+brew "harfbuzz"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Fast web fuzzer written in Go
@@ -170,6 +182,10 @@ brew "gnupg"
 brew "gpgme"
 # Image processing tools collection
 brew "graphicsmagick"
+# Framework for layout and rendering of i18n text
+brew "pango"
+# Library to render SVG files using Cairo
+brew "librsvg"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -216,6 +232,8 @@ brew "kakoune"
 brew "kubernetes-cli", link: false
 # Lazier way to manage everything docker
 brew "lazydocker"
+# DNS library written in C
+brew "ldns"
 # Pager program similar to more
 brew "less"
 # Input filter for the pager less
@@ -243,7 +261,7 @@ brew "mercurial"
 # Simple tool to make locally trusted development certificates
 brew "mkcert"
 # Collection of tools that nobody wrote when UNIX was young
-brew "moreutils", link: false
+brew "moreutils"
 # Remote terminal application
 brew "mosh"
 # 'traceroute' and 'ping' in a single tool
@@ -264,6 +282,8 @@ brew "nmap"
 brew "odt2txt"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # SSL/TLS VPN implementing OSI layer 2 or 3 secure network extension
 brew "openvpn"
 # 7-Zip (high compression file archiver) implementation
@@ -271,7 +291,7 @@ brew "p7zip"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # Shell command parallelization utility
-brew "parallel"
+brew "parallel", link: false
 # Simplistic interactive filtering tool
 brew "peco"
 # CLI for Postgres with auto-completion and syntax highlighting
@@ -280,8 +300,6 @@ brew "pgcli"
 brew "pidof"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# Python dependency management tool
-brew "pipenv"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
 # Cross-platform application and UI framework
@@ -422,6 +440,8 @@ cask "1password-cli"
 cask "adoptopenjdk"
 # Application launcher and productivity software
 cask "alfred"
+# Enable Windows-like alt-tab
+cask "alt-tab"
 # Tools for building Android applications
 cask "android-studio"
 # Application uninstaller
@@ -453,24 +473,34 @@ cask "iterm2"
 cask "karabiner-elements"
 # Open-source keystroke visualizer
 cask "keycastr"
+# Office suite
+cask "libreoffice"
 # Link-Layer MAC spoofing GUI for macOS
 cask "linkliar"
 # Host-based application firewall
 cask "little-snitch"
+# Open-source Markdown editor
+cask "macdown"
 # File system integration
 cask "macfuse"
 # Monitors and reports any microphone and camera activity
 cask "micro-snitch"
 # Silence embarrassing notifications while screensharing
 cask "muzzle"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
 # Retro video game emulation
 cask "openemu"
 # File system integration
 cask "osxfuse"
 # Free and open source web app scanner
 cask "owasp-zap"
+# Move and resize windows using keyboard shortcuts or snap areas
+cask "rectangle"
 # Web browser
 cask "safari-technology-preview"
+# Additional features and controls for Shure MV7 and MV88+ microphones
+cask "shureplus-motiv"
 # Instant messaging application focusing on security
 cask "signal"
 # Team communication and collaboration software
@@ -481,13 +511,15 @@ cask "sloth"
 cask "sonos"
 # Native GUI tool for relational databases
 cask "tableplus"
+# JDK from the Eclipse Foundation (Adoptium)
+cask "temurin8"
 # Free and open-source OpenVPN client
 cask "tunnelblick"
 # Disk encryption software focusing on security based on TrueCrypt
 cask "veracrypt"
-# Free and open-source hosted hypervisor for x86 virtualization
+# Virtualizer for x86 hardware
 cask "virtualbox"
-# AMD64/Intel64 and x86 virtualization
+# Extend the functionality of VirtualBox
 cask "virtualbox-extension-pack"
 # Open-source code editor
 cask "visual-studio-code"
@@ -499,5 +531,3 @@ cask "whatsapp"
 cask "wireshark"
 # Video communication and virtual meeting platform
 cask "zoom"
-mas "Amphetamine", id: 937984704
-mas "Xcode", id: 497799835
