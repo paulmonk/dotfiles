@@ -45,11 +45,6 @@ if [ "${KERNEL}" = "Darwin" ]; then
   if [ "${ARCH}" = "arm64" ]; then
     export BREW_PREFIX="/opt/homebrew"
     export PREFIX="${BREW_PREFIX}"
-
-    # Cater for nvim-treesitter GCC compiling issues
-    # https://github.com/nvim-neorg/neorg/issues/74#issuecomment-906627223
-    CC="${BREW_PREFIX}/bin/gcc-11"
-    export CC
   else
     export BREW_PREFIX="/usr/local"
     export PREFIX="${BREW_PREFIX}"
@@ -99,7 +94,7 @@ if [ "${KERNEL}" = "Darwin" ]; then
   # Xcode
   # BUILD Flags
   # Ensure CommandLineTools SDK is used correctly
-  CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I/usr/local/include"
+  CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I${BREW_PREFIX}/include -I/usr/local/include"
   export CFLAGS
   export CPPFLAGS
   export LDFLAGS
@@ -177,8 +172,8 @@ else
 fi
 export VISUAL="${EDITOR}"
 
-# Local Bin
-export PATH="${HOME}/.local/bin:${PATH}"
+# Local Bins (user and system)
+export PATH="${HOME}/.local/bin:/usr/local/bin:${PATH}"
 
 # Ack configuration
 if [ -f "${XDG_CONFIG_HOME}/ack/ackrc" ]; then
