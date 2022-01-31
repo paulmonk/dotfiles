@@ -186,8 +186,8 @@
     signingKey = 76A45DC5162383BE0FF431F94C0993B829F49191!
     useConfigOnly = true
 
-[includeIf "gitdir:~/projects/streetteam/**/"]
-    path = ~/.config/git/users/streetteam
+[includeIf "gitdir:~/projects/pollen/**/"]
+    path = ~/.config/git/users/pollen
 
 [alias]
     a = add
