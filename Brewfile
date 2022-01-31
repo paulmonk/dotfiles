@@ -273,7 +273,7 @@ brew "mycli"
 # Virtual environments for Node.js
 brew "nave"
 # Ambitious Vim-fork focused on extensibility and agility
-brew "neovim", args: ["HEAD"]
+brew "neovim"
 # HTTP/2 C Library
 brew "nghttp2"
 # Port scanning utility for large networks
@@ -418,6 +418,8 @@ brew "yq"
 brew "zip"
 # General-purpose lossless data-compression library
 brew "zlib"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
 # UNIX shell (command interpreter)
 brew "zsh"
 # Additional completion definitions for zsh
@@ -450,6 +452,8 @@ cask "appcleaner"
 cask "aws-vault"
 # Tool to flash OS images to SD cards & USB drives
 cask "balenaetcher"
+# Menu bar icon organizer
+cask "bartender"
 # API documentation browser and code snippet manager
 cask "dash"
 # App to build and share containerized applications and microservices
@@ -491,8 +495,6 @@ cask "muzzle"
 cask "obsidian"
 # Retro video game emulation
 cask "openemu"
-# File system integration
-cask "osxfuse"
 # Free and open source web app scanner
 cask "owasp-zap"
 # Move and resize windows using keyboard shortcuts or snap areas
@@ -517,10 +519,6 @@ cask "temurin8"
 cask "tunnelblick"
 # Disk encryption software focusing on security based on TrueCrypt
 cask "veracrypt"
-# Virtualizer for x86 hardware
-cask "virtualbox"
-# Extend the functionality of VirtualBox
-cask "virtualbox-extension-pack"
 # Open-source code editor
 cask "visual-studio-code"
 # Multimedia player

@@ -40,6 +40,7 @@ help:
 # Globals
 #------------------------------
 KERNEL := $(shell uname -s)
+ARCH := $(shell uname -m)
 
 XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_CACHE_HOME ?= $(HOME)/.cache
@@ -54,7 +55,12 @@ export XDG_DATA_HOME
 #------------------------------
 # Use a different prefix on macOS
 ifeq ($(KERNEL), Darwin)
+# Cater for M1 arch
+ifeq ($(ARCH), arm64)
+BREW_PREFIX := /opt/homebrew
+else
 BREW_PREFIX := /usr/local
+endif
 else
 BREW_PREFIX := /home/linuxbrew/.linuxbrew
 endif
@@ -65,12 +71,14 @@ export PATH
 
 # Install Homebrew
 $(BREW_PREFIX)/bin/brew:
-	@read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
+	@echo "==============================="; \
+	echo "Brew Prefix will be install here: $(BREW_PREFIX)"; \
+	echo "==============================="; \
+	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-	   [[ "$$0" == "$${BASH_SOURCE}" ]] && exit 1 || return 1; \
+	   exit 1; \
 	fi; \
-	echo; \
-	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
 .PHONY: brew-install
 brew-install: $(BREW_PREFIX)/bin/brew

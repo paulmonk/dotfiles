@@ -2,13 +2,6 @@
 
 GNUPGHOME="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg"
 
-if [ "$(uname -s)" = "Darwin" ]; then
-  # Force use of BSD installed variant.
-  /usr/bin/sed -i "" -e \
-    "s#/usr/bin/pinentry-gnome3#${PREFIX}/bin/pinentry-mac#g" \
-    "${GNUPGHOME}/gpg-agent.conf"
-fi
-
 # Import my key
 MY_GPG_KEY_ID="0x06E2E2310CB5DB04"
 if ! gpg  -k | grep "${MY_GPG_KEY_ID}" > /dev/null; then

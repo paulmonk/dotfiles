@@ -12,6 +12,10 @@ export XDG_DATA_HOME="${HOME}/.local/share"
 KERNEL="$(uname -s)"
 export KERNEL
 
+# Set Arch.
+ARCH="$(uname -m)"
+export ARCH
+
 # Homebrew opts
 # Abort installation of cask if no checksum is defined
 export HOMEBREW_CASK_OPTS="--require-sha"
@@ -37,8 +41,19 @@ if [ "${KERNEL}" = "Darwin" ]; then
   export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
   # Prefix
-  export BREW_PREFIX="/usr/local"
-  export PREFIX="${BREW_PREFIX}"
+  # Cater for M1 arch
+  if [ "${ARCH}" = "arm64" ]; then
+    export BREW_PREFIX="/opt/homebrew"
+    export PREFIX="${BREW_PREFIX}"
+
+    # Cater for nvim-treesitter GCC compiling issues
+    # https://github.com/nvim-neorg/neorg/issues/74#issuecomment-906627223
+    CC="${BREW_PREFIX}/bin/gcc-11"
+    export CC
+  else
+    export BREW_PREFIX="/usr/local"
+    export PREFIX="${BREW_PREFIX}"
+  fi
 
   # XDG
   export XDG_RUNTIME_DIR="/tmp/run"

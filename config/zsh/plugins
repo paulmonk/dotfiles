@@ -24,8 +24,6 @@ antigen bundles <<EOB
     robbyrussell/oh-my-zsh plugins/fancy-ctrl-z
     hlissner/zsh-autopair
     marzocchi/zsh-notify
-    rupa/z
-    changyuheng/fz
     mafredri/zsh-async
 EOB
 
@@ -58,11 +56,12 @@ zstyle ':prezto:module:editor' dot-expansion 'yes'
 zstyle ':prezto:module:editor' key-bindings 'vi'
 
 
-# Z
-if [[ ! -f "${XDG_DATA_HOME}/zsh/z" ]]; then
-  touch "${XDG_DATA_HOME}/zsh/z"
+# Zoxide
+_ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
+if [[ ! -f "${_ZO_DATA}" ]]; then
+  touch "${_ZO_DATA}"
 fi
-export _Z_DATA="${XDG_DATA_HOME}/zsh/z"
+export _ZO_DATA
 
 
 # zsh-notify

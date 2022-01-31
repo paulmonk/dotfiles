@@ -102,17 +102,16 @@ if [[ "${KERNEL}" == "Linux" ]]; then
   [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
 fi
 
+# zoxide
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+
 # Load completions and bash completions
 autoload -Uz +X compinit && compinit -i -d "${ZCOMPDUMP}"
 autoload -Uz +X bashcompinit && bashcompinit
 
-# Additional Bash completions
-# =======
-# dbt
-source "${XDG_CONFIG_HOME:-$HOME/.config}/bash/dbt-completions"
-
-
-# ZSH - Source any local overrides
+# Final: ZSH - Source any local overrides
 #-------------------------
 if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
   source "${ZDOTDIR}/.zshrc.local"

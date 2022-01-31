@@ -2,20 +2,9 @@
 # =====================
 # Disabled
 # =====================
-# Due to Git repo issues.
-- repo: StanAngeloff/php.vim
-  on_ft: php
+# Compile issues.
+- repo: kristijanhusak/orgmode.nvim
   if: 0
-- repo: vim-scripts/python_match.vim
-  on_ft: python
-  if: 0
-- repo: kchmck/vim-coffee-script
-  on_ft: [coffee, litcoffee]
-  if: 0
-- repo: vimwiki/vimwiki
-  if: 0
-
-# Not used.
 
 # =====================
 # Additions
@@ -26,40 +15,6 @@
 - repo: vim-airline/vim-airline-themes
   depends: vim-airline
 
-# Do not lazy-load so that vim-airline sees this.
-- repo: liuchengxu/vista.vim
-  hook_add: |-
-    let g:vista#renderer#enable_icon = 1
-    let g:vista_echo_cursor_strategy = 'scroll'
-    let g:vista_vimwiki_executive = 'markdown'
-    let g:vista_executive_for = {
-      \ 'vimwiki': 'markdown',
-      \ 'pandoc': 'markdown',
-      \ 'markdown': 'toc',
-      \ }
-
 # Terminus enhances Vim's and Neovim's integration with the terminal
 # cursor shape, mouse support, focus reporting, bracketed paste
 - repo: wincent/terminus
-
-# Vim Syntax for Homebrew formulae
-- repo: xu-cheng/brew.vim
-  on_ft: ruby
-
-# GraphQL Syntax
-- repo: jparise/vim-graphql
-  on_ft: graphql
-
-# React / JS / Typescript
-- repo: styled-components/vim-styled-components
-  on_ft:
-    - javascript
-    - javascriptreact
-    - typescript
-    - typescriptreact
-
-# Ale linter/fixer
-# Disable LSP config as this is handled by vim-lsp
-- repo: dense-analysis/ale
-  hook_source: |
-    let g:ale_disable_lsp = 1
