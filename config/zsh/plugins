@@ -22,6 +22,7 @@ antigen use prezto
 antigen bundles <<EOB
     robbyrussell/oh-my-zsh plugins/encode64
     robbyrussell/oh-my-zsh plugins/fancy-ctrl-z
+    Aloxaf/fzf-tab
     hlissner/zsh-autopair
     marzocchi/zsh-notify
     mafredri/zsh-async
@@ -72,6 +73,18 @@ if [[ ! "${KERNEL}" == "Darwin" ]]; then
   zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/256x256/status/dialog-error.png'
   zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/256x256/status/dialog-information.png'
 fi
+
+# fzf-tab
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 
 # Finalize
