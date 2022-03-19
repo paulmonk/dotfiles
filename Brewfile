@@ -229,7 +229,7 @@ brew "k6"
 # Selection-based modal text editor
 brew "kakoune"
 # Kubernetes command-line interface
-brew "kubernetes-cli", link: false
+brew "kubernetes-cli"
 # Lazier way to manage everything docker
 brew "lazydocker"
 # DNS library written in C
@@ -290,8 +290,6 @@ brew "openvpn"
 brew "p7zip"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
-# Shell command parallelization utility
-brew "parallel", link: false
 # Simplistic interactive filtering tool
 brew "peco"
 # CLI for Postgres with auto-completion and syntax highlighting
@@ -361,7 +359,7 @@ brew "terminal-notifier"
 # CLI tool to generate terraform files from existing infrastructure
 brew "terraformer"
 # Terraform version manager inspired by rbenv
-brew "tfenv", link: false
+brew "tfenv"
 # Linter for Terraform files
 brew "tflint"
 # Code-search similar to ack
@@ -511,6 +509,8 @@ cask "slack"
 cask "sloth"
 # Control your Sonos system
 cask "sonos"
+# Data visualization software
+cask "tableau"
 # Native GUI tool for relational databases
 cask "tableplus"
 # JDK from the Eclipse Foundation (Adoptium)
