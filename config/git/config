@@ -73,7 +73,7 @@
 [delta]
     line-numbers = true
     pager = less --tabs=1,3
-    syntax-theme = 'Solarized (dark)'
+    syntax-theme = Solarized (dark)
     zero-style = dim syntax
 
 [diff]
