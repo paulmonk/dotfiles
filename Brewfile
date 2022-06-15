@@ -454,6 +454,8 @@ cask "balenaetcher"
 cask "bartender"
 # API documentation browser and code snippet manager
 cask "dash"
+# Offline toolbox for developers
+cask "devutils"
 # App to build and share containerized applications and microservices
 cask "docker"
 # Web browser
@@ -481,8 +483,6 @@ cask "libreoffice"
 cask "linkliar"
 # Host-based application firewall
 cask "little-snitch"
-# Open-source Markdown editor
-cask "macdown"
 # File system integration
 cask "macfuse"
 # Monitors and reports any microphone and camera activity
