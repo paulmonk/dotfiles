@@ -22,19 +22,60 @@ SHELL := /bin/bash
 
 # HELP
 #------------------------------
-.PHONY: help
+# Inspired by <http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html>
+# sed script explained:
+# /^##/:
+# 	* save line in hold space
+# 	* purge line
+# 	* Loop:
+# 		* append newline + line to hold space
+# 		* go to next line
+# 		* if line starts with doc comment, strip comment character off and loop
+# 	* remove target prerequisites
+# 	* append hold space (+ newline) to line
+# 	* replace newline plus comments by `---`
+# 	* print line
+# Separate expressions are necessary because labels cannot be delimited by
+# semicolon; see <http://stackoverflow.com/a/11799865/1968>
 help:
-	@echo "==========================================================="
-	@echo "DOTFILES DEPLOYMENT"
-	@echo ""
-	@echo "List of available recipes:"
-	@echo "--------------------------"
-	@$(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2> /dev/null \
-		| awk -v RS= -F: '/^# File/,/^# Finished Make data base/ \
-		{if ($$1 !~ "^[#.]") {print $$1}}' \
-			| sort \
-				| egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
-	@echo "==========================================================="
+	@echo "$$(tput bold)Available rules:$$(tput sgr0)"
+	@echo
+	@sed -n -e "/^## / { \
+		h; \
+		s/.*//; \
+		:doc" \
+		-e "H; \
+		n; \
+		s/^## //; \
+		t doc" \
+		-e "s/:.*//; \
+		G; \
+		s/\\n## /---/; \
+		s/\\n/ /g; \
+		p; \
+	}" ${MAKEFILE_LIST} \
+	| LC_ALL='C' sort --ignore-case \
+	| awk -F '---' \
+		-v ncol=$$(tput cols) \
+		-v indent=19 \
+		-v col_on="$$(tput setaf 6)" \
+		-v col_off="$$(tput sgr0)" \
+	'{ \
+		printf "%s%*s%s ", col_on, -indent, $$1, col_off; \
+		n = split($$2, words, " "); \
+		line_length = ncol - indent; \
+		for (i = 1; i <= n; i++) { \
+			line_length -= length(words[i]) + 1; \
+			if (line_length <= 0) { \
+				line_length = ncol - indent - length(words[i]) - 1; \
+				printf "\n%*s ", -indent, " "; \
+			} \
+			printf "%s ", words[i]; \
+		} \
+		printf "\n"; \
+	}' \
+	| more $(shell test $(shell uname) = Darwin && echo '--no-init --raw-control-chars')
+.PHONY: help
 
 #------------------------------
 # Globals
@@ -70,6 +111,7 @@ PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
 export PATH
 
 # Install Homebrew
+# -----
 $(BREW_PREFIX)/bin/brew:
 	@echo "==============================="; \
 	echo "Brew Prefix will be install here: $(BREW_PREFIX)"; \
@@ -80,14 +122,19 @@ $(BREW_PREFIX)/bin/brew:
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
-.PHONY: brew-install
+## Install Homebrew
 brew-install: $(BREW_PREFIX)/bin/brew
+.PHONY: brew-install
 
-.PHONY: brew-bundle
+## Homebrew Bundle Install
 brew-bundle: brew-install
 	$(BREW_PREFIX)/bin/brew bundle --cleanup --verbose --zap
+.PHONY: brew-bundle
+
 
 # Dump current contents to Brewfile excl MAS packages.
+# -----
+## Homebrew bundle Dump
 brew-bundle-dump:
 	HOMEBREW_BUNDLE_MAS_SKIP="1" brew bundle dump --describe --force --verbose
 
@@ -96,10 +143,12 @@ brew-bundle-dump:
 # -f Force RC file creation
 # -k Run pre and post hooks
 # -v verbosity
-.PHONY: dotfiles-install
+# -----
+## Dotfiles Install
 dotfiles-install:
 	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+.PHONY: dotfiles-install
 
-.PHONY: install
 install: brew-bundle
 	$(MAKE) dotfiles-install
+.PHONY: install
