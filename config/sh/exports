@@ -157,18 +157,16 @@ export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 export LC_ALL="en_GB.UTF-8"
 export LANG="en_GB.UTF-8"
 export PAGER="less"
+export MANPAGER="less -X"
 
 # Defaults: Editor
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR="nvim"
-  export MANPAGER="nvim -c 'set ft=man' -"
 elif command -v vim >/dev/null 2>&1; then
   export EDITOR="vim"
-  export MANPAGER="vim -c 'set ft=man' -"
 else
   export EDITOR="vi"
   # Don’t clear the screen after quitting a manual page
-  export MANPAGER="less -X"
 fi
 export VISUAL="${EDITOR}"
 
