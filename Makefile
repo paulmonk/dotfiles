@@ -131,13 +131,25 @@ brew-bundle: brew-install
 	$(BREW_PREFIX)/bin/brew bundle --cleanup --verbose --zap
 .PHONY: brew-bundle
 
-
 # Dump current contents to Brewfile excl MAS packages.
 # -----
 ## Homebrew Bundle Dump
 brew-bundle-dump:
 	brew bundle dump --describe --force --verbose
 .PHONY: brew-bundle-dump
+
+# Install LunarVim
+# -----
+$(HOME)/.local/bin/lunarvim:
+	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
+	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
+	   exit 1; \
+	fi; \
+	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)";
+
+## LunarVim Install
+lunarvim-install: $(HOME)/.local/bin/lunarvim
+.PHONY: lunarvim-install
 
 # rcup options used:
 # -d directory to install dotfiles from
