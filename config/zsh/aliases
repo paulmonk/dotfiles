@@ -163,6 +163,8 @@ if (( $+commands[lvim] )); then
   alias vi="lvim"
   alias vim="lvim"
   alias vimdiff="lvim -d"
+  alias nvim="lvim"
+  alias nvimdiff="lvim -d"
 elif (( $+commands[nvim] )); then
   alias suvim="sudo -E nvim"
   alias vi="nvim"

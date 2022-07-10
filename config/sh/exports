@@ -153,6 +153,9 @@ fi
 # Add homebrew bin
 export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 
+# Local Bins (user and system)
+export PATH="${HOME}/.local/bin:/usr/local/bin:${PATH}"
+
 # Defaults
 export LC_ALL="en_GB.UTF-8"
 export LANG="en_GB.UTF-8"
@@ -160,7 +163,9 @@ export PAGER="less"
 export MANPAGER="less -X"
 
 # Defaults: Editor
-if command -v nvim >/dev/null 2>&1; then
+if command -v lvim >/dev/null 2>&1; then
+  export EDITOR="lvim"
+elif command -v nvim >/dev/null 2>&1; then
   export EDITOR="nvim"
 elif command -v vim >/dev/null 2>&1; then
   export EDITOR="vim"
@@ -169,9 +174,6 @@ else
   # Don’t clear the screen after quitting a manual page
 fi
 export VISUAL="${EDITOR}"
-
-# Local Bins (user and system)
-export PATH="${HOME}/.local/bin:/usr/local/bin:${PATH}"
 
 # Ack configuration
 if [ -f "${XDG_CONFIG_HOME}/ack/ackrc" ]; then
