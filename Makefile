@@ -122,7 +122,7 @@ $(BREW_PREFIX)/bin/brew:
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
-## Install Homebrew
+## Homebrew Install
 brew-install: $(BREW_PREFIX)/bin/brew
 .PHONY: brew-install
 
@@ -134,9 +134,10 @@ brew-bundle: brew-install
 
 # Dump current contents to Brewfile excl MAS packages.
 # -----
-## Homebrew bundle Dump
+## Homebrew Bundle Dump
 brew-bundle-dump:
-	HOMEBREW_BUNDLE_MAS_SKIP="1" brew bundle dump --describe --force --verbose
+	brew bundle dump --describe --force --verbose
+.PHONY: brew-bundle-dump
 
 # rcup options used:
 # -d directory to install dotfiles from

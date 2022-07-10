@@ -158,7 +158,12 @@ if (( $+commands[neomutt] )); then
 fi
 
 # Neovim / Vim
-if (( $+commands[nvim] )); then
+if (( $+commands[lvim] )); then
+  alias suvim="sudo -E lvim"
+  alias vi="lvim"
+  alias vim="lvim"
+  alias vimdiff="lvim -d"
+elif (( $+commands[nvim] )); then
   alias suvim="sudo -E nvim"
   alias vi="nvim"
   alias vim="nvim"
