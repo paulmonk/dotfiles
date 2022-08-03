@@ -191,7 +191,9 @@ lvim.builtin.which_key.mappings["t"] = {
 lvim.builtin.notify.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
-lvim.builtin.terminal.active = true
+
+-- Disable floating terminal - using tmux instead
+lvim.builtin.terminal.active = false
 
 -- Builtins: Alpha
 -- ===============
@@ -205,10 +207,6 @@ lvim.builtin.alpha.dashboard.section.header.val = {
 	"▌  ▌ ▌▌ ▌▞▀▌▌  ▝▞ ▐ ▌▐ ▌",
 	"▀▀▘▝▀▘▘ ▘▝▀▘▘   ▘ ▀▘▘▝ ▘",
 }
-
--- Builtins: Bufferline
--- ===============
-lvim.builtin.bufferline.always_show_bufferline = true
 
 -- Builtins: Gitsigns
 -- ===============
@@ -291,7 +289,7 @@ formatters.setup({
 	{
 		command = "prettier",
 		extra_args = { "--print-with", "80" },
-		filetypes = { "typescript", "typescriptreact", "yaml" },
+		filetypes = { "typescript", "typescriptreact", "yaml", "markdown", "graphql" },
 	},
 })
 
@@ -305,6 +303,10 @@ linters.setup({
 	},
 	{
 		command = "flake8",
+		filetypes = { "python" }
+	},
+	{
+		command = "mypy",
 		filetypes = { "python" }
 	},
 	{
@@ -690,6 +692,7 @@ lvim.plugins = {
 			})
 		end
 	},
+	-- TODO: Fix SQL LSP config
 	-- SQL LSP.
 	-- {
 	--   "nanotee/sqls.nvim",
@@ -789,13 +792,6 @@ lvim.plugins = {
 
 	-- Plugin: Treesitter
 	-- ===============
-	-- Enable Neovim's builtin spellchecker for buffers with tree-sitter highlighting.
-	{
-		'lewis6991/spellsitter.nvim',
-		config = function()
-			require('spellsitter').setup()
-		end
-	},
 	{
 		"windwp/nvim-ts-autotag",
 		config = function()

@@ -218,7 +218,7 @@ endif
 " UI Symbols
 " icons:  ▏│ ¦ ╎ ┆ ⋮ ⦙ ┊ 
 let &showbreak='↳  '
-set listchars=tab:\→\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·,lead:·
+set listchars=tab:\→\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
 
 if has('folding') && has('vim_starting')
 	set foldenable
@@ -241,7 +241,7 @@ let g:ruby_no_expensive = 1
 let g:PHP_removeCRwhenUnix = 0
 
 " }}}
-" Abbreviations {{{1
+" Abbreviations {{{
 
 " Misc
 iab waht what
@@ -254,6 +254,11 @@ iab Attr Attributes
 iab Appl Application
 iab adn and
 
+" }}}
+" Mappings {{{
+" C-r: Easier search and replace visual/select mode
+xnoremap <C-r> :<C-u>%s/\V<C-R>=<SID>get_selection()<CR>//gc<Left><Left><Left>
+"
 " }}}
 " Functions {{{
 " --------------------
@@ -339,5 +344,17 @@ function! DeleteEndingWhiteSpace()
     call setpos('.', current_position)
     unlet current_position
 endfunction
+
+" Returns visually selected text
+function! s:get_selection() abort "{{{
+	try
+		let reg = 's'
+		let [save_reg, save_type] = [getreg(reg), getregtype(reg)]
+		silent! normal! gv"sy
+		return substitute(escape(@s, '\/'), '\n', '\\n', 'g')
+	finally
+		call setreg(reg, save_reg, save_type)
+	endtry
+endfunction "}}}
 
 " }}}
