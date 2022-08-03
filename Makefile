@@ -128,7 +128,7 @@ brew-install: $(BREW_PREFIX)/bin/brew
 
 ## Homebrew Bundle Install
 brew-bundle: brew-install
-	$(BREW_PREFIX)/bin/brew bundle --cleanup --verbose --zap
+	$(BREW_PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
 .PHONY: brew-bundle
 
 # Dump current contents to Brewfile excl MAS packages.
@@ -140,7 +140,7 @@ brew-bundle-dump:
 
 # Install LunarVim
 # -----
-$(HOME)/.local/bin/lunarvim:
+$(HOME)/.local/bin/lunarvim: brew-bundle
 	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
 	   exit 1; \
@@ -150,6 +150,15 @@ $(HOME)/.local/bin/lunarvim:
 ## LunarVim Install
 lunarvim-install: $(HOME)/.local/bin/lunarvim
 .PHONY: lunarvim-install
+
+## Python Install
+python-install: brew-bundle
+	pyenv install 3.7.13
+	pyenv install 3.8.13
+	pyenv install 3.9.11
+	pyenv install 3.10.4
+	pyenv global 3.7.13 3.8.13 3.9.11 3.10.4
+.PHONY: python-install
 
 # rcup options used:
 # -d directory to install dotfiles from
@@ -164,4 +173,6 @@ dotfiles-install:
 
 install: brew-bundle
 	$(MAKE) dotfiles-install
+	$(MAKE) lunarvim-install
+	$(MAKE) python-install
 .PHONY: install
