@@ -277,6 +277,7 @@ export JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME}/jupyter"
 export PYLINTHOME="${XDG_CACHE_HOME}/pylint"
 export PYTHON_EGG_CACHE="${XDG_CACHE_HOME}/python_eggs"
 
+export PYTHONBREAKPOINT="ipdb.set_trace"
 export PYTHONFAULTHANDLER="1"
 export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
 export PATH="${PATH}:${PYTHONUSERBASE}/bin"
