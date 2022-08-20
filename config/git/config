@@ -96,6 +96,7 @@
 
 [init]
     templatedir = ~/.config/git/templates
+	defaultBranch = main
 
 [interactive]
     diffFilter = delta --color-only --theme='Solarized (dark)'
