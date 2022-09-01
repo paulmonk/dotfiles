@@ -96,7 +96,7 @@
 
 [init]
     templatedir = ~/.config/git/templates
-	defaultBranch = main
+    defaultBranch = main
 
 [interactive]
     diffFilter = delta --color-only --theme='Solarized (dark)'
@@ -193,6 +193,7 @@
     signingKey = 76A45DC5162383BE0FF431F94C0993B829F49191!
     useConfigOnly = true
 
+# Switch user depending on projects. Handy for using work email for work projects
 [includeIf "gitdir:~/projects/pollen/**/"]
     path = ~/.config/git/users/pollen
 
