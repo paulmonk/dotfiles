@@ -42,12 +42,17 @@ if [ "${KERNEL}" = "Darwin" ]; then
 
   # Prefix
   # Cater for M1 arch
+  BREW_ARM_PREFIX="/opt/homebrew"
+  BREW_X86_PREFIX="/usr/local"
   if [ "${ARCH}" = "arm64" ]; then
-    export BREW_PREFIX="/opt/homebrew"
+    export BREW_PREFIX="${BREW_ARM_PREFIX}"
     export PREFIX="${BREW_PREFIX}"
+    # Add both Arm and Intel paths, favour native arm first.
+    export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${BREW_X86_PREFIX}/bin:${BREW_X86_PREFIX}/sbin:${PATH}"
   else
-    export BREW_PREFIX="/usr/local"
+    export BREW_PREFIX="${BREW_X86_PREFIX}"
     export PREFIX="${BREW_PREFIX}"
+    export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
   fi
 
   # XDG
@@ -116,6 +121,7 @@ else
   # Prefix
   export BREW_PREFIX="/home/linuxbrew/.linuxbrew"
   export PREFIX="/usr"
+  export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 
   # Set defaults
   export BROWSER="${PREFIX}/bin/chromium"
@@ -149,9 +155,6 @@ else
   # Zeal: https://github.com/zealdocs/zeal/issues/172
   export QT_QPA_PLATFORMTHEME="gtk2"
 fi
-
-# Add homebrew bin
-export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
 
 # Local Bins (user and system)
 export PATH="${HOME}/.local/bin:/usr/local/bin:${PATH}"

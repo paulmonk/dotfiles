@@ -96,19 +96,19 @@ export XDG_DATA_HOME
 #------------------------------
 # Use a different prefix on macOS
 ifeq ($(KERNEL), Darwin)
-# Cater for M1 arch
+
+# Cater for M1 arm arch
 ifeq ($(ARCH), arm64)
 BREW_PREFIX := /opt/homebrew
+BREW_X86_PREFIX := /usr/local
+
+# Cater for Intel
 else
 BREW_PREFIX := /usr/local
-endif
-else
-BREW_PREFIX := /home/linuxbrew/.linuxbrew
+BREW_X86_PREFIX := /usr/local
 endif
 
-# Update PATH to include brew binaries. Subshells can now use just 'brew'.
-PATH := $(BREW_PREFIX)/bin:$(BREW_PREFIX)/sbin:$(PATH)
-export PATH
+endif
 
 # Install Homebrew
 # -----
@@ -122,8 +122,20 @@ $(BREW_PREFIX)/bin/brew:
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
+$(BREW_X86_PREFIX)/bin/brew:
+	@echo "==============================="; \
+	echo "Brew Prefix (X86) will be install here: $(BREW_X86_PREFIX)"; \
+	echo "==============================="; \
+	echo "Ensuring rosetta is installed."; \
+	softwareupdate --install-rosetta; \
+	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
+	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
+	   exit 1; \
+	fi; \
+	arch -x86_64 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
+
 ## Homebrew Install
-brew-install: $(BREW_PREFIX)/bin/brew
+brew-install: $(BREW_PREFIX)/bin/brew $(BREW_X86_PREFIX)/bin/brew
 .PHONY: brew-install
 
 ## Homebrew Bundle Install
@@ -135,7 +147,7 @@ brew-bundle: brew-install
 # -----
 ## Homebrew Bundle Dump
 brew-bundle-dump:
-	brew bundle dump --describe --force --verbose
+	$(BREW_PREFIX)/bin/brew bundle dump --describe --force --verbose
 .PHONY: brew-bundle-dump
 
 # Install LunarVim
@@ -153,12 +165,18 @@ lunarvim-install: $(HOME)/.local/bin/lunarvim
 
 ## Python Install
 python-install: brew-bundle
-	pyenv install 3.7.13
-	pyenv install 3.8.13
-	pyenv install 3.9.11
-	pyenv install 3.10.4
-	pyenv global 3.7.13 3.8.13 3.9.11 3.10.4
+	$(BREW_PREFIX)/bin/pyenv install 3.7.13
+	$(BREW_PREFIX)/bin/pyenv install 3.8.13
+	$(BREW_PREFIX)/bin/pyenv install 3.9.11
+	$(BREW_PREFIX)/bin/pyenv install 3.10.4
+	$(BREW_PREFIX)/bin/pyenv global 3.7.13 3.8.13 3.9.11 3.10.4
 .PHONY: python-install
+
+## Pipx Install
+pipx-deps: brew-bundle
+	$(BREW_PREFIX)/bin/pipx install sqlfluff
+	$(BREW_PREFIX)/bin/pipx inject sqlfluff sqlfluff-templater-dbt
+.PHONY: pipx-deps
 
 # rcup options used:
 # -d directory to install dotfiles from
@@ -175,4 +193,5 @@ install: brew-bundle
 	$(MAKE) dotfiles-install
 	$(MAKE) lunarvim-install
 	$(MAKE) python-install
+	$(MAKE) pipx-deps
 .PHONY: install

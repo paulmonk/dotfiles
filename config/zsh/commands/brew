@@ -1,11 +1,30 @@
 #!/usr/bin/env zsh
 
-alias brewi="brew install"
-alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated --formula && echo '\nOutdated Casks:' && brew outdated --cask --greedy"
-alias brewup="brew upgrade && brew upgrade --cask"
-alias brewr="brew uninstall"
+# Brew default to arm.
+if [[ "${ARCH}" == "arm64" ]]; then
+	alias mbrew="arch -arm64e ${BREW_ARM_PREFIX}/bin/brew"
+	alias mbrewi="mbrew install"
+	alias mbrewo="mbrew update && echo '\nOutdated Pkgs:' && mbrew outdated --formula && echo '\nOutdated Casks:' && mbrew outdated --cask --greedy"
+	alias mbrewup="mbrew upgrade && brew upgrade --cask"
+	alias mbrewr="mbrew uninstall"
+	alias mbrewp="mbrew pin"
+	alias mbrewpl="mbrew list --pinned"
+	alias mbrewq="mbrew search"
 
-alias brewp="brew pin"
-alias brewpl="brew list --pinned"
-
-alias brewq="brew search"
+	alias ibrew="arch -x86_64 ${BREW_X86_PREFIX}/bin/brew"
+	alias ibrewi="ibrew install"
+	alias ibrewo="ibrew update && echo '\nOutdated Pkgs:' && ibrew outdated --formula && echo '\nOutdated Casks:' && ibrew outdated --cask --greedy"
+	alias ibrewup="ibrew upgrade && ibrew upgrade --cask"
+	alias ibrewr="ibrew uninstall"
+	alias ibrewp="ibrew pin"
+	alias ibrewpl="ibrew list --pinned"
+	alias ibrewq="ibrew search"
+else
+	alias brewi="brew install"
+	alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated --formula && echo '\nOutdated Casks:' && brew outdated --cask --greedy"
+	alias brewup="brew upgrade && brew upgrade --cask"
+	alias brewr="brew uninstall"
+	alias brewp="brew pin"
+	alias brewpl="brew list --pinned"
+	alias brewq="brew search"
+fi
