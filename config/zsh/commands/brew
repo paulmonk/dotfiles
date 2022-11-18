@@ -19,6 +19,16 @@ if [[ "${ARCH}" == "arm64" ]]; then
 	alias ibrewp="ibrew pin"
 	alias ibrewpl="ibrew list --pinned"
 	alias ibrewq="ibrew search"
+
+	# Default to mbrew
+	alias brew="mbrew"
+	alias brewi="mbrew install"
+	alias brewo="mbrew update && echo '\nOutdated Pkgs:' && mbrew outdated --formula && echo '\nOutdated Casks:' && mbrew outdated --cask --greedy"
+	alias brewup="mbrew upgrade && mbrew upgrade --cask"
+	alias brewr="mbrew uninstall"
+	alias brewp="mbrew pin"
+	alias brewpl="mbrew list --pinned"
+	alias brewq="mbrew search"
 else
 	alias brewi="brew install"
 	alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated --formula && echo '\nOutdated Casks:' && brew outdated --cask --greedy"
