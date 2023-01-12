@@ -195,8 +195,8 @@
     useConfigOnly = true
 
 # Switch user depending on projects. Handy for using work email for work projects
-[includeIf "gitdir:~/projects/pollen/**/"]
-    path = ~/.config/git/users/pollen
+[includeIf "gitdir:~/projects/clearscore/**/"]
+    path = ~/.config/git/users/clearscore
 
 [alias]
     a = add

@@ -20,3 +20,6 @@ Icon
 Temporary Items
 
 Brewfile.lock.json
+
+# Ignore local user config
+config/git/users
