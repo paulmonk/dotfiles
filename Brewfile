@@ -19,14 +19,10 @@ brew "xz"
 brew "ansible"
 # Plugin manager for zsh, inspired by oh-my-zsh and vundle
 brew "antigen"
-# GNU compiler collection
-brew "gcc"
+# Freely available high-quality data compressor
+brew "bzip2"
 # Library for processing command-line flags
 brew "gflags"
-# Package for scientific computing with Python
-brew "numpy"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
 # Download with resuming and segmented downloading
@@ -51,8 +47,8 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
-# Freely available high-quality data compressor
-brew "bzip2"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.9"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -61,10 +57,14 @@ brew "cabal-install"
 brew "glib"
 # Insanely fast image printing in your terminal
 brew "catimg"
-# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
-brew "libheif"
-# Tools and libraries to manipulate images in many formats
-brew "imagemagick"
+# Toolkit for image loading and pixel buffer manipulation
+brew "gdk-pixbuf"
+# OpenType text shaping engine
+brew "harfbuzz"
+# Framework for layout and rendering of i18n text
+brew "pango"
+# Library to render SVG files using Cairo
+brew "librsvg"
 # Versatile and fast Unicode/ASCII/ANSI graphics renderer
 brew "chafa"
 # Checks for bashisms in shell scripts
@@ -95,6 +95,8 @@ brew "diff-so-fancy"
 brew "diffutils"
 # Load/unload environment variables based on $PWD
 brew "direnv"
+# Tool for exploring each layer in a docker image
+brew "dive"
 # Tools for browsing and manipulating docker registries
 brew "docker-ls"
 # Text processing system for reStructuredText
@@ -103,6 +105,8 @@ brew "docutils"
 brew "dos2unix"
 # Select default apps for documents and URL schemes on macOS
 brew "duti"
+# Collection of reusable C++ library artifacts developed at Facebook
+brew "folly"
 # Maintain consistent coding style between multiple editors
 brew "editorconfig"
 # Platform built on V8 to build network applications
@@ -115,8 +119,6 @@ brew "exa"
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
 brew "exiftool"
-# Collection of reusable C++ library artifacts developed at Facebook
-brew "folly"
 # C++14 implementation of the TLS-1.3 standard
 brew "fizz"
 # Modular, composable client/server abstractions framework
@@ -127,10 +129,6 @@ brew "fbthrift"
 brew "fb303"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
-# Generate introspection data for GObject libraries
-brew "gobject-introspection"
-# OpenType text shaping engine
-brew "harfbuzz"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Fast web fuzzer written in Go
@@ -155,14 +153,18 @@ brew "fzf"
 brew "fzy"
 # GNU awk utility
 brew "gawk"
+# GNU compiler collection
+brew "gcc"
 # Geometry Engine
 brew "geos"
 # Framework for scientific data networking
 brew "libdap"
+# Package for scientific computing with Python
+brew "numpy"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
 # Geospatial Data Abstraction Library
 brew "gdal"
-# Toolkit for image loading and pixel buffer manipulation
-brew "gdk-pixbuf"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -189,14 +191,12 @@ brew "libusb"
 brew "gnupg"
 # Simple jira command-line client in Go
 brew "go-jira"
+# Generate introspection data for GObject libraries
+brew "gobject-introspection"
 # Library access to GnuPG
 brew "gpgme"
 # Image processing tools collection
 brew "graphicsmagick"
-# Framework for layout and rendering of i18n text
-brew "pango"
-# Library to render SVG files using Cairo
-brew "librsvg"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -223,16 +223,24 @@ brew "httpstat"
 brew "hub"
 # Command-line benchmarking tool
 brew "hyperfine"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
 # Tool to monitor I/O latency in real time
 brew "ioping"
 # Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
 # Interactive computing in Python
 brew "ipython"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
+# Enhanced version of john, a UNIX password cracker
+brew "john-jumbo"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # JSON parser and validator with a CLI
@@ -299,8 +307,6 @@ brew "nmap"
 brew "odt2txt"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # SSL/TLS VPN implementing OSI layer 2 or 3 secure network extension
 brew "openvpn"
 # 7-Zip (high compression file archiver) implementation
@@ -317,12 +323,8 @@ brew "pidof"
 brew "pinentry-mac"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
-# Cross-platform application and UI framework
-brew "qt"
-# PDF rendering library (based on the xpdf-3.0 code base)
-brew "poppler"
 # Object-relational database system
-brew "postgresql", restart_service: true
+brew "postgresql@14"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -345,6 +347,8 @@ brew "pyenv-virtualenv"
 brew "python@3.8"
 # QR Code generation
 brew "qrencode"
+# Cross-platform application and UI framework
+brew "qt"
 # File browser
 brew "ranger"
 # Search tool like grep and The Silver Searcher
@@ -417,6 +421,8 @@ brew "watchman"
 brew "wget"
 # Lookup tool for domain names and other internet resources
 brew "whois"
+# Library to create, extract, and modify Windows Imaging files
+brew "wimlib"
 # Userspace Go implementation of WireGuard
 brew "wireguard-go"
 # Tools for the WireGuard secure network tunnel
@@ -427,6 +433,8 @@ brew "xsv"
 brew "yamllint"
 # CLI to convert between YAML, TOML, JSON and HCL
 brew "yj"
+# Tool for managing your YubiKey configuration
+brew "ykman"
 # YubiKey personalization library and tool
 brew "ykpers"
 # Download YouTube videos from the command-line
@@ -475,21 +483,30 @@ cask "bartender"
 cask "dash"
 # Offline toolbox for developers
 cask "devutils"
+# Run Stable Diffusion locally
+cask "diffusionbee"
 # App to build and share containerized applications and microservices
 cask "docker"
 # Web browser
 cask "firefox"
 # Web browser
 cask "firefox-developer-edition"
+# Free monospaced font with programming ligatures
 cask "font-fira-code"
+# Developer targeted fonts with a high number of glyphs
 cask "font-fira-code-nerd-font"
+# Developer targeted fonts with a high number of glyphs
 cask "font-hack-nerd-font"
+# Free and open-source image editor
+cask "gimp"
 # Web browser
 cask "google-chrome"
 # Web browser
 cask "google-chrome-canary"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
+# Vector graphics editor
+cask "inkscape"
 # System monitoring app
 cask "istat-menus"
 # Terminal emulator as alternative to Apple's Terminal app
