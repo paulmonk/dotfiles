@@ -8,10 +8,14 @@ Host *
   HashKnownHosts yes
 
   VisualHostKey yes
+
   PasswordAuthentication no
   ChallengeResponseAuthentication no
+
+  IdentityFile ~/.ssh/smartcard.pub
   AddKeysToAgent yes
   StrictHostKeyChecking ask
+
   ControlMaster auto
   ControlPath /tmp/ssh-%r@%h:%p
   ControlPersist 2m
