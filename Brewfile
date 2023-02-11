@@ -1,3 +1,4 @@
+tap "coursier/formulas"
 tap "heroku/brew"
 tap "homebrew/bundle"
 tap "homebrew/cask"
@@ -13,6 +14,8 @@ tap "warrensbox/tap"
 brew "act"
 # Library for command-line editing
 brew "readline"
+# Command-line interface for SQLite
+brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
 # Automate deployment, configuration, and upgrading
@@ -31,6 +34,8 @@ brew "aria2"
 brew "asciinema"
 # Archival front-end
 brew "atool"
+# Text processing system for reStructuredText
+brew "docutils"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Programmable completion for Bash 4.2+
@@ -99,8 +104,6 @@ brew "direnv"
 brew "dive"
 # Tools for browsing and manipulating docker registries
 brew "docker-ls"
-# Text processing system for reStructuredText
-brew "docutils"
 # Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
 # Select default apps for documents and URL schemes on macOS
@@ -109,6 +112,8 @@ brew "duti"
 brew "folly"
 # Maintain consistent coding style between multiple editors
 brew "editorconfig"
+# Tool to verify that your files are in harmony with your .editorconfig
+brew "editorconfig-checker"
 # Platform built on V8 to build network applications
 brew "node"
 # AST-based pattern checker for JavaScript
@@ -159,6 +164,8 @@ brew "gcc"
 brew "geos"
 # Framework for scientific data networking
 brew "libdap"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
 # Package for scientific computing with Python
 brew "numpy"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -223,28 +230,28 @@ brew "httpstat"
 brew "hub"
 # Command-line benchmarking tool
 brew "hyperfine"
-# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
-brew "libheif"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 # Tool to monitor I/O latency in real time
 brew "ioping"
 # Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
 # Interactive computing in Python
 brew "ipython"
+# Sort Python imports automatically
+brew "isort"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
-# Enhanced version of john, a UNIX password cracker
-brew "john-jumbo"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # JSON parser and validator with a CLI
 brew "jsonlint"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
+# Interactive environments for writing and running code
+brew "jupyterlab"
 # Modern load testing tool, using Go and JavaScript
 brew "k6"
 # Selection-based modal text editor
@@ -263,16 +270,18 @@ brew "lesspipe"
 brew "lf"
 # C and C++ client library to the memcached server
 brew "libmemcached"
-# Host-side of the Universal 2nd Factor (U2F) protocol
-brew "libu2f-host"
 # C library for manipulating Yubico one-time passwords
 brew "libyubikey"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Curses-based tool for viewing and analyzing log files
 brew "lnav"
 # Security and system auditing tool to harden systems
 brew "lynis"
 # Mac App Store command-line interface
 brew "mas"
+# Java-based project management
+brew "maven"
 # Recursively compute digests on files/directories
 brew "md5deep"
 # Unified display of technical and tag data for audio/video
@@ -307,12 +316,12 @@ brew "nmap"
 brew "odt2txt"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # SSL/TLS VPN implementing OSI layer 2 or 3 secure network extension
 brew "openvpn"
 # 7-Zip (high compression file archiver) implementation
 brew "p7zip"
-# Swiss-army knife of markup format conversion
-brew "pandoc"
 # Simplistic interactive filtering tool
 brew "peco"
 # CLI for Postgres with auto-completion and syntax highlighting
@@ -321,10 +330,12 @@ brew "pgcli"
 brew "pidof"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
+# Python dependency management tool
+brew "pipenv"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
 # Object-relational database system
-brew "postgresql@14"
+brew "postgresql@14", restart_service: true
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -343,6 +354,8 @@ brew "pstree"
 brew "pyenv"
 # Pyenv plugin to manage virtualenv
 brew "pyenv-virtualenv"
+# Tool Command Language
+brew "tcl-tk"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.8"
 # QR Code generation
@@ -363,8 +376,16 @@ brew "rmlint"
 brew "rsync"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
+# Extremely fast Python linter, written in Rust
+brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
+# Login and retrieve AWS temporary credentials using a SAML IDP
+brew "saml2aws"
+# Blazing-fast modern Lua linter
+brew "selene"
+# Easily detect and prevent bugs and anti-patterns in your codebase
+brew "semgrep"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
 # Bash syntax highlighter that encourages/fixes variables quoting
@@ -413,6 +434,8 @@ brew "twine-pypi"
 brew "unzip"
 # Vi 'workalike' with many additional features
 brew "vim"
+# Find dead Python code
+brew "vulture"
 # Executes a program periodically, showing output fullscreen
 brew "watch"
 # Watch files and take action when they change
@@ -439,7 +462,7 @@ brew "ykman"
 brew "ykpers"
 # Download YouTube videos from the command-line
 brew "youtube-dl"
-# Process YAML documents from the CLI
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
 # Compression and file packaging/archive utility
 brew "zip"
@@ -451,6 +474,8 @@ brew "zoxide"
 brew "zsh"
 # Additional completion definitions for zsh
 brew "zsh-completions"
+# Launcher for Coursier
+brew "coursier/formulas/coursier"
 # Everything you need to get started with Heroku
 brew "heroku/brew/heroku"
 # Terminal utility for exploring and arranging tabular data
@@ -481,8 +506,6 @@ cask "balenaetcher"
 cask "bartender"
 # API documentation browser and code snippet manager
 cask "dash"
-# Offline toolbox for developers
-cask "devutils"
 # Run Stable Diffusion locally
 cask "diffusionbee"
 # App to build and share containerized applications and microservices
@@ -527,6 +550,8 @@ cask "macfuse"
 cask "micro-snitch"
 # Silence embarrassing notifications while screensharing
 cask "muzzle"
+# App to write, plan, collaborate, and get organized
+cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
 # Retro video game emulation
@@ -537,7 +562,7 @@ cask "owasp-zap"
 cask "rectangle"
 # Web browser
 cask "safari-technology-preview"
-# Additional features and controls for Shure MV7 and MV88+ microphones
+# Additional features and controls for Sure MV7 and MV88+ microphones
 cask "shureplus-motiv"
 # Instant messaging application focusing on security
 cask "signal"
@@ -551,6 +576,10 @@ cask "sonos"
 cask "tableau"
 # Native GUI tool for relational databases
 cask "tableplus"
+# JDK from the Eclipse Foundation (Adoptium)
+cask "temurin"
+# JDK from the Eclipse Foundation (Adoptium)
+cask "temurin11"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin8"
 # Free and open-source OpenVPN client

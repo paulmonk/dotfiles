@@ -188,7 +188,6 @@ lvim.builtin.which_key.mappings["t"] = {
 -- Builtins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 -- =========================================
-lvim.builtin.notify.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
@@ -235,6 +234,7 @@ lvim.builtin.treesitter.ensure_installed = {
 	"r",
 	"ruby",
 	"rust",
+  "scala",
 	"toml",
 	"tsx",
 	"typescript",
@@ -280,16 +280,44 @@ local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
 	{
 		command = "black",
-		filetypes = { "python" }
 	},
 	{
-		command = "isort",
-		filetypes = { "python" }
+		command = "codespell",
 	},
 	{
-		command = "prettier",
-		extra_args = { "--print-with", "80" },
-		filetypes = { "typescript", "typescriptreact", "yaml", "markdown", "graphql" },
+		command = "eslint_d",
+	},
+	{
+		command = "gofmt",
+	},
+	{
+		command = "prettierd",
+		extra_args = { "--print-with", "100" },
+	},
+	{
+		command = "ruff",
+	},
+	{
+		command = "rustfmt",
+	},
+	{
+		command = "scalafmt",
+	},
+	{
+		command = "shellharden",
+	},
+	{
+		command = "shfmt",
+	},
+	{
+		command = "sqlfluff",
+		extra_args = { "--dialect", "postgres" }
+	},
+	{
+		command = "terraform_fmt",
+	},
+	{
+		command = "tidy",
 	},
 })
 
@@ -298,20 +326,71 @@ formatters.setup({
 local linters = require("lvim.lsp.null-ls.linters")
 linters.setup({
 	{
-		command = "codespell",
-		filetypes = { "javascript", "python" },
+		command = "alex",
 	},
 	{
-		command = "flake8",
-		filetypes = { "python" }
+		command = "checkmake",
+	},
+	{
+		command = "chktex",
+	},
+	{
+		command = "codespell",
+	},
+	{
+		command = "dotenv_linter",
+	},
+	{
+		command = "editorconfig_checker",
+	},
+	{
+		command = "eslint_d",
+	},
+	{
+		command = "hadolint",
 	},
 	{
 		command = "mypy",
-		filetypes = { "python" }
+	},
+	{
+		command = "proselint",
+	},
+	{
+		command = "revive",
+	},
+	{
+		command = "rubocop",
+	},
+	{
+		command = "ruff",
+	},
+	{
+		command = "selene",
+	},
+	{
+		command = "semgrep",
 	},
 	{
 		command = "shellcheck",
 		extra_args = { "--severity", "warning" },
+	},
+	{
+		command = "sqlfluff",
+	},
+	{
+		command = "tfsec",
+	},
+	{
+		command = "tidy",
+	},
+	{
+		command = "tsc",
+	},
+	{
+		command = "vulture",
+	},
+	{
+		command = "zsh",
 	},
 })
 
@@ -323,6 +402,12 @@ code_actions.setup {
 		command = "proselint",
 		args = { "--json" },
 		filetypes = { "markdown", "tex" },
+	},
+	{
+		command = "refactoring",
+	},
+	{
+		command = "shellcheck",
 	},
 }
 
@@ -358,7 +443,7 @@ lvim.plugins = {
 	{
 		"xiyaowong/accelerated-jk.nvim",
 		commit = "1b3160724383e0180071753f958806859e2bc81a",
-		lock = true,
+		pin = true,
 		event = "BufRead",
 		config = function()
 			require('accelerated-jk').setup {
@@ -581,7 +666,7 @@ lvim.plugins = {
 		"f-person/git-blame.nvim",
 		event = "BufRead",
 		cmd = { "GitBlameToggle" },
-		setup = function()
+		init = function()
 			vim.cmd("highlight default link gitblame SpecialComment")
 			vim.g.gitblame_enabled = 0
 		end,
@@ -611,7 +696,7 @@ lvim.plugins = {
 	{
 		"cfmeyers/dbt.nvim",
 		ft = { "sql" },
-		requires = {
+		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
 			"rcarriga/nvim-notify",
@@ -692,16 +777,6 @@ lvim.plugins = {
 			})
 		end
 	},
-	-- TODO: Fix SQL LSP config
-	-- SQL LSP.
-	-- {
-	--   "nanotee/sqls.nvim",
-	--   event = "BufRead",
-	--   ft = "sql",
-	--   config = function()
-	--     require 'lspconfig'.sqls.setup {}
-	--   end,
-	-- },
 	{
 		"simrat39/symbols-outline.nvim",
 		cmd = { "SymbolsOutline", "SymbolsOutlineOpen" },
@@ -716,9 +791,9 @@ lvim.plugins = {
 	{ "ggandor/leap.nvim", event = "BufRead", },
 	{
 		'wfxr/minimap.vim',
-		run = "cargo install --locked code-minimap",
+		build = "cargo install --locked code-minimap",
 		cmd = { "Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight" },
-		setup = function()
+		init = function()
 			vim.g.minimap_width = 10
 			vim.g.minimap_auto_start = 0
 			vim.g.minimap_auto_start_win_enter = 0
@@ -784,7 +859,7 @@ lvim.plugins = {
 	{
 		"andymass/vim-matchup",
 		event = "CursorMoved",
-		setup = function()
+		init = function()
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
 		end,
 	},
@@ -933,6 +1008,12 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",
 	command = "setlocal expandtab spell formatoptions=tcroqn2 comments=n:>",
+})
+
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "python",
+	command = "setlocal expandtab tabstop=4",
 })
 
 -- Prefer '--' for comments in SQL
