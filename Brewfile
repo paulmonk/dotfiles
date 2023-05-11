@@ -18,18 +18,28 @@ brew "readline"
 brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
 # Automate deployment, configuration, and upgrading
 brew "ansible"
 # Plugin manager for zsh, inspired by oh-my-zsh and vundle
 brew "antigen"
+# Color management engine supporting ICC profiles
+brew "little-cms2"
 # Freely available high-quality data compressor
 brew "bzip2"
 # Library for processing command-line flags
 brew "gflags"
+# Next generation open source RPC library and framework
+brew "grpc"
+# Framework for scalable cross-language services development
+brew "thrift"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
 # Download with resuming and segmented downloading
 brew "aria2"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.10"
 # Record and share terminal sessions
 brew "asciinema"
 # Archival front-end
@@ -52,6 +62,8 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
+# Collection of portable C++ source libraries
+brew "boost"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
 # Glorious Glasgow Haskell Compilation System
@@ -74,6 +86,8 @@ brew "librsvg"
 brew "chafa"
 # Checks for bashisms in shell scripts
 brew "checkbashisms"
+# Linter/analyzer for Makefiles
+brew "checkmake"
 # Fix common misspellings in source code and text files
 brew "codespell"
 # Color-highlighted diff(1) output
@@ -82,6 +96,8 @@ brew "colordiff"
 brew "coreutils"
 # Top-like interface for container metrics
 brew "ctop"
+# Open source suite of directory software
+brew "openldap"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Tools to manipulate dates with a focus on financial data
@@ -106,10 +122,14 @@ brew "dive"
 brew "docker-ls"
 # Convert text between DOS, UNIX, and Mac formats
 brew "dos2unix"
+# Embeddable SQL OLAP Database Management System
+brew "duckdb"
 # Select default apps for documents and URL schemes on macOS
 brew "duti"
 # Collection of reusable C++ library artifacts developed at Facebook
 brew "folly"
+# Shared library for Watchman and Eden projects
+brew "edencommon"
 # Maintain consistent coding style between multiple editors
 brew "editorconfig"
 # Tool to verify that your files are in harmony with your .editorconfig
@@ -134,6 +154,14 @@ brew "fbthrift"
 brew "fb303"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# Multi-format archive and compression library
+brew "libarchive"
+# OCR (Optical Character Recognition) engine
+brew "tesseract"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
 # Fast web fuzzer written in Go
@@ -162,10 +190,18 @@ brew "gawk"
 brew "gcc"
 # Geometry Engine
 brew "geos"
-# Framework for scientific data networking
-brew "libdap"
+# File format designed to store large amounts of data
+brew "hdf5"
+# Network authentication protocol
+brew "krb5"
 # ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
 brew "libheif"
+# Postgres C API library
+brew "libpq"
+# Libraries and data formats for array-oriented scientific data
+brew "netcdf"
+# Optimized BLAS library
+brew "openblas"
 # Package for scientific computing with Python
 brew "numpy"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -216,6 +252,8 @@ brew "handbrake"
 brew "helm"
 # Command-line hex viewer
 brew "hexyl"
+# Powerful, lightweight programming language
+brew "lua"
 # Convert source code to formatted text with syntax highlighting
 brew "highlight"
 # Command-line tools for OpenPGP-related operations
@@ -236,22 +274,20 @@ brew "imagemagick"
 brew "ioping"
 # Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
 # Interactive computing in Python
 brew "ipython"
-# Sort Python imports automatically
-brew "isort"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
+# Enhanced version of john, a UNIX password cracker
+brew "john-jumbo"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # JSON parser and validator with a CLI
 brew "jsonlint"
-# Swiss-army knife of markup format conversion
-brew "pandoc"
-# Interactive environments for writing and running code
-brew "jupyterlab"
 # Modern load testing tool, using Go and JavaScript
 brew "k6"
 # Selection-based modal text editor
@@ -260,6 +296,8 @@ brew "kakoune"
 brew "kubernetes-cli"
 # Lazier way to manage everything docker
 brew "lazydocker"
+# Simple terminal UI for git commands
+brew "lazygit"
 # DNS library written in C
 brew "ldns"
 # Pager program similar to more
@@ -268,8 +306,14 @@ brew "less"
 brew "lesspipe"
 # Terminal file manager
 brew "lf"
+# Framework for scientific data networking
+brew "libdap"
+# Provides library functionality for FIDO U2F & FIDO 2.0, including USB
+brew "libfido2"
 # C and C++ client library to the memcached server
 brew "libmemcached"
+# Host-side of the Universal 2nd Factor (U2F) protocol
+brew "libu2f-host"
 # C library for manipulating Yubico one-time passwords
 brew "libyubikey"
 # Next-gen compiler infrastructure
@@ -300,6 +344,8 @@ brew "mr"
 brew "mtr"
 # Tail multiple files in one terminal simultaneously
 brew "multitail"
+# Pretty-print tabular data in Python
+brew "python-tabulate"
 # CLI for MySQL with auto-completion and syntax highlighting
 brew "mycli"
 # Experimental optional static type checker for Python
@@ -316,26 +362,28 @@ brew "nmap"
 brew "odt2txt"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # SSL/TLS VPN implementing OSI layer 2 or 3 secure network extension
 brew "openvpn"
 # 7-Zip (high compression file archiver) implementation
 brew "p7zip"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
 # Simplistic interactive filtering tool
 brew "peco"
+# Highly capable, feature-rich programming language
+brew "perl"
 # CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
 # Display the PID number for a given process name
 brew "pidof"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# Python dependency management tool
-brew "pipenv"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Cross-platform application and UI framework
+brew "qt@5"
 # Object-relational database system
-brew "postgresql@14", restart_service: true
+brew "postgresql@14"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -434,8 +482,6 @@ brew "twine-pypi"
 brew "unzip"
 # Vi 'workalike' with many additional features
 brew "vim"
-# Find dead Python code
-brew "vulture"
 # Executes a program periodically, showing output fullscreen
 brew "watch"
 # Watch files and take action when they change
@@ -506,6 +552,8 @@ cask "balenaetcher"
 cask "bartender"
 # API documentation browser and code snippet manager
 cask "dash"
+# All-in-one toolbox for developers
+cask "devutils"
 # Run Stable Diffusion locally
 cask "diffusionbee"
 # App to build and share containerized applications and microservices
@@ -520,6 +568,8 @@ cask "font-fira-code"
 cask "font-fira-code-nerd-font"
 # Developer targeted fonts with a high number of glyphs
 cask "font-hack-nerd-font"
+cask "font-inter"
+cask "font-nova-mono"
 # Free and open-source image editor
 cask "gimp"
 # Web browser
