@@ -157,7 +157,7 @@ $(HOME)/.local/bin/lunarvim: brew-bundle
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
 	   exit 1; \
 	fi; \
-	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)";
+	LV_BRANCH="release-1.3/neovim-0.9" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)";
 
 ## LunarVim Install
 lunarvim-install: $(HOME)/.local/bin/lunarvim
