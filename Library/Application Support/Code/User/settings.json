@@ -1,0 +1,212 @@
+{
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "breadcrumbs.enabled": true,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "smart",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.cursorBlinking": "solid",
+  "editor.cursorStyle": "line",
+  "editor.fontFamily": "FiraCode Nerd Font",
+  "editor.fontLigatures": true,
+  "editor.glyphMargin": false,
+  "editor.insertSpaces": false,
+  "editor.minimap.renderCharacters": false,
+  "editor.parameterHints.enabled": false,
+  "editor.quickSuggestions": {
+    "comments": true,
+    "other": true,
+    "strings": true
+  },
+  "editor.renderLineHighlight": "none",
+  "editor.renderWhitespace": "none",
+  "editor.scrollbar.verticalScrollbarSize": 8,
+  "editor.suggest.localityBonus": true,
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "on",
+  "editor.tokenColorCustomizations": {
+    "[Nord]": {
+      "comments": "#616e88"
+    },
+  },
+  "editor.wordBasedSuggestionsMode": "currentDocument",
+  "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+  "editor.wordWrap": "on",
+  "emmet.showExpandedAbbreviation": "never",
+  "eslint.format.enable": true,
+  "eslint.rules.customizations": [
+    {
+      "rule": "*",
+      "severity": "warn"
+    }
+  ],
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.ignoreRecommendations": true,
+  "files.associations": {
+    "*.mjml": "handlebars",
+    ".env.local": "shellscript"
+  },
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/yarn.lock": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.path": "/usr/local/bin/git",
+  "javascript.suggest.completeJSDocs": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "markdown.preview.fontSize": 16,
+  "php.suggest.basic": false,
+  "references.preferredLocation": "view",
+  "rest-client.enableTelemetry": false,
+  "rest-client.fontSize": 13,
+  "scrolloff.scrolloff": 10,
+  "search.exclude": {
+    "**/*.{png,jpeg,jpg,svg}": true,
+    "**/*.js.snap": true,
+    "**/*.ts.snap": true,
+    "**/yaml.lock": true
+  },
+  "telemetry.telemetryLevel": "off",
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.fontWeight": "400",
+  "terminal.integrated.fontWeightBold": "normal",
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vim.foldfix": false,
+  "vim.leader": ",",
+  "vim.neovimPath": "/opt/homebrew/bin/nvim",
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "j"
+      ],
+      "commands": [
+        "cursorDown"
+      ]
+    },
+    {
+      "before": [
+        "k"
+      ],
+      "commands": [
+        "cursorUp"
+      ]
+    },
+    {
+      "before": [
+        ";"
+      ],
+      "commands": [
+        "workbench.action.quickOpen"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "w"
+      ],
+      "after": [
+        "leader",
+        "leader",
+        "w"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "b"
+      ],
+      "after": [
+        "leader",
+        "leader",
+        "b"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "s"
+      ],
+      "after": [
+        "leader",
+        "leader",
+        "s"
+      ]
+    }
+  ],
+  "workbench.activityBar.visible": false,
+  "workbench.startupEditor": "none",
+  "terminal.integrated.macOptionIsMeta": true,
+  "editor.lineHeight": 1.2,
+  "debug.javascript.autoAttachFilter": "disabled",
+  "editor.formatOnSave": true,
+  "git.useEditorAsCommitInput": false,
+  "window.commandCenter": true,
+  "zenMode.fullScreen": false,
+  "vim.argumentObjectClosingDelimiters": [
+    ")",
+    "]",
+    "\""
+  ],
+  "typescript.preferences.jsxAttributeCompletionStyle": "none",
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.editor.tabCloseButton": "off",
+  "git.mergeEditor": true,
+  "[css]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+  },
+  "workbench.layoutControl.enabled": false,
+  "window.nativeTabs": true,
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true
+  },
+  "editor.autoSurround": "never",
+  "editor.autoClosingQuotes": "never",
+  "editor.autoClosingBrackets": "never",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.minimap.enabled": false,
+  "git.openRepositoryInParentFolders": "never",
+  "editor.showFoldingControls": "never",
+  "editor.guides.indentation": false,
+  "editor.lineNumbers": "on",
+  "update.showReleaseNotes": false,
+  "editor.fontSize": 14,
+  "explorer.autoRevealExclude": {
+    "**/dist": true
+  },
+  "vim.easymotion": true,
+  "vim.easymotionDimBackground": false,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorTheme": "Solarized Dark",
+  "outline.collapseItems": "alwaysCollapse",
+  "editor.tabSize": 8
+}
