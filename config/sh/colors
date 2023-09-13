@@ -2,42 +2,42 @@
 
 # Enable color support of ls and also add handy aliases
 if command -v dircolors >/dev/null 2>&1; then
-  # Prefer exa if available
-  if command -v exa >/dev/null 2>&1; then
-    ls="exa --group --git --group-directories-first --all"
-  else
-    ls="LC_COLLATE=C ls --group-directories-first --all"
-  fi
+	# Prefer eza if available
+	if command -v eza >/dev/null 2>&1; then
+		ls="eza --group --git --group-directories-first --all"
+	else
+		ls="LC_COLLATE=C ls --group-directories-first --all"
+	fi
 
-  # Call dircolors to define colors if they"re missing
-  if [ -z "${LS_COLORS}" ]; then
-    if [ -s "${XDG_CONFIG_HOME}/sh/dircolors" ]; then
-      eval "$(dircolors --sh "${XDG_CONFIG_HOME}/sh/dircolors")"
-    else
-      eval "$(dircolors --sh)"
-    fi
-  fi
+	# Call dircolors to define colors if they"re missing
+	if [ "$LS_COLORS" = "" ]; then
+		if [ -s "${XDG_CONFIG_HOME}/sh/dircolors" ]; then
+			eval "$(dircolors --sh "${XDG_CONFIG_HOME}/sh/dircolors")"
+		else
+			eval "$(dircolors --sh)"
+		fi
+	fi
 
-  # shellcheck disable=SC2139
-  alias ls="${ls} --color=auto"
+	# shellcheck disable=SC2139
+	alias ls="${ls} --color=auto"
 
-  alias dir='dir --color=auto'
-  alias vdir='vdir --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
 else
-  # BSD Core Utilities
-  # enable colored output from ls, etc
-  export CLICOLOR=1
+	# BSD Core Utilities
+	# enable colored output from ls, etc
+	export CLICOLOR=1
 
-  # Define colors for BSD ls if they"re not already defined
-  if [ -z "${LSCOLORS}" ]; then
-    export LSCOLORS="exfxcxdxbxGxDxabagacad"
-  fi
+	# Define colors for BSD ls if they"re not already defined
+	if [ "$LSCOLORS" = "" ]; then
+		export LSCOLORS="exfxcxdxbxGxDxabagacad"
+	fi
 
-  # Define colors for the completion system if they"re not already defined
-  if [ -z "${LS_COLORS}" ]; then
-    export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:"
-  fi
-  alias ls="ls -G"
+	# Define colors for the completion system if they"re not already defined
+	if [ "$LS_COLORS" = "" ]; then
+		export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:"
+	fi
+	alias ls="ls -G"
 fi
 
 # Grep

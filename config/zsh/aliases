@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 #------------------------------------------------------------------------------
-# ZSH Specfic Aliases
+# ZSH Specific Aliases
 #------------------------------------------------------------------------------
 # Disable correction.
 for com in "ack" "ag" "cd" "cp" "egrep" "fd" "find" "fgrep" "gcc" "gist" "grep" \
@@ -118,9 +118,9 @@ fi
 
 # ls
 # ls alias is set in colors sh config.
-# If ls is set to exa. Some of these aliases will not work.
-# TODO: add checks for exa.
-if (( $+commands[exa] )); then
+# If ls is set to eza. Some of these aliases will not work.
+# TODO: add checks for eza.
+if (( $+commands[eza] )); then
   alias ll="${aliases[ls]:-ls} -l"
   alias la="ll"
   alias lr="ll -R"                     # recursively.

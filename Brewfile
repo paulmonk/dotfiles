@@ -138,8 +138,8 @@ brew "editorconfig-checker"
 brew "node"
 # AST-based pattern checker for JavaScript
 brew "eslint"
-# Modern replacement for 'ls'
-brew "exa"
+# Modern, maintained replacement for ls
+brew "eza"
 # Read, write, modify, and display EXIF data on the command-line
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
