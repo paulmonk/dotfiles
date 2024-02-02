@@ -248,7 +248,7 @@
   "workbench.colorTheme": "Solarized Dark",
   "workbench.editor.tabActionCloseVisibility": false,
   "workbench.editor.tabSizing": "shrink",
-  "workbench.iconTheme": "vscode-icons",
+  "workbench.iconTheme": "vscode-great-icons",
   "workbench.layoutControl.enabled": false,
   "workbench.startupEditor": "none",
   "zenMode.fullScreen": false,
