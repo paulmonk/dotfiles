@@ -1,25 +1,23 @@
 tap "coursier/formulas"
 tap "heroku/brew"
 tap "homebrew/bundle"
-tap "homebrew/cask"
 tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
-tap "homebrew/core"
 tap "homebrew/services"
 tap "saulpw/vd"
 tap "thoughtbot/formulae"
 tap "warrensbox/tap"
-# Run your GitHub Actions locally 🚀
+# Run your GitHub Actions locally
 brew "act"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Library for command-line editing
 brew "readline"
 # Command-line interface for SQLite
 brew "sqlite"
 # General-purpose data compression with high compression ratio
 brew "xz"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.11"
 # Automate deployment, configuration, and upgrading
 brew "ansible"
 # Plugin manager for zsh, inspired by oh-my-zsh and vundle
@@ -32,20 +30,22 @@ brew "bzip2"
 brew "gflags"
 # Next generation open source RPC library and framework
 brew "grpc"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Framework for scalable cross-language services development
 brew "thrift"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
 # Download with resuming and segmented downloading
 brew "aria2"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.10"
 # Record and share terminal sessions
 brew "asciinema"
 # Archival front-end
 brew "atool"
 # Text processing system for reStructuredText
 brew "docutils"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Programmable completion for Bash 4.2+
@@ -64,8 +64,6 @@ brew "binutils"
 brew "black"
 # Collection of portable C++ source libraries
 brew "boost"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -138,8 +136,8 @@ brew "editorconfig-checker"
 brew "node"
 # AST-based pattern checker for JavaScript
 brew "eslint"
-# Modern, maintained replacement for ls
-brew "eza"
+# Modern replacement for 'ls'
+brew "exa"
 # Read, write, modify, and display EXIF data on the command-line
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
@@ -148,18 +146,24 @@ brew "exiftool"
 brew "fizz"
 # Modular, composable client/server abstractions framework
 brew "wangle"
-# Facebook's branch of Apache Thrift, including a new C++ server
-brew "fbthrift"
 # Thrift functions for querying information from a service
 brew "fb303"
+# Facebook's branch of Apache Thrift, including a new C++ server
+brew "fbthrift"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# GNU compiler collection
+brew "gcc"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
 # Multi-format archive and compression library
 brew "libarchive"
+# Optimized BLAS library
+brew "openblas"
+# Package for scientific computing with Python
+brew "numpy"
 # OCR (Optical Character Recognition) engine
 brew "tesseract"
 # Play, record, convert, and stream audio and video
@@ -186,10 +190,14 @@ brew "fzf"
 brew "fzy"
 # GNU awk utility
 brew "gawk"
-# GNU compiler collection
-brew "gcc"
 # Geometry Engine
 brew "geos"
+# Library for USB device access
+brew "libusb"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
+# Library access to GnuPG
+brew "gpgme"
 # File format designed to store large amounts of data
 brew "hdf5"
 # Network authentication protocol
@@ -200,10 +208,6 @@ brew "libheif"
 brew "libpq"
 # Libraries and data formats for array-oriented scientific data
 brew "netcdf"
-# Optimized BLAS library
-brew "openblas"
-# Package for scientific computing with Python
-brew "numpy"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Geospatial Data Abstraction Library
@@ -216,6 +220,8 @@ brew "git"
 brew "git-delta"
 # Small git utilities
 brew "git-extras"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.10"
 # Quickly rewrite git repository history
 brew "git-filter-repo"
 # Simple and efficient way to access statistics in git
@@ -228,16 +234,10 @@ brew "glances"
 brew "gnu-sed"
 # GNU version of the tar archiving utility
 brew "gnu-tar"
-# Library for USB device access
-brew "libusb"
-# GNU Pretty Good Privacy (PGP) package
-brew "gnupg"
 # Simple jira command-line client in Go
 brew "go-jira"
 # Generate introspection data for GObject libraries
 brew "gobject-introspection"
-# Library access to GnuPG
-brew "gpgme"
 # Image processing tools collection
 brew "graphicsmagick"
 # Graph visualization software from AT&T and Bell Labs
@@ -268,22 +268,20 @@ brew "httpstat"
 brew "hub"
 # Command-line benchmarking tool
 brew "hyperfine"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.9"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 # Tool to monitor I/O latency in real time
 brew "ioping"
 # Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
 # Interactive computing in Python
 brew "ipython"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
-# Enhanced version of john, a UNIX password cracker
-brew "john-jumbo"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # JSON parser and validator with a CLI
@@ -316,14 +314,10 @@ brew "libmemcached"
 brew "libu2f-host"
 # C library for manipulating Yubico one-time passwords
 brew "libyubikey"
-# Next-gen compiler infrastructure
-brew "llvm"
 # Curses-based tool for viewing and analyzing log files
 brew "lnav"
 # Security and system auditing tool to harden systems
 brew "lynis"
-# Mac App Store command-line interface
-brew "mas"
 # Java-based project management
 brew "maven"
 # Recursively compute digests on files/directories
@@ -380,8 +374,6 @@ brew "pidof"
 brew "pinentry-mac"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
-# Cross-platform application and UI framework
-brew "qt@5"
 # Object-relational database system
 brew "postgresql@14"
 # Framework for managing multi-language pre-commit hooks
@@ -410,6 +402,8 @@ brew "python@3.8"
 brew "qrencode"
 # Cross-platform application and UI framework
 brew "qt"
+# Cross-platform application and UI framework
+brew "qt@5"
 # File browser
 brew "ranger"
 # Search tool like grep and The Silver Searcher
@@ -440,6 +434,8 @@ brew "shellcheck"
 brew "shellharden"
 # Autoformat shell script source code
 brew "shfmt"
+# SQL linter and auto-formatter for Humans
+brew "sqlfluff"
 # IPv4/IPv6 subnet calculator
 brew "subnetcalc"
 # Command-line packet analyzer
@@ -477,7 +473,7 @@ brew "trash"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Utilities for interacting with PyPI
-brew "twine-pypi"
+brew "twine"
 # Extraction utility for .zip compressed archives
 brew "unzip"
 # Vi 'workalike' with many additional features
@@ -488,6 +484,8 @@ brew "watch"
 brew "watchman"
 # Internet file retriever
 brew "wget"
+# Homebrew, but with Docker images
+brew "whalebrew"
 # Lookup tool for domain names and other internet resources
 brew "whois"
 # Library to create, extract, and modify Windows Imaging files
@@ -532,16 +530,12 @@ brew "thoughtbot/formulae/rcm"
 brew "warrensbox/tap/tfswitch"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
-# Command-line helper for the 1Password password manager
+# Command-line interface for 1Password
 cask "1password-cli"
 # JDK from the Java User Group (JUG)
 cask "adoptopenjdk"
 # Application launcher and productivity software
 cask "alfred"
-# Enable Windows-like alt-tab
-cask "alt-tab"
-# Tools for building Android applications
-cask "android-studio"
 # Application uninstaller
 cask "appcleaner"
 # Securely stores and accesses AWS credentials in a development environment
@@ -550,12 +544,16 @@ cask "aws-vault"
 cask "balenaetcher"
 # Menu bar icon organizer
 cask "bartender"
+# Display management tool
+cask "betterdisplay"
 # API documentation browser and code snippet manager
 cask "dash"
 # All-in-one toolbox for developers
 cask "devutils"
 # Run Stable Diffusion locally
 cask "diffusionbee"
+# Voice and text chat software
+cask "discord"
 # App to build and share containerized applications and microservices
 cask "docker"
 # Web browser
@@ -568,6 +566,7 @@ cask "font-fira-code"
 cask "font-fira-code-nerd-font"
 # Developer targeted fonts with a high number of glyphs
 cask "font-hack-nerd-font"
+# Variable font designed for display
 cask "font-inter"
 cask "font-nova-mono"
 # Free and open-source image editor
@@ -578,8 +577,8 @@ cask "google-chrome"
 cask "google-chrome-canary"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
-# Vector graphics editor
-cask "inkscape"
+# Client for the Google Drive storage service
+cask "google-drive"
 # System monitoring app
 cask "istat-menus"
 # Terminal emulator as alternative to Apple's Terminal app
@@ -588,8 +587,6 @@ cask "iterm2"
 cask "karabiner-elements"
 # Open-source keystroke visualizer
 cask "keycastr"
-# Office suite
-cask "libreoffice"
 # Link-Layer MAC spoofing GUI for macOS
 cask "linkliar"
 # Host-based application firewall
@@ -604,15 +601,11 @@ cask "muzzle"
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
-# Retro video game emulation
-cask "openemu"
-# Free and open source web app scanner
-cask "owasp-zap"
 # Move and resize windows using keyboard shortcuts or snap areas
 cask "rectangle"
 # Web browser
 cask "safari-technology-preview"
-# Additional features and controls for Sure MV7 and MV88+ microphones
+# Additional features and controls for Shure MV7 and MV88+ microphones
 cask "shureplus-motiv"
 # Instant messaging application focusing on security
 cask "signal"
@@ -640,9 +633,61 @@ cask "veracrypt"
 cask "visual-studio-code"
 # Multimedia player
 cask "vlc"
-# Desktop client for WhatsApp
+# Native desktop client for WhatsApp
 cask "whatsapp"
 # Network protocol analyzer
 cask "wireshark"
 # Video communication and virtual meeting platform
 cask "zoom"
+vscode "aaron-bond.better-comments"
+vscode "charliermarsh.ruff"
+vscode "codezombiech.gitignore"
+vscode "databricks.databricks"
+vscode "dbaeumer.vscode-eslint"
+vscode "donjayamanne.githistory"
+vscode "dorzey.vscode-sqlfluff"
+vscode "dotenv.dotenv-vscode"
+vscode "editorconfig.editorconfig"
+vscode "esbenp.prettier-vscode"
+vscode "exiasr.hadolint"
+vscode "ginfuru.ginfuru-better-solarized-dark-theme"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.remotehub"
+vscode "github.vscode-github-actions"
+vscode "github.vscode-pull-request-github"
+vscode "golang.go"
+vscode "hashicorp.terraform"
+vscode "innoverio.vscode-dbt-power-user"
+vscode "iterative.dvc"
+vscode "mhutchie.git-graph"
+vscode "mquandalle.graphql"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-wsl"
+vscode "ms-vscode.azure-repos"
+vscode "ms-vscode.makefile-tools"
+vscode "ms-vscode.remote-repositories"
+vscode "naumovs.color-highlight"
+vscode "redhat.vscode-yaml"
+vscode "ritwickdey.liveserver"
+vscode "rust-lang.rust-analyzer"
+vscode "samuelcolvin.jinjahtml"
+vscode "scala-lang.scala"
+vscode "snowflake.snowflake-vsc"
+vscode "tamasfe.even-better-toml"
+vscode "timonwong.shellcheck"
+vscode "usernamehw.errorlens"
+vscode "vscode-icons-team.vscode-icons"
+vscode "vscodevim.vim"
+vscode "waderyan.gitblame"

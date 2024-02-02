@@ -135,11 +135,11 @@ $(BREW_X86_PREFIX)/bin/brew:
 	arch -x86_64 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
 ## Homebrew Install
-brew-install: $(BREW_PREFIX)/bin/brew $(BREW_X86_PREFIX)/bin/brew
-.PHONY: brew-install
+brew-bootstrap: $(BREW_PREFIX)/bin/brew $(BREW_X86_PREFIX)/bin/brew
+.PHONY: brew-bootstrap
 
 ## Homebrew Bundle Install
-brew-bundle: brew-install
+brew-bundle: brew-bootstrap
 	$(BREW_PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
 .PHONY: brew-bundle
 
@@ -160,23 +160,16 @@ $(HOME)/.local/bin/lunarvim: brew-bundle
 	LV_BRANCH="release-1.3/neovim-0.9" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)";
 
 ## LunarVim Install
-lunarvim-install: $(HOME)/.local/bin/lunarvim
-.PHONY: lunarvim-install
+lunarvim-bootstrap: $(HOME)/.local/bin/lunarvim
+.PHONY: lunarvim-bootstrap
 
 ## Python Install
-python-install: brew-bundle
-	$(BREW_PREFIX)/bin/pyenv install 3.7.13
-	$(BREW_PREFIX)/bin/pyenv install 3.8.13
-	$(BREW_PREFIX)/bin/pyenv install 3.9.11
-	$(BREW_PREFIX)/bin/pyenv install 3.10.4
-	$(BREW_PREFIX)/bin/pyenv global 3.7.13 3.8.13 3.9.11 3.10.4
-.PHONY: python-install
-
-## Pipx Install
-pipx-deps: brew-bundle
-	$(BREW_PREFIX)/bin/pipx install sqlfluff
-	$(BREW_PREFIX)/bin/pipx inject sqlfluff sqlfluff-templater-dbt
-.PHONY: pipx-deps
+python-bootstrap: brew-bundle
+	$(BREW_PREFIX)/bin/pyenv install 3.9:latest
+	$(BREW_PREFIX)/bin/pyenv install 3.10:latest
+	$(BREW_PREFIX)/bin/pyenv install 3.11:latest
+	$(BREW_PREFIX)/bin/pyenv install 3.12:latest
+.PHONY: python-bootstrap
 
 # rcup options used:
 # -d directory to install dotfiles from
@@ -184,14 +177,18 @@ pipx-deps: brew-bundle
 # -k Run pre and post hooks
 # -v verbosity
 # -----
-## Dotfiles Install
-dotfiles-install:
+## Dotfiles setup symlinks only
+dotfiles:
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
+.PHONY: dotfiles
+
+## Dotfiles Bootstrap, with pre and post hooks
+dotfiles-bootstrap:
 	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
-.PHONY: dotfiles-install
+.PHONY: dotfiles-bootstrap
 
 install: brew-bundle
-	$(MAKE) dotfiles-install
-	$(MAKE) lunarvim-install
-	$(MAKE) python-install
-	$(MAKE) pipx-deps
+	$(MAKE) dotfiles-bootstrap
+	$(MAKE) lunarvim-bootstrap
+	$(MAKE) python-bootstrap
 .PHONY: install

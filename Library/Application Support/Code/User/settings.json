@@ -1,50 +1,93 @@
 {
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // breadcrumbs
   "breadcrumbs.enabled": true,
-  "editor.acceptSuggestionOnCommitCharacter": false,
-  "editor.acceptSuggestionOnEnter": "smart",
+
+  // diffEditor
+  "diffEditor.renderSideBySide": false,
+
+  // debug
+  "debug.allowBreakpointsEverywhere": true,
+  
+  // editor
+  "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.enabled": true,
   "editor.cursorBlinking": "solid",
   "editor.cursorStyle": "line",
   "editor.fontFamily": "FiraCode Nerd Font",
   "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.formatOnSave": false,
+  "editor.guides.indentation": false,
   "editor.glyphMargin": false,
   "editor.insertSpaces": false,
+  "editor.inlineSuggest.enabled": true,
+  "editor.lineHeight": 1.2,
+  "editor.lineNumbers": "on",
+  "editor.minimap.enabled": false,
   "editor.minimap.renderCharacters": false,
-  "editor.parameterHints.enabled": false,
-  "editor.quickSuggestions": {
-    "comments": true,
-    "other": true,
-    "strings": true
-  },
   "editor.renderLineHighlight": "none",
-  "editor.renderWhitespace": "none",
+  "editor.renderWhitespace": "boundary",
+  "editor.tabSize": 8,
+  "editor.rulers": [
+    120,
+  ],
+  "editor.scrollBeyondLastLine": false,
   "editor.scrollbar.verticalScrollbarSize": 8,
+  "editor.showFoldingControls": "never",
   "editor.suggest.localityBonus": true,
-  "editor.suggestSelection": "first",
-  "editor.tabCompletion": "on",
   "editor.tokenColorCustomizations": {
+    "[*Light*]": {
+      "textMateRules": [
+        {
+          "scope": "ref.matchtext",
+          "settings": {
+            "foreground": "#000"
+          }
+        }
+      ]
+    },
+    "[*Dark*]": {
+      "textMateRules": [
+        {
+          "scope": "ref.matchtext",
+          "settings": {
+            "foreground": "#fff"
+          }
+        }
+      ]
+    },
     "[Nord]": {
       "comments": "#616e88"
     },
+    "textMateRules": [
+      {
+        "scope": "keyword.other.dotenv",
+        "settings": {
+          "foreground": "#FF000000"
+        }
+      }
+    ]
   },
-  "editor.wordBasedSuggestionsMode": "currentDocument",
   "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
   "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 120,
+
+  // Do not modify my code, please:
+  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingQuotes": "never",
+  "editor.autoSurround": "never",
+  "editor.autoClosingOvertype": "never",
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.parameterHints.enabled": false,
+  "editor.tabCompletion": "off",
+  "editor.suggestSelection": "recentlyUsed",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false,
+  },
   "emmet.showExpandedAbbreviation": "never",
   "eslint.format.enable": true,
   "eslint.rules.customizations": [
@@ -53,16 +96,38 @@
       "severity": "warn"
     }
   ],
+  
+  // explorer
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
+  "explorer.autoRevealExclude": {
+    "**/dist": true
+  },
+
+  // extensions
   "extensions.ignoreRecommendations": true,
+
+  // files
   "files.associations": {
     "*.mjml": "handlebars",
-    ".env.local": "shellscript"
+    ".env.local": "shellscript",
+    ".env*": "dotenv"
   },
   "files.exclude": {
-    "**/.next": true,
+    "**/.DS_Store": true,
     "**/node_modules": true,
+    "**/bower_components": true,
+    "**/__pycache__": true,
+    "**/.cache": true,
+    "**/.idea": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.venv": true,
+    "**/.coverage": true,
+    "**/*.py[co]": true,
+    "**/htmlcoverage": true,
+    "**/docs/build": true,
+    "**/.next": true,
     "**/yarn.lock": true
   },
   "files.watcherExclude": {
@@ -70,32 +135,47 @@
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true
   },
+
+  // git
   "git.autofetch": true,
   "git.confirmSync": false,
+  "git.decorations.enabled": true,
   "git.enableSmartCommit": true,
-  "git.path": "/usr/local/bin/git",
-  "javascript.suggest.completeJSDocs": false,
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "markdown.preview.fontSize": 16,
-  "php.suggest.basic": false,
-  "references.preferredLocation": "view",
-  "rest-client.enableTelemetry": false,
-  "rest-client.fontSize": 13,
-  "scrolloff.scrolloff": 10,
+  "git.mergeEditor": true,
+  "git.openRepositoryInParentFolders": "never",
+  "git.path": "/opt/homebrew/bin/git",
+  "git.useEditorAsCommitInput": false,
+
+  // search
   "search.exclude": {
     "**/*.{png,jpeg,jpg,svg}": true,
     "**/*.js.snap": true,
     "**/*.ts.snap": true,
     "**/yaml.lock": true
   },
+
+  // telemetry
   "telemetry.telemetryLevel": "off",
+
+  // terminal
   "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.enableBell": true,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.fontWeightBold": "normal",
-  "typescript.disableAutomaticTypeAcquisition": true,
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "terminal.integrated.macOptionIsMeta": true,
+
+  // vim
+  "vim.argumentObjectClosingDelimiters": [
+    ")",
+    "]",
+    "\""
+  ],
+  "vim.easymotion": true,
+  "vim.easymotionDimBackground": false,
   "vim.foldfix": false,
-  "vim.leader": ",",
+  "vim.leader": "<space>",
   "vim.neovimPath": "/opt/homebrew/bin/nvim",
   "vim.normalModeKeyBindingsNonRecursive": [
     {
@@ -156,57 +236,86 @@
       ]
     }
   ],
-  "workbench.activityBar.visible": false,
-  "workbench.startupEditor": "none",
-  "terminal.integrated.macOptionIsMeta": true,
-  "editor.lineHeight": 1.2,
-  "debug.javascript.autoAttachFilter": "disabled",
-  "editor.formatOnSave": true,
-  "git.useEditorAsCommitInput": false,
+  "vim.useSystemClipboard": true,
+
+  // UI
+  "references.preferredLocation": "view",
+  "outline.collapseItems": "alwaysCollapse",
+  "update.showReleaseNotes": false,
   "window.commandCenter": true,
-  "zenMode.fullScreen": false,
-  "vim.argumentObjectClosingDelimiters": [
-    ")",
-    "]",
-    "\""
-  ],
-  "typescript.preferences.jsxAttributeCompletionStyle": "none",
+  "window.nativeTabs": true,
+  "workbench.activityBar.location": "hidden",
+  "workbench.colorTheme": "Solarized Dark",
+  "workbench.editor.tabActionCloseVisibility": false,
   "workbench.editor.tabSizing": "shrink",
-  "workbench.editor.tabCloseButton": "off",
-  "git.mergeEditor": true,
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.layoutControl.enabled": false,
+  "workbench.startupEditor": "none",
+  "zenMode.fullScreen": false,
+
+  // Langs
   "[css]": {
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false
   },
-  "workbench.layoutControl.enabled": false,
-  "window.nativeTabs": true,
-  "editor.inlineSuggest.enabled": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "markdown.preview.fontSize": 16,
+  "php.suggest.basic": false,
+
+  // Python
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": true,
+    "notebook.source.organizeImports": true
+  },
+  "notebook.formatOnSave.enabled": true,
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.autoImportCompletions": false,
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportUnusedVariable": "none",
+  },
+  "python.languageServer": "Pylance",
+  "python.terminal.activateEnvironment": true,
+
+  // Typescript
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.suggest.completeJSDocs": false,
+  "javascript.suggest.autoImports": false,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.jsxAttributeCompletionStyle": "none",
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "typescript.suggest.autoImports": false,
+
+  // Github Copilot
   "github.copilot.enable": {
     "*": true,
     "yaml": false,
     "plaintext": false,
     "markdown": true
   },
-  "editor.autoSurround": "never",
-  "editor.autoClosingQuotes": "never",
-  "editor.autoClosingBrackets": "never",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "editor.minimap.enabled": false,
-  "git.openRepositoryInParentFolders": "never",
-  "editor.showFoldingControls": "never",
-  "editor.guides.indentation": false,
-  "editor.lineNumbers": "on",
-  "update.showReleaseNotes": false,
-  "editor.fontSize": 14,
-  "explorer.autoRevealExclude": {
-    "**/dist": true
-  },
-  "vim.easymotion": true,
-  "vim.easymotionDimBackground": false,
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "workbench.colorTheme": "Solarized Dark",
-  "outline.collapseItems": "alwaysCollapse",
-  "editor.tabSize": 8
 }
