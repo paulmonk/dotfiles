@@ -1,322 +1,130 @@
-// Place your key bindings in this file to overwrite the defaults
 [
-  {
-    "key": "ctrl+w",
-    "command": "-workbench.action.switchWindow"
-  },
-  {
-    "key": "cmd+[",
-    "command": "-editor.action.outdentLines",
-    "when": "editorTextFocus && !editorReadonly"
-  },
-  {
-    "key": "cmd+[",
-    "command": "workbench.action.navigateBack"
-  },
-  {
-    "key": "ctrl+-",
-    "command": "-workbench.action.navigateBack"
-  },
-  {
-    "key": "cmd+]",
-    "command": "-editor.action.indentLines",
-    "when": "editorTextFocus && !editorReadonly"
-  },
-  {
-    "key": "cmd+]",
-    "command": "workbench.action.navigateForward"
-  },
-  {
-    "key": "ctrl+shift+-",
-    "command": "-workbench.action.navigateForward"
-  },
+  // Vim keys to easily move between editor groups
   {
     "key": "ctrl+h",
-    "command": "-deleteLeft",
-    "when": "textInputFocus && !editorReadonly"
+    "command": "workbench.action.focusLeftGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
   },
   {
-    "key": "ctrl+c",
-    "command": "workbench.action.closeQuickOpen",
-    "when": "inQuickOpen"
+    "key": "ctrl+l",
+    "command": "workbench.action.focusRightGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
   },
   {
-    "key": "escape",
-    "command": "-workbench.action.closeQuickOpen",
-    "when": "inQuickOpen"
+    "key": "ctrl+k",
+    "command": "workbench.action.focusAboveGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
   },
   {
-    "key": "f8",
-    "command": "-editor.action.marker.nextInFiles",
-    "when": "editorFocus && !editorReadonly"
+    "key": "ctrl+j",
+    "command": "workbench.action.focusBelowGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+  // Scroll in Hover with vim keys
+  {
+    "key": "ctrl+h",
+    "command": "editor.action.scrollLeftHover",
+    "when": "editorHoverFocused"
   },
   {
-    "key": "ctrl+shift+r",
-    "command": "editor.action.rename",
-    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+    "key": "ctrl+j",
+    "command": "editor.action.scrollDownHover",
+    "when": "editorHoverFocused"
   },
   {
-    "key": "f2",
-    "command": "-editor.action.rename",
-    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+    "key": "ctrl+k",
+    "command": "editor.action.scrollUpHover",
+    "when": "editorHoverFocused"
   },
   {
-    "key": "ctrl+cmd+n",
-    "command": "editor.action.marker.next"
+    "key": "ctrl+l",
+    "command": "editor.action.scrollRightHover",
+    "when": "editorHoverFocused"
+  },
+  // Vim: Ensure this works in the explorer window, synergy with vim normal mode config
+  // space == <leader>
+  {
+    "key": "space e",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  // Explorer file operations
+  {
+    "key": "a",
+    "command": "explorer.newFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
   {
-    "key": "shift+f8",
-    "command": "-editor.action.marker.prevInFiles",
-    "when": "editorFocus && !editorReadonly"
+    "key": "f",
+    "command": "explorer.newFolder",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
   {
-    "key": "ctrl+cmd+p",
-    "command": "editor.action.marker.prev"
-  },
-  {
-    "key": "cmd+1",
-    "command": "workbench.files.action.focusFilesExplorer"
-  },
-  {
-    "key": "ctrl+shift+space",
-    "command": "editor.action.triggerParameterHints",
-    "when": "editorHasSignatureHelpProvider && editorTextFocus"
-  },
-  {
-    "key": "shift+cmd+space",
-    "command": "-editor.action.triggerParameterHints",
-    "when": "editorHasSignatureHelpProvider && editorTextFocus"
-  },
-  {
-    "key": "shift+cmd+n",
-    "command": "-workbench.action.newWindow"
-  },
-  {
-    "key": "cmd+r",
+    "key": "r",
     "command": "renameFile",
     "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
   {
-    "key": "enter",
-    "command": "-renameFile",
+    "key": "x",
+    "command": "filesExplorer.cut",
     "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
   },
   {
-    "key": "shift+cmd+n",
-    "command": "explorer.newFile"
+    "key": "y",
+    "command": "filesExplorer.copy",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
   },
   {
-    "key": "shift+alt+cmd+n",
-    "command": "workbench.action.newWindow"
+    "key": "p",
+    "command": "filesExplorer.paste",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
   },
-  {
-    "key": "ctrl+shift+b",
-    "command": "git.checkout"
-  },
-  {
-    "key": "ctrl+cmd+o",
-    "command": "workbench.action.closeOtherEditors"
-  },
-  {
-    "key": "alt+cmd+t",
-    "command": "-workbench.action.closeOtherEditors"
-  },
-  {
-    "key": "ctrl+cmd+t",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
-    "key": "ctrl+shift+n",
-    "command": "search.action.focusNextSearchResult",
-    "when": "hasSearchResult || inSearchEditor"
-  },
-  {
-    "key": "f4",
-    "command": "-search.action.focusNextSearchResult",
-    "when": "hasSearchResult || inSearchEditor"
-  },
-  {
-    "key": "ctrl+shift+p",
-    "command": "search.action.focusPreviousSearchResult",
-    "when": "hasSearchResult || inSearchEditor"
-  },
-  {
-    "key": "shift+f4",
-    "command": "-search.action.focusPreviousSearchResult",
-    "when": "hasSearchResult || inSearchEditor"
-  },
-  {
-    "key": "ctrl+shift+`",
-    "command": "-workbench.action.terminal.new",
-    "when": "terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+t",
-    "command": "-extension.vim_ctrl+t",
-    "when": "editorTextFocus && vim.active && vim.use<C-t> && !inDebugRepl"
-  },
-  {
-    "key": "ctrl+t",
-    "command": "-editor.action.transposeLetters",
-    "when": "textInputFocus && !editorReadonly"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "extension.goto-previous-buffer",
-    "when": "editorTextFocus"
-  },
+  // Vim: Explorer movement
   {
     "key": "ctrl+h",
-    "command": "workbench.action.navigateLeft"
+    "command": "list.collapse",
+    "when": "listFocus && !inputFocus"
   },
   {
     "key": "ctrl+l",
-    "command": "workbench.action.navigateRight",
-    "when": "!terminalFocus"
+    "command": "list.expand",
+    "when": "listFocus && !inputFocus"
   },
   {
-    "key": "shift+cmd+c",
-    "command": "-workbench.action.terminal.openNativeConsole",
-    "when": "!terminalFocus"
+    "key": "ctrl+k",
+    "command": "list.focusUp",
+    "when": "listFocus && !inputFocus"
   },
   {
-    "key": "ctrl+cmd+g",
-    "command": "workbench.view.scm",
-    "when": "workbench.scm.active"
+    "key": "ctrl+j",
+    "command": "list.focusDown",
+    "when": "listFocus && !inputFocus"
   },
   {
-    "key": "ctrl+shift+g",
-    "command": "-workbench.view.scm",
-    "when": "workbench.scm.active"
+    "key": "enter",
+    "command": "list.select",
+    "when": "listFocus && !inputFocus"
+  },
+
+  // Vim: accept suggestions with vim keys
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible"
   },
   {
-    "key": "ctrl+cmd+g",
-    "command": "workbench.view.scm",
-    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetVisible"
   },
   {
-    "key": "ctrl+shift+g",
-    "command": "-workbench.view.scm",
-    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen"
   },
   {
-    "key": "ctrl+shift+cmd+n",
-    "command": "merge-conflict.next"
-  },
-  {
-    "key": "ctrl+shift+cmd+p",
-    "command": "merge-conflict.previous"
-  },
-  {
-    "key": "shift+alt+f",
-    "command": "eslint.executeAutofix"
-  },
-  {
-    "key": "shift+alt+d",
-    "command": "editor.action.organizeImports",
-    "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
-  },
-  {
-    "key": "shift+alt+o",
-    "command": "-editor.action.organizeImports",
-    "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
-  },
-  {
-    "key": "ctrl+shift+alt+cmd+n",
-    "command": "explorer.newFolder"
-  },
-  {
-    "key": "shift+cmd+y",
-    "command": "-workbench.debug.action.toggleRepl",
-    "when": "workbench.panel.repl.view.active"
-  },
-  {
-    "key": "shift+cmd+y",
-    "command": "workbench.view.extension.test"
-  },
-  {
-    "key": "ctrl+cmd+right",
-    "command": "-workbench.action.terminal.resizePaneRight",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+cmd+right",
-    "command": "-workbench.action.moveEditorToNextGroup"
-  },
-  {
-    "key": "ctrl+cmd+down",
-    "command": "-workbench.action.terminal.resizePaneDown",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+cmd+down",
-    "command": "-notebook.focusNextEditor",
-    "when": "notebookEditorFocused && notebookOutputFocused"
-  },
-  {
-    "key": "ctrl+cmd+down",
-    "command": "-notebook.cell.focusInOutput",
-    "when": "notebookCellHasOutputs && notebookEditorFocused"
-  },
-  {
-    "key": "ctrl+cmd+left",
-    "command": "-workbench.action.terminal.resizePaneLeft",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+cmd+left",
-    "command": "-workbench.action.moveEditorToPreviousGroup"
-  },
-  {
-    "key": "ctrl+cmd+up",
-    "command": "-notebook.cell.focusOutOutput",
-    "when": "notebookEditorFocused && notebookOutputFocused"
-  },
-  {
-    "key": "ctrl+cmd+up",
-    "command": "-workbench.action.terminal.resizePaneUp",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+cmd+left",
-    "command": "workbench.action.positionPanelLeft"
-  },
-  {
-    "key": "ctrl+cmd+right",
-    "command": "workbench.action.positionPanelRight"
-  },
-  {
-    "key": "ctrl+cmd+down",
-    "command": "workbench.action.positionPanelBottom"
-  },
-  {
-    "key": "ctrl+cmd+j",
-    "command": "workbench.action.terminal.focusNextPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "alt+cmd+down",
-    "command": "-workbench.action.terminal.focusNextPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "alt+cmd+right",
-    "command": "-workbench.action.terminal.focusNextPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+cmd+k",
-    "command": "workbench.action.terminal.focusPreviousPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "alt+cmd+up",
-    "command": "-workbench.action.terminal.focusPreviousPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "alt+cmd+left",
-    "command": "-workbench.action.terminal.focusPreviousPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen"
   }
 ]
