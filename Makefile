@@ -152,7 +152,7 @@ brew-bundle-dump:
 
 # Install LunarVim
 # -----
-$(HOME)/.local/bin/lunarvim: brew-bundle
+$(HOME)/.local/bin/lunarvim:
 	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
 	   exit 1; \
@@ -164,7 +164,7 @@ lunarvim-bootstrap: $(HOME)/.local/bin/lunarvim
 .PHONY: lunarvim-bootstrap
 
 ## Python Install
-python-bootstrap: brew-bundle
+python-bootstrap:
 	$(BREW_PREFIX)/bin/pyenv install 3.9:latest
 	$(BREW_PREFIX)/bin/pyenv install 3.10:latest
 	$(BREW_PREFIX)/bin/pyenv install 3.11:latest
