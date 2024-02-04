@@ -1,44 +1,20 @@
 #!/bin/sh
 
-# Enable color support of ls and also add handy aliases
-if command -v dircolors >/dev/null 2>&1; then
-	# Prefer eza if available
-	if command -v eza >/dev/null 2>&1; then
-		ls="eza --group --git --group-directories-first --all"
-	else
-		ls="LC_COLLATE=C ls --group-directories-first --all"
-	fi
+LS_COLORS="$(vivid generate solarized-dark)"
+export LS_COLORS
 
-	# Call dircolors to define colors if they"re missing
-	if [ "$LS_COLORS" = "" ]; then
-		if [ -s "${XDG_CONFIG_HOME}/sh/dircolors" ]; then
-			eval "$(dircolors --sh "${XDG_CONFIG_HOME}/sh/dircolors")"
-		else
-			eval "$(dircolors --sh)"
-		fi
-	fi
-
-	# shellcheck disable=SC2139
-	alias ls="${ls} --color=auto"
-
-	alias dir='dir --color=auto'
-	alias vdir='vdir --color=auto'
+# Prefer eza if available
+if command -v eza >/dev/null 2>&1; then
+	ls="eza --group --git --group-directories-first --all"
 else
-	# BSD Core Utilities
-	# enable colored output from ls, etc
-	export CLICOLOR=1
-
-	# Define colors for BSD ls if they"re not already defined
-	if [ "$LSCOLORS" = "" ]; then
-		export LSCOLORS="exfxcxdxbxGxDxabagacad"
-	fi
-
-	# Define colors for the completion system if they"re not already defined
-	if [ "$LS_COLORS" = "" ]; then
-		export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:"
-	fi
-	alias ls="ls -G"
+	ls="LC_COLLATE=C ls --all"
 fi
+
+# shellcheck disable=SC2139
+alias ls="${ls} --color=auto"
+
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
 
 # Grep
 export GREP_COLOR="37;45"             # BSD.

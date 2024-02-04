@@ -30,10 +30,14 @@ export HOMEBREW_INSTALL_CLEANUP="1"
 export HOMEBREW_NO_ANALYTICS="1"
 # Disable automatic updates to keep in control of brew updates
 export HOMEBREW_NO_AUTO_UPDATE="1"
+# Disable hints to avoid cluttering the terminal
+export HOMEBREW_NO_ENV_HINTS="1"
+
 # When checking out a public repository, by default, your username is always sent, not now.
 export HOMEBREW_NO_GITHUB_API="1"
 # Avoid protocol downgrades from HTTPS to HTTP via redirect
 export HOMEBREW_NO_INSECURE_REDIRECT="1"
+
 
 # macOS
 if [ "$KERNEL" = "Darwin" ]; then
@@ -62,12 +66,8 @@ if [ "$KERNEL" = "Darwin" ]; then
 	# Use homebrew GNU tools instead of system BSD
 	# =============
 	# Coreutils
-	export PATH="${BREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
-	export MANPATH="${BREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
-
-	# Findutils
-	export PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:${PATH}"
-	export MANPATH="${BREW_PREFIX}/opt/findutils/libexec/gnuman:${MANPATH}"
+	export PATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnubin:${PATH}"
+	export MANPATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnuman:${MANPATH}"
 
 	# Sed
 	export PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:${PATH}"
@@ -75,14 +75,16 @@ if [ "$KERNEL" = "Darwin" ]; then
 
 	# Use homebrew tools for build support
 	# =============
+	CPPFLAGS="-I${BREW_PREFIX}/include"
+	LDFLAGS="-L${BREW_PREFIX}/lib"
+
 	# Memcached
 	export LIBMEMCACHED="$BREW_PREFIX"
 
 	# Openssl
-	export PATH="${BREW_PREFIX}/opt/openssl@1.1/bin:${PATH}"
-	export OPENSSL_ROOT_DIR="${BREW_PREFIX}/opt/openssl@1.1/"
-	CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@1.1/include ${CPPFLAGS}"
-	LDFLAGS="-L${BREW_PREFIX}/opt/openssl@1.1/lib ${LDFLAGS}"
+	export PATH="${BREW_PREFIX}/opt/openssl@3/bin:${PATH}"
+	CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include ${CPPFLAGS}"
+	LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib ${LDFLAGS}"
 
 	# Zlib
 	CPPFLAGS="-I${BREW_PREFIX}/opt/zlib/include ${CPPFLAGS}"
@@ -282,6 +284,8 @@ export PYTHON_EGG_CACHE="${XDG_CACHE_HOME}/python_eggs"
 
 export PYTHONASYNCIODEBUG="1"
 export PYTHONBREAKPOINT="ipdb.set_trace"
+export PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto'
+export PYTHON_CFLAGS='-march=native -mtune=native'
 export PYTHONFAULTHANDLER="1"
 export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
 export PATH="${PATH}:${PYTHONUSERBASE}/bin"
@@ -302,7 +306,7 @@ export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/rc"
 export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
 GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
 export GEM_HOME
-export GEM_PATH=${GEM_HOME}
+export GEM_PATH="${GEM_HOME}"
 export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
 export PATH="${PATH}:${GEM_HOME}/bin"
 
