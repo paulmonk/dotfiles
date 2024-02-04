@@ -20,111 +20,150 @@
     "command": "workbench.action.focusBelowGroup",
     "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
   },
-  // Scroll in Hover with vim keys
+
+  // vim:Scroll in Hover with vim keys
   {
     "key": "ctrl+h",
     "command": "editor.action.scrollLeftHover",
-    "when": "editorHoverFocused"
+    "when": "editorHoverFocused && vim.active"
   },
   {
     "key": "ctrl+j",
     "command": "editor.action.scrollDownHover",
-    "when": "editorHoverFocused"
+    "when": "editorHoverFocused && vim.active"
   },
   {
     "key": "ctrl+k",
     "command": "editor.action.scrollUpHover",
-    "when": "editorHoverFocused"
+    "when": "editorHoverFocused && vim.active"
   },
   {
     "key": "ctrl+l",
     "command": "editor.action.scrollRightHover",
-    "when": "editorHoverFocused"
+    "when": "editorHoverFocused && vim.active"
   },
+
+  // vim: Disable arrow movement in NORMAL mode, resize windows instead
+  {
+    "key": "up",
+    "command": "workbench.action.increaseViewWidth",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "down",
+    "command": "workbench.action.decreaseViewWidth",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "left",
+    "command": "workbench.action.increaseViewHeight",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "right",
+    "command": "workbench.action.decreaseViewHeight",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+
   // Vim: Ensure this works in the explorer window, synergy with vim normal mode config
   // space == <leader>
   {
     "key": "space e",
     "command": "workbench.action.toggleSidebarVisibility",
-    "when": "filesExplorerFocus && !inputFocus"
+    "when": "filesExplorerFocus && !inputFocus && vim.active"
   },
-  // Explorer file operations
+
+  // Vim: Focus the terminal when the terminal is not focused
+  {
+    "key": "ctrl+;",
+    "command": "workbench.action.terminal.focus",
+    "when": "vim.active"
+  },
+  // Focus the active editor group (text editor) when the terminal is focused
+  {
+    "key": "ctrl+;",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus && vim.active"
+  },
+
+  // vim: Explorer file operations
   {
     "key": "a",
     "command": "explorer.newFile",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
   },
   {
     "key": "f",
     "command": "explorer.newFolder",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
   },
   {
     "key": "r",
     "command": "renameFile",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
   },
   {
     "key": "x",
     "command": "filesExplorer.cut",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
   },
   {
     "key": "y",
     "command": "filesExplorer.copy",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus && vim.active"
   },
   {
     "key": "p",
     "command": "filesExplorer.paste",
-    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus && vim.active"
   },
+
   // Vim: Explorer movement
   {
     "key": "ctrl+h",
     "command": "list.collapse",
-    "when": "listFocus && !inputFocus"
+    "when": "listFocus && !inputFocus && vim.active"
   },
   {
     "key": "ctrl+l",
     "command": "list.expand",
-    "when": "listFocus && !inputFocus"
+    "when": "listFocus && !inputFocus && vim.active"
   },
   {
     "key": "ctrl+k",
     "command": "list.focusUp",
-    "when": "listFocus && !inputFocus"
+    "when": "listFocus && !inputFocus && vim.active"
   },
   {
     "key": "ctrl+j",
     "command": "list.focusDown",
-    "when": "listFocus && !inputFocus"
+    "when": "listFocus && !inputFocus && vim.active"
   },
   {
     "key": "enter",
     "command": "list.select",
-    "when": "listFocus && !inputFocus"
+    "when": "listFocus && !inputFocus && vim.active"
   },
 
   // Vim: accept suggestions with vim keys
   {
     "key": "ctrl+j",
     "command": "selectNextSuggestion",
-    "when": "suggestWidgetVisible"
+    "when": "suggestWidgetVisible && vim.active"
   },
   {
     "key": "ctrl+k",
     "command": "selectPrevSuggestion",
-    "when": "suggestWidgetVisible"
+    "when": "suggestWidgetVisible && vim.active"
   },
   {
     "key": "ctrl+j",
     "command": "workbench.action.quickOpenSelectNext",
-    "when": "inQuickOpen"
+    "when": "inQuickOpen && vim.active"
   },
   {
     "key": "ctrl+k",
     "command": "workbench.action.quickOpenSelectPrevious",
-    "when": "inQuickOpen"
+    "when": "inQuickOpen && vim.active"
   }
 ]

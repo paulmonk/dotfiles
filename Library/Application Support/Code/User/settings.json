@@ -144,7 +144,23 @@
 
   // search
   "search.exclude": {
-    "**/*.{png,jpeg,jpg,svg}": true,
+    "**/.swp": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/__pycache__": true,
+    "**/.cache": true,
+    "**/.idea": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.venv": true,
+    "**/.coverage": true,
+    "**/*.py[co]": true,
+    "**/htmlcoverage": true,
+    "**/docs/build": true,
+    "**/.next": true,
+    "**/yarn.lock": true,
+    "**/*.{png,jpeg,jpg,svg,webp}": true,
     "**/*.js.snap": true,
     "**/*.ts.snap": true,
     "**/yaml.lock": true
@@ -158,6 +174,7 @@
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.enableBell": true,
+  "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.fontWeightBold": "normal",
   "terminal.integrated.macOptionIsMeta": true,
@@ -173,6 +190,7 @@
   "vim.shell": "bash",
   "vim.smartRelativeLine": true,
   "vim.useSystemClipboard": true,
+
   // Normal Mode
   "vim.normalModeKeyBindingsNonRecursive": [
     // Vertical Movement
@@ -302,11 +320,11 @@
     },
     // Drag selected lines up or down
     {
-      "before": ["J"],
+      "before": ["<leader>", "j"],
       "commands": ["editor.action.moveLinesDownAction"]
     },
     {
-      "before": ["K"],
+      "before": ["<leader>", "k"],
       "commands": ["editor.action.moveLinesUpAction"]
     },
 
@@ -317,7 +335,7 @@
     }
   ],
   // Visual Mode
-  "vim.visualModeKeyBindings": [
+  "vim.visualModeKeyBindingsNonRecursive": [
     // Bind > and < in visual mode to indent/outdent lines (repeatable)
     {
       "before": [">"],
@@ -329,17 +347,23 @@
     },
     // Drag selected lines up or down
     {
-      "before": ["J"],
+      "before": ["<leader>", "j"],
       "commands": ["editor.action.moveLinesDownAction"]
     },
     {
-      "before": ["K"],
+      "before": ["<leader>", "k"],
       "commands": ["editor.action.moveLinesUpAction"]
     },
     // Enter Visual Line Mode
     {
       "before": ["<leader>", "<leader>"],
       "after": ["V"]
+    },
+    // Reselect and re-yank any text that is pasted in visual mode.
+    // https://stackoverflow.com/questions/290465/how-to-paste-over-without-overwriting-register
+    {
+      "before": ["p"],
+      "after": ["P"]
     }
   ],
 
@@ -349,13 +373,22 @@
   "update.showReleaseNotes": false,
   "window.commandCenter": true,
   "window.nativeTabs": true,
+
+  // Workbench
   "workbench.activityBar.location": "hidden",
   "workbench.colorTheme": "Solarized Dark",
+
+  // Open each file in a new tab
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+
   "workbench.editor.tabActionCloseVisibility": false,
   "workbench.editor.tabSizing": "shrink",
   "workbench.iconTheme": "vscode-great-icons",
   "workbench.layoutControl.enabled": false,
   "workbench.startupEditor": "none",
+
+  // Zen Mode
   "zenMode.fullScreen": false,
 
   // Langs
