@@ -165,5 +165,34 @@
     "key": "ctrl+k",
     "command": "workbench.action.quickOpenSelectPrevious",
     "when": "inQuickOpen && vim.active"
-  }
+  },
+
+  /*
+    VSCode attempt to emulate https://github.com/terryma/vim-multiple-cursors
+    https://github.com/VSCodeVim/Vim/issues/3588#issuecomment-1139373669
+  */
+  // Use built in VSCode pattern matcher for entire word search (ctrl + d)
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Skip current match (ctrl + x)
+  {
+    "key": "ctrl+x",
+    "command": "editor.action.moveSelectionToNextFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Go back to previous match (ctrl + p)
+  {
+    "key": "ctrl+p",
+    "command": "editor.action.moveSelectionToPreviousFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Select all matches (ctrl + a). This is effectively the same as (cmd + shift + l)
+  {
+    "key": "ctrl+a",
+    "command": "editor.action.selectHighlights",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
 ]

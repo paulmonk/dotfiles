@@ -1,4 +1,8 @@
 {
+  /*
+    Built-ins
+    ============
+  */
   // breadcrumbs
   "breadcrumbs.enabled": true,
 
@@ -33,6 +37,7 @@
   "editor.scrollBeyondLastLine": false,
   "editor.scrollbar.verticalScrollbarSize": 8,
   "editor.showFoldingControls": "never",
+  "editor.smoothScrolling": true,
   "editor.suggest.localityBonus": true,
   "editor.tokenColorCustomizations": {
     "[*Light*]": {
@@ -73,40 +78,50 @@
 
   // Do not modify my code, please:
   "editor.autoClosingBrackets": "never",
-  "editor.autoClosingQuotes": "never",
-  "editor.autoSurround": "never",
   "editor.autoClosingOvertype": "never",
-  "editor.suggestOnTriggerCharacters": false,
+  "editor.autoClosingQuotes": "never",
   "editor.acceptSuggestionOnCommitCharacter": false,
   "editor.acceptSuggestionOnEnter": "on",
-  "editor.parameterHints.enabled": false,
-  "editor.tabCompletion": "off",
-  "editor.suggestSelection": "recentlyUsed",
+  "editor.autoSurround": "never",
   "editor.quickSuggestions": {
     "other": true,
     "comments": false,
     "strings": false
   },
+  "editor.parameterHints.enabled": false,
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.suggestSelection": "recentlyUsed",
+  "editor.tabCompletion": "off",
   "emmet.showExpandedAbbreviation": "never",
 
   // explorer
-  "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false,
   "explorer.autoRevealExclude": {
     "**/dist": true
   },
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
 
   // extensions
-  "extensions.ignoreRecommendations": true,
   "extensions.experimental.affinity": {
     "vscodevim.vim": 1
   },
+  "extensions.ignoreRecommendations": true,
 
   // files
   "files.associations": {
     "*.mjml": "handlebars",
     ".env.local": "shellscript",
-    ".env*": "dotenv"
+    ".env*": "dotenv",
+    ".buckconfig": "toml",
+    ".flowconfig": "ini",
+    ".tern-project": "json",
+    ".jsbeautifyrc": "json",
+    ".jscsrc": "json",
+    ".watchmanconfig": "json",
+    "go.sum": "go",
+    "Brewfile": "ruby",
+    "Tmuxfile": "tmux",
+    "yarn.lock": "yaml"
   },
   "files.exclude": {
     "**/.swp": true,
@@ -126,6 +141,7 @@
     "**/.next": true,
     "**/yarn.lock": true
   },
+  "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
@@ -137,34 +153,16 @@
   "git.confirmSync": false,
   "git.decorations.enabled": true,
   "git.enableSmartCommit": true,
+  "git.inputValidationSubjectLength": 50,
+  "git.inputValidationLength": 72,
   "git.mergeEditor": true,
   "git.openRepositoryInParentFolders": "never",
   "git.path": "/opt/homebrew/bin/git",
   "git.useEditorAsCommitInput": false,
 
   // search
-  "search.exclude": {
-    "**/.swp": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true,
-    "**/bower_components": true,
-    "**/__pycache__": true,
-    "**/.cache": true,
-    "**/.idea": true,
-    "**/.pytest_cache": true,
-    "**/.mypy_cache": true,
-    "**/.venv": true,
-    "**/.coverage": true,
-    "**/*.py[co]": true,
-    "**/htmlcoverage": true,
-    "**/docs/build": true,
-    "**/.next": true,
-    "**/yarn.lock": true,
-    "**/*.{png,jpeg,jpg,svg,webp}": true,
-    "**/*.js.snap": true,
-    "**/*.ts.snap": true,
-    "**/yaml.lock": true
-  },
+  "search.useGlobalIgnoreFiles": true,
+  "search.useIgnoreFiles": true,
 
   // telemetry
   "telemetry.telemetryLevel": "off",
@@ -178,40 +176,105 @@
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.fontWeightBold": "normal",
   "terminal.integrated.macOptionIsMeta": true,
+  "terminal.integrated.smoothScrolling": true,
 
-  // vim
+  // UI
+  "references.preferredLocation": "view",
+  "outline.collapseItems": "alwaysCollapse",
+  "update.showReleaseNotes": false,
+  "window.commandCenter": true,
+  "window.nativeTabs": true,
+
+  // Workbench
+  "workbench.activityBar.location": "hidden",
+  "workbench.colorTheme": "Solarized Dark",
+  "workbench.editor.tabActionCloseVisibility": false,
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.iconTheme": "vscode-great-icons",
+  "workbench.layoutControl.enabled": false,
+  "workbench.startupEditor": "none",
+  "workbench.list.smoothScrolling": true,
+  // Open each file in a new tab
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+
+  // Zen Mode
+  "zenMode.centerLayout": true,
+  "zenMode.fullScreen": false,
+  "zenMode.hideStatusBar": false,
+  "zenMode.hideLineNumbers": false,
+  "zenMode.restore": true,
+
+  /*
+    Vim
+    ============
+  */
   "vim.argumentObjectClosingDelimiters": [")", "]", "\""],
   "vim.easymotion": true,
   "vim.easymotionDimBackground": false,
+  "vim.enableNeovim": true,
   "vim.foldfix": true,
+  // If false delegate configured keys to be handled by VS Code instead
+  "vim.handleKeys": {
+    "<C-d>": false,
+    "<C-k>": false,
+    "<C-s>": false,
+    "<C-u>": false,
+    "<C-x>": false,
+    "<C-z>": false
+  },
   "vim.highlightedyank.enable": true,
   "vim.highlightedyank.duration": 150,
+  "vim.hlsearch": true,
+  "vim.incsearch": true,
   "vim.leader": "<space>",
-  "vim.shell": "bash",
+  "vim.shell": "/opt/homebrew/bin/bash",
   "vim.smartRelativeLine": true,
+  "vim.useCtrlKeys": true,
   "vim.useSystemClipboard": true,
 
   // Normal Mode
+  "vim.normalModeKeyBindings": [
+    // C for c$ (change to end of line)
+    {
+      "before": ["C"],
+      "after": ["c", "$"]
+    }
+  ],
   "vim.normalModeKeyBindingsNonRecursive": [
-    // Vertical Movement
+    // Vertical Movement - Accelerated JK
+    // https://github.com/ypresto/vscode-accelerated
     {
       "before": ["j"],
-      "commands": ["cursorDown"]
+      "commands": ["accelerated.cursorDown"],
+      "silent": true
     },
     {
       "before": ["k"],
-      "commands": ["cursorUp"]
+      "commands": ["accelerated.cursorUp"],
+      "silent": true
     },
-    // Cycle through tabs
-    {
-      "before": ["H"],
-      "commands": ["workbench.action.previousEditor"]
-    },
+    // L for $ (go to end of line)
     {
       "before": ["L"],
-      "commands": ["workbench.action.nextEditor"]
+      "after": ["$"]
     },
-    // Command Window
+    // H for ^ (go to beginning of line)
+    {
+      "before": ["H"],
+      "after": ["^"]
+    },
+    // Y for y$ (yank till end of line)
+    {
+      "before": ["Y"],
+      "after": ["y", "$"]
+    },
+    // Show definition and detail about function/var
+    {
+      "before": ["K"],
+      "commands": ["editor.action.showHover"]
+    },
+    // Fuzzy Search
     {
       "before": [";"],
       "commands": ["workbench.action.quickOpen"]
@@ -219,50 +282,69 @@
     // Folding
     {
       "before": ["<cr>"],
-      "after": ["z", "a"]
+      "after": ["z", "a"],
+      "silent": true
+    },
+    // Undo / Redo
+    // https://github.com/VSCodeVim/Vim/issues/2007
+    {
+      "before": ["u"],
+      "commands": ["undo"],
+      "silent": true
+    },
+    {
+      "before": ["<c-r>"],
+      "commands": ["redo"],
+      "silent": true
     },
     // Editor
     // Split the current editor, vertically or horizontally respectively
     {
+      "before": ["q"],
+      "commands": ["workbench.action.closeActiveEditor"],
+      "silent": true
+    },
+    {
       "before": ["s", "g"],
-      "commands": ["workbench.action.splitEditor"]
+      "commands": ["workbench.action.splitEditor"],
+      "silent": true
     },
     {
       "before": ["s", "v"],
-      "commands": ["workbench.action.splitEditorOrthogonal"]
-    },
-    {
-      "before": ["q"],
-      "commands": ["workbench.action.closeActiveEditor"]
+      "commands": ["workbench.action.splitEditorOrthogonal"],
+      "silent": true
     },
     // Explorer
     {
       "before": ["<leader>", "e"],
-      "commands": ["workbench.view.explorer"]
+      "commands": ["workbench.view.explorer"],
+      "silent": true
     },
     {
       "before": ["<leader>", "f"],
       "commands": ["revealInExplorer"]
     },
-    // Sidebar Toggles
+    // Nav Toggles
     {
       "before": ["<leader>", "t", "l"],
-      "commands": ["workbench.action.toggleSidebarVisibility"]
+      "commands": ["workbench.action.toggleSidebarVisibility"],
+      "silent": true
     },
     {
       "before": ["<leader>", "t", "r"],
-      "commands": ["workbench.action.toggleAuxiliaryBar"]
+      "commands": ["workbench.action.toggleAuxiliaryBar"],
+      "silent": true
+    },
+    {
+      "before": ["<leader>", "t", "b"],
+      "commands": ["workbench.action.togglePanel"],
+      "silent": true
     },
     // Command mode
     {
       "before": [":"],
       "commands": ["workbench.action.showCommands"],
       "silent": true
-    },
-    // Show definition and detail about function/var
-    {
-      "before": ["K"],
-      "commands": ["editor.action.showHover"]
     },
     // LSP keybindings
     // Note: The gd (Go to Definition) keybinding is built-in
@@ -298,26 +380,6 @@
       "before": ["g", "p", "t"],
       "commands": ["editor.action.peekTypeDefinition"]
     },
-    // Undo / Redo
-    // https://github.com/VSCodeVim/Vim/issues/2007
-    {
-      "before": ["u"],
-      "after": [],
-      "commands": [
-        {
-          "command": "undo"
-        }
-      ]
-    },
-    {
-      "before": ["<c-r>"],
-      "after": [],
-      "commands": [
-        {
-          "command": "redo"
-        }
-      ]
-    },
     // Drag selected lines up or down
     {
       "before": ["<leader>", "j"],
@@ -327,13 +389,13 @@
       "before": ["<leader>", "k"],
       "commands": ["editor.action.moveLinesUpAction"]
     },
-
     // Enter Visual Line Mode
     {
-      "before": ["<leader>", "<leader>"],
+      "before": ["<leader>", "v"],
       "after": ["V"]
     }
   ],
+
   // Visual Mode
   "vim.visualModeKeyBindingsNonRecursive": [
     // Bind > and < in visual mode to indent/outdent lines (repeatable)
@@ -356,7 +418,7 @@
     },
     // Enter Visual Line Mode
     {
-      "before": ["<leader>", "<leader>"],
+      "before": ["<leader>", "v"],
       "after": ["V"]
     },
     // Reselect and re-yank any text that is pasted in visual mode.
@@ -367,34 +429,85 @@
     }
   ],
 
-  // UI
-  "references.preferredLocation": "view",
-  "outline.collapseItems": "alwaysCollapse",
-  "update.showReleaseNotes": false,
-  "window.commandCenter": true,
-  "window.nativeTabs": true,
+  // Vim abbreviations styles
+  "auto-correct.dictionary": [
+    {
+      "languages": ["*"],
+      "words": {
+        "adn": "and",
+        "afterword{,s}": "afterward{}",
+        "anomol{y,ies}": "anomal{}",
+        "austrail{a,an,ia,ian}": "austral{ia,ian}",
+        "cal{a,e}nder{,s}": "cal{e}ndar{}",
+        "{c,m}arraige{,s}": "{}arriage{}",
+        "{,in}consistan{cy,cies,t,tly}": "{}consisten{}",
+        "destionation{,s}": "destination{}",
+        "delimeter{,s}": "delimiter{}",
+        "{,non}existan{ce,t}": "{}existen{}",
+        "despara{te,tely,tion}": "despera{}",
+        "d{e,i}screp{e,a}nc{y,ies}": "d{i}screp{a}nc{}",
+        "euphamis{m,ms,tic,tically}": "euphemis{}",
+        "grpe": "grep",
+        "gti": "git",
+        "hense": "hence",
+        "{,re}impliment{,s,ing,ed,ation}": "{}implement{}",
+        "improvment{,s}": "improvement{}",
+        "inherant{,ly}": "inherent{}",
+        "lastest": "latest",
+        "{les,compar,compari}sion{,s}": "{les,compari,compari}son{}",
+        "mispell": "misspell",
+        "mispelled": "misspelled",
+        "{,un}nec{ce,ces,e}sar{y,ily}": "{}nec{es}sar{}",
+        "{,un}orgin{,al}": "{}origin{}",
+        "persistan{ce,t,tly}": "persisten{}",
+        "referesh{,es}": "refresh{}",
+        "rec{co,com,o}mend{,s,ed,ing,ation}": "rec{om}mend{}",
+        "{,ir}releven{ce,cy,t,tly}": "{}relevan{}",
+        "Req": "Request",
+        "reproducable": "reproducible",
+        "resouce{,s}": "resource{}",
+        "restraunt{,s}": "restaurant{}",
+        "seperat{e,es,ed,ing,ely,ion,ions,or}": "separat{}",
+        "segument{,s,ed,ation}": "segment{}",
+        "hte": "the",
+        "tehn": "then",
+        "waht": "what",
+        "Tqbf": "The quick, brown fox jumps over the lazy dog",
+        "Lidsa": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      },
+      "useLargeList": false
+    },
+    {
+      "languages": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+      ],
+      "words": {
+        "cosnt": "const",
+        "lte": "let",
+        "functoin": "function"
+      }
+    },
+    {
+      "languages": ["python"],
+      "words": {
+        "dfe": "def"
+      }
+    }
+  ],
 
-  // Workbench
-  "workbench.activityBar.location": "hidden",
-  "workbench.colorTheme": "Solarized Dark",
-
-  // Open each file in a new tab
-  "workbench.editor.enablePreview": false,
-  "workbench.editor.enablePreviewFromQuickOpen": false,
-
-  "workbench.editor.tabActionCloseVisibility": false,
-  "workbench.editor.tabSizing": "shrink",
-  "workbench.iconTheme": "vscode-great-icons",
-  "workbench.layoutControl.enabled": false,
-  "workbench.startupEditor": "none",
-
-  // Zen Mode
-  "zenMode.fullScreen": false,
-
-  // Langs
+  /*
+    Langs
+    ============
+  */
   "[css]": {
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false
+  },
+  "[git-commit]": {
+    "editor.rulers": [50, 72]
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -430,7 +543,7 @@
   "python.languageServer": "Pylance",
   "python.terminal.activateEnvironment": true,
 
-  // Typescript
+  // JS / TS
   "[javascript]": {
     "editor.tabSize": 2,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -450,11 +563,21 @@
   "javascript.suggest.completeJSDocs": false,
   "javascript.suggest.autoImports": false,
   "javascript.updateImportsOnFileMove.enabled": "never",
+
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.jsxAttributeCompletionStyle": "none",
-  "typescript.updateImportsOnFileMove.enabled": "never",
   "typescript.suggest.autoImports": false,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+
+  /*
+    Tools
+    ============
+  */
+  // errorlens
+  "errorLens.messageEnabled": true,
+  "errorLens.statusBarColorsEnabled": true,
+  "errorLens.statusBarMessageEnabled": false,
 
   // eslint
   "eslint.format.enable": true,
