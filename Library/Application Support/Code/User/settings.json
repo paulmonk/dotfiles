@@ -147,9 +147,6 @@
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true
   },
-
-  // git
-  "git.autofetch": true,
   "git.confirmSync": false,
   "git.decorations.enabled": true,
   "git.enableSmartCommit": true,
@@ -594,5 +591,6 @@
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  }
+  },
+  "git.enableCommitSigning": true
 }

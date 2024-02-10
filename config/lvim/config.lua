@@ -234,7 +234,7 @@ lvim.builtin.treesitter.ensure_installed = {
 	"r",
 	"ruby",
 	"rust",
-  "scala",
+	"scala",
 	"toml",
 	"tsx",
 	"typescript",
