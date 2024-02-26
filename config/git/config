@@ -29,6 +29,10 @@
     # Detect whitespace errors when applying a patch
     whitespace = fix
 
+[branch]
+    # Sort by branches commit timestamps.
+    sort = -committerdate
+
 [color]
     ui = auto
 
@@ -77,9 +81,11 @@
     zero-style = dim syntax
 
 [diff]
-    algorithm = patience
+    # https://luppeng.wordpress.com/2020/10/10/when-to-use-each-of-the-git-diff-algorithms/
+    algorithm = histogram
     mnemonicPrefix = true
     renames = copies
+    submodule = log
 
 [diff "bin"]
     # Use `hexdump` to diff binary files
@@ -92,6 +98,7 @@
     # https://resources.infosecinstitute.com/security-best-practices-for-git-users/
     fsckObjects = true
     prune = true
+    pruneTags = true
     recurseSubmodules = true
 
 [init]
@@ -101,11 +108,15 @@
 [interactive]
     diffFilter = delta --color-only -- --theme='Solarized (dark)'
 
+[log]
+    date = iso
+
 [merge]
     # Standard diff is two sets of final changes.
     # This introduces the original text before each side's changes.
     # https://git-scm.com/docs/git-config#git-config-mergeconflictStyle
-    conflictstyle = diff3
+    # https://ductile.systems/zdiff3/
+    conflictstyle = zdiff3
 
     # Include summaries of merged commits in newly created merge commit messages
     log = true
@@ -159,10 +170,15 @@
 
 [submodule]
     fetchJobs = 4
+    recurse = true
 
 [status]
-    submodulesummary = true
+    submoduleSummary = true
     showUntrackedFiles = all
+
+[tag]
+    # Sort by tags commit timestamps.
+    sort = -taggerdate
 
 [transfer]
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=813157
@@ -195,8 +211,8 @@
     useConfigOnly = true
 
 # Switch user depending on projects. Handy for using work email for work projects
-[includeIf "gitdir:~/projects/clearscore/**/"]
-    path = ~/.config/git/users/clearscore
+# [includeIf "gitdir:~/projects/clearscore/**/"]
+#    path = ~/.config/git/users/clearscore
 
 [alias]
     a = add
@@ -343,7 +359,7 @@
     # reset dev-container to qcpp/dev-container? (Y/n)
     #
     # If you then type y or just hit return, it will perform the reset. If you enter anything else the reset will not be carried out.
-    catchup = "!f(){ echo -n \"reset \\033[0;33m$(git symbolic-ref -q --short HEAD)\\033[0m to \\033[0;33m$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))\\033[0m? (Y/n) \"; read -r ans; if [ \"$ans\" = \"y\" -o \"$ans\" = \"Y\" -o -z \"$ans\" ]; then git reset --hard $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); else echo \"catchup aborted\"; fi }; f"
+    catchup = "!f(){ echo -n \"reset \\033[0;33m$(git symbolic-ref -q --short HEAD)\\033[0m to \\033[0;33m$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))\\033[0m? (Y/n) \"; read -r and; if [ \"$and\" = \"y\" -o \"$and\" = \"Y\" -o -z \"$and\" ]; then git reset --hard $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); else echo \"catchup aborted\"; fi }; f"
     #===============================================
 
 # vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
