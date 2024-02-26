@@ -149,6 +149,7 @@
   },
   "git.confirmSync": false,
   "git.decorations.enabled": true,
+  "git.enableCommitSigning": true,
   "git.enableSmartCommit": true,
   "git.inputValidationSubjectLength": 50,
   "git.inputValidationLength": 72,
@@ -567,6 +568,16 @@
   "typescript.suggest.autoImports": false,
   "typescript.updateImportsOnFileMove.enabled": "never",
 
+  // terraform
+  "[terraform]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.tabSize": 2
+  },
+  "[terraform-vars]": {
+    "editor.tabSize": 2
+  },
+
   /*
     Tools
     ============
@@ -591,6 +602,5 @@
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  },
-  "git.enableCommitSigning": true
+  }
 }

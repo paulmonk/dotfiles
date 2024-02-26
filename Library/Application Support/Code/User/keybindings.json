@@ -195,4 +195,11 @@
     "command": "editor.action.selectHighlights",
     "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
   },
+
+  // Save files with ctrl shortcut too
+  {
+    "key": "ctrl+s",
+    "command": "workbench.action.files.save",
+    "when": "editorFocus && vim.active"
+  }
 ]
