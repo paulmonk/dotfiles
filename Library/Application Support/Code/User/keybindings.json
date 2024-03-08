@@ -46,22 +46,22 @@
   // vim: Disable arrow movement in NORMAL mode, resize windows instead
   {
     "key": "up",
-    "command": "workbench.action.increaseViewWidth",
-    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
-  },
-  {
-    "key": "down",
-    "command": "workbench.action.decreaseViewWidth",
-    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
-  },
-  {
-    "key": "left",
     "command": "workbench.action.increaseViewHeight",
     "when": "editorFocus && vim.active && vim.mode == 'Normal'"
   },
   {
-    "key": "right",
+    "key": "down",
     "command": "workbench.action.decreaseViewHeight",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "left",
+    "command": "workbench.action.increaseViewWidth",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "right",
+    "command": "workbench.action.decreaseViewWidth",
     "when": "editorFocus && vim.active && vim.mode == 'Normal'"
   },
 
