@@ -311,7 +311,7 @@ formatters.setup({
 	},
 	{
 		command = "sqlfluff",
-		extra_args = { "--dialect", "postgres" }
+		extra_args = { "--dialect", "postgres –-templater jinja" }
 	},
 	{
 		command = "terraform_fmt",
