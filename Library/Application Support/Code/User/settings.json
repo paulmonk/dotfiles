@@ -3,6 +3,11 @@
     Built-ins
     ============
   */
+  // accessibility
+  "accessibility.signals.terminalBell": {
+    "sound": "on"
+  },
+
   // breadcrumbs
   "breadcrumbs.enabled": true,
 
@@ -63,14 +68,7 @@
     "[Nord]": {
       "comments": "#616e88"
     },
-    "textMateRules": [
-      {
-        "scope": "keyword.other.dotenv",
-        "settings": {
-          "foreground": "#FF000000"
-        }
-      }
-    ]
+    "textMateRules": []
   },
   "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?",
   "editor.wordWrap": "bounded",
@@ -109,6 +107,9 @@
 
   // files
   "files.associations": {
+    "*.md": "jinja-md",
+    "*.sql": "jinja-sql",
+    "*.yml": "jinja-yaml",
     "*.mjml": "handlebars",
     ".env.local": "shellscript",
     ".env*": "dotenv",
@@ -139,7 +140,9 @@
     "**/htmlcoverage": true,
     "**/docs/build": true,
     "**/.next": true,
-    "**/yarn.lock": true
+    "**/yarn.lock": true,
+    "**/.terragrunt-cache": true,
+    "**/terragrunt-debug.tfvars.json": true
   },
   "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
@@ -162,6 +165,9 @@
   "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
 
+	// security
+  "security.workspace.trust.untrustedFiles": "open",
+
   // telemetry
   "telemetry.telemetryLevel": "off",
 
@@ -169,7 +175,7 @@
   "terminal.external.osxExec": "iTerm.app",
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.defaultProfile.linux": "bash",
-  "terminal.integrated.enableBell": true,
+  "terminal.integrated.enableVisualBell": true,
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.fontWeightBold": "normal",
@@ -568,6 +574,11 @@
   "typescript.suggest.autoImports": false,
   "typescript.updateImportsOnFileMove.enabled": "never",
 
+	// sql
+  "[jinja-sql]": {
+    "editor.defaultFormatter": "dorzey.vscode-sqlfluff"
+  },
+
   // terraform
   "[terraform]": {
     "editor.formatOnSave": true,
@@ -582,6 +593,9 @@
     Tools
     ============
   */
+  // dotenv
+  "dotenv.enableAutocloaking": false,
+
   // errorlens
   "errorLens.messageEnabled": true,
   "errorLens.statusBarColorsEnabled": true,
@@ -602,5 +616,9 @@
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  }
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+
+  // Misc
+  "vsintellicode.modify.editor.suggestSelection": "disabled"
 }
