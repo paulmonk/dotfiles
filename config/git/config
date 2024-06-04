@@ -116,7 +116,7 @@
     # This introduces the original text before each side's changes.
     # https://git-scm.com/docs/git-config#git-config-mergeconflictStyle
     # https://ductile.systems/zdiff3/
-    conflictstyle = zdiff3
+    conflictstyle = diff3
 
     # Include summaries of merged commits in newly created merge commit messages
     log = true
@@ -211,8 +211,10 @@
     useConfigOnly = true
 
 # Switch user depending on projects. Handy for using work email for work projects
-# [includeIf "gitdir:~/projects/clearscore/**/"]
-#    path = ~/.config/git/users/clearscore
+[includeIf "gitdir:~/projects/decide-with-data/**/"]
+    path = ~/.config/git/users/decide-with-data
+[includeIf "gitdir:~/projects/scan/**/"]
+    path = ~/.config/git/users/scan
 
 [alias]
     a = add
