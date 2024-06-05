@@ -165,7 +165,7 @@
   "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
 
-	// security
+  // security
   "security.workspace.trust.untrustedFiles": "open",
 
   // telemetry
@@ -574,7 +574,7 @@
   "typescript.suggest.autoImports": false,
   "typescript.updateImportsOnFileMove.enabled": "never",
 
-	// sql
+  // sql
   "[jinja-sql]": {
     "editor.defaultFormatter": "dorzey.vscode-sqlfluff"
   },
@@ -593,6 +593,96 @@
     Tools
     ============
   */
+  // cSpell
+  // The Language locale to use when spell checking. "en", "en-US" and "en-GB" are currently supported by default.
+  "cSpell.language": "en,en-GB",
+
+  // Controls the maximum number of spelling errors per document.
+  "cSpell.maxNumberOfProblems": 100,
+
+  // Controls the number of suggestions shown.
+  "cSpell.numSuggestions": 8,
+
+  // The minimum length of a word before checking it against a dictionary.
+  "cSpell.minWordLength": 4,
+
+  // Specify file types to spell check.
+  "cSpell.enabledLanguageIds": [
+    "csharp",
+    "css",
+    "git-commit",
+    "go",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "jinja-md",
+    "jinja-yaml",
+    "jinja-sql",
+    "json",
+    "jsonc",
+    "markdown",
+    "php",
+    "plaintext",
+    "python",
+    "rust",
+    "sql",
+    "terraform",
+    "terraform-vars",
+    "typescript",
+    "typescriptreact",
+    "yaml",
+    "yml"
+  ],
+
+  // Enable / Disable the spell checker.
+  "cSpell.enabled": true,
+
+  // Display the spell checker status on the status bar.
+  "cSpell.showStatus": true,
+
+  // Enable / Disable compound words like 'errormessage'
+  "cSpell.allowCompoundWords": false,
+
+  // Words to be ignored and not suggested.
+  "cSpell.ignoreWords": ["behaviour"],
+
+  // User words to add to dictionary.  Should only be in the user settings.
+  "cSpell.userWords": [
+    "enddocs",
+    "findrelated",
+    "fivetran",
+    "pycache",
+    "Rulesets",
+    "sqlfluff"
+  ],
+
+  // Specify paths/files to ignore.
+  "cSpell.ignorePaths": [
+    "node_modules", // this will ignore anything the node_modules directory
+    "**/node_modules", // the same for this one
+    "**/node_modules/**", // the same for this one
+    "node_modules/**", // Doesn't currently work due to how the current working directory is determined.
+    "vscode-extension", //
+    ".git", // Ignore the .git directory
+    "*.dll", // Ignore all .dll files.
+    "**/*.dll" // Ignore all .dll files
+  ],
+
+  // flagWords - list of words to be always considered incorrect
+  // This is useful for offensive words and common spelling errors.
+  // For example "hte" should be "the"`
+  "cSpell.flagWords": ["hte"],
+
+  // Set the delay before spell checking the document. Default is 50.
+  "cSpell.spellCheckDelayMs": 50,
+
+  // Set Diagnostic Reporting Level
+  //   Error - Report Spelling Issues as Errors
+  //   Warning - Report Spelling Issues as Warnings
+  //   Information - Report Spelling Issues as Information (default)
+  //   Hint - Report Spelling Issues as Hints, will not show up in Problems
+  "cSpell.diagnosticLevel": "Information",
+
   // dotenv
   "dotenv.enableAutocloaking": false,
 
