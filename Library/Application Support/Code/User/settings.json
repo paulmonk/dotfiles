@@ -19,8 +19,8 @@
 
   // dotfiles install in dev containers
   "dotfiles.repository": "paulmonk/dotfiles",
-  "dotfiles.targetPath": "~/dotfiles",
-  "dotfiles.installCommand": "cd ~/dotfiles && make dotfiles",
+  "dotfiles.targetPath": "~/projects/dotfiles",
+  "dotfiles.installCommand": "~/projects/dotfiles/install",
 
   // editor
   "editor.accessibilitySupport": "off",

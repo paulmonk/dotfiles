@@ -1,3 +1,3 @@
 DOTFILES_DIRS="$HOME/projects/dotfiles"
-EXCLUDES="README.md LICENSE Brewfile Brewfile.lock.json Makefile"
+EXCLUDES="README.md LICENSE Brewfile Brewfile.lock.json Makefile install.sh"
 UNDOTTED="Library"
