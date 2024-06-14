@@ -17,6 +17,11 @@
   // debug
   "debug.allowBreakpointsEverywhere": true,
 
+  // dotfiles install in dev containers
+  "dotfiles.repository": "paulmonk/dotfiles",
+  "dotfiles.targetPath": "~/dotfiles",
+  "dotfiles.installCommand": "make dotfiles",
+
   // editor
   "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.enabled": true,
@@ -648,12 +653,15 @@
 
   // User words to add to dictionary.  Should only be in the user settings.
   "cSpell.userWords": [
+    "dotfiles",
     "enddocs",
+    "endfor",
     "findrelated",
     "fivetran",
     "pycache",
     "Rulesets",
-    "sqlfluff"
+    "sqlfluff",
+    "zipcode"
   ],
 
   // Specify paths/files to ignore.

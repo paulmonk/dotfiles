@@ -99,22 +99,26 @@ ifeq ($(KERNEL), Darwin)
 
 # Cater for M1 arm arch
 ifeq ($(ARCH), arm64)
-BREW_PREFIX := /opt/homebrew
-BREW_X86_PREFIX := /usr/local
+PREFIX := /opt/homebrew
+X86_PREFIX := /usr/local
 
 # Cater for Intel
 else
-BREW_PREFIX := /usr/local
-BREW_X86_PREFIX := /usr/local
+PREFIX := /usr/local
+X86_PREFIX := /usr/local
 endif
 
+# Linux
+else
+PREFIX := /usr
+X86_PREFIX := /usr
 endif
 
 # Install Homebrew
 # -----
-$(BREW_PREFIX)/bin/brew:
+$(PREFIX)/bin/brew:
 	@echo "==============================="; \
-	echo "Brew Prefix will be install here: $(BREW_PREFIX)"; \
+	echo "Brew will be install here: $(PREFIX)"; \
 	echo "==============================="; \
 	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
@@ -122,9 +126,9 @@ $(BREW_PREFIX)/bin/brew:
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
-$(BREW_X86_PREFIX)/bin/brew:
+$(X86_PREFIX)/bin/brew:
 	@echo "==============================="; \
-	echo "Brew Prefix (X86) will be install here: $(BREW_X86_PREFIX)"; \
+	echo "Brew (X86) will be install here: $(X86_PREFIX)"; \
 	echo "==============================="; \
 	echo "Ensuring rosetta is installed."; \
 	softwareupdate --install-rosetta; \
@@ -135,19 +139,19 @@ $(BREW_X86_PREFIX)/bin/brew:
 	arch -x86_64 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
 ## Homebrew Install
-brew-bootstrap: $(BREW_PREFIX)/bin/brew $(BREW_X86_PREFIX)/bin/brew
+brew-bootstrap: $(PREFIX)/bin/brew $(X86_PREFIX)/bin/brew
 .PHONY: brew-bootstrap
 
 ## Homebrew Bundle Install
 brew-bundle: brew-bootstrap
-	$(BREW_PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
+	$(PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
 .PHONY: brew-bundle
 
 # Dump current contents to Brewfile excl MAS packages.
 # -----
 ## Homebrew Bundle Dump
 brew-bundle-dump:
-	$(BREW_PREFIX)/bin/brew bundle dump --describe --force --verbose
+	$(PREFIX)/bin/brew bundle dump --describe --force --verbose
 .PHONY: brew-bundle-dump
 
 # Install LunarVim
@@ -165,10 +169,10 @@ lunarvim-bootstrap: $(HOME)/.local/bin/lunarvim
 
 ## Python Install
 python-bootstrap:
-	$(BREW_PREFIX)/bin/pyenv install 3.9:latest
-	$(BREW_PREFIX)/bin/pyenv install 3.10:latest
-	$(BREW_PREFIX)/bin/pyenv install 3.11:latest
-	$(BREW_PREFIX)/bin/pyenv install 3.12:latest
+	$(PREFIX)/bin/pyenv install 3.9:latest
+	$(PREFIX)/bin/pyenv install 3.10:latest
+	$(PREFIX)/bin/pyenv install 3.11:latest
+	$(PREFIX)/bin/pyenv install 3.12:latest
 .PHONY: python-bootstrap
 
 # rcup options used:
@@ -177,14 +181,23 @@ python-bootstrap:
 # -k Run pre and post hooks
 # -v verbosity
 # -----
+## Ensure RCUP is installed
+ifeq ($(KERNEL), Darwin)
+$(PREFIX)/bin/rcup: brew-bootstrap
+	$(PREFIX)/bin/brew install rcm
+else
+$(PREFIX)/bin/rcup:
+	apt update && apt install -y rcm
+endif
+
 ## Dotfiles setup symlinks only
-dotfiles:
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
+dotfiles: $(PREFIX)/bin/rcup
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
 .PHONY: dotfiles
 
 ## Dotfiles Bootstrap, with pre and post hooks
-dotfiles-bootstrap:
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(BREW_PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+dotfiles-bootstrap: $(PREFIX)/bin/rcup
+	RCRC="$(CURDIR)/config/rcm/rcrc" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
 .PHONY: dotfiles-bootstrap
 
 install: brew-bundle
