@@ -1,8 +1,0 @@
-[Unit]
-Description=Geoclue2 User Agent
-
-[Service]
-ExecStart=/usr/lib/geoclue-2.0/demos/agent
-
-[Install]
-WantedBy=default.target

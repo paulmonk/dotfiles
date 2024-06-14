@@ -38,7 +38,6 @@ export HOMEBREW_NO_GITHUB_API="1"
 # Avoid protocol downgrades from HTTPS to HTTP via redirect
 export HOMEBREW_NO_INSECURE_REDIRECT="1"
 
-
 # macOS
 if [ "$KERNEL" = "Darwin" ]; then
 	# Set Default PATH
@@ -121,41 +120,10 @@ if [ "$KERNEL" = "Darwin" ]; then
 	CPU_CORES="$(sysctl -n hw.ncpu)"
 else
 	# Prefix
-	export BREW_PREFIX="/home/linuxbrew/.linuxbrew"
 	export PREFIX="/usr"
-	export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
-
-	# Set defaults
-	export BROWSER="${PREFIX}/bin/chromium"
-	export TERMINAL="${PREFIX}/bin/kitty"
 
 	# CPU
 	CPU_CORES="$(nproc)"
-
-	# GTK 2: Pull GTK2 RC files from the standard config location, similar to gtk-3.0
-	export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
-
-	# GTK 3: HiDPI.
-	# Scale UI elements by a factor of two
-	# export GDK_SCALE="2"
-	# Undo text scaling.
-	# export GDK_DPI_SCALE="0.5"
-
-	# QT 5.6: HiDPI
-	# export QT_AUTO_SCREEN_SCALE_FACTOR="1"
-
-	# Qt: Forces QT to use GTK icons
-	export DESKTOP_SESSION="gnome"
-
-	# XSECURELOCK
-	export XSECURELOCK_FONT="-misc-roboto-medium-r-normal--0-0-0-0-p-0-iso10646-1"
-	export XSECURELOCK_PASSWORD_PROMPT=time_hex
-	export XSECURELOCK_SHOW_HOSTNAME="0"
-	export XSECURELOCK_SHOW_USERNAME="0"
-	export XSECURELOCK_WANT_FIRST_KEYPRESS="1"
-
-	# Zeal: https://github.com/zealdocs/zeal/issues/172
-	export QT_QPA_PLATFORMTHEME="gtk2"
 fi
 
 # Local Bins (user and system)
@@ -303,12 +271,14 @@ export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/rc"
 
 # Ruby: Always install ruby gems local to the user
-export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
-GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
-export GEM_HOME
-export GEM_PATH="${GEM_HOME}"
-export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
-export PATH="${PATH}:${GEM_HOME}/bin"
+if command -v ruby >/dev/null 2>&1; then
+	export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
+	GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
+	export GEM_HOME
+	export GEM_PATH="$GEM_HOME"
+	export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
+	export PATH="${PATH}:${GEM_HOME}/bin"
+fi
 
 # Rust: Cargo configuration
 export CARGO_BUILD_JOBS="$CPU_CORES"

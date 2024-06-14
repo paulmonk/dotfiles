@@ -1,7 +1,10 @@
 #!/bin/sh
 
-LS_COLORS="$(vivid generate solarized-dark)"
-export LS_COLORS
+# Prefer vivid if available
+if command -v vivid >/dev/null 2>&1; then
+	LS_COLORS="$(vivid generate solarized-dark)"
+	export LS_COLORS
+fi
 
 # Prefer eza if available
 if command -v eza >/dev/null 2>&1; then
