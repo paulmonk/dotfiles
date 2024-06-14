@@ -111,11 +111,13 @@ endif
 # Linux
 else
 PREFIX := /usr
+# This is not necessary on Linux so just set to /usr to catch all
 X86_PREFIX := /usr
 endif
 
 # Install Homebrew
 # -----
+ifeq ($(KERNEL), Darwin)
 $(PREFIX)/bin/brew:
 	@echo "==============================="; \
 	echo "Brew will be install here: $(PREFIX)"; \
@@ -153,6 +155,7 @@ brew-bundle: brew-bootstrap
 brew-bundle-dump:
 	$(PREFIX)/bin/brew bundle dump --describe --force --verbose
 .PHONY: brew-bundle-dump
+endif
 
 # Install LunarVim
 # -----
@@ -175,13 +178,15 @@ python-bootstrap:
 	$(PREFIX)/bin/pyenv install 3.12:latest
 .PHONY: python-bootstrap
 
+# Dotfiles Setup
+# -----
 # rcup options used:
 # -d directory to install dotfiles from
 # -f Force RC file creation
 # -k Run pre and post hooks
 # -v verbosity
 # -----
-## Ensure RCUP is installed
+# Ensure RCUP is installed
 ifeq ($(KERNEL), Darwin)
 $(PREFIX)/bin/rcup: brew-bootstrap
 	$(PREFIX)/bin/brew install rcm
@@ -200,6 +205,9 @@ dotfiles-bootstrap: $(PREFIX)/bin/rcup
 	RCRC="$(CURDIR)/config/rcm/rcrc" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
 .PHONY: dotfiles-bootstrap
 
+# Install
+# -----
+## Full install of all components
 install: brew-bundle
 	$(MAKE) dotfiles-bootstrap
 	$(MAKE) lunarvim-bootstrap
