@@ -17,6 +17,24 @@
   // debug
   "debug.allowBreakpointsEverywhere": true,
 
+  // Dev Containers, force the installation of these extension always.
+  "dev.containers.defaultExtensions": [
+    "bierner.markdown-emoji",
+    "donjayamanne.githistory",
+    "editorconfig.editorconfig",
+    "mhutchie.git-graph",
+    "mutantdino.resourcemonitor",
+    "naumovs.color-highlight",
+    "oderwat.indent-rainbow",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-british-english",
+    "sygene.auto-correct",
+    "waderyan.gitblame",
+    "yzhang.markdown-all-in-one"
+  ],
+
   // dotfiles install in dev containers
   "dotfiles.repository": "paulmonk/dotfiles",
   "dotfiles.targetPath": "~/projects/dotfiles",
