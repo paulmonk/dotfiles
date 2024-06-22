@@ -27,7 +27,7 @@ set history=2000
 set viewoptions=folds,cursor,curdir
 set sessionoptions=curdir,help,tabpages,winsize
 
-" Fast cliboard setup for macOS
+" Fast clipboard setup for macOS
 if has('mac') && executable('pbcopy') && has('vim_starting')
 	let g:clipboard = {
 		\   'name': 'macOS-clipboard',
@@ -99,7 +99,7 @@ augroup END
 " ----------------
 set textwidth=80    " Text width maximum chars before wrapping
 set noexpandtab     " Don't expand tabs to spaces
-set tabstop=2       " The number of spaces a tab is
+set tabstop=8       " The number of spaces a tab is
 set shiftwidth=2    " Number of spaces to use in auto(indent)
 set softtabstop=-1  " Automatically keeps in sync with shiftwidth
 set smarttab        " Tab insert blanks according to 'shiftwidth'
@@ -219,7 +219,7 @@ endif
 " UI Symbols
 " icons:  ▏│ ¦ ╎ ┆ ⋮ ⦙ ┊ 
 let &showbreak='↳  '
-set listchars=tab:\→\ ,extends:⟫,precedes:⟪,nbsp:␣,trail:·
+set listchars=tab:\→\·,trail:~,extends:⟫,precedes:⟪
 
 if has('folding') && has('vim_starting')
 	set foldenable
@@ -245,15 +245,15 @@ let g:PHP_removeCRwhenUnix = 0
 " Abbreviations {{{
 
 " Misc
-iab waht what
+iab what what
 iab Vari Variables
-iab teh the
+iab the the
 iab tehn then
 iab Req Request
 iab fb foobar
 iab Attr Attributes
 iab Appl Application
-iab adn and
+iab and and
 
 " }}}
 " Mappings {{{

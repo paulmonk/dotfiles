@@ -124,7 +124,7 @@ $(PREFIX)/bin/brew:
 	echo "==============================="; \
 	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-	   exit 1; \
+		exit 1; \
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
@@ -136,7 +136,7 @@ $(X86_PREFIX)/bin/brew:
 	softwareupdate --install-rosetta; \
 	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-	   exit 1; \
+		exit 1; \
 	fi; \
 	arch -x86_64 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
@@ -164,7 +164,7 @@ LVIM_BRANCH := "master"
 $(HOME)/.local/bin/lvim:
 	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-	   exit 1; \
+		exit 1; \
 	fi; \
 	LV_BRANCH="$(LVIM_BRANCH)" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/$(LVIM_BRANCH)/utils/installer/install.sh)";
 
