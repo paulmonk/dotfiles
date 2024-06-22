@@ -94,6 +94,7 @@
   "editor.parameterHints.enabled": false,
   "editor.suggestOnTriggerCharacters": false,
   "editor.suggestSelection": "recentlyUsed",
+  "editor.stickyScroll.enabled": false,
   "editor.tabCompletion": "off",
   "emmet.showExpandedAbbreviation": "never",
 
@@ -201,8 +202,9 @@
   "workbench.editor.tabSizing": "shrink",
   "workbench.iconTheme": "vscode-great-icons",
   "workbench.layoutControl.enabled": false,
-  "workbench.startupEditor": "none",
   "workbench.list.smoothScrolling": true,
+  "workbench.startupEditor": "none",
+  "workbench.tree.enableStickyScroll": false,
   // Open each file in a new tab
   "workbench.editor.enablePreview": false,
   "workbench.editor.enablePreviewFromQuickOpen": false,
@@ -653,14 +655,19 @@
 
   // User words to add to dictionary.  Should only be in the user settings.
   "cSpell.userWords": [
+    "datediff",
     "dotfiles",
     "enddocs",
     "endfor",
     "findrelated",
     "fivetran",
+    "noqa",
     "pycache",
     "Rulesets",
     "sqlfluff",
+    "trunc",
+    "unioned",
+    "varchar",
     "zipcode"
   ],
 

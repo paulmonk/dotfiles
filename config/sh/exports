@@ -40,90 +40,90 @@ export HOMEBREW_NO_INSECURE_REDIRECT="1"
 
 # macOS
 if [ "$KERNEL" = "Darwin" ]; then
-	# Set Default PATH
-	export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+    # Set Default PATH
+    export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
-	# Prefix
-	# Cater for M1 arch
-	BREW_ARM_PREFIX="/opt/homebrew"
-	BREW_X86_PREFIX="/usr/local"
-	if [ "$ARCH" = "arm64" ]; then
-		export BREW_PREFIX="$BREW_ARM_PREFIX"
-		export PREFIX="$BREW_PREFIX"
-		# Add both Arm and Intel paths, favour native arm first.
-		export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${BREW_X86_PREFIX}/bin:${BREW_X86_PREFIX}/sbin:${PATH}"
-	else
-		export BREW_PREFIX="$BREW_X86_PREFIX"
-		export PREFIX="$BREW_PREFIX"
-		export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
-	fi
+    # Prefix
+    # Cater for M1 arch
+    BREW_ARM_PREFIX="/opt/homebrew"
+    BREW_X86_PREFIX="/usr/local"
+    if [ "$ARCH" = "arm64" ]; then
+        export BREW_PREFIX="$BREW_ARM_PREFIX"
+        export PREFIX="$BREW_PREFIX"
+        # Add both Arm and Intel paths, favour native arm first.
+        export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${BREW_X86_PREFIX}/bin:${BREW_X86_PREFIX}/sbin:${PATH}"
+    else
+        export BREW_PREFIX="$BREW_X86_PREFIX"
+        export PREFIX="$BREW_PREFIX"
+        export PATH="${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${PATH}"
+    fi
 
-	# XDG
-	export XDG_RUNTIME_DIR="/tmp/run"
-	[ ! -d "$XDG_RUNTIME_DIR" ] && mkdir -m 0700 "$XDG_RUNTIME_DIR"
+    # XDG
+    export XDG_RUNTIME_DIR="/tmp/run"
+    [ ! -d "$XDG_RUNTIME_DIR" ] && mkdir -m 0700 "$XDG_RUNTIME_DIR"
 
-	# Use homebrew GNU tools instead of system BSD
-	# =============
-	# Coreutils
-	export PATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnubin:${PATH}"
-	export MANPATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnuman:${MANPATH}"
+    # Use homebrew GNU tools instead of system BSD
+    # =============
+    # Coreutils
+    export PATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnubin:${PATH}"
+    export MANPATH="${BREW_PREFIX}/opt/uutils-coreutils/libexec/gnuman:${MANPATH}"
 
-	# Sed
-	export PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:${PATH}"
-	export MANPATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnuman:${MANPATH}"
+    # Sed
+    export PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:${PATH}"
+    export MANPATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnuman:${MANPATH}"
 
-	# Use homebrew tools for build support
-	# =============
-	CPPFLAGS="-I${BREW_PREFIX}/include"
-	LDFLAGS="-L${BREW_PREFIX}/lib"
+    # Use homebrew tools for build support
+    # =============
+    CPPFLAGS="-I${BREW_PREFIX}/include"
+    LDFLAGS="-L${BREW_PREFIX}/lib"
 
-	# Memcached
-	export LIBMEMCACHED="$BREW_PREFIX"
+    # Memcached
+    export LIBMEMCACHED="$BREW_PREFIX"
 
-	# Openssl
-	export PATH="${BREW_PREFIX}/opt/openssl@3/bin:${PATH}"
-	CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include ${CPPFLAGS}"
-	LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib ${LDFLAGS}"
+    # Openssl
+    export PATH="${BREW_PREFIX}/opt/openssl@3/bin:${PATH}"
+    CPPFLAGS="-I${BREW_PREFIX}/opt/openssl@3/include ${CPPFLAGS}"
+    LDFLAGS="-L${BREW_PREFIX}/opt/openssl@3/lib ${LDFLAGS}"
 
-	# Zlib
-	CPPFLAGS="-I${BREW_PREFIX}/opt/zlib/include ${CPPFLAGS}"
-	LDFLAGS="-L${BREW_PREFIX}/opt/zlib/lib ${LDFLAGS}"
+    # Zlib
+    CPPFLAGS="-I${BREW_PREFIX}/opt/zlib/include ${CPPFLAGS}"
+    LDFLAGS="-L${BREW_PREFIX}/opt/zlib/lib ${LDFLAGS}"
 
-	# Bzip2
-	CPPFLAGS="-I${BREW_PREFIX}/opt/bzip2/include ${CPPFLAGS}"
-	LDFLAGS="-L${BREW_PREFIX}/opt/bzip2/lib ${LDFLAGS}"
+    # Bzip2
+    CPPFLAGS="-I${BREW_PREFIX}/opt/bzip2/include ${CPPFLAGS}"
+    LDFLAGS="-L${BREW_PREFIX}/opt/bzip2/lib ${LDFLAGS}"
 
-	# Readline
-	CPPFLAGS="-I${BREW_PREFIX}/opt/readline/include ${CPPFLAGS}"
-	LDFLAGS="-L${BREW_PREFIX}/opt/readline/lib ${LDFLAGS}"
+    # Readline
+    CPPFLAGS="-I${BREW_PREFIX}/opt/readline/include ${CPPFLAGS}"
+    LDFLAGS="-L${BREW_PREFIX}/opt/readline/lib ${LDFLAGS}"
 
-	# Xcode
-	# BUILD Flags
-	# Ensure CommandLineTools SDK is used correctly
-	CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I${BREW_PREFIX}/include -I/usr/local/include"
-	export CFLAGS
-	export CPPFLAGS
-	export LDFLAGS
+    # Xcode
+    # BUILD Flags
+    # Ensure CommandLineTools SDK is used correctly
+    CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I${BREW_PREFIX}/include -I/usr/local/include"
+    export CFLAGS
+    export CPPFLAGS
+    export LDFLAGS
 
-	# Android
-	export ANDROID_HOME="${HOME}/Library/Android/sdk"
-	export PATH="${PATH}:${ANDROID_HOME}/emulator"
-	export PATH="${PATH}:${ANDROID_HOME}/tools"
-	export PATH="${PATH}:${ANDROID_HOME}/tools/bin"
-	export PATH="${PATH}:${ANDROID_HOME}/platform-tools"
+    # Android
+    export ANDROID_HOME="${HOME}/Library/Android/sdk"
+    export PATH="${PATH}:${ANDROID_HOME}/emulator"
+    export PATH="${PATH}:${ANDROID_HOME}/tools"
+    export PATH="${PATH}:${ANDROID_HOME}/tools/bin"
+    export PATH="${PATH}:${ANDROID_HOME}/platform-tools"
 
-	# Set defaults
-	export BROWSER="open"
-	export TERMINAL="open"
+    # Set defaults
+    export BROWSER="open"
+    export TERMINAL="open"
 
-	# CPU
-	CPU_CORES="$(sysctl -n hw.ncpu)"
+    # CPU
+    CPU_CORES="$(sysctl -n hw.ncpu)"
 else
-	# Prefix
-	export PREFIX="/usr"
+    # Prefix
+    export PREFIX="/usr"
 
-	# CPU
-	CPU_CORES="$(nproc)"
+    # CPU
+    CPU_CORES="$(nproc)"
 fi
 
 # Local Bins (user and system)
@@ -137,20 +137,20 @@ export MANPAGER="less -X"
 
 # Defaults: Editor
 if command -v lvim >/dev/null 2>&1; then
-	export EDITOR="lvim"
+    export EDITOR="lvim"
 elif command -v nvim >/dev/null 2>&1; then
-	export EDITOR="nvim"
+    export EDITOR="nvim"
 elif command -v vim >/dev/null 2>&1; then
-	export EDITOR="vim"
+    export EDITOR="vim"
 else
-	export EDITOR="vi"
-	# Don’t clear the screen after quitting a manual page
+    export EDITOR="vi"
+    # Don’t clear the screen after quitting a manual page
 fi
 export VISUAL="$EDITOR"
 
 # Ack configuration
 if [ -f "${XDG_CONFIG_HOME}/ack/ackrc" ]; then
-	export ACKRC="${XDG_CONFIG_HOME}/ack/ackrc"
+    export ACKRC="${XDG_CONFIG_HOME}/ack/ackrc"
 fi
 export ACK_PAGER_COLOR="less -x4SRFX"
 
@@ -161,14 +161,14 @@ export BAT_THEME="TwoDark"
 export CURL_HOME="${XDG_CONFIG_HOME}/curl"
 # .netrc
 if [ -f "${XDG_CONFIG_HOME}/netrc/config" ]; then
-	export CURLOPT_NETRC_FILE="${XDG_CONFIG_HOME}/netrc/config"
+    export CURLOPT_NETRC_FILE="${XDG_CONFIG_HOME}/netrc/config"
 fi
 
 # Docker
 export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
 
 if command -v docker-machine >/dev/null 2>&1; then
-	export MACHINE_STORAGE_PATH="${XDG_DATA_HOME}/docker-machine"
+    export MACHINE_STORAGE_PATH="${XDG_DATA_HOME}/docker-machine"
 fi
 
 # Facebook PathPicker
@@ -218,8 +218,8 @@ export MPV_HOME="${XDG_CONFIG_HOME}/mpv"
 # Ncurses
 # Look for terminfo files under data
 if [ -d "${XDG_DATA_HOME}/terminfo" ]; then
-	export TERMINFO="${XDG_DATA_HOME}/terminfo"
-	export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:${PREFIX}/share/terminfo"
+    export TERMINFO="${XDG_DATA_HOME}/terminfo"
+    export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:${PREFIX}/share/terminfo"
 fi
 
 # Node / NPM / Nave
@@ -261,6 +261,12 @@ export PATH="${PATH}:${PYTHONUSERBASE}/bin"
 export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export PATH="${PYENV_ROOT}/shims:${PATH}"
 
+# PIPX
+export PIPX_HOME="${XDG_DATA_HOME}/pipx"
+export PIPX_BIN_DIR="${HOME}/.local/bin"
+export PIPX_MAN_DIR="${XDG_DATA_HOME}/pipx/man"
+export PIPX_SHARED_LIBS="${XDG_DATA_HOME}/pipx/shared"
+
 # RCM
 export RCRC="${XDG_CONFIG_HOME}/rcm/rcrc"
 
@@ -272,12 +278,12 @@ export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/rc"
 
 # Ruby: Always install ruby gems local to the user
 if command -v ruby >/dev/null 2>&1; then
-	export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
-	GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
-	export GEM_HOME
-	export GEM_PATH="$GEM_HOME"
-	export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
-	export PATH="${PATH}:${GEM_HOME}/bin"
+    export GEMRC="${XDG_CONFIG_HOME}/gem/gemrc"
+    GEM_HOME="${XDG_DATA_HOME}/gem/$(ruby -e 'puts RbConfig::CONFIG["ruby_version"]')"
+    export GEM_HOME
+    export GEM_PATH="$GEM_HOME"
+    export GEM_SPEC_CACHE="${XDG_CACHE_HOME}/gem/specs"
+    export PATH="${PATH}:${GEM_HOME}/bin"
 fi
 
 # Rust: Cargo configuration
@@ -305,13 +311,13 @@ export VBOX_USER_HOME="${XDG_CONFIG_HOME}/virtualbox"
 
 # Wine
 if command -v wine >/dev/null 2>&1; then
-	[ ! -d "${XDG_DATA_HOME}/wineprefixes" ] && mkdir -m 0700 "${XDG_DATA_HOME}/wineprefixes"
-	export WINEPREFIX="${XDG_DATA_HOME}/wineprefixes/default"
+    [ ! -d "${XDG_DATA_HOME}/wineprefixes" ] && mkdir -m 0700 "${XDG_DATA_HOME}/wineprefixes"
+    export WINEPREFIX="${XDG_DATA_HOME}/wineprefixes/default"
 fi
 
 # Wget
 if [ -f "${XDG_CONFIG_HOME}/wget/config" ]; then
-	export WGETRC="${XDG_CONFIG_HOME}/wget/config"
+    export WGETRC="${XDG_CONFIG_HOME}/wget/config"
 fi
 
 # vim: set ft=sh ts=2 sw=2 tw=80 et :

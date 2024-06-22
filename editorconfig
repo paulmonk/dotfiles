@@ -1,0 +1,20 @@
+# This .editorconfig file should live outside of all repositories (and thus not be committed to source control) in
+# a parent directory, as it includes personal preference presentation settings, like a tab's `indent_size`.
+root = true
+
+[*]
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{html,xml,config,json}]
+indent_size = 2
+
+[*.{md,psd1,pp,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[Makefile]
+indent_style = tab

@@ -1,40 +1,34 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
 
-# Archlinux loads bash completions from /etc
+# shellcheck disable=1091,1090
+
+# Archlinux loads bash completions from /etc automatically
 # https://wiki.archlinux.org/index.php/Bash#Configuration_files
 
-# OSX and Ubuntu/Debian bash completions aren't loaded automatically.
-if [[ "${KERNEL}" == "Darwin" ]]; then
-    if [[ -f "${PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-        source "${PREFIX}/etc/profile.d/bash_completion.sh"
+# Deal with other operating-systems...
+# macOS / Darwin
+if [[ "$KERNEL" == "Darwin" ]]; then
+    # macOS Homebrew bash completions
+    if [[ -f "${PREFIX:-/opt/homebrew}/etc/profile.d/bash_completion.sh" ]]; then
+        # Load entire Homebrew installed software's bash completion
+        # export BASH_COMPLETION_DEBUG=1
+        source "${PREFIX:-/opt/homebrew}/etc/profile.d/bash_completion.sh"
+    else
+        for COMPLETION in "${PREFIX:-/opt/homebrew}/etc/bash_completion.d/"*; do
+            [[ -r "$COMPLETION" ]] && source "$COMPLETION"
+        done
     fi
+
+    # Add tab completion for `defaults read|write NSGlobalDomain`
+    # You could just use `-g` instead, but I like being explicit
+    complete -W "NSGlobalDomain" defaults
+
+    # Add `killall` tab completion for common apps
+    complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall
 elif [[ -f "/etc/lsb-release" ]]; then
     if [[ -f "${PREFIX}/share/bash-completion/bash_completion" ]]; then
         source "${PREFIX}/share/bash-completion/bash_completion"
     elif [[ -f "/etc/bash_completion" ]]; then
         source "/etc/bash_completion"
     fi
-fi
-
-# Load Git bash completion
-# https://github.com/git/git/blob/master/contrib/completion
-if [[ -f "${PREFIX}/share/git/completion/git-completion.bash" ]]; then
-    source "${PREFIX}/share/git/completion/git-completion.bash"
-elif [[ -f "${PREFIX}/share/git/contrib/completion/git-completion.bash" ]]; then
-    source "${PREFIX}/share/git/contrib/completion/git-completion.bash"
-elif [[ -f "${PREFIX}/share/bash-completion/completions/git" ]]; then
-    source "${PREFIX}/share/bash-completion/completions/git"
-fi
-
-# Extra OSX stuff
-if [[ "${KERNEL}" == "Darwin" ]]; then
-    # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-    [[ -e "${HOME}/.ssh/config" ]] && \
-        complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | \
-            grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
-
-    # Add tab completion for `defaults read|write NSGlobalDomain`
-    # You could just use `-g` instead, but I like being explicit
-    complete -W "NSGlobalDomain" defaults
 fi

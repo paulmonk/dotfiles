@@ -153,26 +153,27 @@ brew-bundle: brew-bootstrap
 # -----
 ## Homebrew Bundle Dump
 brew-bundle-dump:
-	$(PREFIX)/bin/brew bundle dump --describe --force --verbose
+	$(PREFIX)/bin/brew bundle dump --describe --force --verbose --no-restart
 .PHONY: brew-bundle-dump
 endif
 
 # Install LunarVim
 # -----
-$(HOME)/.local/bin/lunarvim:
+LVIM_BRANCH := "master"
+
+$(HOME)/.local/bin/lvim:
 	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
 	   exit 1; \
 	fi; \
-	LV_BRANCH="release-1.3/neovim-0.9" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)";
+	LV_BRANCH="$(LVIM_BRANCH)" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/$(LVIM_BRANCH)/utils/installer/install.sh)";
 
 ## LunarVim Install
-lunarvim-bootstrap: $(HOME)/.local/bin/lunarvim
+lunarvim-bootstrap: $(HOME)/.local/bin/lvim
 .PHONY: lunarvim-bootstrap
 
 ## Python Install
 python-bootstrap:
-	$(PREFIX)/bin/pyenv install 3.9:latest
 	$(PREFIX)/bin/pyenv install 3.10:latest
 	$(PREFIX)/bin/pyenv install 3.11:latest
 	$(PREFIX)/bin/pyenv install 3.12:latest

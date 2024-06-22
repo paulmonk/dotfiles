@@ -1,93 +1,54 @@
-#!/usr/bin/env zsh
-
 #------------------------------------------------------------------------------
 # Plugins
 #------------------------------------------------------------------------------
-# Load antigen
-# https://github.com/zsh-users/antigen/wiki/Configuration
-export ADOTDIR="${XDG_DATA_HOME}/zsh/antigen"
-export ANTIGEN_COMPDUMP="${ADOTDIR}/.zcompdump-${HOST}-${ZSH_VERSION}"
+# Additional zsh completions
+zsh-users/zsh-completions
 
-# Init ZSH
-if [[ "${KERNEL}" == "Darwin" ]]; then
-  source "${PREFIX}/share/antigen/antigen.zsh"
-else
-  source "${PREFIX}/share/zsh-antigen/antigen.zsh"
-fi
+# Benchmark ZSH configurations
+romkatv/zsh-bench kind:path
 
-# Setup
-antigen use prezto
+# zsh-abbr is the zsh manager for auto-expanding abbreviations -
+# text that when written in a terminal is replaced with other (typically longer) text.
+# Inspired by fish shell.
+olets/zsh-abbr kind:defer
 
-# Bundles
-antigen bundles <<EOB
-    robbyrussell/oh-my-zsh plugins/encode64
-    robbyrussell/oh-my-zsh plugins/fancy-ctrl-z
-    Aloxaf/fzf-tab
-    hlissner/zsh-autopair
-    marzocchi/zsh-notify
-    mafredri/zsh-async
-EOB
+# oh-my-zsh plugins
+ohmyzsh/ohmyzsh path:plugins/colored-man-pages
+ohmyzsh/ohmyzsh path:plugins/encode64
+ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z
+ohmyzsh/ohmyzsh path:plugins/magic-enter
 
-# Plugins Config
-# ----------------
-# Prezto
-# Color output (auto set to 'no' on dumb terminals).
-zstyle ':prezto:*:*' color 'yes'
+# zsh-utils
+# A collection of sane defaults
+belak/zsh-utils path:editor
+belak/zsh-utils path:history
+belak/zsh-utils path:prompt
+belak/zsh-utils path:utility
+belak/zsh-utils path:completion
 
-# Set the Prezto modules to load (browse modules).
-# The order matters.
-zstyle ':prezto:load' pmodule \
-  'prompt' \
-  'environment' \
-  'editor'      \
-  'history'     \
-  'directory'   \
-  'completion'  \
-  'archive' \
-  'syntax-highlighting' \
-  'history-substring-search' \
-  'autosuggestions'
+# prompts:
+#   with prompt plugins, remember to add this to your .zshrc:
+#   `autoload -Uz promptinit && promptinit && prompt pure`
+romkatv/powerlevel10k kind:fpath
 
-# Set theme
-zstyle ':prezto:module:prompt' theme 'powerlevel10k'
+# Use a $ZDOTDIR/functions directory to store lazy-loaded zsh function files.
+# This plugin is similar in concept to the fish functions directory.
+mattmc3/zfunctions
 
-# Auto convert .... to ../..
-zstyle ':prezto:module:editor' dot-expansion 'yes'
-# Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'vi'
+# Fish-like fast/unobtrusive autosuggestions for zsh.
+# It suggests commands as you type based on history and completions.
+zsh-users/zsh-autosuggestions
 
+# Feature rich syntax highlighting for Zsh.
+zdharma-continuum/fast-syntax-highlighting kind:defer
 
-# Zoxide
-_ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
-if [[ ! -f "${_ZO_DATA}" ]]; then
-  touch "${_ZO_DATA}"
-fi
-export _ZO_DATA
+# implementation of the Fish shell's history search feature, where you can type
+# in any part of any command from history and then press chosen keys,
+# such as the UP and DOWN arrows, to cycle through matches.
+zsh-users/zsh-history-substring-search
 
+# auto-closes, deletes and skips over matching delimiters in zsh intelligently
+hlissner/zsh-autopair
 
-# zsh-notify
-zstyle ':notify:*' command-complete-timeout 15
-zstyle ':notify:*' error-title 'Error'
-zstyle ':notify:*' success-title 'Success'
-if [[ ! "${KERNEL}" == "Darwin" ]]; then
-  zstyle ':notify:*' error-icon '/usr/share/icons/Adwaita/256x256/status/dialog-error.png'
-  zstyle ':notify:*' success-icon '/usr/share/icons/Adwaita/256x256/status/dialog-information.png'
-fi
-
-# fzf-tab
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with eza when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
-
-
-# Finalize
-# ----------------
-# Tell Antigen that you're done.
-antigen apply
+# Replace zsh's default completion selection menu with fzf
+Aloxaf/fzf-tab
