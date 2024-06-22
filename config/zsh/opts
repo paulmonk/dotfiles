@@ -5,8 +5,11 @@
 #------------------------------------------------------------------------------
 # Remove the ^S ^Q mappings. See all mappings: stty -a
 # Disable start/stop characters in shell editor.
-stty ixany
-stty ixoff -ixon
+# Only run in an interactive shell
+if [[ $- != *i* ]] then
+    stty ixany
+    stty ixoff -ixon
+fi
 setopt NO_FLOW_CONTROL
 
 # Basics
@@ -60,7 +63,7 @@ setopt PATH_DIRS             # Path search even on cmd bins with slashes.
 # Typically, compinit will not automatically find new executables in the
 # $PATH. For example, after you install a new package, the files in /usr/bin
 # would not be immediately or automatically included in the completion. Thus,
-# to have these new exectuables included, one would run a rehash.
+# to have these new executables included, one would run a rehash.
 # This 'rehash' can be set to happen automatically as below.
 zstyle ':completion:*' rehash true
 
