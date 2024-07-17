@@ -40,7 +40,7 @@ mattmc3/zfunctions
 zsh-users/zsh-autosuggestions
 
 # Feature rich syntax highlighting for Zsh.
-zdharma-continuum/fast-syntax-highlighting kind:defer
+zsh-users/zsh-syntax-highlighting kind:defer
 
 # implementation of the Fish shell's history search feature, where you can type
 # in any part of any command from history and then press chosen keys,
