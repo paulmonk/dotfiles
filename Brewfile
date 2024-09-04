@@ -17,8 +17,6 @@ brew "ca-certificates"
 brew "certifi"
 # C parser in Python
 brew "pycparser"
-# Easily download, build, install, upgrade, and uninstall Python packages
-brew "python-setuptools"
 # C Foreign Function Interface for Python
 brew "cffi"
 # Cryptography and SSL/TLS Toolkit
@@ -127,8 +125,6 @@ brew "awscli"
 brew "bash"
 # Programmable completion for Bash 4.2+
 brew "bash-completion@2"
-# C library of Git core methods that is re-entrant and linkable
-brew "libgit2"
 # Regular expressions library
 brew "oniguruma"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -210,7 +206,7 @@ brew "colordiff"
 # GNU multiple precision arithmetic library
 brew "gmp"
 # GNU File, Shell, and Text utilities
-brew "coreutils"
+brew "coreutils", link: false
 # Top-like interface for container metrics
 brew "ctop"
 # C string library for manipulating Unicode strings
@@ -219,8 +215,6 @@ brew "libunistring"
 brew "libidn2"
 # HTTP/2 C Library
 brew "libnghttp2"
-# Open source suite of directory software
-brew "openldap"
 # Tool for downloading RTMP streaming media
 brew "rtmpdump"
 # Get a file from an HTTP, HTTPS or FTP server
@@ -271,6 +265,8 @@ brew "nspr"
 brew "nss"
 # Library for JPEG-2000 image manipulation
 brew "openjpeg"
+# Open source suite of directory software
+brew "openldap"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Visually compare two PDF files
@@ -331,6 +327,8 @@ brew "libexif"
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
 brew "exiftool"
+# C library of Git core methods that is re-entrant and linkable
+brew "libgit2"
 # Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
@@ -671,6 +669,8 @@ brew "md5deep"
 brew "media-info"
 # Scalable distributed version control system
 brew "mercurial"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
 # Simple tool to make locally trusted development certificates
 brew "mkcert"
 # Collection of tools that nobody wrote when UNIX was young
@@ -705,8 +705,6 @@ brew "odt2txt"
 brew "openssh"
 # Light-weight C++ XML processing library
 brew "pugixml"
-# Core utilities for Python packages
-brew "python-packaging"
 # Rich and complete approach to parallelism in C++
 brew "tbb"
 # Open Visual Inference And Optimization toolkit for AI inference
@@ -731,6 +729,8 @@ brew "pinentry-mac"
 brew "pipx"
 # Library to simplify the interaction with PKCS#11
 brew "pkcs11-helper"
+# Object-relational database system
+brew "postgresql@14"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -773,6 +773,8 @@ brew "python-markupsafe"
 brew "python-jinja"
 # Pythonic binding for the libxml2 and libxslt libraries
 brew "python-lxml"
+# Core utilities for Python packages
+brew "python-packaging"
 # Utility library for gitignore style pattern matching of file paths
 brew "python-pathspec"
 # Python package for determining appropriate platform-specific dirs
@@ -781,6 +783,8 @@ brew "python-platformdirs"
 brew "python-pyparsing"
 # Python library for cross platform timezone
 brew "python-pytz"
+# Easily download, build, install, upgrade, and uninstall Python packages
+brew "python-setuptools"
 # Pretty-print tabular data in Python
 brew "python-tabulate"
 # Backported and experimental type hints for Python
@@ -793,6 +797,8 @@ brew "pyyaml"
 brew "qrencode"
 # Cross-platform application and UI framework
 brew "qt@5"
+# RC file (dotfile) management
+brew "rcm"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Wrapper around ripgrep that adds multiple rich file types
@@ -823,8 +829,6 @@ brew "shellcheck"
 brew "shellharden"
 # Autoformat shell script source code
 brew "shfmt"
-# SQL linter and auto-formatter for Humans
-brew "sqlfluff"
 # Tool Command Language
 brew "tcl-tk"
 # Command-line packet analyzer
@@ -862,7 +866,7 @@ brew "twine"
 # Extraction utility for .zip compressed archives
 brew "unzip"
 # Cross-platform Rust rewrite of the GNU coreutils
-brew "uutils-coreutils", link: false
+brew "uutils-coreutils"
 # Vi 'workalike' with many additional features
 brew "vim"
 # Tool for creating isolated virtual python environments
@@ -911,8 +915,6 @@ brew "zsh-completions"
 brew "coursier/formulas/coursier"
 # Everything you need to get started with Heroku
 brew "heroku/brew/heroku"
-# management suite for dotfiles
-brew "thoughtbot/formulae/rcm"
 # The tfswitch command lets you switch between terraform versions.
 brew "warrensbox/tap/tfswitch"
 # The tgswitch command lets you switch between terragrunt versions.
@@ -944,7 +946,7 @@ cask "docker"
 # Web browser
 cask "firefox"
 # Web browser
-cask "firefox-developer-edition"
+cask "firefox@developer-edition"
 cask "font-fira-code"
 cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
@@ -953,7 +955,7 @@ cask "font-nova-mono"
 # Web browser
 cask "google-chrome"
 # Web browser
-cask "google-chrome-canary"
+cask "google-chrome@canary"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
 # Client for the Google Drive storage service
@@ -986,7 +988,7 @@ cask "reader"
 cask "rectangle"
 # Web browser
 cask "safari-technology-preview"
-# Additional features and controls for Shure MV7 and MV88+ microphones
+# Additional features and controls for Sure MV7 and MV88+ microphones
 cask "shureplus-motiv"
 # Instant messaging application focusing on security
 cask "signal"
@@ -994,6 +996,8 @@ cask "signal"
 cask "slack"
 # Displays all open files and sockets in use by all running processes
 cask "sloth"
+# Command-line client for connecting to Snowflake
+cask "snowflake-snowsql"
 # Control your Sonos system
 cask "sonos"
 # Data visualization software
@@ -1003,9 +1007,9 @@ cask "tableplus"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin"
 # JDK from the Eclipse Foundation (Adoptium)
-cask "temurin11"
+cask "temurin@11"
 # JDK from the Eclipse Foundation (Adoptium)
-cask "temurin8"
+cask "temurin@8"
 # Free and open-source OpenVPN client
 cask "tunnelblick"
 # Disk encryption software focusing on security based on TrueCrypt
@@ -1018,6 +1022,8 @@ cask "vlc"
 cask "whatsapp"
 # Network protocol analyzer
 cask "wireshark"
+# Application for configuring any YubiKey
+cask "yubico-yubikey-manager"
 # Video communication and virtual meeting platform
 cask "zoom"
 vscode "aaron-bond.better-comments"

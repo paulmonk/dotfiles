@@ -177,10 +177,6 @@ export FPP_DIR="${XDG_CACHE_HOME}/fpp"
 # GCC
 export GCC_COLORS="1"
 
-# Git
-# This is used in multiple aliases in the config file.
-export GIT_REVIEW_BASE="master"
-
 # GNUPG
 export GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"
 

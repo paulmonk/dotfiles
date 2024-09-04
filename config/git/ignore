@@ -126,6 +126,8 @@ id_*
 *.key
 *_history
 *.history
+*.p8
+*.pub
 
 #---------------------------
 # Linters

@@ -13,6 +13,14 @@
 # See: https://github.com/mattmc3/zfunctions/tree/main
 export ZFUNCDIR="${XDG_CONFG_HOME:-$HOME/.config}/zsh/functions"
 
+autoload -Uz add-zsh-hook
+
+# Run 'ls' after 'cd'
+function chpwd_ls {
+    eza --group --git --group-directories-first --all --color=auto -l
+}
+add-zsh-hook chpwd chpwd_ls
+
 # ZSH Plugins
 #-------------------------
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

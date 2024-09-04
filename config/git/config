@@ -163,7 +163,7 @@
 [rebase]
     autosquash = true
     autostash = true
-	updateRefs = true
+    updateRefs = true
 
 [rerere]
     enabled = true
@@ -244,11 +244,14 @@
     pf = p --force-with-lease
     pu = !"git pull && git smu"
     remotes = remote -v
+    rhk = reset --keep
     s = status -sb
     sm = submodule
     smu = submodule update --init --recursive --remote --rebase
     st = stash
     st-all = stash save --include-untracked
+    swd="switch --detach"
+    swr="switch-recent"
     t = tag --column
     tn = tag -n
     tags = tag -l
@@ -262,9 +265,9 @@
     # https://twitter.com/TrevorBramble/status/774292970681937920
     alias = !git config -l | grep ^alias | cut -c 7- | sort
 
-    # Remove branches that have already been merged with master
+    # Remove branches that have already been merged with master or main
     # a.k.a. ‘delete merged’
-    brdm = "!git branch --merged | grep -v '\\*\\|master' | xargs -n 1 git branch -d"
+    brdm = "!git branch --merged | grep -v '\\*\\|master|main' | xargs -n 1 git branch -d"
 
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
@@ -325,30 +328,6 @@
     # changes from your tree.
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     snapshots = !git stash list --grep snapshot
-    #===============================================
-
-    #===============================================
-    # https://blog.jez.io/cli-code-review/
-    #  # list files which have changed since REVIEW_BASE
-    # (GIT_REVIEW_BASE defaults to 'master' in my shell environment.)
-    files = !git diff --name-only $(git merge-base HEAD \"${GIT_REVIEW_BASE\")
-
-    # Same as above, but with a diff stat instead of just names
-    # (better for interactive use)
-    stat = !git diff --stat $(git merge-base HEAD \"$GIT_REVIEW_BASE\")
-
-    # NOTE: These aliases depend on the `git files` alias from
-    # a few sections ago!
-    #
-    # Open all files changed since REVIEW_BASE in Vim tabs
-    # Then, run fugitive's :Gdiff in each tab, and finally
-    # tell vim-gitgutter to show +/- for changes since REVIEW_BASE
-    review = !vim -p $(git files) +\"tabdo Gdiff $GIT_REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$GIT_REVIEW_BASE'\"
-
-    # Same as the above, except specify names of files as arguments,
-    # instead of opening all files:
-    # git reviewone foo.js bar.js
-    reviewone = !vim -p +\"tabdo Gdiff $GIT_REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$GIT_REVIEW_BASE'\"
     #===============================================
 
     #===============================================

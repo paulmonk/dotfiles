@@ -673,16 +673,20 @@
 
   // User words to add to dictionary.  Should only be in the user settings.
   "cSpell.userWords": [
+    "dateadd",
     "datediff",
     "dotfiles",
     "enddocs",
     "endfor",
+    "endset",
     "findrelated",
     "fivetran",
     "noqa",
     "pycache",
     "Rulesets",
     "sqlfluff",
+    "Terragrunt",
+    "timestampdiff",
     "trunc",
     "unioned",
     "varchar",
