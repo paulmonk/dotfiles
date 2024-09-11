@@ -174,9 +174,7 @@ lunarvim-bootstrap: $(HOME)/.local/bin/lvim
 
 ## Python Install
 python-bootstrap:
-	$(PREFIX)/bin/pyenv install 3.10:latest
-	$(PREFIX)/bin/pyenv install 3.11:latest
-	$(PREFIX)/bin/pyenv install 3.12:latest
+	$(PREFIX)/bin/mise use -g python@3.10 python@3.11 python@3.12
 .PHONY: python-bootstrap
 
 # Dotfiles Setup

@@ -10,9 +10,6 @@
 
 # ZSH Functions
 #-------------------------
-# See: https://github.com/mattmc3/zfunctions/tree/main
-export ZFUNCDIR="${XDG_CONFG_HOME:-$HOME/.config}/zsh/functions"
-
 autoload -Uz add-zsh-hook
 
 # Run 'ls' after 'cd'
@@ -121,21 +118,6 @@ fi
 # Load completions and bash completions
 autoload -Uz +X compinit && compinit -i -d "${ZCOMPDUMP}"
 autoload -Uz +X bashcompinit && bashcompinit
-
-# Loading...
-#-------------------------
-# zoxide
-if (( $+commands[zoxide] )); then
-    _ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
-    [[ ! -f "${_ZO_DATA}" ]] && touch "${_ZO_DATA}"
-    export _ZO_DATA
-    eval "$(zoxide init zsh)"
-fi
-
-# Shell history
-if (( $+commands[atuin] )); then
-    eval "$(atuin init zsh)"
-fi
 
 # Final: ZSH - Source any local overrides
 #-------------------------
