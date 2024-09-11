@@ -119,6 +119,21 @@ fi
 autoload -Uz +X compinit && compinit -i -d "${ZCOMPDUMP}"
 autoload -Uz +X bashcompinit && bashcompinit
 
+# Loading...
+#-------------------------
+# zoxide
+if (( $+commands[zoxide] )); then
+    _ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
+    [[ ! -f "${_ZO_DATA}" ]] && touch "${_ZO_DATA}"
+    export _ZO_DATA
+    eval "$(zoxide init zsh)"
+fi
+
+# Shell history
+if (( $+commands[atuin] )); then
+    eval "$(atuin init zsh)"
+fi
+
 # Final: ZSH - Source any local overrides
 #-------------------------
 if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
