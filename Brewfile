@@ -7,34 +7,11 @@ tap "homebrew/services"
 tap "saulpw/vd"
 tap "thoughtbot/formulae"
 tap "warrensbox/tap"
+tap "withgraphite/tap"
 # C++ Common Libraries
 brew "abseil"
 # Run your GitHub Actions locally
 brew "act"
-# Mozilla CA certificate store
-brew "ca-certificates"
-# Mozilla CA bundle for Python
-brew "certifi"
-# C parser in Python
-brew "pycparser"
-# C Foreign Function Interface for Python
-brew "cffi"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
-# Cryptographic recipes and primitives for Python
-brew "cryptography"
-# C library SSHv1/SSHv2 client and server protocols
-brew "libssh"
-# YAML Parser
-brew "libyaml"
-# Library for decimal floating point arithmetic
-brew "mpdecimal"
-# General-purpose data compression with high compression ratio
-brew "xz"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.12"
-# Automate deployment, configuration, and upgrading
-brew "ansible"
 # Plugin manager for zsh, inspired by antigen and antibody
 brew "antidote"
 # Generic-purpose lossless compression algorithm by Google
@@ -51,6 +28,8 @@ brew "jpeg-turbo"
 brew "libpng"
 # Extremely Fast Compression algorithm
 brew "lz4"
+# General-purpose data compression with high compression ratio
+brew "xz"
 # Zstandard is a real-time compression algorithm
 brew "zstd"
 # TIFF library and utilities
@@ -73,16 +52,24 @@ brew "aws-sdk-cpp"
 brew "bzip2"
 # Asynchronous DNS library
 brew "c-ares"
+# Mozilla CA certificate store
+brew "ca-certificates"
 # Library for processing command-line flags
 brew "gflags"
 # Application-level logging library
 brew "glog"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Protocol buffers (Google's data interchange format)
 brew "protobuf"
 # Alternative to backtracking PCRE-style regular expression engines
 brew "re2"
 # Next generation open source RPC library and framework
 brew "grpc"
+# Library for decimal floating point arithmetic
+brew "mpdecimal"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
 # High-performance theorem prover
 brew "z3"
 # Next-gen compiler infrastructure
@@ -117,6 +104,12 @@ brew "atuin"
 brew "m4"
 # Automatic configure script builder
 brew "autoconf"
+# C parser in Python
+brew "pycparser"
+# C Foreign Function Interface for Python
+brew "cffi"
+# Cryptographic recipes and primitives for Python
+brew "cryptography"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.11"
 # Official Amazon AWS command-line interface
@@ -143,6 +136,16 @@ brew "binutils"
 brew "black"
 # Collection of portable C++ source libraries
 brew "boost"
+# X.Org: Protocol Headers
+brew "xorgproto"
+# X.Org: A Sample Authorization Protocol for X
+brew "libxau"
+# X.Org: X Display Manager Control Protocol library
+brew "libxdmcp"
+# X.Org: Interface to the X Window System protocol
+brew "libxcb"
+# New way to see and navigate directory trees
+brew "broot"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -155,14 +158,6 @@ brew "fontconfig"
 brew "pcre2"
 # Core application library for C
 brew "glib"
-# X.Org: Protocol Headers
-brew "xorgproto"
-# X.Org: A Sample Authorization Protocol for X
-brew "libxau"
-# X.Org: X Display Manager Control Protocol library
-brew "libxdmcp"
-# X.Org: Interface to the X Window System protocol
-brew "libxcb"
 # X.Org: Core X11 protocol client library
 brew "libx11"
 # X.Org: Library for common extensions to the X11 protocol
@@ -177,6 +172,8 @@ brew "pixman"
 brew "cairo"
 # Insanely fast image printing in your terminal
 brew "catimg"
+# Mozilla CA bundle for Python
+brew "certifi"
 # C access to FITS data files with optional Fortran wrappers
 brew "cfitsio"
 # Implementation of the Unicode BiDi algorithm
@@ -209,10 +206,6 @@ brew "gmp"
 brew "coreutils", link: false
 # Top-like interface for container metrics
 brew "ctop"
-# C string library for manipulating Unicode strings
-brew "libunistring"
-# International domain name library (IDNA2008, Punycode and TR46)
-brew "libidn2"
 # HTTP/2 C Library
 brew "libnghttp2"
 # Tool for downloading RTMP streaming media
@@ -225,12 +218,18 @@ brew "dateutils"
 brew "dav1d"
 # Message bus system, providing inter-application communication
 brew "dbus"
+# YAML Parser
+brew "libyaml"
 # Enterprise friendly way of detecting and preventing secrets in code
 brew "detect-secrets"
 # Utility to replace problematic characters in filenames
 brew "detox"
 # Asynchronous event library
 brew "libevent"
+# C string library for manipulating Unicode strings
+brew "libunistring"
+# International domain name library (IDNA2008, Punycode and TR46)
+brew "libidn2"
 # ASN.1 structure parser library
 brew "libtasn1"
 # Low-level cryptographic library
@@ -371,6 +370,8 @@ brew "opus"
 brew "libsndfile"
 # High quality, one-dimensional sample-rate conversion library
 brew "libsoxr"
+# C library SSHv1/SSHv2 client and server protocols
+brew "libssh"
 # Transcode video stabilization plugin
 brew "libvidstab"
 # VP8/VP9 video codec
@@ -539,6 +540,8 @@ brew "gts"
 brew "graphviz"
 # GNU grep, egrep and fgrep
 brew "grep"
+# Command-line tool for generating regular expressions
+brew "grex"
 # Smarter Dockerfile linter to validate best practices
 brew "hadolint"
 # Open-source video transcoder available for Linux, Mac, and Windows
@@ -745,6 +748,8 @@ brew "proselint"
 brew "pspg"
 # Show ps output as a tree
 brew "pstree"
+# Command-line tool for managing long-running shell commands
+brew "pueue"
 # Python version management
 brew "pyenv"
 # Pyenv plugin to manage virtualenv
@@ -859,6 +864,8 @@ brew "tox"
 brew "translate-toolkit"
 # CLI tool that moves files or folder to the trash
 brew "trash"
+# Tree command, improved
+brew "tre-command"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Utilities for interacting with PyPI
@@ -919,6 +926,8 @@ brew "heroku/brew/heroku"
 brew "warrensbox/tap/tfswitch"
 # The tgswitch command lets you switch between terragrunt versions.
 brew "warrensbox/tap/tgswitch"
+# Allows you to manage your stacked changes and submit them for review on GitHub
+brew "withgraphite/tap/graphite"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
@@ -927,6 +936,8 @@ cask "1password-cli"
 cask "alfred"
 # Enable Windows-like alt-tab
 cask "alt-tab"
+# Application uninstaller
+cask "appcleaner"
 # Securely stores and accesses AWS credentials in a development environment
 cask "aws-vault"
 # Tool to flash OS images to SD cards & USB drives
@@ -984,8 +995,6 @@ cask "notion"
 cask "obsidian"
 # Save articles to read, highlight key content, and organise notes for review
 cask "reader"
-# Move and resize windows using keyboard shortcuts or snap areas
-cask "rectangle"
 # Web browser
 cask "safari-technology-preview"
 # Additional features and controls for Sure MV7 and MV88+ microphones
@@ -1049,6 +1058,7 @@ vscode "github.vscode-github-actions"
 vscode "github.vscode-pull-request-github"
 vscode "gitlab.gitlab-workflow"
 vscode "golang.go"
+vscode "graphite.gti-vscode"
 vscode "hashicorp.hcl"
 vscode "hashicorp.terraform"
 vscode "innoverio.vscode-dbt-power-user"

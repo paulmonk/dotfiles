@@ -41,7 +41,7 @@ export HOMEBREW_NO_INSECURE_REDIRECT="1"
 # macOS
 if [ "$KERNEL" = "Darwin" ]; then
     # Set Default PATH
-    export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+    export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 
     # Prefix
     # Cater for M1 arch
@@ -126,8 +126,8 @@ else
     CPU_CORES="$(nproc)"
 fi
 
-# Local Bins (user and system)
-export PATH="${HOME}/.local/bin:/usr/local/bin:${PATH}"
+# Local Bins (user)
+export PATH="${HOME}/.local/bin:${PATH}"
 
 # Defaults
 export LC_ALL="en_GB.UTF-8"
