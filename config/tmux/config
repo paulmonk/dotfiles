@@ -74,6 +74,9 @@ setw -g pane-base-index 1
 # Renumber windows automatically.
 set -g renumber-windows on
 
+# Keep windows around after they exit
+set -g remain-on-exit on
+
 # Visual notifications
 set -g visual-bell off
 set -g visual-activity off
@@ -195,25 +198,8 @@ bind-key B setw main-pane-height 30\; select-layout main-horizontal
 bind-key r command-prompt -I '#W' -p '(rename window)' "rename-window '%%'"
 bind-key R command-prompt -I '#S' -p '(rename session)' "rename-session '%%'"
 
-# Reload tmux conf
-bind-key C-r source-file $XDG_CONFIG_HOME/tmux/config \; display "Config reloaded"
-
 # Open a man page in new vertical pane
 bind-key / command-prompt -p 'Man>' "split-window -d -v 'exec man %%'"
-
-# Use Facebook PathPicker to select paths from buffer interactively
-# bind-key f capture-pane \; \
-#  save-buffer $TMUX_TMPDIR/tmux-buffer \; \
-#  new-window -c "#{pane_current_path}" \
-#  "sh -c 'cat $TMUX_TMPDIR/tmux-buffer | fpp -c \"vim -O\" && rm $TMUX_TMPDIR/tmux-buffer'"
-
-# # Use urlscan for displaying all links from buffer
-# bind-key u capture-pane -J \; \
-#   save-buffer $TMUX_TMPDIR/tmux-buffer \; \
-#   split-window -l 10 "urlscan -c -d '$TMUX_TMPDIR/tmux-buffer' && rm $TMUX_TMPDIR/tmux-buffer"
-
-# Use urlview for displaying all links from buffer
-bind-key u capture-pane -J \; save-buffer $TMUX_TMPDIR/tmux-buffer \; split-window -l 10 "urlview '$TMUX_TMPDIR/tmux-buffer' && rm $TMUX_TMPDIR/tmux-buffer"
 
 # Quick view of processes
 bind-key P split-window -h 'exec htop'
