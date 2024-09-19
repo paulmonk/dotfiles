@@ -105,6 +105,9 @@ fi
 # Hex dump Canonical; some systems have this symlinked
 (( $+commands[hd] )) || alias hd="hexdump -C"
 
+# tree to be tre
+(( $+commands[tre] )) && alias tree="tre"
+
 # ls
 # ls alias is set in colors sh config.
 # If ls is set to eza. Some of these aliases will not work.

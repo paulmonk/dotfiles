@@ -134,6 +134,11 @@ if (( $+commands[atuin] )); then
     eval "$(atuin init zsh)"
 fi
 
+# Broot
+if (( $+commands[broot] )); then
+    source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
+fi
+
 # Final: ZSH - Source any local overrides
 #-------------------------
 if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
