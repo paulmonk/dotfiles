@@ -55,7 +55,7 @@ setopt AUTO_PARAM_KEYS
 setopt AUTO_PARAM_SLASH      # If param is a dir, add a trailing slash.
 setopt LIST_TYPES            # list like "ls -F"
 setopt LIST_PACKED           # Try to make the completion list small
-setopt COMPLETE_ALIASES      # Completion of cmd switches for aliases
+unsetopt COMPLETE_ALIASES    # Completion of cmd switches for aliases
 setopt MAGIC_EQUAL_SUBST     # Enable completion in "--option=arg"
 setopt MARK_DIRS             # Add "/" if completes directory
 setopt PATH_DIRS             # Path search even on cmd bins with slashes.
