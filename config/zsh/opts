@@ -55,7 +55,7 @@ setopt AUTO_PARAM_KEYS
 setopt AUTO_PARAM_SLASH      # If param is a dir, add a trailing slash.
 setopt LIST_TYPES            # list like "ls -F"
 setopt LIST_PACKED           # Try to make the completion list small
-# unsetopt COMPLETE_ALIASES    # Completion of cmd switches for aliases
+setopt COMPLETE_ALIASES      # Completion of cmd switches for aliases
 setopt MAGIC_EQUAL_SUBST     # Enable completion in "--option=arg"
 setopt MARK_DIRS             # Add "/" if completes directory
 setopt PATH_DIRS             # Path search even on cmd bins with slashes.
@@ -90,15 +90,15 @@ unsetopt CHECK_JOBS       # Do not report on jobs when shell exit.
 # which is generally better than url-quote-magic so we load that when possible.
 autoload -Uz is-at-least
 if [[ "${ZSH_VERSION}" != "5.1.1" ]]; then
-  if is-at-least "5.2"; then
-    autoload -Uz bracketed-paste-url-magic
-    zle -N bracketed-paste bracketed-paste-url-magic
-  else
-    if is-at-least "5.1"; then
-      autoload -Uz bracketed-paste-magic
-      zle -N bracketed-paste bracketed-paste-magic
+    if is-at-least "5.2"; then
+        autoload -Uz bracketed-paste-url-magic
+        zle -N bracketed-paste bracketed-paste-url-magic
+    else
+        if is-at-least "5.1"; then
+            autoload -Uz bracketed-paste-magic
+            zle -N bracketed-paste bracketed-paste-magic
+        fi
     fi
-  fi
-  autoload -Uz url-quote-magic
-  zle -N self-insert url-quote-magic
+    autoload -Uz url-quote-magic
+    zle -N self-insert url-quote-magic
 fi

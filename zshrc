@@ -95,10 +95,13 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/sandboxd"
 
 # ZSH Completions
 #-------------------------
+fpath=(
+    ${BREW_PREFIX}/share/zsh/site-functions
+    ${fpath}
+)
 if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions" ]]; then
     fpath=(
         ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions
-        ${BREW_PREFIX}/share/zsh/site-functions
         ${fpath}
     )
 fi
