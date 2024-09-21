@@ -1,8 +1,6 @@
 tap "coursier/formulas"
 tap "heroku/brew"
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
 tap "homebrew/services"
 tap "saulpw/vd"
 tap "thoughtbot/formulae"
@@ -68,6 +66,10 @@ brew "re2"
 brew "grpc"
 # Library for decimal floating point arithmetic
 brew "mpdecimal"
+# Library for command-line editing
+brew "readline"
+# Command-line interface for SQLite
+brew "sqlite"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.12"
 # High-performance theorem prover
@@ -110,14 +112,14 @@ brew "pycparser"
 brew "cffi"
 # Cryptographic recipes and primitives for Python
 brew "cryptography"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.11"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Programmable completion for Bash 4.2+
 brew "bash-completion@2"
+# C library of Git core methods that is re-entrant and linkable
+brew "libgit2@1.7"
 # Regular expressions library
 brew "oniguruma"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -134,6 +136,8 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c"
 # Collection of portable C++ source libraries
 brew "boost"
 # X.Org: Protocol Headers
@@ -264,10 +268,10 @@ brew "nspr"
 brew "nss"
 # Library for JPEG-2000 image manipulation
 brew "openjpeg"
-# Open source suite of directory software
-brew "openldap"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
+# Cross-platform C++ GUI toolkit
+brew "wxwidgets"
 # Visually compare two PDF files
 brew "diff-pdf"
 # Good-lookin' diffs with diff-highlight and more
@@ -298,6 +302,8 @@ brew "libsodium"
 brew "folly"
 # C++14 implementation of the TLS-1.3 standard
 brew "fizz"
+# QUIC transport protocol implementation
+brew "mvfst"
 # Modular, composable client/server abstractions framework
 brew "wangle"
 # Facebook's branch of Apache Thrift, including a new C++ server
@@ -326,6 +332,8 @@ brew "libexif"
 brew "exif"
 # Perl lib for reading and writing EXIF metadata
 brew "exiftool"
+# XML 1.0 parser
+brew "expat"
 # C library of Git core methods that is re-entrant and linkable
 brew "libgit2"
 # Modern, maintained replacement for ls
@@ -512,8 +520,6 @@ brew "git"
 brew "git-delta"
 # Small git utilities
 brew "git-extras"
-# Simple and efficient way to access statistics in git
-brew "git-quick-stats"
 # Audit git repos for secrets
 brew "gitleaks"
 # Alternative to top/htop
@@ -612,6 +618,8 @@ brew "less"
 brew "lesspipe"
 # Terminal file manager
 brew "lf"
+# Assuan IPC Library
+brew "libassuan@2"
 # CBOR protocol implementation for C and others
 brew "libcbor"
 # Framework for scientific data networking
@@ -654,6 +662,8 @@ brew "libvterm"
 brew "libyubikey"
 # Curses-based tool for viewing and analyzing log files
 brew "lnav"
+# Parsing Expression Grammars For Lua
+brew "lpeg"
 # Just-In-Time Compiler (JIT) for the Lua programming language
 brew "luajit"
 # Bare libuv bindings for lua
@@ -672,6 +682,8 @@ brew "md5deep"
 brew "media-info"
 # Scalable distributed version control system
 brew "mercurial"
+# Tool for working with usage-spec CLIs
+brew "usage"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Simple tool to make locally trusted development certificates
@@ -704,6 +716,8 @@ brew "nghttp2"
 brew "nmap"
 # Convert OpenDocument files to plain text
 brew "odt2txt"
+# Open source suite of directory software
+brew "openldap"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Light-weight C++ XML processing library
@@ -750,54 +764,12 @@ brew "pspg"
 brew "pstree"
 # Command-line tool for managing long-running shell commands
 brew "pueue"
-# Python version management
-brew "pyenv"
-# Pyenv plugin to manage virtualenv
-brew "pyenv-virtualenv"
 # Generic syntax highlighter
 brew "pygments"
-# Tab completion for Python argparse
-brew "python-argcomplete"
-# Python Classes Without Boilerplate
-brew "python-attrs"
-# Python composable command-line interface toolkit
-brew "python-click"
-# Python 2 and 3 compatibility utilities
-brew "six"
-# Useful extensions to the standard Python datetime features
-brew "python-dateutil"
-# Library which implements some Python packaging standards (PEPs)
-brew "python-distlib"
-# Platform-independent file lock for Python
-brew "python-filelock"
-# Internationalized Domain Names in Applications (IDNA)
-brew "python-idna"
-# Implements a XML/HTML/XHTML Markup safe string for Python
-brew "python-markupsafe"
-# Fast, expressive, extensible templating engine for Python
-brew "python-jinja"
-# Pythonic binding for the libxml2 and libxslt libraries
-brew "python-lxml"
-# Core utilities for Python packages
-brew "python-packaging"
-# Utility library for gitignore style pattern matching of file paths
-brew "python-pathspec"
-# Python package for determining appropriate platform-specific dirs
-brew "python-platformdirs"
-# Python library for creating PEG parsers
-brew "python-pyparsing"
-# Python library for cross platform timezone
-brew "python-pytz"
-# Easily download, build, install, upgrade, and uninstall Python packages
-brew "python-setuptools"
-# Pretty-print tabular data in Python
-brew "python-tabulate"
-# Backported and experimental type hints for Python
-brew "python-typing-extensions"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.10"
-# YAML framework for Python
-brew "pyyaml"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
 # QR Code generation
 brew "qrencode"
 # Cross-platform application and UI framework
@@ -860,8 +832,6 @@ brew "tokei"
 brew "tor"
 # Generic Python virtualenv management and test command-line tool
 brew "tox"
-# Toolkit for localization engineers
-brew "translate-toolkit"
 # CLI tool that moves files or folder to the trash
 brew "trash"
 # Tree command, improved
@@ -876,8 +846,6 @@ brew "unzip"
 brew "uutils-coreutils"
 # Vi 'workalike' with many additional features
 brew "vim"
-# Tool for creating isolated virtual python environments
-brew "virtualenv"
 # Generator for LS_COLORS with support for multiple color themes
 brew "vivid"
 # Executes a program periodically, showing output fullscreen
@@ -886,8 +854,6 @@ brew "watch"
 brew "watchman"
 # Internet file retriever
 brew "wget"
-# Homebrew, but with Docker images
-brew "whalebrew"
 # Lookup tool for domain names and other internet resources
 brew "whois"
 # Library to create, extract, and modify Windows Imaging files
@@ -997,7 +963,7 @@ cask "obsidian"
 cask "reader"
 # Web browser
 cask "safari-technology-preview"
-# Additional features and controls for Sure MV7 and MV88+ microphones
+# Additional features and controls for Shure MV7 and MV88+ microphones
 cask "shureplus-motiv"
 # Instant messaging application focusing on security
 cask "signal"
@@ -1005,8 +971,6 @@ cask "signal"
 cask "slack"
 # Displays all open files and sockets in use by all running processes
 cask "sloth"
-# Command-line client for connecting to Snowflake
-cask "snowflake-snowsql"
 # Control your Sonos system
 cask "sonos"
 # Data visualization software
