@@ -46,16 +46,10 @@ brew "libvmaf"
 brew "aom"
 # AWS SDK for C++
 brew "aws-sdk-cpp"
-# Freely available high-quality data compressor
-brew "bzip2"
 # Asynchronous DNS library
 brew "c-ares"
 # Mozilla CA certificate store
 brew "ca-certificates"
-# Library for processing command-line flags
-brew "gflags"
-# Application-level logging library
-brew "glog"
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@3"
 # Protocol buffers (Google's data interchange format)
@@ -70,14 +64,10 @@ brew "mpdecimal"
 brew "readline"
 # Command-line interface for SQLite
 brew "sqlite"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.12"
 # High-performance theorem prover
 brew "z3"
 # Next-gen compiler infrastructure
 brew "llvm"
-# JSON parser/generator for C++ with SAX and DOM style APIs
-brew "rapidjson"
 # Compression/decompression library aiming for high speed
 brew "snappy"
 # Framework for scalable cross-language services development
@@ -94,6 +84,8 @@ brew "libssh2"
 brew "aria2"
 # Library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS
 brew "aribb24"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
 # Record and share terminal sessions
 brew "asciinema"
 # Portable library for importing many well-known 3D model formats
@@ -136,8 +128,6 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c"
 # Collection of portable C++ source libraries
 brew "boost"
 # X.Org: Protocol Headers
@@ -150,6 +140,8 @@ brew "libxdmcp"
 brew "libxcb"
 # New way to see and navigate directory trees
 brew "broot"
+# Freely available high-quality data compressor
+brew "bzip2"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -158,6 +150,8 @@ brew "cabal-install"
 brew "freetype"
 # XML-based font configuration API for X Windows
 brew "fontconfig"
+# C string library for manipulating Unicode strings
+brew "libunistring"
 # Perl compatible regular expressions library with a new API
 brew "pcre2"
 # Core application library for C
@@ -188,6 +182,8 @@ brew "gdk-pixbuf"
 brew "graphite2"
 # OpenType text shaping engine
 brew "harfbuzz"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c"
 # Framework for layout and rendering of i18n text
 brew "pango"
 # Library to render SVG files using Cairo
@@ -230,8 +226,6 @@ brew "detect-secrets"
 brew "detox"
 # Asynchronous event library
 brew "libevent"
-# C string library for manipulating Unicode strings
-brew "libunistring"
 # International domain name library (IDNA2008, Punycode and TR46)
 brew "libidn2"
 # ASN.1 structure parser library
@@ -296,6 +290,10 @@ brew "duckdb"
 brew "duti"
 # Open-source formatting library for C++
 brew "fmt"
+# Library for processing command-line flags
+brew "gflags"
+# Application-level logging library
+brew "glog"
 # NaCl networking and cryptography library
 brew "libsodium"
 # Collection of reusable C++ library artifacts developed at Facebook
@@ -306,6 +304,8 @@ brew "fizz"
 brew "mvfst"
 # Modular, composable client/server abstractions framework
 brew "wangle"
+# Extremely fast non-cryptographic hash algorithm
+brew "xxhash"
 # Facebook's branch of Apache Thrift, including a new C++ server
 brew "fbthrift"
 # Thrift functions for querying information from a service
@@ -584,8 +584,6 @@ brew "ioping"
 brew "ipcalc"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
-# Interactive computing in Python
-brew "ipython"
 # C library for encoding, decoding, and manipulating JSON
 brew "jansson"
 # Serializes the output of command-line tools to structured JSON output
@@ -752,7 +750,7 @@ brew "postgresql@14"
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
-# Modern replacement for ps written by Rust
+# Modern replacement for ps written in Rust
 brew "procs"
 # Coreutils progress viewer
 brew "progress"
@@ -774,6 +772,8 @@ brew "python@3.11"
 brew "qrencode"
 # Cross-platform application and UI framework
 brew "qt@5"
+# JSON parser/generator for C++ with SAX and DOM style APIs
+brew "rapidjson"
 # RC file (dotfile) management
 brew "rcm"
 # Search tool like grep and The Silver Searcher
@@ -784,8 +784,6 @@ brew "ripgrep-all"
 brew "rkhunter"
 # Extremely fast tool to remove dupes and other lint from your filesystem
 brew "rmlint"
-# Extremely fast non-cryptographic hash algorithm
-brew "xxhash"
 # Utility that provides fast incremental file transfer
 brew "rsync"
 # Powerful, clean, object-oriented scripting language
@@ -844,6 +842,8 @@ brew "twine"
 brew "unzip"
 # Cross-platform Rust rewrite of the GNU coreutils
 brew "uutils-coreutils"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
 # Vi 'workalike' with many additional features
 brew "vim"
 # Generator for LS_COLORS with support for multiple color themes
@@ -977,6 +977,8 @@ cask "sonos"
 cask "tableau"
 # Native GUI tool for relational databases
 cask "tableplus"
+# Mesh VPN based on WireGuard
+cask "tailscale"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin"
 # JDK from the Eclipse Foundation (Adoptium)
@@ -1047,6 +1049,8 @@ vscode "ms-vscode-remote.remote-ssh"
 vscode "ms-vscode-remote.remote-ssh-edit"
 vscode "ms-vscode-remote.remote-wsl"
 vscode "ms-vscode.azure-repos"
+vscode "ms-vscode.cpptools"
+vscode "ms-vscode.live-server"
 vscode "ms-vscode.makefile-tools"
 vscode "ms-vscode.remote-explorer"
 vscode "ms-vscode.remote-repositories"
@@ -1057,7 +1061,7 @@ vscode "ritwickdey.liveserver"
 vscode "rust-lang.rust-analyzer"
 vscode "samuelcolvin.jinjahtml"
 vscode "scala-lang.scala"
-vscode "snowflake.snowflake-vsc"
+vscode "scalameta.metals"
 vscode "streetsidesoftware.code-spell-checker"
 vscode "streetsidesoftware.code-spell-checker-british-english"
 vscode "sygene.auto-correct"
