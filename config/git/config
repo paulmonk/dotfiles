@@ -141,6 +141,8 @@
     rebase = true
 
 [push]
+    autoSetupRemote = true
+
     # Defines the action git push should take if no refspec is explicitly
     # given:
     # current = Push the current branch to update a branch with the same
@@ -213,8 +215,6 @@
 # Switch user depending on projects. Handy for using work email for work projects
 [includeIf "gitdir:~/projects/decide-with-data/**/"]
     path = ~/.config/git/users/decide-with-data
-[includeIf "gitdir:~/projects/scan/**/"]
-    path = ~/.config/git/users/scan
 
 [alias]
     a = add
@@ -232,6 +232,8 @@
     dp = !git log --pretty=oneline | fzf | cut -d ' ' -f1 | xargs -o git show
     ds = diff --staged
     dw = diff --color-words
+    # shows all unstaged files in fzf and you can use space to toggle them, then hitting enter finishes adding/staging them
+    fza = "!git ls-files -m -o --exclude-standard -z | fzf -m --read0 | xargs -0 git add"
     l = log --pretty=log -n 20 --graph --abbrev-commit
     lb = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
     lg = log --graph --pretty=log --all
@@ -243,6 +245,7 @@
     p = push -u origin HEAD
     pf = p --force-with-lease
     pu = !"git pull && git smu"
+    root = rev-parse --show-toplevel
     remotes = remote -v
     rhk = reset --keep
     s = status -sb
@@ -250,6 +253,8 @@
     smu = submodule update --init --recursive --remote --rebase
     st = stash
     st-all = stash save --include-untracked
+    # shows branches in fzf, hit enter on one and you checkout that branch
+    sw = "!git checkout $(git branch -a --format '%(refname:short)' | sed 's~origin/~~' | sort | uniq | fzf);"
     swd="switch --detach"
     swr="switch-recent"
     t = tag --column
