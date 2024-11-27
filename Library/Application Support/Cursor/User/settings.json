@@ -1,6 +1,6 @@
 {
   /*
-    CODE Built-ins
+    CURSOR Built-ins
     ============
   */
   // accessibility
@@ -23,7 +23,7 @@
     "donjayamanne.githistory",
     "editorconfig.editorconfig",
     "mhutchie.git-graph",
-    "mutantdino.resourcemonitor",
+    "mutantdino.resourcemonitor"
     "naumovs.color-highlight",
     "oderwat.indent-rainbow",
     "redhat.vscode-yaml",
@@ -569,7 +569,8 @@
     "reportMissingImports": "none",
     "reportUnusedVariable": "none"
   },
-  "python.languageServer": "Pylance",
+  // Pylance does not work with Cursor. BasedPyRight is installed instead.
+  "python.languageServer": "None",
   "python.terminal.activateEnvironment": true,
 
   // JS / TS
@@ -707,8 +708,8 @@
 
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
-  // For example "hte" should be "the"`
-  "cSpell.flagWords": ["hte"],
+  // For example "the" should be "the"`
+  "cSpell.flagWords": ["the"],
 
   // Set the delay before spell checking the document. Default is 50.
   "cSpell.spellCheckDelayMs": 50,
@@ -737,15 +738,8 @@
     }
   ],
 
-  // Github Copilot
-  "github.copilot.enable": {
-    "*": true,
-    "yaml": false,
-    "plaintext": false,
-    "markdown": true
-  },
-  "github.copilot.editor.enableAutoCompletions": true,
-
   // Misc
+  "makefile.configureOnOpen": false,
+  "liveServer.settings.donotShowInfoMsg": true,
   "vsintellicode.modify.editor.suggestSelection": "disabled"
 }

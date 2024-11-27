@@ -69,10 +69,15 @@ alias g="git"
 alias md="mkdir -pv"
 alias o="open"
 alias p="${(z)PAGER}"
-alias pip="python -m pip"
 alias type="type -a"
 alias v="vi"
 alias x="unarchive"
+
+# Python
+alias pip="python -m pip"
+alias py="python"
+alias uvxi="uv tool install"
+alias uvxr="uv tool run"
 
 # Carry over aliases to the root account when using sudo
 alias sudo="sudo "

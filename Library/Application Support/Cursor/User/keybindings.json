@@ -1,0 +1,205 @@
+[
+  // Vim keys to easily move between editor groups
+  {
+    "key": "ctrl+h",
+    "command": "workbench.action.focusLeftGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.focusRightGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.focusAboveGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.focusBelowGroup",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+
+  // vim:Scroll in Hover with vim keys
+  {
+    "key": "ctrl+h",
+    "command": "editor.action.scrollLeftHover",
+    "when": "editorHoverFocused && vim.active"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "editor.action.scrollDownHover",
+    "when": "editorHoverFocused && vim.active"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "editor.action.scrollUpHover",
+    "when": "editorHoverFocused && vim.active"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "editor.action.scrollRightHover",
+    "when": "editorHoverFocused && vim.active"
+  },
+
+  // vim: Disable arrow movement in NORMAL mode, resize windows instead
+  {
+    "key": "up",
+    "command": "workbench.action.increaseViewHeight",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "down",
+    "command": "workbench.action.decreaseViewHeight",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "left",
+    "command": "workbench.action.increaseViewWidth",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "right",
+    "command": "workbench.action.decreaseViewWidth",
+    "when": "editorFocus && vim.active && vim.mode == 'Normal'"
+  },
+
+  // Vim: Ensure this works in the explorer window, synergy with vim normal mode config
+  // space == <leader>
+  {
+    "key": "space e",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "filesExplorerFocus && !inputFocus && vim.active"
+  },
+
+  // Vim: Focus the terminal when the terminal is not focused
+  {
+    "key": "ctrl+;",
+    "command": "workbench.action.terminal.focus",
+    "when": "vim.active"
+  },
+  // Focus the active editor group (text editor) when the terminal is focused
+  {
+    "key": "ctrl+;",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus && vim.active"
+  },
+
+  // vim: Explorer file operations
+  {
+    "key": "a",
+    "command": "explorer.newFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
+  },
+  {
+    "key": "f",
+    "command": "explorer.newFolder",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
+  },
+  {
+    "key": "r",
+    "command": "renameFile",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
+  },
+  {
+    "key": "x",
+    "command": "filesExplorer.cut",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus && vim.active"
+  },
+  {
+    "key": "y",
+    "command": "filesExplorer.copy",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus && vim.active"
+  },
+  {
+    "key": "p",
+    "command": "filesExplorer.paste",
+    "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus && vim.active"
+  },
+
+  // Vim: Explorer movement
+  {
+    "key": "ctrl+h",
+    "command": "list.collapse",
+    "when": "listFocus && !inputFocus && vim.active"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "list.expand",
+    "when": "listFocus && !inputFocus && vim.active"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "list.focusUp",
+    "when": "listFocus && !inputFocus && vim.active"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "list.focusDown",
+    "when": "listFocus && !inputFocus && vim.active"
+  },
+  {
+    "key": "enter",
+    "command": "list.select",
+    "when": "listFocus && !inputFocus && vim.active"
+  },
+
+  // Vim: accept suggestions with vim keys
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetVisible && vim.active"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetVisible && vim.active"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen && vim.active"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen && vim.active"
+  },
+
+  /*
+    VSCode attempt to emulate https://github.com/terryma/vim-multiple-cursors
+    https://github.com/VSCodeVim/Vim/issues/3588#issuecomment-1139373669
+  */
+  // Use built in VSCode pattern matcher for entire word search (ctrl + d)
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Skip current match (ctrl + x)
+  {
+    "key": "ctrl+x",
+    "command": "editor.action.moveSelectionToNextFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Go back to previous match (ctrl + p)
+  {
+    "key": "ctrl+p",
+    "command": "editor.action.moveSelectionToPreviousFindMatch",
+    "when": "vim.active && editorFocus && vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+  // Select all matches (ctrl + a). This is effectively the same as (cmd + shift + l)
+  {
+    "key": "ctrl+a",
+    "command": "editor.action.selectHighlights",
+    "when": "vim.active && editorFocus && vim.mode == 'Normal' || vim.mode == 'Visual' || vim.mode == 'VisualBlock'"
+  },
+
+  // Save files with ctrl shortcut too
+  {
+    "key": "ctrl+s",
+    "command": "workbench.action.files.save",
+    "when": "editorFocus && vim.active"
+  }
+]

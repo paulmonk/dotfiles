@@ -128,6 +128,8 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c@76"
 # Collection of portable C++ source libraries
 brew "boost"
 # X.Org: Protocol Headers
@@ -182,8 +184,8 @@ brew "gdk-pixbuf"
 brew "graphite2"
 # OpenType text shaping engine
 brew "harfbuzz"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c"
+# Library for encoding and decoding .avif files
+brew "libavif"
 # Framework for layout and rendering of i18n text
 brew "pango"
 # Library to render SVG files using Cairo
@@ -300,8 +302,6 @@ brew "libsodium"
 brew "folly"
 # C++14 implementation of the TLS-1.3 standard
 brew "fizz"
-# QUIC transport protocol implementation
-brew "mvfst"
 # Modular, composable client/server abstractions framework
 brew "wangle"
 # Extremely fast non-cryptographic hash algorithm
@@ -448,16 +448,14 @@ brew "isl"
 brew "libmpc"
 # GNU compiler collection
 brew "gcc"
-# Library for encoding and decoding .avif files
-brew "libavif"
 # Graphics library to dynamically manipulate images
 brew "gd"
 # Geometry Engine
 brew "geos"
 # Adaptive Entropy Coding implementing Golomb-Rice algorithm
 brew "libaec"
-# Manage compile and link flags for libraries
-brew "pkg-config"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
 # File format designed to store large amounts of data
 brew "hdf5"
 # JSON parser for C
@@ -698,6 +696,8 @@ brew "msgpack"
 brew "mtr"
 # Tail multiple files in one terminal simultaneously
 brew "multitail"
+# QUIC transport protocol implementation
+brew "mvfst"
 # CLI for MySQL with auto-completion and syntax highlighting
 brew "mycli"
 # Experimental optional static type checker for Python
@@ -904,6 +904,8 @@ cask "alfred"
 cask "alt-tab"
 # Application uninstaller
 cask "appcleaner"
+# Chromium based browser
+cask "arc"
 # Securely stores and accesses AWS credentials in a development environment
 cask "aws-vault"
 # Tool to flash OS images to SD cards & USB drives
@@ -912,6 +914,10 @@ cask "balenaetcher"
 cask "betterdisplay"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
+# Anthropic's official Claude AI desktop app
+cask "claude"
+# Write, edit, and chat about your code with AI
+cask "cursor"
 # All-in-one toolbox for developers
 cask "devutils"
 # Run Stable Diffusion locally
@@ -1060,6 +1066,7 @@ vscode "redhat.vscode-yaml"
 vscode "ritwickdey.liveserver"
 vscode "rust-lang.rust-analyzer"
 vscode "samuelcolvin.jinjahtml"
+vscode "saoudrizwan.claude-dev"
 vscode "scala-lang.scala"
 vscode "scalameta.metals"
 vscode "streetsidesoftware.code-spell-checker"
