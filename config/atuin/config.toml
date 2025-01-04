@@ -13,17 +13,17 @@
 # where to store your auth session token, default is your system data directory
 # session_path = "~/.key"
 
-dialect = "uk"            # us, uk
-style = "compact"         # auto, full, compact
-inline_height = 30        # interface max lines, or 0 for full screen
-show_preview = true       # bottom preview pane for long commands
-search_mode = "fuzzy"     # prefix, fulltext, fuzzy, skim
-word_jump_mode = "emacs"  # emacs, subl
+dialect = "uk"             # us, uk
+style = "compact"          # auto, full, compact
+inline_height = 30         # interface max lines, or 0 for full screen
+show_preview = true        # bottom preview pane for long commands
+search_mode = "fuzzy"      # prefix, fulltext, fuzzy, skim
+keymap_mode = "vim-normal" # emacs, subl
 # show_help = false
 
 scroll_context_lines = 2
-exit_mode = "return-original"  # return-original, return-query
-filter_mode = "global"  # global, host, session, directory
+exit_mode = "return-original" # return-original, return-query
+filter_mode = "global"        # global, host, session, directory
 
 auto_sync = false
 update_check = false
@@ -35,6 +35,15 @@ update_check = false
 
 # Unanchored regular-expression (match anywhere unless ^ or $ is used).
 # https://docs.rs/regex/latest/regex/#syntax
-history_filter = [
-  "^ ",
-]
+history_filter = ["^ "]
+
+[dotfiles]
+enabled = false
+
+[sync]
+records = false
+
+[theme]
+name = "solarized"
+debug = false
+max_depth = 10

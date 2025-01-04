@@ -1,0 +1,20 @@
+# Core
+auto-update = "check"
+auto-update-channel = "stable"
+
+# Startup
+# Tmux is used to manage sessions
+initial-command = "/bin/zsh --login -c "tmux attach-session || tmux -f $XDG_CONFIG_HOME/tmux/config""
+
+# Keybindings
+macos-option-as-alt = true
+
+# UI
+# Add more line-height to the text for easier readablity
+adjust-cell-height = +10%
+font-family = "FiraCode Nerd Font Mono"
+# Matching up with Iterm2
+theme = "iTerm2 Solarized Dark"
+window-padding-x = 5
+window-padding-y = 5
+window-padding-balance = true

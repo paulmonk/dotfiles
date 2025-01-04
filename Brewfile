@@ -76,6 +76,8 @@ brew "thrift"
 brew "utf8proc"
 # Columnar in-memory analytics layer designed to accelerate big data
 brew "apache-arrow"
+# C string library for manipulating Unicode strings
+brew "libunistring"
 # GNU internationalization (i18n) and localization (l10n) library
 brew "gettext"
 # C library implementing the SSH2 protocol
@@ -152,8 +154,6 @@ brew "cabal-install"
 brew "freetype"
 # XML-based font configuration API for X Windows
 brew "fontconfig"
-# C string library for manipulating Unicode strings
-brew "libunistring"
 # Perl compatible regular expressions library with a new API
 brew "pcre2"
 # Core application library for C
@@ -550,6 +550,8 @@ brew "grex"
 brew "hadolint"
 # Open-source video transcoder available for Linux, Mac, and Windows
 brew "handbrake"
+# Easy, fast, and beautiful database client for the terminal
+brew "harlequin"
 # Kubernetes package manager
 brew "helm"
 # Command-line hex viewer
@@ -826,12 +828,10 @@ brew "tig"
 brew "tmux"
 # Program that allows you to count code, quickly
 brew "tokei"
-# Anonymizing overlay network for TCP
-brew "tor"
 # Generic Python virtualenv management and test command-line tool
 brew "tox"
 # CLI tool that moves files or folder to the trash
-brew "trash"
+brew "trash", link: true
 # Tree command, improved
 brew "tre-command"
 # Display directories as trees (with optional color/HTML output)
@@ -874,6 +874,8 @@ brew "ykman"
 brew "ykpers"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
 # Compression and file packaging/archive utility
 brew "zip"
 # General-purpose lossless data-compression library
@@ -935,6 +937,8 @@ cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 cask "font-inter"
 cask "font-nova-mono"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
 # Web browser
 cask "google-chrome"
 # Web browser
@@ -959,6 +963,10 @@ cask "little-snitch"
 cask "macfuse"
 # Monitors and reports any microphone and camera activity
 cask "micro-snitch"
+# Provides updates to various Microsoft products
+cask "microsoft-auto-update"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
 # Silence embarrassing notifications while screensharing
 cask "muzzle"
 # App to write, plan, collaborate, and get organised
@@ -993,6 +1001,8 @@ cask "temurin@11"
 cask "temurin@8"
 # Free and open-source OpenVPN client
 cask "tunnelblick"
+# Virtual machines UI using QEMU
+cask "utm"
 # Disk encryption software focusing on security based on TrueCrypt
 cask "veracrypt"
 # Open-source code editor
