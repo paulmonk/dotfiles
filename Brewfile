@@ -973,6 +973,10 @@ cask "muzzle"
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Get up and running with large language models locally
+cask "ollama"
+# Control your tools with a few keystrokes
+cask "raycast"
 # Save articles to read, highlight key content, and organise notes for review
 cask "reader"
 # Web browser
