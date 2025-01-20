@@ -139,7 +139,7 @@ if (( $+commands[atuin] )); then
 fi
 
 # Broot
-if (( $+commands[broot] )); then
+if (( $+commands[broot])) && [[ -x "${XDG_CONFIG_HOME}/broot/launcher/bash/br" ]]; then
     source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
 fi
 

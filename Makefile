@@ -115,6 +115,10 @@ PREFIX := /usr
 X86_PREFIX := /usr
 endif
 
+# Ensure all required binaries on the PATH. Especially useful on first bootstrap of dotfiles.
+# Reference this variable as required in a recipe
+DEFAULT_PATH := "$(PREFIX)/bin:$(X86_PREFIX)/bin/:usr/bin:/bin:/usr/sbin:/sbin"
+
 # Install Homebrew
 # -----
 ifeq ($(KERNEL), Darwin)
@@ -196,12 +200,12 @@ endif
 
 ## Dotfiles setup symlinks only
 dotfiles: $(PREFIX)/bin/rcup
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
+	RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
 .PHONY: dotfiles
 
 ## Dotfiles Bootstrap, with pre and post hooks
 dotfiles-bootstrap: $(PREFIX)/bin/rcup
-	RCRC="$(CURDIR)/config/rcm/rcrc" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+	RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
 .PHONY: dotfiles-bootstrap
 
 # Install
