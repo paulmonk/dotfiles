@@ -33,6 +33,9 @@
     # Sort by branches commit timestamps.
     sort = -committerdate
 
+[checkout]
+    workers = 0
+
 [color]
     ui = auto
 
@@ -215,6 +218,8 @@
 # Switch user depending on projects. Handy for using work email for work projects
 [includeIf "gitdir:~/projects/decide-with-data/**/"]
     path = ~/.config/git/users/decide-with-data
+[includeIf "gitdir:~/projects/benefex/**/"]
+    path = ~/.config/git/users/benefex
 
 [alias]
     a = add
