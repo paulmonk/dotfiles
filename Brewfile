@@ -113,7 +113,7 @@ brew "bash"
 # Programmable completion for Bash 4.2+
 brew "bash-completion@2"
 # C library of Git core methods that is re-entrant and linkable
-brew "libgit2@1.7"
+brew "libgit2"
 # Regular expressions library
 brew "oniguruma"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -130,8 +130,6 @@ brew "bingrep"
 brew "binutils"
 # Python code formatter
 brew "black"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c@76"
 # Collection of portable C++ source libraries
 brew "boost"
 # X.Org: Protocol Headers
@@ -146,6 +144,8 @@ brew "libxcb"
 brew "broot"
 # Freely available high-quality data compressor
 brew "bzip2"
+# GNU multiple precision arithmetic library
+brew "gmp"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -184,6 +184,8 @@ brew "gdk-pixbuf"
 brew "graphite2"
 # OpenType text shaping engine
 brew "harfbuzz"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c@76"
 # Library for encoding and decoding .avif files
 brew "libavif"
 # Framework for layout and rendering of i18n text
@@ -202,10 +204,8 @@ brew "cjson"
 brew "codespell"
 # Color-highlighted diff(1) output
 brew "colordiff"
-# GNU multiple precision arithmetic library
-brew "gmp"
 # GNU File, Shell, and Text utilities
-brew "coreutils", link: false
+brew "coreutils"
 # Top-like interface for container metrics
 brew "ctop"
 # HTTP/2 C Library
@@ -274,6 +274,8 @@ brew "diff-pdf"
 brew "diff-so-fancy"
 # File comparison utilities
 brew "diffutils"
+# Text-based UI library
+brew "ncurses"
 # Load/unload environment variables based on $PWD
 brew "direnv"
 # Tool for exploring each layer in a docker image
@@ -334,8 +336,6 @@ brew "exif"
 brew "exiftool"
 # XML 1.0 parser
 brew "expat"
-# C library of Git core methods that is re-entrant and linkable
-brew "libgit2"
 # Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
@@ -368,7 +368,7 @@ brew "mbedtls"
 brew "librist"
 # Library for sample rate conversion of audio data
 brew "libsamplerate"
-# Vorbis General Audio Compression Codec
+# Vorbis general audio compression codec
 brew "libvorbis"
 # MP3 player for Linux and UNIX
 brew "mpg123"
@@ -418,8 +418,6 @@ brew "ffmpeg"
 brew "ffuf"
 # Banner-like program prints strings as ASCII art
 brew "figlet"
-# Text-based UI library
-brew "ncurses"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
 # Lint your Python code for style and logical errors
@@ -584,6 +582,8 @@ brew "ioping"
 brew "ipcalc"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
+# Official CLI for the IPinfo IP Address API
+brew "ipinfo-cli"
 # C library for encoding, decoding, and manipulating JSON
 brew "jansson"
 # Serializes the output of command-line tools to structured JSON output
@@ -628,6 +628,8 @@ brew "libev"
 brew "libffi"
 # Provides library functionality for FIDO U2F & FIDO 2.0, including USB
 brew "libfido2"
+# C library of Git core methods that is re-entrant and linkable
+brew "libgit2@1.7"
 # Library for large linear classification
 brew "liblinear"
 # Library for parsing mms:// and mmsh:// network streams
@@ -841,7 +843,7 @@ brew "twine"
 # Extraction utility for .zip compressed archives
 brew "unzip"
 # Cross-platform Rust rewrite of the GNU coreutils
-brew "uutils-coreutils"
+brew "uutils-coreutils", link: false
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Vi 'workalike' with many additional features
@@ -914,6 +916,8 @@ cask "aws-vault"
 cask "balenaetcher"
 # Display management tool
 cask "betterdisplay"
+# Design tool
+cask "canva"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
@@ -959,14 +963,12 @@ cask "keycastr"
 cask "linkliar"
 # Host-based application firewall
 cask "little-snitch"
+# Screen and video recording software
+cask "loom"
 # File system integration
 cask "macfuse"
 # Monitors and reports any microphone and camera activity
 cask "micro-snitch"
-# Provides updates to various Microsoft products
-cask "microsoft-auto-update"
-# Meet, chat, call, and collaborate in just one place
-cask "microsoft-teams"
 # Silence embarrassing notifications while screensharing
 cask "muzzle"
 # App to write, plan, collaborate, and get organised
@@ -991,8 +993,6 @@ cask "slack"
 cask "sloth"
 # Control your Sonos system
 cask "sonos"
-# Data visualization software
-cask "tableau"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Mesh VPN based on WireGuard
@@ -1001,8 +1001,6 @@ cask "tailscale"
 cask "temurin"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin@11"
-# JDK from the Eclipse Foundation (Adoptium)
-cask "temurin@8"
 # Free and open-source OpenVPN client
 cask "tunnelblick"
 # Virtual machines UI using QEMU
@@ -1023,19 +1021,22 @@ cask "yubico-yubikey-manager"
 cask "zoom"
 vscode "aaron-bond.better-comments"
 vscode "bierner.markdown-emoji"
+vscode "biomejs.biome"
+vscode "bradlc.vscode-tailwindcss"
 vscode "charliermarsh.ruff"
 vscode "codezombiech.gitignore"
 vscode "databricks.databricks"
 vscode "davidanson.vscode-markdownlint"
 vscode "dbaeumer.vscode-eslint"
+vscode "dbtlabsinc.dbt"
 vscode "donjayamanne.githistory"
-vscode "dorzey.vscode-sqlfluff"
 vscode "dotenv.dotenv-vscode"
 vscode "ecmel.vscode-html-css"
 vscode "editorconfig.editorconfig"
 vscode "emmanuelbeziat.vscode-great-icons"
-vscode "esbenp.prettier-vscode"
 vscode "exiasr.hadolint"
+vscode "formulahendry.auto-close-tag"
+vscode "formulahendry.auto-rename-tag"
 vscode "ginfuru.ginfuru-better-solarized-dark-theme"
 vscode "github.copilot"
 vscode "github.copilot-chat"
@@ -1047,16 +1048,14 @@ vscode "golang.go"
 vscode "graphite.gti-vscode"
 vscode "hashicorp.hcl"
 vscode "hashicorp.terraform"
-vscode "innoverio.vscode-dbt-power-user"
 vscode "iterative.dvc"
+vscode "joshbolduc.commitlint"
 vscode "mechatroner.rainbow-csv"
 vscode "mhutchie.git-graph"
 vscode "mquandalle.graphql"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
-vscode "ms-python.black-formatter"
 vscode "ms-python.debugpy"
-vscode "ms-python.mypy-type-checker"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
 vscode "ms-toolsai.jupyter"
@@ -1091,5 +1090,6 @@ vscode "timonwong.shellcheck"
 vscode "usernamehw.errorlens"
 vscode "vscodevim.vim"
 vscode "waderyan.gitblame"
+vscode "wix.vscode-import-cost"
 vscode "ypresto.vscode-accelerated"
 vscode "yzhang.markdown-all-in-one"
