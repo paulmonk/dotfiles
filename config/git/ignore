@@ -134,3 +134,5 @@ id_*
 #---------------------------
 .mypy_cache
 .tern-port
+
+**/.claude/settings.local.json
