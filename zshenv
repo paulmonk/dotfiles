@@ -29,17 +29,6 @@ fi
 
 # Autoloads
 # ============
-# Asdf
-if (( $+commands[asdf] )); then
-    if [[ -s "${ASDF_DATA_DIR:-$BREW_PREFIX/opt/asdf}/asdf.sh" ]]; then
-        source "${ASDF_DATA_DIR:-$BREW_PREFIX/opt/asdf}/asdf.sh"
-    fi
-elif (( $+commands[mise] )); then
-        eval "$(mise activate zsh)"
-else
-    # Pyenv
-    if (( $+commands[pyenv] )); then
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
+if (( $+commands[mise] )); then
+    eval "$(mise activate zsh)"
 fi

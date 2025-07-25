@@ -220,11 +220,18 @@ fi
 
 # Node / NPM / Nave
 export BABEL_CACHE_PATH="${XDG_CACHE_HOME}/babel.json"
+export COREPACK_HOME="${XDG_DATA_HOME}/corepack"
 export NODE_REPL_HISTORY="${XDG_DATA_HOME}/node/repl_history"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 export NAVE_DIR="${XDG_DATA_HOME}/nave"
 export NAVE_JOBS="$CPU_CORES"
+
+export PATH="${PATH}:${COREPACK_HOME}/bin"
 export PATH="${PATH}:${XDG_DATA_HOME}/npm/bin"
+
+# Node: PNPM
+export PNPM_HOME="${XDG_DATA_HOME}/pnpm"
+export PATH="${PATH}:${PNPM_HOME}"
 
 # NotMuch
 export NOTMUCH_CONFIG="${XDG_CONFIG_HOME}/notmuch/config"
@@ -257,7 +264,10 @@ export PATH="${PATH}:${PYTHONUSERBASE}/bin"
 export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export PATH="${PYENV_ROOT}/shims:${PATH}"
 
-# PIPX
+# Python: uv
+export UV_PYTHON_PREFERENCE=only-managed
+
+# Python: PIPX
 export PIPX_HOME="${XDG_DATA_HOME}/pipx"
 export PIPX_BIN_DIR="${HOME}/.local/bin"
 export PIPX_MAN_DIR="${XDG_DATA_HOME}/pipx/man"
