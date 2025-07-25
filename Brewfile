@@ -100,14 +100,10 @@ brew "atuin"
 brew "m4"
 # Automatic configure script builder
 brew "autoconf"
-# C parser in Python
-brew "pycparser"
-# C Foreign Function Interface for Python
-brew "cffi"
-# Cryptographic recipes and primitives for Python
-brew "cryptography"
 # Official Amazon AWS command-line interface
 brew "awscli"
+# Text-based UI library
+brew "ncurses"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Programmable completion for Bash 4.2+
@@ -128,6 +124,8 @@ brew "berkeley-db@5"
 brew "bingrep"
 # GNU binary tools for native development
 brew "binutils"
+# Toolchain of the web
+brew "biome"
 # Python code formatter
 brew "black"
 # Collection of portable C++ source libraries
@@ -174,6 +172,10 @@ brew "cairo"
 brew "catimg"
 # Mozilla CA bundle for Python
 brew "certifi"
+# C parser in Python
+brew "pycparser"
+# C Foreign Function Interface for Python
+brew "cffi"
 # C access to FITS data files with optional Fortran wrappers
 brew "cfitsio"
 # Implementation of the Unicode BiDi algorithm
@@ -184,8 +186,6 @@ brew "gdk-pixbuf"
 brew "graphite2"
 # OpenType text shaping engine
 brew "harfbuzz"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c@76"
 # Library for encoding and decoding .avif files
 brew "libavif"
 # Framework for layout and rendering of i18n text
@@ -200,12 +200,16 @@ brew "checkbashisms"
 brew "checkmake"
 # Ultralightweight JSON parser in ANSI C
 brew "cjson"
+# Cross-platform make
+brew "cmake"
 # Fix common misspellings in source code and text files
 brew "codespell"
 # Color-highlighted diff(1) output
 brew "colordiff"
 # GNU File, Shell, and Text utilities
-brew "coreutils"
+brew "coreutils", link: false
+# Cryptographic recipes and primitives for Python
+brew "cryptography"
 # Top-like interface for container metrics
 brew "ctop"
 # HTTP/2 C Library
@@ -274,8 +278,6 @@ brew "diff-pdf"
 brew "diff-so-fancy"
 # File comparison utilities
 brew "diffutils"
-# Text-based UI library
-brew "ncurses"
 # Load/unload environment variables based on $PWD
 brew "direnv"
 # Tool for exploring each layer in a docker image
@@ -576,6 +578,8 @@ brew "hunspell"
 brew "hwloc"
 # Command-line benchmarking tool
 brew "hyperfine"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c@76"
 # Tool to monitor I/O latency in real time
 brew "ioping"
 # Calculate various network masks, etc. from a given IP address
@@ -632,6 +636,8 @@ brew "libfido2"
 brew "libgit2@1.7"
 # Library for large linear classification
 brew "liblinear"
+# Implementation of the file(1) command
+brew "libmagic"
 # Library for parsing mms:// and mmsh:// network streams
 brew "libmms"
 # Shared library for libmediainfo
@@ -843,7 +849,7 @@ brew "twine"
 # Extraction utility for .zip compressed archives
 brew "unzip"
 # Cross-platform Rust rewrite of the GNU coreutils
-brew "uutils-coreutils", link: false
+brew "uutils-coreutils"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Vi 'workalike' with many additional features
@@ -902,16 +908,12 @@ brew "withgraphite/tap/graphite"
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
-# Application launcher and productivity software
-cask "alfred"
-# Enable Windows-like alt-tab
-cask "alt-tab"
 # Application uninstaller
 cask "appcleaner"
 # Chromium based browser
 cask "arc"
 # Securely stores and accesses AWS credentials in a development environment
-cask "aws-vault"
+cask "aws-vault-binary"
 # Tool to flash OS images to SD cards & USB drives
 cask "balenaetcher"
 # Display management tool
@@ -922,6 +924,8 @@ cask "canva"
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
 cask "claude"
+# Terminal-based AI coding assistant
+cask "claude-code"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # All-in-one toolbox for developers
@@ -931,7 +935,7 @@ cask "diffusionbee"
 # Voice and text chat software
 cask "discord"
 # App to build and share containerised applications and microservices
-cask "docker"
+cask "docker-desktop"
 # Web browser
 cask "firefox"
 # Web browser
@@ -941,14 +945,14 @@ cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 cask "font-inter"
 cask "font-nova-mono"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "gcloud-cli"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Web browser
 cask "google-chrome"
 # Web browser
 cask "google-chrome@canary"
-# Set of tools to manage resources and applications hosted on Google Cloud
-cask "google-cloud-sdk"
 # Client for the Google Drive storage service
 cask "google-drive"
 # System monitoring app
@@ -969,6 +973,10 @@ cask "loom"
 cask "macfuse"
 # Monitors and reports any microphone and camera activity
 cask "micro-snitch"
+# Provides updates to various Microsoft products
+cask "microsoft-auto-update"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
 # Silence embarrassing notifications while screensharing
 cask "muzzle"
 # App to write, plan, collaborate, and get organised
@@ -976,7 +984,7 @@ cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
 # Get up and running with large language models locally
-cask "ollama"
+cask "ollama-app"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Save articles to read, highlight key content, and organise notes for review
@@ -996,7 +1004,7 @@ cask "sonos"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Mesh VPN based on WireGuard
-cask "tailscale"
+cask "tailscale-app"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin"
 # JDK from the Eclipse Foundation (Adoptium)
@@ -1011,15 +1019,18 @@ cask "veracrypt"
 cask "visual-studio-code"
 # Multimedia player
 cask "vlc"
+# Rust-based terminal
+cask "warp"
 # Native desktop client for WhatsApp
 cask "whatsapp"
 # Network protocol analyzer
-cask "wireshark"
+cask "wireshark-app"
 # Application for configuring any YubiKey
 cask "yubico-yubikey-manager"
 # Video communication and virtual meeting platform
 cask "zoom"
 vscode "aaron-bond.better-comments"
+vscode "anthropic.claude-code"
 vscode "bierner.markdown-emoji"
 vscode "biomejs.biome"
 vscode "bradlc.vscode-tailwindcss"
@@ -1053,6 +1064,7 @@ vscode "joshbolduc.commitlint"
 vscode "mechatroner.rainbow-csv"
 vscode "mhutchie.git-graph"
 vscode "mquandalle.graphql"
+vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
 vscode "ms-python.debugpy"
@@ -1079,7 +1091,6 @@ vscode "redhat.vscode-yaml"
 vscode "ritwickdey.liveserver"
 vscode "rust-lang.rust-analyzer"
 vscode "samuelcolvin.jinjahtml"
-vscode "saoudrizwan.claude-dev"
 vscode "scala-lang.scala"
 vscode "scalameta.metals"
 vscode "streetsidesoftware.code-spell-checker"
