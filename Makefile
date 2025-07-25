@@ -117,7 +117,7 @@ endif
 
 # Ensure all required binaries on the PATH. Especially useful on first bootstrap of dotfiles.
 # Reference this variable as required in a recipe
-DEFAULT_PATH := "$(PREFIX)/bin:$(X86_PREFIX)/bin/:usr/bin:/bin:/usr/sbin:/sbin"
+DEFAULT_PATH := "$(PREFIX)/bin:$(X86_PREFIX)/bin/:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Install Homebrew
 # -----
@@ -163,7 +163,7 @@ endif
 
 # Install LunarVim
 # -----
-LVIM_BRANCH := "master"
+LVIM_BRANCH := 1.4.0
 
 $(HOME)/.local/bin/lvim:
 	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
