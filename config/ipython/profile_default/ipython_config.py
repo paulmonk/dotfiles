@@ -7,6 +7,7 @@ from pygments.token import Token
 # Powerline
 try:
     from powerline.bindings.ipython.since_5 import PowerlinePrompts
+
     c.TerminalInteractiveShell.simple_prompt = False
     c.TerminalInteractiveShell.prompts_class = PowerlinePrompts
 except ImportError:
@@ -19,11 +20,11 @@ def xdg_get(name, default=None):
     return os.environ.get(name, default)
 
 
-HOME = os.path.expanduser('~')
-XDG_CACHE_HOME = xdg_get('XDG_CACHE_HOME', ['.cache'])
-XDG_CONFIG_HOME = xdg_get('XDG_CONFIG_HOME', ['.config'])
-XDG_DATA_HOME = xdg_get('XDG_DATA_HOME', ['.local', 'share'])
-XDG_RUNTIME_DIR = xdg_get('XDG_RUNTIME_DIR')
+HOME = os.path.expanduser("~")
+XDG_CACHE_HOME = xdg_get("XDG_CACHE_HOME", [".cache"])
+XDG_CONFIG_HOME = xdg_get("XDG_CONFIG_HOME", [".config"])
+XDG_DATA_HOME = xdg_get("XDG_DATA_HOME", [".local", "share"])
+XDG_RUNTIME_DIR = xdg_get("XDG_RUNTIME_DIR")
 
 # c.InteractiveShellApp.code_to_run = ''
 
@@ -33,6 +34,7 @@ XDG_RUNTIME_DIR = xdg_get('XDG_RUNTIME_DIR')
 
 # A list of dotted module names of IPython extensions to load.
 # c.InteractiveShellApp.extensions = []
+c.InteractiveShellApp.extensions = ["rich"]
 
 # dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''
@@ -42,9 +44,7 @@ XDG_RUNTIME_DIR = xdg_get('XDG_RUNTIME_DIR')
 # c.InteractiveShellApp.hide_initial_ns = True
 
 # Path to file to use for SQLite history database.
-c.HistoryAccessor.hist_file = os.path.join(
-    XDG_CACHE_HOME, 'ipython_hist.sqlite'
-)
+c.HistoryAccessor.hist_file = os.path.join(XDG_CACHE_HOME, "ipython_hist.sqlite")
 
 # Write to database every x commands (higher values save disk access & power).
 # Values of 1 or less effectively disable caching.
@@ -155,7 +155,7 @@ c.TerminalIPythonApp.display_banner = False
 # c.InteractiveShell.color_info = True
 
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = 'Linux'
+c.InteractiveShell.colors = "Linux"
 
 # c.InteractiveShell.debug = False
 
@@ -207,7 +207,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 # c.TerminalInteractiveShell.display_completions = 'multicolumn'
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
-c.TerminalInteractiveShell.editing_mode = 'vi'
+c.TerminalInteractiveShell.editing_mode = "vi"
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 # c.TerminalInteractiveShell.editor = 'nvim'
@@ -219,32 +219,30 @@ c.TerminalInteractiveShell.editing_mode = 'vi'
 # paraiso-light, lovelace, bw, default, emacs, pastie, fruity, algol_nu, vs,
 # paraiso-dark, murphy, rrt, tango, perldoc, igor, algol, xcode, borland,
 # colorful, autumn, friendly, vim, monokai, native
-c.TerminalInteractiveShell.highlighting_style = 'default'
+c.TerminalInteractiveShell.highlighting_style = "default"
 
 # Override highlighting format for specific tokens
 c.TerminalInteractiveShell.highlighting_style_overrides = {
-    Token.Text: '#C6C6C6',
-    Token.Keyword: '#B086B0',
-    Token.Number: '#D55D5B',
-    Token.Operator: '#86AFAF',
-    Token.String: '#AFB05A',
-    Token.Literal: '#222222',
-    Token.Name.Function: '#FFD881',
-    Token.Name.Builtin: '#86AFAF',
-    Token.Name.Class: '#FFD881',
-    Token.Name.Namespace: '#86AFAF',
-
-    Token.MatchingBracket.Cursor: '#D55D5B',
-    Token.MatchingBracket.Other: 'bg:#444444 #dda578',
-    Token.Prompt: '#B086B0',
-    Token.PromptNum: '#FFD881',
-    Token.OutPrompt: '#86AFAF',
-    Token.OutPromptNum: '#dda578',
-
-    Token.Menu.Completions.Completion.Current: 'bg:#ffffff #000000',
-    Token.Menu.Completions.Completion: 'bg:#333333 #888888',
-    Token.Menu.Completions.ProgressButton: 'bg:#333333',
-    Token.Menu.Completions.ProgressBar: 'bg:#aaaaaa',
+    Token.Text: "#C6C6C6",
+    Token.Keyword: "#B086B0",
+    Token.Number: "#D55D5B",
+    Token.Operator: "#86AFAF",
+    Token.String: "#AFB05A",
+    Token.Literal: "#222222",
+    Token.Name.Function: "#FFD881",
+    Token.Name.Builtin: "#86AFAF",
+    Token.Name.Class: "#FFD881",
+    Token.Name.Namespace: "#86AFAF",
+    Token.MatchingBracket.Cursor: "#D55D5B",
+    Token.MatchingBracket.Other: "bg:#444444 #dda578",
+    Token.Prompt: "#B086B0",
+    Token.PromptNum: "#FFD881",
+    Token.OutPrompt: "#86AFAF",
+    Token.OutPromptNum: "#dda578",
+    Token.Menu.Completions.Completion.Current: "bg:#ffffff #000000",
+    Token.Menu.Completions.Completion: "bg:#333333 #888888",
+    Token.Menu.Completions.ProgressButton: "bg:#333333",
+    Token.Menu.Completions.ProgressBar: "bg:#aaaaaa",
 }
 
 # Enable mouse support in the prompt
