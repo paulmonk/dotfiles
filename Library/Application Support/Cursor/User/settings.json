@@ -1,6 +1,14 @@
 {
   /*
-    CURSOR Built-ins
+    CURSOR Specifics
+    ============
+  */
+  // Cursor
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.composer.textSizeScale": 1.15,
+
+  /*
+    CODE Built-ins
     ============
   */
   // accessibility
@@ -23,7 +31,7 @@
     "donjayamanne.githistory",
     "editorconfig.editorconfig",
     "mhutchie.git-graph",
-    "mutantdino.resourcemonitor"
+    "mutantdino.resourcemonitor",
     "naumovs.color-highlight",
     "oderwat.indent-rainbow",
     "redhat.vscode-yaml",
@@ -54,6 +62,7 @@
   "editor.glyphMargin": false,
   "editor.insertSpaces": false,
   "editor.inlineSuggest.enabled": true,
+  "editor.inlayHints.enabled": "off",
   "editor.lineHeight": 1.2,
   "editor.lineNumbers": "on",
   "editor.minimap.enabled": false,
@@ -133,7 +142,7 @@
   "files.associations": {
     "*.md": "jinja-md",
     "*.sql": "jinja-sql",
-    "*.yml": "jinja-yaml",
+    "*.yml": "yaml",
     "*.mjml": "handlebars",
     ".env.local": "shellscript",
     ".env*": "dotenv",
@@ -146,7 +155,10 @@
     "go.sum": "go",
     "Brewfile": "ruby",
     "Tmuxfile": "tmux",
-    "yarn.lock": "yaml"
+    "yarn.lock": "yaml",
+    "*.css": "tailwindcss",
+    "*.env.example": "dotenv",
+    "*.env.dev": "dotenv"
   },
   "files.exclude": {
     "**/.swp": true,
@@ -539,14 +551,15 @@
     "editor.rulers": [50, 72]
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
+  "makefile.configureOnOpen": false,
   "markdown.preview.fontSize": 16,
   "php.suggest.basic": false,
 
@@ -561,7 +574,7 @@
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
     },
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.autoImportCompletions": false,
@@ -576,19 +589,19 @@
   // JS / TS
   "[javascript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[javascriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[typescript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[typescriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "javascript.suggest.completeJSDocs": false,
   "javascript.suggest.autoImports": false,
@@ -739,7 +752,6 @@
   ],
 
   // Misc
-  "makefile.configureOnOpen": false,
   "liveServer.settings.donotShowInfoMsg": true,
   "vsintellicode.modify.editor.suggestSelection": "disabled"
 }

@@ -201,5 +201,17 @@
     "key": "ctrl+s",
     "command": "workbench.action.files.save",
     "when": "editorFocus && vim.active"
-  }
+  },
+  {
+    "key": "cmd+i",
+    "command": "composerMode.agent"
+},
+{
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+        "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+}
 ]
