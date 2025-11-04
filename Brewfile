@@ -86,8 +86,6 @@ brew "libssh2"
 brew "aria2"
 # Library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS
 brew "aribb24"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.12"
 # Record and share terminal sessions
 brew "asciinema"
 # Portable library for importing many well-known 3D model formats
@@ -178,6 +176,8 @@ brew "pycparser"
 brew "cffi"
 # C access to FITS data files with optional Fortran wrappers
 brew "cfitsio"
+# C library for multiple-precision floating-point computations
+brew "mpfr"
 # Implementation of the Unicode BiDi algorithm
 brew "fribidi"
 # Toolkit for image loading and pixel buffer manipulation
@@ -204,6 +204,10 @@ brew "cjson"
 brew "cmake"
 # Fix common misspellings in source code and text files
 brew "codespell"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# OpenAI's coding agent that runs in your terminal
+brew "codex"
 # Color-highlighted diff(1) output
 brew "colordiff"
 # GNU File, Shell, and Text utilities
@@ -270,8 +274,6 @@ brew "nss"
 brew "openjpeg"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
-# Cross-platform C++ GUI toolkit
-brew "wxwidgets"
 # Visually compare two PDF files
 brew "diff-pdf"
 # Good-lookin' diffs with diff-highlight and more
@@ -326,7 +328,7 @@ brew "popt"
 brew "epsilon"
 # Multi-platform support library with a focus on asynchronous I/O
 brew "libuv"
-# Platform built on V8 to build network applications
+# Open-source, cross-platform JavaScript runtime environment
 brew "node"
 # AST-based pattern checker for JavaScript
 brew "eslint"
@@ -438,8 +440,6 @@ brew "freexl"
 brew "fzf"
 # Fast, simple fuzzy text selector with an advanced scoring algorithm
 brew "fzy"
-# C library for multiple-precision floating-point computations
-brew "mpfr"
 # GNU awk utility
 brew "gawk"
 # Integer Set Library for the polyhedral model
@@ -468,6 +468,8 @@ brew "libde265"
 brew "proj"
 # Library and tools for dealing with GeoTIFF
 brew "libgeotiff"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
 # Database of common MIME types
 brew "shared-mime-info"
 # ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
@@ -548,6 +550,8 @@ brew "grep"
 brew "grex"
 # Smarter Dockerfile linter to validate best practices
 brew "hadolint"
+# C library for encoding, decoding, and manipulating JSON
+brew "jansson"
 # Open-source video transcoder available for Linux, Mac, and Windows
 brew "handbrake"
 # Easy, fast, and beautiful database client for the terminal
@@ -588,8 +592,6 @@ brew "ipcalc"
 brew "iperf3"
 # Official CLI for the IPinfo IP Address API
 brew "ipinfo-cli"
-# C library for encoding, decoding, and manipulating JSON
-brew "jansson"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
 # Implementation of malloc emphasizing fragmentation avoidance
@@ -652,6 +654,8 @@ brew "libmng"
 brew "libomp", link: true
 # Portable library for network traffic capture
 brew "libpcap"
+# Library for parsing/normalizing street addresses around the world
+brew "libpostal"
 # X.Org: pthread-stubs.pc
 brew "libpthread-stubs"
 # Library for reading RAW files from digital photo cameras
@@ -714,7 +718,7 @@ brew "mycli"
 brew "mypy"
 # Virtual environments for Node.js
 brew "nave"
-# Parser generator tool and incremental parsing library
+# Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
@@ -782,12 +786,12 @@ brew "python@3.11"
 brew "qrencode"
 # Cross-platform application and UI framework
 brew "qt@5"
+# Develop and deploy code with zero configuration
+brew "railway"
 # JSON parser/generator for C++ with SAX and DOM style APIs
 brew "rapidjson"
 # RC file (dotfile) management
 brew "rcm"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
 # Rootkit hunter
@@ -870,6 +874,8 @@ brew "wimlib"
 brew "wireguard-go"
 # Tools for the WireGuard secure network tunnel
 brew "wireguard-tools"
+# Cross-platform C++ GUI toolkit
+brew "wxwidgets"
 # Fast CSV toolkit written in Rust
 brew "xsv"
 # Linter for YAML files
@@ -924,8 +930,6 @@ cask "canva"
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
 cask "claude"
-# Terminal-based AI coding assistant
-cask "claude-code"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # All-in-one toolbox for developers
@@ -959,6 +963,8 @@ cask "google-drive"
 cask "istat-menus"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
+# Menu bar manager
+cask "jordanbaird-ice"
 # Keyboard customiser
 cask "karabiner-elements"
 # Open-source keystroke visualiser
@@ -1070,6 +1076,7 @@ vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
 vscode "ms-python.debugpy"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
 vscode "ms-toolsai.jupyter"
 vscode "ms-toolsai.jupyter-keymap"
 vscode "ms-toolsai.jupyter-renderers"
@@ -1104,3 +1111,5 @@ vscode "waderyan.gitblame"
 vscode "wix.vscode-import-cost"
 vscode "ypresto.vscode-accelerated"
 vscode "yzhang.markdown-all-in-one"
+go "golang.org/x/tools/gopls"
+go "honnef.co/go/tools/cmd/staticcheck"
