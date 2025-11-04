@@ -205,13 +205,14 @@
   {
     "key": "cmd+i",
     "command": "composerMode.agent"
-},
-{
+  },
+  // Installed by Claude Code
+  {
     "key": "shift+enter",
     "command": "workbench.action.terminal.sendSequence",
     "args": {
-        "text": "\\\r\n"
+      "text": "\\\r\n"
     },
     "when": "terminalFocus"
-}
+  }
 ]

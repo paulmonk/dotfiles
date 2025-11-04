@@ -1,7 +1,93 @@
 {
   "env": {
-    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
-    "DISABLE_AUTOUPDATER": "1",
-    "DISABLE_TELEMETRY": "1"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(awk:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(cut:*)",
+      "Bash(diff:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(for:*)",
+      "Bash(git:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(mise:*)",
+      "Bash(pytest:*)",
+      "Bash(python:*)",
+      "Bash(rg:*)",
+      "Bash(ruff:*)",
+      "Bash(sed:*)",
+      "Bash(sort:*)",
+      "Bash(tail:*)",
+      "Bash(test:*)",
+      "Bash(touch:*)",
+      "Bash(uniq:*)",
+      "Bash(xargs:*)",
+      "Bash(uv:*)",
+      "mcp__ide__executeCode",
+      "mcp__ide__getDiagnostics",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
+    ],
+    "deny": [
+      "Bash(rm:*)"
+    ],
+    "defaultMode": "plan"
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send 'Claude Code' 'Awaiting your input'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo ' Megathink.'"
+          },
+          {
+            "type": "command",
+            "command": "echo ' When looking up practices or code use this datatime to ground your search: $(date).'"
+          },
+          {
+            "type": "command",
+            "command": "echo ' Ensure alignment to our coding conventions.'"
+          },
+          {
+            "type": "command",
+            "command": "echo ' Remember to follow: KISS, DRY, DAMP (for tests), SOLID, YAGNI.'"
+          },
+          {
+            "type": "command",
+            "command": "echo ' Provide reference(s) to back up your points.'"
+          },
+          {
+            "type": "command",
+            "command": "echo ' Run the linting on any changes, ensure the code meets our standards.'"
+          }
+        ]
+      }
+    ]
+  },
+  "alwaysThinkingEnabled": true,
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true
   }
 }

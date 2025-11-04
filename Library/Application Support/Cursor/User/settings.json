@@ -131,16 +131,12 @@
   },
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
-
-  // extensions
-  "extensions.experimental.affinity": {
-    "vscodevim.vim": 1
-  },
   "extensions.ignoreRecommendations": true,
 
   // files
   "files.associations": {
     "*.md": "jinja-md",
+    "*.md*": "jinja-md",
     "*.sql": "jinja-sql",
     "*.yml": "yaml",
     "*.mjml": "handlebars",
@@ -184,7 +180,9 @@
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
-    "**/node_modules/*/**": true
+    "**/node_modules/*/**": true,
+    "**/.bloop": true,
+    "**/.metals": true
   },
   "git.confirmSync": false,
   "git.decorations.enabled": true,
@@ -224,9 +222,11 @@
   "update.showReleaseNotes": false,
   "window.commandCenter": true,
   "window.nativeTabs": true,
+  "window.customTitleBarVisibility": "never",
 
   // Workbench
   "workbench.activityBar.location": "hidden",
+  "workbench.activityBar.orientation": "vertical",
   "workbench.colorTheme": "Solarized Dark",
   "workbench.editor.tabActionCloseVisibility": false,
   "workbench.editor.tabSizing": "shrink",
@@ -235,8 +235,6 @@
   "workbench.list.smoothScrolling": true,
   "workbench.startupEditor": "none",
   "workbench.tree.enableStickyScroll": false,
-  // Open each file in a new tab
-  "workbench.editor.enablePreview": false,
   "workbench.editor.enablePreviewFromQuickOpen": false,
 
   // Zen Mode
@@ -560,7 +558,24 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "makefile.configureOnOpen": false,
+
+  // Markdown
   "markdown.preview.fontSize": 16,
+  "[markdown]": {
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    },
+    "cSpell.fixSpellingWithRenameProvider": true,
+    "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+    "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/"
+  },
+
   "php.suggest.basic": false,
 
   // Python
@@ -576,13 +591,14 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
+  // Pylance does not work with Cursor. BasedPyRight is installed instead.
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticSeverityOverrides": {
     "reportMissingImports": "none",
-    "reportUnusedVariable": "none"
+    "reportMissingTypeStubs": "none"
   },
-  // Pylance does not work with Cursor. BasedPyRight is installed instead.
+
   "python.languageServer": "None",
   "python.terminal.activateEnvironment": true,
 
@@ -626,6 +642,19 @@
   },
   "[terraform-vars]": {
     "editor.tabSize": 2
+  },
+
+  // Docker Compose
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+
+  // GitHub Actions Workflow
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
   },
 
   /*

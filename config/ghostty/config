@@ -4,7 +4,7 @@ auto-update-channel = "stable"
 
 # Startup
 # Tmux is used to manage sessions
-initial-command = "/bin/zsh --login -c "tmux attach-session || tmux -f $XDG_CONFIG_HOME/tmux/config""
+initial-command = "/bin/zsh --login -c "tmux attach-session || tmux -f ~/.config/tmux/config""
 
 # Keybindings
 macos-option-as-alt = true

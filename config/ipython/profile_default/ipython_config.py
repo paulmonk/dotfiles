@@ -26,6 +26,8 @@ XDG_CONFIG_HOME = xdg_get("XDG_CONFIG_HOME", [".config"])
 XDG_DATA_HOME = xdg_get("XDG_DATA_HOME", [".local", "share"])
 XDG_RUNTIME_DIR = xdg_get("XDG_RUNTIME_DIR")
 
+c = get_config()
+
 # c.InteractiveShellApp.code_to_run = ''
 
 # c.InteractiveShellApp.exec_PYTHONSTARTUP = True
@@ -155,7 +157,7 @@ c.TerminalIPythonApp.display_banner = False
 # c.InteractiveShell.color_info = True
 
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = "Linux"
+c.InteractiveShell.colors = "linux"
 
 # c.InteractiveShell.debug = False
 
@@ -219,7 +221,7 @@ c.TerminalInteractiveShell.editing_mode = "vi"
 # paraiso-light, lovelace, bw, default, emacs, pastie, fruity, algol_nu, vs,
 # paraiso-dark, murphy, rrt, tango, perldoc, igor, algol, xcode, borland,
 # colorful, autumn, friendly, vim, monokai, native
-c.TerminalInteractiveShell.highlighting_style = "default"
+c.TerminalInteractiveShell.highlighting_style = "solarized"
 
 # Override highlighting format for specific tokens
 c.TerminalInteractiveShell.highlighting_style_overrides = {

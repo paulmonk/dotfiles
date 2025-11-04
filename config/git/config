@@ -215,6 +215,8 @@
 # Switch user depending on projects. Handy for using work email for work projects
 [includeIf "gitdir:~/projects/decide-with-data/**/"]
     path = ~/.config/git/users/decide-with-data
+[includeIf "gitdir:~/projects/hawkfry/**/"]
+    path = ~/.config/git/users/hawkfry
 
 [alias]
     a = add
