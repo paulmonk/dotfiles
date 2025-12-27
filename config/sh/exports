@@ -184,6 +184,11 @@ export GNUPGHOME="${XDG_CONFIG_HOME}/gnupg"
 export GOPATH="${XDG_DATA_HOME}/go"
 export PATH="${PATH}:${GOPATH}/bin"
 
+# Google Cloud SDK
+# Use a locally installed UV version of Python as the homebrew version doesn't work correctly due to segfault.
+# so likely a compile issue. TODO: look into why!
+export CLOUDSDK_PYTHON="${XDG_DATA_HOME}/uv/python/cpython-3.13.5-macos-aarch64-none/bin/python3"
+
 # Haskell cabal configuration
 export PATH="${PATH}:${HOME}/.cabal/bin"
 
@@ -198,6 +203,9 @@ export LESS="--tabs=4 --quit-if-one-screen --ignore-case --no-init --QUIET --LON
 export LESSCHARSET="UTF-8"
 export LESSHISTFILE="${XDG_CACHE_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/lesskey/output"
+
+# LM Studio
+export PATH="$PATH:${HOME}/.lmstudio/bin"
 
 # Lua user config
 export LUAROCKS_CONFIG="${XDG_CONFIG_HOME}/luarocks/config.lua"

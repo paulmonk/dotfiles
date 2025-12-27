@@ -2,6 +2,7 @@ tap "coursier/formulas"
 tap "heroku/brew"
 tap "homebrew/bundle"
 tap "homebrew/services"
+tap "lightdash/lightdash"
 tap "saulpw/vd"
 tap "thoughtbot/formulae"
 tap "warrensbox/tap"
@@ -62,8 +63,6 @@ brew "grpc"
 brew "mpdecimal"
 # Library for command-line editing
 brew "readline"
-# Command-line interface for SQLite
-brew "sqlite"
 # High-performance theorem prover
 brew "z3"
 # Next-gen compiler infrastructure
@@ -178,6 +177,8 @@ brew "cffi"
 brew "cfitsio"
 # C library for multiple-precision floating-point computations
 brew "mpfr"
+# AV1 decoder targeted to be small and fast
+brew "dav1d"
 # Implementation of the Unicode BiDi algorithm
 brew "fribidi"
 # Toolkit for image loading and pixel buffer manipulation
@@ -198,6 +199,20 @@ brew "chafa"
 brew "checkbashisms"
 # Linter/analyzer for Makefiles
 brew "checkmake"
+# Integer Set Library for the polyhedral model
+brew "isl"
+# C library for the arithmetic of high precision complex numbers
+brew "libmpc"
+# GNU compiler collection
+brew "gcc"
+# YAML Parser
+brew "libyaml"
+# Optimized BLAS library
+brew "openblas"
+# Package for scientific computing with Python
+brew "numpy"
+# Prevent cloud misconfigurations during build-time for IaC tools
+brew "checkov"
 # Ultralightweight JSON parser in ANSI C
 brew "cjson"
 # Cross-platform make
@@ -224,12 +239,8 @@ brew "rtmpdump"
 brew "curl"
 # Tools to manipulate dates with a focus on financial data
 brew "dateutils"
-# AV1 decoder targeted to be small and fast
-brew "dav1d"
 # Message bus system, providing inter-application communication
 brew "dbus"
-# YAML Parser
-brew "libyaml"
 # Enterprise friendly way of detecting and preventing secrets in code
 brew "detect-secrets"
 # Utility to replace problematic characters in filenames
@@ -262,7 +273,7 @@ brew "libusb"
 brew "npth"
 # Passphrase entry dialog utilizing the Assuan protocol
 brew "pinentry"
-# GNU Pretty Good Privacy (PGP) package
+# GNU Privacy Guard (OpenPGP)
 brew "gnupg"
 # Library access to GnuPG
 brew "gpgme"
@@ -366,8 +377,6 @@ brew "libass"
 brew "libbluray"
 # Light HTTP/1.1 server library
 brew "libmicrohttpd"
-# Cryptographic & SSL/TLS library
-brew "mbedtls"
 # Reliable Internet Stream Transport (RIST)
 brew "librist"
 # Library for sample rate conversion of audio data
@@ -442,12 +451,6 @@ brew "fzf"
 brew "fzy"
 # GNU awk utility
 brew "gawk"
-# Integer Set Library for the polyhedral model
-brew "isl"
-# C library for the arithmetic of high precision complex numbers
-brew "libmpc"
-# GNU compiler collection
-brew "gcc"
 # Graphics library to dynamically manipulate images
 brew "gd"
 # Geometry Engine
@@ -468,8 +471,6 @@ brew "libde265"
 brew "proj"
 # Library and tools for dealing with GeoTIFF
 brew "libgeotiff"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.12"
 # Database of common MIME types
 brew "shared-mime-info"
 # ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
@@ -492,10 +493,6 @@ brew "libspatialite"
 brew "libtool"
 # Libraries and data formats for array-oriented scientific data
 brew "netcdf"
-# Optimized BLAS library
-brew "openblas"
-# Package for scientific computing with Python
-brew "numpy"
 # Computes convex hulls in n dimensions
 brew "qhull"
 # ODBC 3 connectivity for UNIX
@@ -540,6 +537,8 @@ brew "jasper"
 brew "graphicsmagick"
 # Image manipulation
 brew "netpbm"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
 # GNU triangulated surface library
 brew "gts"
 # Graph visualization software from AT&T and Bell Labs
@@ -684,6 +683,8 @@ brew "lynis"
 brew "openjdk"
 # Java-based project management
 brew "maven"
+# Cryptographic & SSL/TLS library
+brew "mbedtls"
 # C Markdown parser. Fast. SAX-like interface
 brew "md4c"
 # Recursively compute digests on files/directories
@@ -718,8 +719,6 @@ brew "mycli"
 brew "mypy"
 # Virtual environments for Node.js
 brew "nave"
-# Incremental parsing library
-brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # HTTP/2 C Library
@@ -754,6 +753,8 @@ brew "pgcli"
 brew "pidof"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
+# Python dependency management tool
+brew "pipenv"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
 # Library to simplify the interaction with PKCS#11
@@ -776,6 +777,8 @@ brew "pspg"
 brew "pstree"
 # Command-line tool for managing long-running shell commands
 brew "pueue"
+# Python version management
+brew "pyenv"
 # Generic syntax highlighter
 brew "pygments"
 # Interpreted, interactive, object-oriented programming language
@@ -810,6 +813,8 @@ brew "rust"
 brew "saml2aws"
 # Blazing-fast modern Lua linter
 brew "selene"
+# Incremental parsing library
+brew "tree-sitter"
 # Easily detect and prevent bugs and anti-patterns in your codebase
 brew "semgrep"
 # Static analysis and lint tool, for (ba)sh scripts
@@ -818,6 +823,8 @@ brew "shellcheck"
 brew "shellharden"
 # Autoformat shell script source code
 brew "shfmt"
+# Editor of encrypted files
+brew "sops"
 # Tool Command Language
 brew "tcl-tk"
 # Command-line packet analyzer
@@ -826,12 +833,16 @@ brew "tcpdump"
 brew "tealdeer"
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
+# Tool to generate documentation from Terraform modules
+brew "terraform-docs"
 # CLI tool to generate terraform files from existing infrastructure
 brew "terraformer"
 # Terraform version manager inspired by rbenv
 brew "tfenv"
 # Linter for Terraform files
 brew "tflint"
+# Update version constraints in your Terraform configurations
+brew "tfupdate"
 # Granddaddy of HTML tools, with support for modern standards
 brew "tidy-html5"
 # Text interface for Git repositories
@@ -848,6 +859,8 @@ brew "trash", link: true
 brew "tre-command"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Vulnerability scanner for container images, file systems, and Git repos
+brew "trivy"
 # Utilities for interacting with PyPI
 brew "twine"
 # Extraction utility for .zip compressed archives
@@ -900,10 +913,10 @@ brew "zoxide"
 brew "zsh"
 # Additional completion definitions for zsh
 brew "zsh-completions"
-# Launcher for Coursier
-brew "coursier/formulas/coursier"
 # Everything you need to get started with Heroku
 brew "heroku/brew/heroku"
+# CLI for the Lightdash BI platform
+brew "lightdash/lightdash/lightdash"
 # The tfswitch command lets you switch between terraform versions.
 brew "warrensbox/tap/tfswitch"
 # The tgswitch command lets you switch between terragrunt versions.
@@ -914,6 +927,8 @@ brew "withgraphite/tap/graphite"
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
+# Enable Windows-like alt-tab
+cask "alt-tab"
 # Application uninstaller
 cask "appcleaner"
 # Chromium based browser
@@ -930,6 +945,8 @@ cask "canva"
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
 cask "claude"
+# Terminal-based AI coding assistant
+cask "claude-code"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # All-in-one toolbox for developers
@@ -953,6 +970,8 @@ cask "font-nova-mono"
 cask "gcloud-cli"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Desktop client for GitHub repositories
+cask "github"
 # Web browser
 cask "google-chrome"
 # Web browser
@@ -973,6 +992,8 @@ cask "keycastr"
 cask "linkliar"
 # Host-based application firewall
 cask "little-snitch"
+# Discover, download, and run local LLMs
+cask "lm-studio"
 # Screen and video recording software
 cask "loom"
 # File system integration
@@ -989,8 +1010,6 @@ cask "muzzle"
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
-# Get up and running with large language models locally
-cask "ollama-app"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Save articles to read, highlight key content, and organise notes for review

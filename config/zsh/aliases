@@ -47,7 +47,6 @@ for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
     fi
 done
 
-
 # Path
 # -------------------------
 # Show PATH info in a more readable format.
@@ -81,10 +80,6 @@ alias uvxr="uv tool run"
 
 # Carry over aliases to the root account when using sudo
 alias sudo="sudo "
-
-# head and tail will show as much possible without scrolling
-alias head="head -n \$((\${LINES:-12}-4))"
-alias tail="tail -n \$((\${LINES:-12}-4)) -s.1"
 
 # rsync sensible defaults.
 alias rsync="${aliases[rsync]:-rsync} --verbose --archive --info=progress2 --human-readable --compress --partial"

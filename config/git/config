@@ -217,6 +217,11 @@
     path = ~/.config/git/users/decide-with-data
 [includeIf "gitdir:~/projects/hawkfry/**/"]
     path = ~/.config/git/users/hawkfry
+[includeIf "gitdir:~/projects/trailmix/**/"]
+    path = ~/.config/git/users/trailmix
+# Second brain
+[includeIf "gitdir:~/Documents/Personal/**/"]
+    path = ~/.config/git/users/obsidian
 
 [alias]
     a = add
@@ -351,3 +356,8 @@
     #===============================================
 
 # vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

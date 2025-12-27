@@ -6,6 +6,7 @@
   // Cursor
   "cursor.composer.shouldChimeAfterChatFinishes": true,
   "cursor.composer.textSizeScale": 1.15,
+  "cursorpyright.disableLanguageServices": true,
 
   /*
     CODE Built-ins
@@ -223,11 +224,8 @@
   "window.commandCenter": true,
   "window.nativeTabs": true,
   "window.customTitleBarVisibility": "never",
-
-  // Workbench
-  "workbench.activityBar.location": "hidden",
   "workbench.activityBar.orientation": "vertical",
-  "workbench.colorTheme": "Solarized Dark",
+  "workbench.colorTheme": "Better Solarized Dark",
   "workbench.editor.tabActionCloseVisibility": false,
   "workbench.editor.tabSizing": "shrink",
   "workbench.iconTheme": "vscode-great-icons",
@@ -557,6 +555,9 @@
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
+  "[jsonl]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
   "makefile.configureOnOpen": false,
 
   // Markdown
@@ -644,6 +645,11 @@
     "editor.tabSize": 2
   },
 
+  // helm
+  "[helm]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+
   // Docker Compose
   "[dockercompose]": {
     "editor.insertSpaces": true,
@@ -654,6 +660,10 @@
 
   // GitHub Actions Workflow
   "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+
+  "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
 
@@ -781,6 +791,9 @@
   ],
 
   // Misc
+  "claudeCode.useTerminal": true,
+  "dbt.perspectiveTheme": "Solarized Dark",
+  "githubPullRequests.pullBranch": "never",
   "liveServer.settings.donotShowInfoMsg": true,
-  "vsintellicode.modify.editor.suggestSelection": "disabled"
+  "vsintellicode.modify.editor.suggestSelection": "disabled",
 }
