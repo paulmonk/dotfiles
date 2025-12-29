@@ -2,11 +2,14 @@
   "env": {
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(awk:*)",
       "Bash(cat:*)",
-      "Bash(curl:*)",
       "Bash(cut:*)",
       "Bash(diff:*)",
       "Bash(echo:*)",
@@ -18,8 +21,6 @@
       "Bash(jq:*)",
       "Bash(ls:*)",
       "Bash(mise:*)",
-      "Bash(pytest:*)",
-      "Bash(python:*)",
       "Bash(rg:*)",
       "Bash(ruff:*)",
       "Bash(sed:*)",
@@ -30,7 +31,6 @@
       "Bash(uniq:*)",
       "Bash(xargs:*)",
       "Bash(uv:*)",
-      "mcp__ide__executeCode",
       "mcp__ide__getDiagnostics",
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
@@ -38,37 +38,25 @@
       "mcp__context7__get-library-docs"
     ],
     "deny": [
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)"
     ],
     "defaultMode": "plan"
   },
   "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "notify-send 'Claude Code' 'Awaiting your input'"
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "echo ' Megathink.'"
+            "command": "echo ' When working temporally, use this datatime to ground your search: $(date).'"
           },
           {
             "type": "command",
-            "command": "echo ' When looking up practices or code use this datatime to ground your search: $(date).'"
-          },
-          {
-            "type": "command",
-            "command": "echo ' Ensure alignment to our coding conventions.'"
+            "command": "echo ' Ensure alignment to the project coding conventions.'"
           },
           {
             "type": "command",
@@ -76,18 +64,19 @@
           },
           {
             "type": "command",
-            "command": "echo ' Provide reference(s) to back up your points.'"
+            "command": "echo ' Provide a reference(s) to back up your statements.'"
           },
           {
             "type": "command",
-            "command": "echo ' Run the linting on any changes, ensure the code meets our standards.'"
+            "command": "echo ' Run the linting (if available) on any changes, ensure the code meets our standards.'"
           }
         ]
       }
     ]
   },
   "enabledPlugins": {
-    "superpowers@superpowers-marketplace": true
+    "superpowers@superpowers-marketplace": true,
+    "safety-hooks@cctools-plugins": true
   },
   "alwaysThinkingEnabled": true
 }

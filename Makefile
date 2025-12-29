@@ -216,3 +216,27 @@ install: brew-bundle
 	$(MAKE) lunarvim-bootstrap
 	$(MAKE) python-bootstrap
 .PHONY: install
+
+# Claude Code MCP Servers
+# -----
+## Claude MCP servers setup
+claude-mcp:
+	claude mcp add -t sse atlassian https://mcp.atlassian.com/v1/sse
+	claude mcp add -t stdio context7 -- npx -y @upstash/context7-mcp
+	claude mcp add -t http exa https://mcp.exa.ai/mcp
+	@if [ -n "$${FIRECRAWL_API_KEY}" ]; then \
+		claude mcp add -t stdio -e FIRECRAWL_API_KEY=$${FIRECRAWL_API_KEY} firecrawl -- npx -y firecrawl-mcp; \
+	else \
+		echo "Skipping firecrawl (FIRECRAWL_API_KEY not set)"; \
+	fi
+	@if [ -n "$${GITHUB_CC_PAT_TOKEN}" ]; then \
+		claude mcp add -t http -H "Authorization: Bearer $${GITHUB_CC_PAT_TOKEN}" github https://api.githubcopilot.com/mcp; \
+	else \
+		echo "Skipping github (GITHUB_CC_PAT_TOKEN not set)"; \
+	fi
+	claude mcp add -t http hugging-face https://huggingface.co/mcp
+	claude mcp add -t http linear https://mcp.linear.app/mcp
+	claude mcp add -t http notion https://mcp.notion.com/mcp
+	claude mcp add -t stdio playwright -- npx @playwright/mcp@latest --ignore-https-errors --isolated
+	claude mcp add -t http sentry https://mcp.sentry.dev/mcp
+.PHONY: claude-mcp
