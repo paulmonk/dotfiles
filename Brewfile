@@ -531,6 +531,8 @@ brew "go"
 brew "go-jira"
 # Generate introspection data for GObject libraries
 brew "gobject-introspection"
+# Language server for the Go language
+brew "gopls"
 # Library for manipulating JPEG-2000 images
 brew "jasper"
 # Image processing tools collection
@@ -781,6 +783,8 @@ brew "pueue"
 brew "pyenv"
 # Generic syntax highlighter
 brew "pygments"
+# Static type checker for Python
+brew "pyright"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.10"
 # Interpreted, interactive, object-oriented programming language
@@ -809,6 +813,8 @@ brew "ruby"
 brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
+# Experimental Rust compiler front-end for IDEs
+brew "rust-analyzer"
 # Login and retrieve AWS temporary credentials using a SAML IDP
 brew "saml2aws"
 # Blazing-fast modern Lua linter
@@ -863,6 +869,8 @@ brew "tree"
 brew "trivy"
 # Utilities for interacting with PyPI
 brew "twine"
+# Language Server Protocol implementation for TypeScript wrapping tsserver
+brew "typescript-language-server"
 # Extraction utility for .zip compressed archives
 brew "unzip"
 # Cross-platform Rust rewrite of the GNU coreutils

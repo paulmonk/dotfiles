@@ -32,10 +32,9 @@
       "Bash(xargs:*)",
       "Bash(uv:*)",
       "mcp__ide__getDiagnostics",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs"
+      "mcp__firecrawl__firecrawl_*",
+      "mcp__plugin_atlassian_atlassian__*",
+      "mcp__plugin_context7__*"
     ],
     "deny": [
       "Bash(rm:*)",
@@ -64,10 +63,6 @@
           },
           {
             "type": "command",
-            "command": "echo ' Provide a reference(s) to back up your statements.'"
-          },
-          {
-            "type": "command",
             "command": "echo ' Run the linting (if available) on any changes, ensure the code meets our standards.'"
           }
         ]
@@ -75,8 +70,30 @@
     ]
   },
   "enabledPlugins": {
+    "atlassian@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
+    "commit-commands@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "exa-mcp-server@exa-mcp-server": true,
+    "feature-dev@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "github@claude-plugins-official": false,
+    "gitlab@claude-plugins-official": false,
+    "gopls-lsp@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": false,
+    "playwright@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": false,
+    "pyright-lsp@claude-plugins-official": true,
+    "ralph-wiggum@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "safety-hooks@cctools-plugins": true,
+    "security-guidance@claude-plugins-official": true,
+    "slack@claude-plugins-official": false,
     "superpowers@superpowers-marketplace": true,
-    "safety-hooks@cctools-plugins": true
+    "swift-lsp@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false
   },
   "alwaysThinkingEnabled": true
 }
