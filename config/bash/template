@@ -76,7 +76,7 @@ log "==================== BEGIN ===================="
 
 # Help message (extracted from script headers)
 usage() {
-  grep '^#/' "$0" | cut --characters=4-
+  grep '^#/' "$0" | cut -c4-
   exit 0
 }
 REGEX='(^|\W)(-h|--help)($|\W)'

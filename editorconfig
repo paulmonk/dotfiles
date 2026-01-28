@@ -9,7 +9,7 @@ indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{html,xml,config,json}]
+[*.{html,xml,config,lua,json}]
 indent_size = 2
 
 [*.{md,psd1,pp,yml,yaml}]

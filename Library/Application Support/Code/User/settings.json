@@ -192,7 +192,7 @@
   "search.useIgnoreFiles": true,
 
   // security
-  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.untrustedFiles": "prompt",
 
   // telemetry
   "telemetry.telemetryLevel": "off",
@@ -561,7 +561,8 @@
   "[python]": {
     "editor.tabSize": 4,
     "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit"
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
@@ -571,7 +572,7 @@
     "reportMissingImports": "none",
     "reportUnusedVariable": "none"
   },
-  "python.languageServer": "Pylance",
+  "python.languageServer": "none",
   "python.terminal.activateEnvironment": true,
 
   // JS / TS

@@ -136,7 +136,13 @@ id_*
 .tern-port
 
 #---------------------------
-# Claude
+# AI
 #---------------------------
+**/.claude/docs/**
+**/.claude/plans/**
 **/.claude/settings.local.json
-pr.md
+*.worktrees/
+AGENTS.local.md
+CLAUDE.local.md
+TRASH-FILES.md
+TRASH/*

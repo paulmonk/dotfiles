@@ -137,14 +137,7 @@ alias ps="ps -ax"
 alias pst="pstree -g 3 -ws"
 
 # Neovim / Vim
-if (( $+commands[lvim] )); then
-    alias suvim="sudo -E lvim"
-    alias vi="lvim"
-    alias vim="lvim"
-    alias vimdiff="lvim -d"
-    alias nvim="lvim"
-    alias nvimdiff="lvim -d"
-elif (( $+commands[nvim] )); then
+if (( $+commands[nvim] )); then
     alias suvim="sudo -E nvim"
     alias vi="nvim"
     alias vim="nvim"

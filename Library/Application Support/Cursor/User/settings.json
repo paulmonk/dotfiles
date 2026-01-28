@@ -201,7 +201,7 @@
   "search.useIgnoreFiles": true,
 
   // security
-  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.untrustedFiles": "prompt",
 
   // telemetry
   "telemetry.telemetryLevel": "off",
@@ -588,7 +588,8 @@
   "[python]": {
     "editor.tabSize": 4,
     "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit"
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
@@ -796,4 +797,5 @@
   "githubPullRequests.pullBranch": "never",
   "liveServer.settings.donotShowInfoMsg": true,
   "vsintellicode.modify.editor.suggestSelection": "disabled",
+  "explorer.confirmPasteNative": false,
 }

@@ -94,92 +94,57 @@ export XDG_DATA_HOME
 #------------------------------
 # Targets
 #------------------------------
-# Use a different prefix on macOS
-ifeq ($(KERNEL), Darwin)
-
-# Cater for M1 arm arch
-ifeq ($(ARCH), arm64)
 PREFIX := /opt/homebrew
-X86_PREFIX := /usr/local
-
-# Cater for Intel
-else
-PREFIX := /usr/local
-X86_PREFIX := /usr/local
-endif
-
-# Linux
-else
-PREFIX := /usr
-# This is not necessary on Linux so just set to /usr to catch all
-X86_PREFIX := /usr
-endif
 
 # Ensure all required binaries on the PATH. Especially useful on first bootstrap of dotfiles.
 # Reference this variable as required in a recipe
-DEFAULT_PATH := "$(PREFIX)/bin:$(X86_PREFIX)/bin/:/usr/bin:/bin:/usr/sbin:/sbin"
+DEFAULT_PATH := "$(PREFIX)/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Install Homebrew
-# -----
-ifeq ($(KERNEL), Darwin)
 $(PREFIX)/bin/brew:
-	@echo "==============================="; \
-	echo "Brew will be install here: $(PREFIX)"; \
-	echo "==============================="; \
-	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
+	@echo "==============================="
+	@echo "Brew will be install here: $(PREFIX)"
+	@echo "==============================="
+	@read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
 	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
 		exit 1; \
 	fi; \
 	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
 
-$(X86_PREFIX)/bin/brew:
-	@echo "==============================="; \
-	echo "Brew (X86) will be install here: $(X86_PREFIX)"; \
-	echo "==============================="; \
-	echo "Ensuring rosetta is installed."; \
-	softwareupdate --install-rosetta; \
-	read -p "Homebrew will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
-	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-		exit 1; \
-	fi; \
-	arch -x86_64 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)";
-
 ## Homebrew Install
-brew-bootstrap: $(PREFIX)/bin/brew $(X86_PREFIX)/bin/brew
+brew-bootstrap: $(PREFIX)/bin/brew
 .PHONY: brew-bootstrap
 
 ## Homebrew Bundle Install
 brew-bundle: brew-bootstrap
-	$(PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
+	@echo "================================================"
+	@echo "Installing Homebrew Bundle"
+	@echo ""
+	@$(PREFIX)/bin/brew bundle --cleanup --quiet --verbose --zap
+	@echo "================================================"
 .PHONY: brew-bundle
 
 # Dump current contents to Brewfile excl MAS packages.
 # -----
 ## Homebrew Bundle Dump
 brew-bundle-dump:
-	$(PREFIX)/bin/brew bundle dump --describe --force --verbose --no-restart
+	@echo "================================================"
+	@echo "Dumping Brewfile"
+	@echo ""
+	@$(PREFIX)/bin/brew bundle dump --describe --force --verbose --no-restart
+	@echo "================================================"
 .PHONY: brew-bundle-dump
-endif
 
-# Install LunarVim
-# -----
-LVIM_BRANCH := 1.4.0
-
-$(HOME)/.local/bin/lvim:
-	read -p "LunarVim will be installed via shell script in the official repo. Please audit the script before continuing. Continue installation? [yY/nN]" -n 1 -r; \
-	if [[ ! $${REPLY} =~ ^[Yy]$$ ]]; then \
-		exit 1; \
-	fi; \
-	LV_BRANCH="$(LVIM_BRANCH)" /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/$(LVIM_BRANCH)/utils/installer/install.sh)";
-
-## LunarVim Install
-lunarvim-bootstrap: $(HOME)/.local/bin/lvim
-.PHONY: lunarvim-bootstrap
-
-## Python Install
-python-bootstrap:
-	$(PREFIX)/bin/mise use -g python@3.10 python@3.11 python@3.12
-.PHONY: python-bootstrap
+## Setup Claude Code MCP servers
+claude-code-mcp:
+	@echo "================================================"
+	@echo "Adding Claude Code MCP servers"
+	@claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer $${GITHUB_TOKEN}"}}'
+	@claude mcp add atlassian -- mcp-remote https://mcp.atlassian.com/v1/sse
+	@claude mcp add firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY
+	@echo "MCP servers configured. Set GITHUB_TOKEN env var for GitHub MCP."
+	@echo "================================================"
+.PHONY: claude-code-mcp
 
 # Dotfiles Setup
 # -----
@@ -190,29 +155,31 @@ python-bootstrap:
 # -v verbosity
 # -----
 # Ensure RCUP is installed
-ifeq ($(KERNEL), Darwin)
 $(PREFIX)/bin/rcup: brew-bootstrap
-	$(PREFIX)/bin/brew install rcm
-else
-$(PREFIX)/bin/rcup:
-	apt update && apt install -y rcm
-endif
+	@$(PREFIX)/bin/brew install --quiet rcm
 
 ## Dotfiles setup symlinks only
 dotfiles: $(PREFIX)/bin/rcup
-	RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
+	@echo "================================================"
+	@echo "Syncing dotfiles"
+	@echo ""
+	@RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -K -f -v
+	@echo "================================================"
 .PHONY: dotfiles
 
 ## Dotfiles Bootstrap, with pre and post hooks
 dotfiles-bootstrap: $(PREFIX)/bin/rcup
-	RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+	@echo "================================================"
+	@echo "Bootstrapping dotfiles"
+	@echo ""
+	@RCRC="$(CURDIR)/config/rcm/rcrc" PATH="$(DEFAULT_PATH)" $(PREFIX)/bin/rcup -d $(CURDIR) -k -f -v
+	@echo "================================================"
 .PHONY: dotfiles-bootstrap
 
 # Install
 # -----
 ## Full install of all components
 install: brew-bundle
-	$(MAKE) dotfiles-bootstrap
-	$(MAKE) lunarvim-bootstrap
-	$(MAKE) python-bootstrap
+	@$(MAKE) dotfiles-bootstrap
+	@$(MAKE) claude-code-mcp
 .PHONY: install

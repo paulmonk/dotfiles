@@ -1,1 +1,14 @@
-package-lock.json    diff=nodiff
+# Secrets - prevent diff exposure
+*.pem diff=nodiff merge=union
+*.key diff=nodiff merge=union
+.env* diff=nodiff merge=union
+secrets.* diff=nodiff merge=union
+
+# Line ending normalization
+* text=auto
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+
+# Existing
+package-lock.json diff=nodiff
