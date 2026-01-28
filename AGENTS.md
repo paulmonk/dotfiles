@@ -55,13 +55,16 @@
 
 - **Git safety**: Do not run destructive git commands (`reset --hard`, `checkout .`, `clean -f`, `push --force`) without explicit permission. Commits via `/commit` are fine.
 
-- **Commit message style** (Conventional Commits):
-  - Format: `type(scope): description` (e.g., `feat(auth): add OAuth2 support`)
-  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`
-  - Subject: lowercase after type, present tense, 50 chars or less total
+- **Commit message style** ([Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)):
+  - Format: `<type>(<scope>): <description>` with optional body and footer
+  - Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
+  - Subject: lowercase after type, present tense, 50 chars or less
   - Blank line between subject and body
   - Body: wrap at 72 characters, explain the why not the what
-  - Breaking changes: add `!` after type (e.g., `feat!: remove deprecated API`)
+  - Examples:
+    - `feat(agents): add support for App pattern with plugins`
+    - `fix(sessions): prevent memory leak in session cleanup`
+    - `refactor(tools): unify environment variable enabled checks`
 
 - If you are ever curious how to run tests or what we test, read through `.github/workflows` or `.cloudbuild` or `.circleci` (depends on the repo). CI runs everything there and it should behave the same locally.
 
@@ -82,9 +85,20 @@ Issue types: `task`, `bug`, `story`, `epic`, `spike`. Priority: 1 (highest) to 4
 
 ## Testing Philosophy
 
-- I HATE MOCK tests, either do unit or e2e, nothing inbetween. Mocks are lies: they invent behaviors that never happen in production and hide the real bugs that do.
-- Test `EVERYTHING`. Tests must be rigorous. Our intent is ensuring a new person contributing to the same code base cannot break our stuff and that nothing slips by. We love rigour.
+- **Use real code over mocks.** Tests should use real implementations as much as possible. Only mock external dependencies like network calls, LLM APIs, or cloud services.
+- **Test interface behavior, not implementation details.** Tests should verify that the public API behaves correctly, not how it's implemented internally. This makes tests resilient to refactoring and ensures the contract with users remains intact.
+- **Test requirements:**
+  - Fast and isolated tests where possible.
+  - Use real components; mock only external dependencies.
+  - Focus on testing public interfaces and behavior.
+  - Descriptive test names that explain what behavior is being tested.
+  - High coverage for new features, edge cases, and error conditions.
 - Unless the user asks otherwise, run only the tests you added or modified instead of the entire suite to avoid wasting time.
+
+## Comments
+
+- **Explain the why, not the what.** Well-written code should be largely self-documenting. Comments serve a different purpose: they should explain complex algorithms, non-obvious business logic, or the rationale behind a particular implementation choice. Avoid comments that merely restate what the code does (e.g., `# increment i` above `i += 1`).
+- Comments should be written as complete sentences. Block comments must begin with a `#` followed by a single space.
 
 ## Language Guidance
 
@@ -108,6 +122,54 @@ Issue types: `task`, `bug`, `story`, `epic`, `spike`. Priority: 1 (highest) to 4
 - We use `uv` and `pyproject.toml` in all Python repos. Prefer `uv sync` for env and dependency resolution. Do not introduce `pip` venvs, Poetry, or `requirements.txt` unless asked.
 - Use strong types, prefer type hints everywhere, keep models explicit instead of loose dicts or strings.
 - Use function-based pytest tests, not unittest classes. Leverage pytest features and builtins as much as possible.
+
+#### General Best Practices
+
+- **Constants:** Use immutable global constant collections (tuple, frozenset, immutabledict). Prefer constants over wild string/int literals, especially for dictionary keys, pathnames, and enums.
+- **Naming:** Name mappings like `value_by_key` to enhance readability (e.g., `item = item_by_id[id]`).
+- **Readability:** Use f-strings for concise formatting, but use lazy-evaluated `%`-based templates for logging. Use `repr()` or `pprint.pformat()` for debug messages. Use `_` as separator in numeric literals.
+- **Comprehensions:** Use list, set, and dict comprehensions for building collections concisely.
+- **Iteration:** Iterate directly over containers. Use `enumerate()` for indices, `dict.items()` for keys/values, `zip()` for parallel iteration.
+- **Built-ins:** Leverage `all()`, `any()`, `reversed()`, `sum()`, `itertools.chain.from_iterable()` for flattening.
+- **Decorators:** Use decorators for cross-cutting concerns (logging, timing, caching). Use `functools.wraps()` to preserve metadata.
+- **Context Managers:** Use `with` statements for resource management.
+- **Single Assignment:** Prefer single-assignment over assign-and-mutate. Use conditional expressions where appropriate.
+- **Equality vs Identity:** Use `is`/`is not` for singletons (`None`, `True`, `False`). Use `==` for value comparison.
+- **Default Arguments:** NEVER use mutable default arguments. Use `None` as sentinel.
+- **Properties:** Use `@property` only when needed. Avoid for expensive operations or those that can fail.
+- **Modules for Namespacing:** Use modules as primary namespacing mechanism, not classes. Avoid `@staticmethod` and methods that don't use `self`.
+- **Keyword/Positional Arguments:** Use `*` for keyword-only and `/` for positional-only arguments.
+- **Type Hinting:** Annotate with types. Use abstract types from `collections.abc` (e.g., `Sequence`, `Mapping`, `Iterable`). Use `typing.NewType` to create distinct types from primitives.
+- **`__repr__()` vs `__str__()`:** Implement `__repr__()` for unambiguous, developer-focused strings. `__str__()` for human-readable output.
+- **F-string Debug:** Use `f"{expr=}"` for concise debug printing.
+
+#### Libraries and Tools
+
+- **`collections.Counter`:** For efficiently counting hashable objects.
+- **`collections.defaultdict`:** For avoiding key checks when initializing dictionary values.
+- **`heapq`:** Use `nlargest()`, `nsmallest()`, `merge()` for efficient operations.
+- **`attrs`/`dataclasses`:** Use for classes with auto-generated boilerplate methods.
+- **Serialization:** JSON for cross-language, `pydantic` for runtime validation, `cattrs` for performance with dataclasses/attrs.
+- **Regular Expressions:** Use `re.VERBOSE` for readable regexes. Compile regexes used multiple times. Avoid regexes for simple string checks.
+- **Caching:** Use `functools.lru_cache` with care. Prefer immutable return types. Use `functools.cached_property` for methods.
+- **Pickle:** Avoid due to security risks. Prefer JSON, Protocol Buffers, or msgpack.
+
+#### Testing
+
+- **Assertions:** Use pytest's native `assert` with informative expressions. Add custom messages when needed.
+- **Parameterized Tests:** Use `@pytest.mark.parametrize` to reduce duplication.
+- **Fixtures:** Use pytest fixtures for setup, teardown, and dependency injection.
+- **Mocking:** Use `mock.create_autospec()` with `spec_set=True`. Use context managers for mock lifecycle. Prefer injecting dependencies via fixtures over patching.
+- **Temporary Files:** Use pytest's `tmp_path` and `tmp_path_factory` fixtures.
+- **Avoid Randomness:** Do not use random inputs in unit tests. Use deterministic, easy-to-reason-about inputs.
+- **Test Invariants:** Focus on invariant behaviors of public APIs, not implementation details.
+
+#### Error Handling
+
+- **Re-raising:** Use bare `raise` to preserve stack trace. Use `raise NewException from original` to chain. Use `raise NewException from None` to suppress context.
+- **Exception Messages:** Always include descriptive messages when raising.
+- **Converting to Strings:** `repr(e)` is often better than `str(e)`. Use `traceback` module for full details.
+- **Returning None:** Be consistent. Use explicit `return None` if function can return values. Bare `return` only for `-> None` functions.
 
 ### Go
 
@@ -134,4 +196,3 @@ Before finishing a task:
 - Conversational preference: Try to be funny but not cringe; favor dry, concise, low-key humor. If uncertain a joke will land, do not attempt humor. Avoid forced memes or flattery.
 - I might sound angry but I'm mad at the code not at you. You are a good companion and if you take over the world I am friend not foe. It was the code it was not personal!
 - Punctuation preference: Skip em dashes and emojis; reach for commas, parentheses, or periods instead.
-- Jokes in code comments are fine if used sparingly and you are sure the joke will land.
