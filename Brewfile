@@ -835,6 +835,8 @@ brew "terminal-notifier"
 brew "terraform-docs"
 # CLI tool to generate terraform files from existing infrastructure
 brew "terraformer"
+# Tool which checks for the support of TLS/SSL ciphers and flaws
+brew "testssl"
 # Terraform version manager inspired by rbenv
 brew "tfenv"
 # Linter for Terraform files

@@ -86,6 +86,11 @@
   },
   "plansDirectory": "./.claude/plans",
   "showTurnDuration": true,
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline",
+    "padding": 0
+  },
   "extraKnownMarketplaces": {
     "beads-marketplace": {
       "source": {
