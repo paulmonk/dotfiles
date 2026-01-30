@@ -1,5 +1,5 @@
 ---
-globs: ["*.ts", "*.tsx", "*.mts", "*.cts"]
+paths: ["*.ts", "*.tsx", "*.mts", "*.cts", "package.json", "tsconfig.json"]
 ---
 
 # TypeScript

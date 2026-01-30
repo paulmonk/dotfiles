@@ -1,5 +1,5 @@
 ---
-globs: ["*.py", "pyproject.toml"]
+paths: ["*.py", "pyproject.toml"]
 ---
 
 # Python

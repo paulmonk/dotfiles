@@ -1,7 +1,9 @@
 ---
 name: create-issue
 description: Use when creating a new issue in the project's issue tracker (beads, Jira, Linear, or GitHub)
-allowed-tools: Read,Bash(bd *),mcp__github__*,mcp__atlassian__*,mcp__linear__*
+allowed-tools: Read,Glob,Bash(bd *),mcp__github__*,mcp__atlassian__*,mcp__linear__*
+argument-hint: The type of issue to create (task, bug, story, spike, epic) and the title of the issue
+disable-model-invocation: true
 ---
 
 # Create Issue
@@ -26,7 +28,7 @@ Create an issue in whatever tracker the project uses, optionally using templates
 
 2. **Check for templates** (optional):
 
-- Look for `claude/templates/{type}.md` or `.github/ISSUE_TEMPLATE/`
+- Look for templates relative to this skill: `claude/skills/create-issue/templates/{type}.md` or `.github/ISSUE_TEMPLATE/`
 - If found, ask user if they want to use it
 - If not found or declined, freeform description
 
@@ -50,7 +52,7 @@ Create an issue in whatever tracker the project uses, optionally using templates
 
 ## Templates (Optional)
 
-If `claude/templates/` exists, these templates are available:
+Templates are located at `claude/skills/create-issue/templates/`:
 
 - `task.md` - Small pieces of work
 - `bug.md` - Defects with repro steps
