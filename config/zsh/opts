@@ -6,7 +6,7 @@
 # Remove the ^S ^Q mappings. See all mappings: stty -a
 # Disable start/stop characters in shell editor.
 # Only run in an interactive shell
-if [[ $- != *i* ]] then
+if [[ $- != *i* ]]; then
     stty ixany
     stty ixoff -ixon
 fi
@@ -37,10 +37,10 @@ setopt PRINT_EXIT_VALUE
 # Don't print a warning message if a mail file has been accessed.
 unsetopt MAIL_WARNING
 
-setopt INTERACTIVECOMMENTS   # Ignore lines prefixed with '#'
-setopt NO_BEEP               # beeps are annoying
-setopt NO_NOMATCH            # Avoid problem with HEAD^
-setopt RM_STAR_WAIT          # 10 second wait if you try to delete everything
+setopt INTERACTIVECOMMENTS # Ignore lines prefixed with '#'
+setopt NO_BEEP             # beeps are annoying
+setopt NO_NOMATCH          # Avoid problem with HEAD^
+setopt RM_STAR_WAIT        # 10 second wait if you try to delete everything
 
 # History
 # ----------------------
@@ -48,21 +48,20 @@ export HISTFILE="${XDG_DATA_HOME}/zsh/history"
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-setopt HIST_IGNORE_ALL_DUPS  # Remove older duplicate entries
-setopt HIST_SAVE_NO_DUPS     # Don't write duplicates to history file
-setopt HIST_FIND_NO_DUPS     # Don't display duplicates when searching
-
+setopt HIST_IGNORE_ALL_DUPS # Remove older duplicate entries
+setopt HIST_SAVE_NO_DUPS    # Don't write duplicates to history file
+setopt HIST_FIND_NO_DUPS    # Don't display duplicates when searching
 
 # Completion
 # ----------------------
 setopt AUTO_PARAM_KEYS
-setopt AUTO_PARAM_SLASH      # If param is a dir, add a trailing slash.
-setopt LIST_TYPES            # list like "ls -F"
-setopt LIST_PACKED           # Try to make the completion list small
-unsetopt COMPLETE_ALIASES    # Completion of cmd switches for aliases
-setopt MAGIC_EQUAL_SUBST     # Enable completion in "--option=arg"
-setopt MARK_DIRS             # Add "/" if completes directory
-setopt PATH_DIRS             # Path search even on cmd bins with slashes.
+setopt AUTO_PARAM_SLASH   # If param is a dir, add a trailing slash.
+setopt LIST_TYPES         # list like "ls -F"
+setopt LIST_PACKED        # Try to make the completion list small
+unsetopt COMPLETE_ALIASES # Completion of cmd switches for aliases
+setopt MAGIC_EQUAL_SUBST  # Enable completion in "--option=arg"
+setopt MARK_DIRS          # Add "/" if completes directory
+setopt PATH_DIRS          # Path search even on cmd bins with slashes.
 
 # Typically, compinit will not automatically find new executables in the
 # $PATH. For example, after you install a new package, the files in /usr/bin
@@ -75,16 +74,14 @@ zstyle ':completion:*' rehash true
 zstyle ':completion::complete:*' use-cache on
 zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME}/zsh"
 
-
 # Jobs
 # ----------------------
-setopt LONG_LIST_JOBS     # List jobs in the long format by default.
-setopt AUTO_RESUME        # Attempt to resume existing job before creating a new process.
-setopt NOTIFY             # Report status of background jobs immediately.
-unsetopt BG_NICE          # Do not run all background jobs at a lower priority.
-unsetopt HUP              # Do not kill jobs on shell exit.
-unsetopt CHECK_JOBS       # Do not report on jobs when shell exit.
-
+setopt LONG_LIST_JOBS # List jobs in the long format by default.
+setopt AUTO_RESUME    # Attempt to resume existing job before creating a new process.
+setopt NOTIFY         # Report status of background jobs immediately.
+unsetopt BG_NICE      # Do not run all background jobs at a lower priority.
+unsetopt HUP          # Do not kill jobs on shell exit.
+unsetopt CHECK_JOBS   # Do not report on jobs when shell exit.
 
 # Smart URLS
 # ----------------------
@@ -94,15 +91,15 @@ unsetopt CHECK_JOBS       # Do not report on jobs when shell exit.
 # which is generally better than url-quote-magic so we load that when possible.
 autoload -Uz is-at-least
 if [[ "${ZSH_VERSION}" != "5.1.1" ]]; then
-    if is-at-least "5.2"; then
-        autoload -Uz bracketed-paste-url-magic
-        zle -N bracketed-paste bracketed-paste-url-magic
-    else
-        if is-at-least "5.1"; then
-            autoload -Uz bracketed-paste-magic
-            zle -N bracketed-paste bracketed-paste-magic
-        fi
+  if is-at-least "5.2"; then
+    autoload -Uz bracketed-paste-url-magic
+    zle -N bracketed-paste bracketed-paste-url-magic
+  else
+    if is-at-least "5.1"; then
+      autoload -Uz bracketed-paste-magic
+      zle -N bracketed-paste bracketed-paste-magic
     fi
-    autoload -Uz url-quote-magic
-    zle -N self-insert url-quote-magic
+  fi
+  autoload -Uz url-quote-magic
+  zle -N self-insert url-quote-magic
 fi

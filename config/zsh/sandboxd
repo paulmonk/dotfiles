@@ -8,8 +8,7 @@ sandbox_hooks=()
 # deletes all hooks associated with cmd
 sandbox_delete_hooks() {
   local cmd=$1
-  for i in "${sandbox_hooks[@]}";
-  do
+  for i in "${sandbox_hooks[@]}"; do
     if [[ $i == "${cmd}:"* ]]; then
       local hook=$(echo $i | sed "s/.*://")
       unset -f "$hook"

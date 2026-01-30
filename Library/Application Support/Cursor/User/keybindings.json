@@ -214,5 +214,15 @@
       "text": "\\\r\n"
     },
     "when": "terminalFocus"
+  },
+  // Save files without formatting
+  {
+    "key": "ctrl+shift+s",
+    "command": "workbench.action.files.saveWithoutFormatting",
+    "when": "editorFocus && vim.active"
+  },
+  {
+    "key": "cmd+shift+s",
+    "command": "workbench.action.files.saveWithoutFormatting"
   }
 ]

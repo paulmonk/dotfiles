@@ -7,4 +7,6 @@
 
 # Mise Shims for IDE Integration
 # https://mise.jdx.dev/ide-integration.html
-eval "$(mise activate zsh --shims)"
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --shims)"
+fi

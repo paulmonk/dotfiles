@@ -5,6 +5,9 @@ paths:
 
 # Shell
 
+- Validate all scripts with `shellcheck`. Use `# shellcheck disable=SC####` with justification when suppressing.
+- Use `shfmt -i 2` for consistent formatting.
+
 ## General Best Practices
 
 - **Small utilities only:** Limit shell to small utilities, wrapper scripts, and glue code under 100 lines.
@@ -15,8 +18,6 @@ paths:
 
 - **Shebang:** Always start with `#!/bin/bash` or `#!/usr/bin/env bash`.
 - **Strict mode:** Enable `set -o errexit -o errtrace -o pipefail -o nounset`.
-- **Linting:** Validate all scripts with `shellcheck`. Use `# shellcheck disable=SC####` with justification when suppressing.
-- **Formatting:** Use `shfmt -i 2` for consistent formatting.
 - **Header comment:** Every file needs a comment describing its purpose.
 - **File order:** Shebang, header comment, `set` options, constants, includes/sources, functions, main logic.
 - **Extensions:** Executables may omit `.sh`; libraries must use `.sh` and be non-executable.

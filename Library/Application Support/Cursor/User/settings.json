@@ -638,7 +638,6 @@
 
   // terraform
   "[terraform]": {
-    "editor.formatOnSave": true,
     "editor.defaultFormatter": "hashicorp.terraform",
     "editor.tabSize": 2
   },
@@ -797,5 +796,5 @@
   "githubPullRequests.pullBranch": "never",
   "liveServer.settings.donotShowInfoMsg": true,
   "vsintellicode.modify.editor.suggestSelection": "disabled",
-  "explorer.confirmPasteNative": false,
+  "explorer.confirmPasteNative": false
 }

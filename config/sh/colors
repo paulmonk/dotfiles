@@ -2,15 +2,15 @@
 
 # Prefer vivid if available
 if command -v vivid >/dev/null 2>&1; then
-	LS_COLORS="$(vivid generate solarized-dark)"
-	export LS_COLORS
+  LS_COLORS="$(vivid generate solarized-dark)"
+  export LS_COLORS
 fi
 
 # Prefer eza if available
 if command -v eza >/dev/null 2>&1; then
-	ls="eza --group --git --group-directories-first --all"
+  ls="eza --group --git --group-directories-first --all"
 else
-	ls="LC_COLLATE=C ls --all"
+  ls="LC_COLLATE=C ls --all"
 fi
 
 # shellcheck disable=SC2139

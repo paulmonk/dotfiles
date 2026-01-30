@@ -5,16 +5,34 @@ root = true
 [*]
 end_of_line = lf
 indent_style = space
-indent_size = 4
+indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{html,xml,config,lua,json}]
-indent_size = 2
-
-[*.{md,psd1,pp,yml,yaml}]
-indent_style = space
+[*.{md,html,py}]
 indent_size = 2
 
 [Makefile]
 indent_style = tab
+
+[shell]
+# For shfmt: custom shell rules
+shell_variant = auto
+binary_next_line = true
+switch_case_indent = true
+
+# Ignore zsh files - shfmt doesn't fully support zsh syntax
+[*.zsh]
+ignore = true
+
+[**/zsh/**]
+ignore = true
+
+[.zshrc]
+ignore = true
+
+[.zshenv]
+ignore = true
+
+[.zprofile]
+ignore = true

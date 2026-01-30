@@ -113,55 +113,58 @@ fi
 # If ls is set to eza. Some of these aliases will not work.
 # TODO: add checks for eza.
 if (( $+commands[eza] )); then
-    alias ll="${aliases[ls]:-ls} -l"
-    alias la="ll"
-    alias lr="ll -R"                     # recursively.
-    alias lk="ll -s=size"                # Sorted by size
-    alias lm="ll -s=modified"            # Sorted by modified date
-    alias lc="ll --created -s=created"   # Sorted by created date
+  alias ll="${aliases[ls]:-ls} -l"
+  alias la="ll"
+  alias lr="ll -R"                     # recursively.
+  alias lk="ll -s=size"                # Sorted by size
+  alias lm="ll -s=modified"            # Sorted by modified date
+  alias lc="ll --created -s=created"   # Sorted by created date
 else
-    alias l="${aliases[ls]:-ls} -1A"           # Lists in one column, hidden files.
-    alias ll="${aliases[ls]:-ls} -lh"          # Lists human readable sizes.
-    alias lr="ll -R"           # Lists human readable sizes, recursively.
-    alias la="ll -A"           # Lists human readable sizes, hidden files.
-    alias lm='la | "${PAGER}"' # Lists human readable sizes, hidden files through pager.
-    alias lx="ll -XB"          # Lists sorted by extension (GNU only).
-    alias lk="ll -Sr"          # Lists sorted by size, largest last.
-    alias lt="ll -tr"          # Lists sorted by date, most recent last.
-    alias lc="lt -c"           # Lists sorted by date, most recent last, shows change time.
-    alias lu="lt -u"           # Lists sorted by date, most recent last, shows access time.
+  alias l="${aliases[ls]:-ls} -1A"           # Lists in one column, hidden files.
+  alias ll="${aliases[ls]:-ls} -lh"          # Lists human readable sizes.
+  alias lr="ll -R"           # Lists human readable sizes, recursively.
+  alias la="ll -A"           # Lists human readable sizes, hidden files.
+  alias lm='la | "${PAGER}"' # Lists human readable sizes, hidden files through pager.
+  alias lx="ll -XB"          # Lists sorted by extension (GNU only).
+  alias lk="ll -Sr"          # Lists sorted by size, largest last.
+  alias lt="ll -tr"          # Lists sorted by date, most recent last.
+  alias lc="lt -c"           # Lists sorted by date, most recent last, shows change time.
+  alias lu="lt -u"           # Lists sorted by date, most recent last, shows access time.
 fi
 
 # process
 alias ps="ps -ax"
 alias pst="pstree -g 3 -ws"
 
+# Set Code to be Cursor
+alias code='cursor'
+
 # Neovim / Vim
 if (( $+commands[nvim] )); then
-    alias suvim="sudo -E nvim"
-    alias vi="nvim"
-    alias vim="nvim"
-    alias vimdiff="nvim -d"
+  alias suvim="sudo -E nvim"
+  alias vi="nvim"
+  alias vim="nvim"
+  alias vimdiff="nvim -d"
 elif (( $+commands[vim] )); then
-    alias suvim="sudo -E vim"
-    alias vi="vim"
-    alias vimdiff="vim -d"
+  alias suvim="sudo -E vim"
+  alias vi="vim"
+  alias vimdiff="vim -d"
 fi
 if (( $+commands[fzf] )); then
-    alias v="vi \$(fzf)"
+  alias v="vi \$(fzf)"
 fi
 
 # Youtube DL
 if (( $+commands[youtube-dl] )); then
-    alias yt="youtube-dl --add-metadata --ignore-errors --continue --restrict-filenames" # Download video link
-    alias yta="yt --extract-audio --format bestaudio/best" # Download only audio
+  alias yt="youtube-dl --add-metadata --ignore-errors --continue --restrict-filenames" # Download video link
+  alias yta="yt --extract-audio --format bestaudio/best" # Download only audio
 fi
 
 # File Download
 if (( $+commands[curl] )); then
-    alias get="curl --continue-at - --location --progress-bar --remote-name --remote-time"
+  alias get="curl --continue-at - --location --progress-bar --remote-name --remote-time"
 elif (( $+commands[wget] )); then
-    alias get="wget --continue --progress=bar --timestamping"
+  alias get="wget --continue --progress=bar --timestamping"
 fi
 
 
@@ -188,43 +191,117 @@ alias weather="curl -s https://wttr.in"
 # macOS aliases
 #-----------------------
 if [[ "${KERNEL}" == "Darwin" ]]; then
-    # Lock the screen (when going AFK)
-    alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+  # Lock the screen (when going AFK)
+  alias afk="/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
-    # Recursively delete `.DS_Store` files
-    alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
+  # Recursively delete `.DS_Store` files
+  alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
 
-    # Flush the DNS on Mac
-    alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+  # Flush the DNS on Mac
+  alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 
-    # Empty the Trash on all mounted volumes and the main HDD
-    # Also, clear Apple’s System Logs to improve shell startup speed
-    alias emptytrash=" \
-            sudo rm -rfv /Volumes/*/.Trashes; \
-            sudo rm -rfv ~/.Trash; \
-            sudo rm -rfv /private/var/log/asl/*.asl; \
-            sqlite3 ~/Library/Preferences/com.apple.LaunchServices.sQuarantineEventsV* 'delete from LSQuarantineEvent' \
-        "
+  # Empty the Trash on all mounted volumes and the main HDD
+  # Also, clear Apple’s System Logs to improve shell startup speed
+  alias emptytrash=" \
+          sudo rm -rfv /Volumes/*/.Trashes; \
+          sudo rm -rfv ~/.Trash; \
+          sudo rm -rfv /private/var/log/asl/*.asl; \
+          sqlite3 ~/Library/Preferences/com.apple.LaunchServices.sQuarantineEventsV* 'delete from LSQuarantineEvent' \
+      "
 
-    # Hide/show all desktop icons (useful when presenting)
-    alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-    alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+  # Hide/show all desktop icons (useful when presenting)
+  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+  alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-    # Clean up LaunchServices to remove duplicates in the “Open With” menu
-    alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+  # Clean up LaunchServices to remove duplicates in the “Open With” menu
+  alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
-    # No `md5sum`, so use `md5` as a fallback
-    (( $+commands[md5sum] )) || alias md5sum="md5"
+  # No `md5sum`, so use `md5` as a fallback
+  (( $+commands[md5sum] )) || alias md5sum="md5"
 
-    # No `sha1sum`, so use `shasum` as a fallback
-    (( $+commands[sha1sum] )) || alias sha1sum="shasum"
+  # No `sha1sum`, so use `shasum` as a fallback
+  (( $+commands[sha1sum] )) || alias sha1sum="shasum"
 else
-    # open, pbcopy and pbpaste on linux
-    if (( $+commands[xclip] )); then
-        alias pbcopy="xclip -selection clipboard"
-        alias pbpaste="xclip -selection clipboard -o"
-    elif (( $+commands[xsel] )); then
-        alias pbcopy="xsel --clipboard --input"
-        alias pbpaste="xsel --clipboard --output"
-    fi
+  # open, pbcopy and pbpaste on linux
+  if (( $+commands[xclip] )); then
+      alias pbcopy="xclip -selection clipboard"
+      alias pbpaste="xclip -selection clipboard -o"
+  elif (( $+commands[xsel] )); then
+      alias pbcopy="xsel --clipboard --input"
+      alias pbpaste="xsel --clipboard --output"
+  fi
 fi
+
+# Brew aliases
+#-----------------------
+alias brew="${BREW_PREFIX}/bin/brew"
+alias brewi="brew install"
+alias brewo="brew update && echo '\nOutdated Pkgs:' && brew outdated --formula && echo '\nOutdated Casks:' && brew outdated --cask --greedy"
+alias brewup="brew upgrade && brew upgrade --cask"
+alias brewr="brew uninstall"
+alias brewp="brew pin"
+alias brewpl="brew list --pinned"
+alias brewq="brew search"
+
+# Curl aliases
+#-----------------------
+
+#/ Label: Curl Inspect
+#/ Description: Inspect remote file with default editor.
+#/ Parameters: $1 (required) - The URL.
+curli() {
+  if [[ "$1" ]]; then
+    local file=$(mktemp -t suspicious_curl_file) || {
+        printf "%s\n" "ERROR: Unable to create temporary file."; return;
+    }
+    curl --location --fail --silent --show-error "$1" > $file || {
+        printf "%s\n" "Failed to curl file."; return;
+    }
+    $EDITOR --wait $file || { printf "Unable to open temporary curl file.\n"; return; }
+    rm -f $file;
+  else
+    printf "%s\n" "ERROR: URL must be supplied."
+    return 1
+  fi
+}
+
+#/ Label: Curl Diagnostics
+#/ Description: Curl with diagnostic information for request.
+#/ Parameters: $1 (required) - The URL.
+curld() {
+  local url="$1"
+
+  printf -v diagnostics "%s\n" "\n" \
+    "HTTP Version:   %{http_version}" \
+    "HTTP Status:    %{http_code}" \
+    "Content Type:   %{content_type}" \
+    "DNS Lookup:     %{time_namelookup} seconds" \
+    "Connect:        %{time_connect} seconds" \
+    "App Connect:    %{time_appconnect} seconds" \
+    "Pre-Transfer:   %{time_pretransfer} seconds" \
+    "Start Transfer: %{time_starttransfer} seconds" \
+    "Speed:          %{speed_upload}↑ %{speed_download}↓ bytes/second" \
+    "Total Time:     %{time_total} seconds" \
+    "Total Size:     %{size_download} bytes"
+
+  curl --write-out "$diagnostics" --url "$url"
+}
+
+# Docker aliases
+#-----------------------
+alias dops="docker ps -q | xargs docker inspect --format '{{.Id}} @{{.Name}} @{{.Config.Image}} @{{.Config.Cmd}} @{{range \$p, \$conf := .NetworkSettings.Ports}}{{\$p}}->{{(index \$conf 0).HostPort}}{{end}} @{{.NetworkSettings.IPAddress}} @{{.State.Status}}' | column -t -s='@' | cut -c 1-5,64-"
+
+alias dols='docker ps -a --format "table{{ .Names }}\\t{{ .ID }}\\t{{ .Image }}\\t{{ .Status }}\\t{{ .Ports }}\\t{{ .Command }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
+
+alias doim='docker images --format "table{{ .Repository }}\\t{{ .Tag }}\\t{{ .ID }}\\t{{ .Size }}\\t{{ .CreatedAt }}" | cut -c-$(tput cols)'
+
+alias dogc='docker image prune -f'
+
+alias dovc='docker volume prune -f'
+
+alias dotop='docker stats $(docker ps --format="{{.Names}}")'
+
+alias dolast='docker inspect --format "{{.State.Running}}" $(docker ps -lq)'
+
+# Clean up unused docker images, containers, networks and volumes
+alias doclean="docker system prune --volumes -f"

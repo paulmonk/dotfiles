@@ -58,11 +58,12 @@
       "Skill(superpowers:*)",
       "WebSearch",
       "mcp__atlassian_atlassian__*",
+      "mcp__context7__*",
+      "mcp__exa-mcp-server_exa__*",
       "mcp__ide__getDiagnostics",
-      "mcp__firecrawl__firecrawl_*",
+      "mcp__firecrawl__*",
       "mcp__github__*",
-      "mcp__plugin_context7_context7__*",
-      "mcp__plugin_exa-mcp-server_exa__*"
+      "mcp__qmd__*"
     ],
     "deny": [
       "Bash(rm:*)",

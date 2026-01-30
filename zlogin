@@ -8,7 +8,7 @@
 [[ -o INTERACTIVE && -t 2 ]] && {
 
   # Print a random, hopefully interesting, adage.
-  if (( $+commands[fortune] )); then
+  if (($ + commands[fortune])); then
     fortune -s
     print
   fi

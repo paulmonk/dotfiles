@@ -139,9 +139,10 @@ brew-bundle-dump:
 claude-code-mcp:
 	@echo "================================================"
 	@echo "Adding Claude Code MCP servers"
-	@claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer $${GITHUB_TOKEN}"}}'
-	@claude mcp add atlassian -- mcp-remote https://mcp.atlassian.com/v1/sse
-	@claude mcp add firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY
+	@claude mcp add-json --scope user github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer $${GITHUB_TOKEN}"}}'
+	@claude mcp add --scope user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
+	@claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY
+	@claude mcp add --scope user qmd -- $${BUN_INSTALL_BIN}/bin/qmd mcp
 	@echo "MCP servers configured. Set GITHUB_TOKEN env var for GitHub MCP."
 	@echo "================================================"
 .PHONY: claude-code-mcp
@@ -181,5 +182,6 @@ dotfiles-bootstrap: $(PREFIX)/bin/rcup
 ## Full install of all components
 install: brew-bundle
 	@$(MAKE) dotfiles-bootstrap
+	@bun install -g https://github.com/tobi/qmd
 	@$(MAKE) claude-code-mcp
 .PHONY: install

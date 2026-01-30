@@ -14,7 +14,7 @@ autoload -Uz add-zsh-hook
 
 # Run 'ls' after 'cd'
 function chpwd_ls {
-    eza --group --git --group-directories-first --all --color=auto -l
+  eza --group --git --group-directories-first --all --color=auto -l
 }
 add-zsh-hook chpwd chpwd_ls
 
@@ -24,14 +24,14 @@ add-zsh-hook chpwd chpwd_ls
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Source antidote
 if [[ "${KERNEL}" == "Darwin" ]]; then
-    source "${PREFIX}/opt/antidote/share/antidote/antidote.zsh"
+  source "${PREFIX}/opt/antidote/share/antidote/antidote.zsh"
 else
-    git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-$HOME}/.antidote
+  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-$HOME}/.antidote
 fi
 
 # initialize plugins statically
@@ -78,13 +78,13 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/aliases"
 # Source all shell command specific config
 #-------------------------
 if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/commands" ]]; then
-    for bin in ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/commands/*; do
-        cmd=$(basename "${bin}")
-        if (( $+commands[$cmd] )) && [[ -s "${bin}" ]]; then
-            source "${bin}";
-        fi
-    done
-    unset bin
+  for bin in ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/commands/*; do
+    cmd=$(basename "${bin}")
+    if (( $+commands[$cmd] )) && [[ -s "${bin}" ]]; then
+        source "${bin}";
+    fi
+  done
+  unset bin
 fi
 
 
@@ -96,27 +96,27 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/sandboxd"
 # ZSH Completions
 #-------------------------
 fpath=(
-    ${BREW_PREFIX}/share/zsh/site-functions
-    ${fpath}
+  ${BREW_PREFIX}/share/zsh/site-functions
+  ${fpath}
 )
 
 if [[ -d "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions" ]]; then
-    fpath=(
-        ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions
-        ${fpath}
-    )
+  fpath=(
+    ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions
+    ${fpath}
+  )
 fi
 
 # macOS add gcloud completions
 if [[ "${KERNEL}" == "Darwin" ]]; then
-    GCLOUD_COMPLETIONS_SETUP_PATH="${BREW_PREFIX}/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-    [[ -f "${GCLOUD_COMPLETIONS_SETUP_PATH}" ]] && source "${GCLOUD_COMPLETIONS_SETUP_PATH}"
+  GCLOUD_COMPLETIONS_SETUP_PATH="${BREW_PREFIX}/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+  [[ -f "${GCLOUD_COMPLETIONS_SETUP_PATH}" ]] && source "${GCLOUD_COMPLETIONS_SETUP_PATH}"
 fi
 
 # Add heroku completions - Linux.
 if [[ "${KERNEL}" == "Linux" ]]; then
-    HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME:-$HOME/.cache}/heroku/autocomplete/zsh_setup"
-    [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
+  HEROKU_AC_ZSH_SETUP_PATH="${XDG_CACHE_HOME:-$HOME/.cache}/heroku/autocomplete/zsh_setup"
+  [[ -f "${HEROKU_AC_ZSH_SETUP_PATH}" ]] && source "${HEROKU_AC_ZSH_SETUP_PATH}"
 fi
 
 # Load completions and bash completions
@@ -127,24 +127,29 @@ autoload -Uz +X bashcompinit && bashcompinit
 #-------------------------
 # zoxide
 if (( $+commands[zoxide] )); then
-    _ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
-    [[ ! -f "${_ZO_DATA}" ]] && touch "${_ZO_DATA}"
-    export _ZO_DATA
-    eval "$(zoxide init zsh)"
+  _ZO_DATA="${XDG_DATA_HOME}/zsh/zo"
+  [[ ! -f "${_ZO_DATA}" ]] && touch "${_ZO_DATA}"
+  export _ZO_DATA
+  eval "$(zoxide init zsh)"
 fi
 
 # Shell history
 if (( $+commands[atuin] )); then
-    eval "$(atuin init zsh)"
+  eval "$(atuin init zsh)"
+fi
+
+# Direnv
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
 fi
 
 # Broot
 if (( $+commands[broot])) && [[ -x "${XDG_CONFIG_HOME}/broot/launcher/bash/br" ]]; then
-    source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
+  source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
 fi
 
 # Final: ZSH - Source any local overrides
 #-------------------------
 if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
-    source "${ZDOTDIR}/.zshrc.local"
+  source "${ZDOTDIR}/.zshrc.local"
 fi
