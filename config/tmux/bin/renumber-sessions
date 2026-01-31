@@ -1,9 +1,16 @@
-#!/usr/bin/env zsh
+#!/bin/bash
+# Renumber tmux sessions with numeric names to be sequential starting from 1.
 
-sessions=$(tmux ls | grep '^[0-9]\+:' | cut -f1 -d':' | sort -n)
+set -o errexit -o errtrace -o pipefail -o nounset
 
-new=1
-for old in ${sessions}; do
-  tmux rename -t ${old} ${new}
-  ((new++))
-done
+main() {
+  local new=1
+  local old
+
+  while read -r old; do
+    tmux rename -t "${old}" "${new}"
+    ((new++))
+  done < <(tmux ls | grep '^[0-9]\+:' | cut -f1 -d':' | sort -n)
+}
+
+main "$@"

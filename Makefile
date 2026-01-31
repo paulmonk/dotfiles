@@ -147,6 +147,7 @@ claude-code-mcp:
 	@echo "================================================"
 .PHONY: claude-code-mcp
 
+
 # Dotfiles Setup
 # -----
 # rcup options used:
@@ -185,3 +186,19 @@ install: brew-bundle
 	@bun install -g https://github.com/tobi/qmd
 	@$(MAKE) claude-code-mcp
 .PHONY: install
+
+# Lint and Format code
+lint:
+	@echo "================================================"
+	@echo "Linting Shell scripts"
+	@echo ""
+	@shfmt --apply-ignore --find . | xargs shellcheck
+	@echo "================================================"
+.PHONY: lint
+
+format:
+	@echo "================================================"
+	@echo "Formatting Shell scripts"
+	@echo ""
+	@shfmt --apply-ignore .
+	@echo "================================================"

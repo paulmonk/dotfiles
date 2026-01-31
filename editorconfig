@@ -16,7 +16,7 @@ indent_size = 2
 indent_style = tab
 
 [shell]
-# For shfmt: custom shell rules
+# For shfmt: custom shell rules (use --apply-ignore flag)
 shell_variant = auto
 binary_next_line = true
 switch_case_indent = true
@@ -28,11 +28,12 @@ ignore = true
 [**/zsh/**]
 ignore = true
 
-[.zshrc]
+[.{zshrc,zshenv,zprofile,zlogin,zlogout}]
 ignore = true
 
-[.zshenv]
+[{zshrc,zshenv,zprofile,zlogin,zlogout}]
 ignore = true
 
-[.zprofile]
+# Ignore as these are submodule code
+[**/tmux/plugins/**]
 ignore = true

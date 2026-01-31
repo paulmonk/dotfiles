@@ -1,7 +1,3 @@
----
-paths: ["*.ts", "*.tsx", "*.mts", "*.cts", "package.json", "tsconfig.json"]
----
-
 # TypeScript
 
 ## General Best Practices

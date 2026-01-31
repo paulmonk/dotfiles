@@ -26,97 +26,97 @@ input=$(cat)
 
 # Extract the project directory name from the workspace path.
 get_project() {
-    echo "$input" | jq -r '.workspace.current_dir // "unknown"' | xargs basename
+  echo "$input" | jq -r '.workspace.current_dir // "unknown"' | xargs basename
 }
 
 # Get the current git branch name, with "(wt)" suffix if in a worktree.
 get_git_info() {
-    local branch="" wt_suffix=""
-    if git rev-parse --git-dir >/dev/null 2>&1; then
-        branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-        if [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]; then
-            wt_suffix=" (wt)"
-        fi
-        echo "${branch}${wt_suffix}"
+  local branch="" wt_suffix=""
+  if git rev-parse --git-dir >/dev/null 2>&1; then
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+    if [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]; then
+      wt_suffix=" (wt)"
     fi
+    echo "${branch}${wt_suffix}"
+  fi
 }
 
 # Extract the model display name (e.g., "Opus", "Sonnet", "Haiku").
 get_model() {
-    echo "$input" | jq -r '.model.display_name // "?"'
+  echo "$input" | jq -r '.model.display_name // "?"'
 }
 
 # Extract the Claude Code version string.
 get_version() {
-    echo "$input" | jq -r '.version // "?"'
+  echo "$input" | jq -r '.version // "?"'
 }
 
 # Extract context window usage as an integer percentage.
 get_used_pct() {
-    echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1
+  echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1
 }
 
 # Extract and format the session cost in USD.
 get_cost() {
-    local cost
-    cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-    printf "\$%.2f" "$cost"
+  local cost
+  cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
+  printf "\$%.2f" "$cost"
 }
 
 # Build circles based on percentage thresholds
 # 0-19%: ○○○○○, 20-39%: ●○○○○, 40-59%: ●●○○○, 60-79%: ●●●○○, 80-89%: ●●●●○, 90-100%: ●●●●●
 get_circles() {
-    local pct=$1
-    local filled="●" empty="○" circles=""
-    for threshold in 20 40 60 80 90; do
-        if [ "$pct" -ge "$threshold" ]; then
-            circles="${circles}${filled}"
-        else
-            circles="${circles}${empty}"
-        fi
-    done
-    echo "$circles"
+  local pct=$1
+  local filled="●" empty="○" circles=""
+  for threshold in 20 40 60 80 90; do
+    if [ "$pct" -ge "$threshold" ]; then
+      circles="${circles}${filled}"
+    else
+      circles="${circles}${empty}"
+    fi
+  done
+  echo "$circles"
 }
 
 # Return ANSI color code based on context usage: green (<60%), yellow (60-79%), red (80%+).
 get_color() {
-    local pct=$1
-    if [ "$pct" -ge 80 ]; then
-        echo "$COLOR_RED"
-    elif [ "$pct" -ge 60 ]; then
-        echo "$COLOR_YELLOW"
-    else
-        echo "$COLOR_GREEN"
-    fi
+  local pct=$1
+  if [ "$pct" -ge 80 ]; then
+    echo "$COLOR_RED"
+  elif [ "$pct" -ge 60 ]; then
+    echo "$COLOR_YELLOW"
+  else
+    echo "$COLOR_GREEN"
+  fi
 }
 
 # Assemble and print the statusline.
 main() {
-    local project branch model version pct circles color cost
+  local project branch model version pct circles color cost
 
-    project=$(get_project)
-    branch=$(get_git_info)
-    model=$(get_model)
-    version=$(get_version)
-    pct=$(get_used_pct)
-    circles=$(get_circles "$pct")
-    color=$(get_color "$pct")
-    cost=$(get_cost)
+  project=$(get_project)
+  branch=$(get_git_info)
+  model=$(get_model)
+  version=$(get_version)
+  pct=$(get_used_pct)
+  circles=$(get_circles "$pct")
+  color=$(get_color "$pct")
+  cost=$(get_cost)
 
-    # directory
-    printf "${COLOR_DIM}${ICON_PROJECT}${COLOR_RESET} %s" "$project"
-    # branch
-    if [ -n "$branch" ]; then
-        printf "  ${COLOR_DIM}${ICON_BRANCH}${COLOR_RESET} %s" "$branch"
-    fi
-    # model
-    printf "  ${COLOR_DIM}${ICON_MODEL}${COLOR_RESET} %s" "$model"
-    # version
-    printf "  ${COLOR_DIM}${ICON_VERSION}${COLOR_RESET} %s" "$version"
-    # context
-    printf "  ${color}${circles} %d%%${COLOR_RESET}" "$pct"
-    # cost
-    printf "  ${COLOR_DIM}${ICON_COST}${COLOR_RESET} %s" "$cost"
+  # directory
+  printf "${COLOR_DIM}${ICON_PROJECT}${COLOR_RESET} %s" "$project"
+  # branch
+  if [ -n "$branch" ]; then
+    printf "  ${COLOR_DIM}${ICON_BRANCH}${COLOR_RESET} %s" "$branch"
+  fi
+  # model
+  printf "  ${COLOR_DIM}${ICON_MODEL}${COLOR_RESET} %s" "$model"
+  # version
+  printf "  ${COLOR_DIM}${ICON_VERSION}${COLOR_RESET} %s" "$version"
+  # context
+  printf "  ${color}${circles} %d%%${COLOR_RESET}" "$pct"
+  # cost
+  printf "  ${COLOR_DIM}${ICON_COST}${COLOR_RESET} %s" "$cost"
 }
 
 main

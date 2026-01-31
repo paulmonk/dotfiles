@@ -1,7 +1,3 @@
----
-paths: ["*.sql"]
----
-
 # SQL
 
 ## General Best Practices

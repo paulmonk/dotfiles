@@ -580,11 +580,6 @@
   "php.suggest.basic": false,
 
   // Python
-  "notebook.codeActionsOnSave": {
-    "notebook.source.fixAll": true,
-    "notebook.source.organizeImports": true
-  },
-  "notebook.formatOnSave.enabled": true,
   "[python]": {
     "editor.tabSize": 4,
     "editor.codeActionsOnSave": {
@@ -600,9 +595,14 @@
     "reportMissingImports": "none",
     "reportMissingTypeStubs": "none"
   },
-
   "python.languageServer": "None",
   "python.terminal.activateEnvironment": true,
+
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": true,
+    "notebook.source.organizeImports": true
+  },
+  "notebook.formatOnSave.enabled": true,
 
   // JS / TS
   "[javascript]": {
@@ -635,6 +635,9 @@
   "[jinja-sql]": {
     "editor.defaultFormatter": "dorzey.vscode-sqlfluff"
   },
+
+  // shell
+  "shfmt.formatIgnored": false,
 
   // terraform
   "[terraform]": {
@@ -793,8 +796,8 @@
   // Misc
   "claudeCode.useTerminal": true,
   "dbt.perspectiveTheme": "Solarized Dark",
+  "explorer.confirmPasteNative": false,
   "githubPullRequests.pullBranch": "never",
   "liveServer.settings.donotShowInfoMsg": true,
-  "vsintellicode.modify.editor.suggestSelection": "disabled",
-  "explorer.confirmPasteNative": false
+  "vsintellicode.modify.editor.suggestSelection": "disabled"
 }

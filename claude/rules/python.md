@@ -1,7 +1,3 @@
----
-paths: ["*.py", "pyproject.toml"]
----
-
 # Python
 
 - Use `uv` and `pyproject.toml` in all Python repos. Prefer `uv sync` for env and dependency resolution. Do not introduce `pip` venvs, Poetry, or `requirements.txt` unless asked.

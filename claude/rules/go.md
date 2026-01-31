@@ -1,7 +1,3 @@
----
-paths: ["*.go", "go.mod", "go.sum"]
----
-
 # Go
 
 ## General Best Practices

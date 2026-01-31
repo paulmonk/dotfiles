@@ -1,7 +1,3 @@
----
-paths: ["*.rs", "Cargo.toml", "Cargo.lock"]
----
-
 # Rust
 
 - Do NOT use unwraps or anything that can panic in Rust code, handle errors. Obviously in tests unwraps and panics are fine!

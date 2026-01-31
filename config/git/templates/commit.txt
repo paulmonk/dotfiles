@@ -1,4 +1,5 @@
-# Header - Capitalized, short summary in the imperative mood.
+# Header - Capitalized, short summary in the imperative.
+# Prefix conventional commit type (feat, fix, refactor, docs, test, chore)
 # (if applied this commit will...)
 # |<----   Using a Maximum Of 50 Characters   ---->|
 
@@ -41,5 +42,5 @@
 # For more information on the contents/format of this template, see
 # https://who-t.blogspot.com/2009/12/on-commit-messages.html
 # https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
-# https://github.com/torvalds/subsurface-for-dirk/blob/README#L88
+# https://github.com/torvalds/subsurface-for-dirk?tab=readme-ov-file#contributing
 # https://gist.github.com/adeekshith/cd4c95a064977cdc6c50

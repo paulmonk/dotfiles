@@ -38,24 +38,7 @@ Run these commands in parallel to understand the current state:
 In a single message with parallel tool calls:
 
 1. Stage relevant files with `git add` (prefer specific files over `git add -A`)
-2. Create the commit with an appropriate message
-
-**Commit message format** ([Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)):
-
-```
-<type>(<scope>): <description>
-
-<optional body explaining why>
-```
-
-**Quick reference:**
-- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
-- Subject: lowercase after type, present tense, 50 chars max
-- Body: wrap at 72 chars, explain the why not the what
-- Examples:
-  - `feat(auth): add OAuth2 support for GitHub`
-  - `fix(api): prevent null pointer in request handler`
-  - `refactor(db): simplify connection pooling logic`
+2. Create the commit with an appropriate message (Run `git config --get commit.template` to get the commit template and use it)
 
 ### 4. Security Checks
 

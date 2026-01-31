@@ -1,8 +1,3 @@
----
-paths:
-  ["*.sh", "*.bash", ".bashrc", ".bash_profile", ".zshrc", "bin/*", "scripts/*"]
----
-
 # Shell
 
 - Validate all scripts with `shellcheck`. Use `# shellcheck disable=SC####` with justification when suppressing.
