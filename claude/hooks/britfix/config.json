@@ -1,0 +1,54 @@
+{
+  "comment": "Configuration for britfix file type handling",
+  "strategies": {
+    "text": {
+      "description": "Plain text - convert everything",
+      "extensions": [".txt"]
+    },
+    "markdown": {
+      "description": "Markdown - preserve code spans and code blocks",
+      "extensions": [".md", ".markdown", ".mdown", ".mkd", ".mdx"]
+    },
+    "latex": {
+      "description": "LaTeX - skip commands and math",
+      "extensions": [".tex"]
+    },
+    "html": {
+      "description": "HTML/XML - skip tags",
+      "extensions": [".html", ".htm", ".xml"]
+    },
+    "css": {
+      "description": "CSS/SCSS/SASS/LESS - only convert comments",
+      "extensions": [".css", ".scss", ".sass", ".less"]
+    },
+    "json": {
+      "description": "JSON - only convert string values",
+      "extensions": [".json"]
+    },
+    "code": {
+      "description": "Code - only convert comments and docstrings (not string literals)",
+      "extensions": [
+        ".py",
+        ".js",
+        ".ts",
+        ".jsx",
+        ".tsx",
+        ".java",
+        ".cpp",
+        ".c",
+        ".h",
+        ".hpp",
+        ".cs",
+        ".rb",
+        ".go",
+        ".rs",
+        ".swift",
+        ".kt",
+        ".scala",
+        ".php",
+        ".pl",
+        ".sh"
+      ]
+    }
+  }
+}

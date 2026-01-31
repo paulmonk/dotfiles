@@ -2,8 +2,8 @@
 
 **TL;DR**: Fix from first principles, no mocks, no `any`, no breadcrumbs, strong types everywhere.
 
-**Purpose**: Operate tasks in this repo while honoring user preferences and house style.\
-**Read When**: On task initialization and before major decisions; re-skim when requirements shift.\
+**Purpose**: Operate tasks in this repo while honoring user preferences and house style.
+**Read When**: On task initialization and before major decisions; re-skim when requirements shift.
 **Concurrency**: Assume other agents or the user might land commits mid-run; refresh context before summarizing or editing.
 
 ## Quick Obligations
@@ -36,15 +36,16 @@
 
 ## Tooling & Workflow
 
+- **Task runner preference**. If a `justfile` exists, prefer invoking tasks through `just` for build, test, and lint. Do not add a `justfile` unless asked. If no `justfile` exists and there is a `Makefile` you can use that. Default lint/test commands if no `Makefile` or `justfile` exists:
+  - Rust: run `cargo fmt`, `cargo clippy --all --benches --tests --examples --all-features`, then the targeted `cargo test` commands.
+  - TypeScript: Confirm with user on the `npm` or `pnpm` scripts to use. Otherwise if they don't exist, use `tsc --noEmit`, `biome check`, `eslint`.
+  - Python: Run `uv`, using `uv run ruff check`, `uv run ty` for type checking.
+  - Go: Run `gofmt -w .`, `go vet ./...`, `staticcheck ./...` (if available), then `go test ./...`.
+  - Shell: Run `shfmt -w .`, `shellcheck .`.
 - **AST-first where it helps**. Prefer `ast-grep` for tree-safe edits when it is better than regex.
 - **Git safety**: Do not run destructive git commands (`reset --hard`, `checkout .`, `clean -f`, `push --force`) without explicit permission. Commits via `/commit` are fine.
-- **Task runner preference**. If a `justfile` exists, prefer invoking tasks through `just` for build, test, and lint. Do not add a `justfile` unless asked. If no `justfile` exists and there is a `Makefile` you can use that. Default lint/test commands if no `Makefile` or `justfile` exists:
-
-- Rust: run `cargo fmt`, `cargo clippy --all --benches --tests --examples --all-features`, then the targeted `cargo test` commands.
-- TypeScript: Confirm with user on the `npm` or `pnpm` scripts to use. Otherwise if they don't exist, use `tsc --noEmit`, `biome check`, `eslint`.
-- Python: Run `uv`, using `uv run ruff check`, `uv run ty` for type checking.
-- Go: Run `gofmt -w .`, `go vet ./...`, `staticcheck ./...` (if available), then `go test ./...`.
-- Shell: Run `shfmt -w .`, `shellcheck .`.
+- **Research - Knowledge base**: If you are looking for information on a specific topic or my workday (see daily notes), use `qmd` to search the Obsidian vault.
+- **Research - Web Search**: If you need to look up documentation for library or framework, then use a mix of `context7` for lookup and `exa` or `firecrawl` to search the web and fetch web content.
 
 ### Commit Message Style
 
@@ -55,11 +56,12 @@
 - Blank line between subject and body
 - Body: wrap at 72 characters, explain the why not the what
 - Examples:
+
   - `feat(agents): add support for App pattern with plugins`
   - `fix(sessions): prevent memory leak in session cleanup`
   - `refactor(tools): unify environment variable enabled checks`
 
-- If you are ever curious how to run tests or what we test, read through `.github/workflows` or `.cloudbuild` or `.circleci` (depends on the repo). CI runs everything there and it should behave the same locally.
+- If you are ever curious how to run tests or what we test, read through `.github/workflows` or `.cloudbuild` or `.circleci` (depends on the repo). CI runs everything and it should behave the same locally.
 
 ## Testing Philosophy
 

@@ -10,6 +10,32 @@
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
     "DISABLE_TELEMETRY": "1"
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/britfix/hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "attribution": {
     "commit": "",
     "pr": ""
