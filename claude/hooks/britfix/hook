@@ -2,6 +2,8 @@
 """
 Britfix hook - converts US spellings to British.
 Processes files after they're written (PostToolUse).
+
+Credit: https://github.com/Talieisin/britfix/
 """
 
 import json

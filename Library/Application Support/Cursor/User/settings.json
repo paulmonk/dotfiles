@@ -149,13 +149,17 @@
     ".jsbeautifyrc": "json",
     ".jscsrc": "json",
     ".watchmanconfig": "json",
+    "commit.txt": "git-commit",
+    "editorconfig": "editorconfig",
     "go.sum": "go",
     "Brewfile": "ruby",
-    "Tmuxfile": "tmux",
+    "justfile": "makefile",
     "yarn.lock": "yaml",
     "*.css": "tailwindcss",
     "*.env.example": "dotenv",
-    "*.env.dev": "dotenv"
+    "*.env.dev": "dotenv",
+    "**/git/config": "ini",
+    "**/git/ignore": "gitignore"
   },
   "files.exclude": {
     "**/.swp": true,

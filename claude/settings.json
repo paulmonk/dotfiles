@@ -17,8 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\"",
-            "timeout": 10
+            "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
           }
         ]
       }
@@ -29,8 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/britfix/hook",
-            "timeout": 10
+            "command": "~/.claude/hooks/britfix/hook"
           }
         ]
       }
