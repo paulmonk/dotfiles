@@ -77,13 +77,22 @@ map(
 
 -- C-r: Easier search and replace visual/select mode
 map('x', '<C-r>', function()
-	local selection = vim.fn.getreg('s')
-	vim.cmd('normal! gv"sy')
-	local escaped = vim.fn.escape(vim.fn.getreg('s'), '\\/')
-	escaped = escaped:gsub('\n', '\\n')
-	vim.fn.setreg('s', selection)
-	return ':%s/\\V' .. escaped .. '//gc<Left><Left><Left>'
-end, { expr = true, desc = 'Search and replace selection' })
+	-- Get visual selection using getregion (. = cursor, v = visual start)
+	local lines = vim.fn.getregion(vim.fn.getpos('.'), vim.fn.getpos('v'))
+
+	-- Escape each line separately, then join with literal \n
+	local escaped = vim.fn.escape(lines[1] or '', [[\/]])
+	for i = 2, #lines do
+		escaped = escaped .. '\\n' .. vim.fn.escape(lines[i], [[\/]])
+	end
+
+	-- Build command with <C-u> to clear any auto-inserted range
+	local c_u = vim.api.nvim_replace_termcodes('<C-u>', true, false, true)
+	local left3 = vim.api.nvim_replace_termcodes('<Left><Left><Left>', true, false, true)
+	local cmd = ':' .. c_u .. '%s/\\V' .. escaped .. '//gc' .. left3
+
+	vim.fn.feedkeys(cmd)
+end, { desc = 'Search and replace selection' })
 
 -- Helper functions
 local M = {}

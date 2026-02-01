@@ -72,6 +72,9 @@ alias type="type -a"
 alias v="vi"
 alias x="unarchive"
 
+# AI
+alias ai="claude"
+
 # Python
 alias pip="python -m pip"
 alias py="python"

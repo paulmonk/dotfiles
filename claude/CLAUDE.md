@@ -8,12 +8,13 @@
 
 ## Quick Obligations
 
-| Situation                     | Required action                                                                          |
-| ----------------------------- | ---------------------------------------------------------------------------------------- |
-| Starting a task               | Read this guide end-to-end and align with any fresh user instructions.                   |
-| Tool or command hangs         | If a command runs longer than 5 minutes, stop it, capture logs, and check with the user. |
-| Reviewing git status or diffs | Treat them as read-only context; never revert or assume missing changes were yours.      |
-| Adding a dependency           | Research well-maintained options and confirm fit with the user before adding.            |
+| Situation                     | Required action                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| Starting a task               | Read this guide end-to-end and align with any fresh user instructions.                      |
+| Relevant learnings exist      | Check `.claude/learnings/` and `~/.claude/learnings/` for past solutions to similar issues. |
+| Tool or command hangs         | If a command runs longer than 5 minutes, stop it, capture logs, and check with the user.    |
+| Reviewing git status or diffs | Treat them as read-only context; never revert or assume missing changes were yours.         |
+| Adding a dependency           | Research well-maintained options and confirm fit with the user before adding.               |
 
 ## Mindset & Process
 

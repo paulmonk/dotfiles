@@ -56,16 +56,17 @@ If similar documentation exists, present options:
 
 **Scope decision:** Is this learning specific to this project, or universal?
 
-| Scope       | Destination        | Location                                            |
-| ----------- | ------------------ | --------------------------------------------------- |
-| **Project** | Learning file      | `<project>/.claude/learnings/<date>-<topic>.md`     |
-| **Project** | CLAUDE.md rule     | `<project>/CLAUDE.md`                               |
-| **Project** | Code comment       | Inline in source                                    |
-| **Project** | Project docs       | `README.md` or `docs/`                              |
-| **Global**  | CLAUDE.md rule     | `~/.claude/CLAUDE.md` (applies to all projects)     |
-| **Global**  | Learning file      | `~/.claude/learnings/<date>-<topic>.md`             |
+| Scope       | Destination    | Location                                        |
+| ----------- | -------------- | ----------------------------------------------- |
+| **Project** | Learning file  | `<project>/.claude/learnings/<date>-<topic>.md` |
+| **Project** | CLAUDE.md rule | `<project>/CLAUDE.md`                           |
+| **Project** | Code comment   | Inline in source                                |
+| **Project** | Project docs   | `README.md` or `docs/`                          |
+| **Global**  | CLAUDE.md rule | `~/.claude/CLAUDE.md` (applies to all projects) |
+| **Global**  | Learning file  | `~/.claude/learnings/<date>-<topic>.md`         |
 
 **Guidelines:**
+
 - Language gotchas (e.g., Go nil maps) → Global CLAUDE.md rule
 - Tool/library quirks you'll hit again → Global learning file
 - Project-specific patterns → Project .claude/learnings/
