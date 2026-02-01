@@ -155,7 +155,7 @@ fi
 export ACK_PAGER_COLOR="less -x4SRFX"
 
 # Bat
-export BAT_THEME="TwoDark"
+export BAT_THEME="Solarized (dark)"
 
 # Curl
 export CURL_HOME="${XDG_CONFIG_HOME}/curl"

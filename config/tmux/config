@@ -1,15 +1,8 @@
 #--------------------------------------------------------
-# TMUX shims
-# https://superuser.com/questions/1069902/tmux-configuration-stanzas-based-on-tmux-version
-# Version-specific commands [grumble, grumble]
-# See: https://github.com/tmux/tmux/blob/master/CHANGES
-tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
-
-#--------------------------------------------------------
 # General
 #--------------------------------------------------------
 set -g default-shell "${SHELL}"
-set -g default-terminal "${TERM}"
+set -g default-terminal "tmux-256color"
 
 # set window title string
 #  #H  Hostname of local host
@@ -23,26 +16,20 @@ set -g set-titles on
 set -g set-titles-string '#T #S:#I.#P #W'
 
 setw -g automatic-rename on
-
-# This will generate xterm style function key sequences included to indicate
-# modifiers such as Shift, Alt or Ctrl.
-setw -g xterm-keys on
+# Show directory name for shells, command name for everything else
+setw -g automatic-rename-format '#{?#{m:*sh,#{pane_current_command}},#{b:pane_current_path},#{pane_current_command}}'
 
 # Always honor extended keys, fixes Alacritty mods.
 set-option -s -a extended-keys always
 
-# Enable cursor shape modification in vim without Ptmux wrap
+# Modern terminal features (tmux 3.2+)
+# RGB: 24-bit true colour, usstyle: undercurl and coloured underlines
+set -as terminal-features ",xterm-ghostty:RGB:usstyle"
+set -as terminal-features ",xterm-256color:RGB:usstyle"
+
+# Cursor shape for neovim (Ss=set, Se=reset)
 # See https://github.com/neovim/neovim/wiki/FAQ
-set-option -s -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
-
-# Enable 24-bit color support (check if this works via `tmux info | grep Tc`)
-set-option -s -a terminal-overrides ",*:Tc"
-
-# Add Undercurl (test it with `printf '\e[4:3mUndercurl\n\e[0m'`)
-set-option -s -a terminal-overrides ',*:Smulx=\E[4::%p1%dm'
-
-# Add colored undercurl (test it with `printf '\e[4:3;58:2:255:100:0mUndercurl\n\e[0m'`)
-set-option -s -a terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
+set -as terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 
 # scrollback buffer size increase
 set -g history-limit 50000
@@ -74,9 +61,6 @@ setw -g pane-base-index 1
 # Renumber windows automatically.
 set -g renumber-windows on
 
-# Keep windows around after they exit
-set -g remain-on-exit on
-
 # Visual notifications
 set -g visual-bell off
 set -g visual-activity off
@@ -106,8 +90,8 @@ set -g prefix `
 # use send-prefix to pass ` (tic) through to application
 bind-key ` send-prefix
 
-# Help screen: rebind list-keys window into a new pane
-bind-key ? split-window -h 'exec tmux list-keys | less'
+# Help screen: searchable keybindings popup
+bind-key ? display-popup -E -w 80% -h 80% "tmux list-keys | fzf --reverse --no-sort --header='Keybindings (type to search)'"
 
 # Create new session
 bind-key N new-session
@@ -134,23 +118,39 @@ bind M if -F '#{monitor-silence}' \
 # Kill a session
 bind-key D choose-tree -sf "kill-session -t '%%'"
 
+# FZF-powered navigation popups
+bind-key s display-popup -E "tmux list-sessions -F '#{session_name}' | fzf --reverse | xargs tmux switch-client -t"
+bind-key w display-popup -E "tmux list-windows -a -F '#{session_name}:#{window_index} #{window_name}' | fzf --reverse | cut -d' ' -f1 | xargs tmux switch-client -t"
+
+# Scratch terminal popup
+bind-key t display-popup -E -w 80% -h 70% -d '#{pane_current_path}'
+bind-key -n M-t display-popup -E -w 80% -h 70% -d '#{pane_current_path}'
+
+# Lazygit popup
+bind-key G display-popup -E -w 90% -h 90% -d '#{pane_current_path}' 'lazygit'
+
+# Clipboard history popup
+bind-key C-p display-popup -E "tmux list-buffers -F '#{buffer_name}: #{buffer_sample}' | fzf --reverse | cut -d: -f1 | xargs -I {} tmux paste-buffer -b {}"
+
+# URL picker - extract URLs from pane and open selected
+bind-key u run-shell -b "tmux capture-pane -J -p | grep -oE 'https?://[^[:space:]\"]+' | sed 's/[>),.]*$//' | sort -u | fzf-tmux -p --reverse | xargs open"
+
+# Project session switcher - jump to project directory as named session
+bind-key f display-popup -E "find ~/projects -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf --reverse | xargs -I {} bash -c 'tmux new-session -d -s \"\$(basename {})\" -c \"{}\" 2>/dev/null; tmux switch-client -t \"\$(basename {})\"'"
+
 # Use v and g for splitting from current path
 unbind-key %
 unbind-key '"'
 bind-key g split-window -h -c "#{pane_current_path}"
 bind-key v split-window -v -c "#{pane_current_path}"
-bind-key | split-window -h -c "#{pane_current_path}"
-bind-key - split-window -v -c "#{pane_current_path}"
 
 # Session navigation
 bind-key n switch-client -n
 bind-key p switch-client -p
 
-# Window navigation with Meta+h/l/left/right
+# Window navigation with Meta+h/l
 bind-key -n M-h previous-window
 bind-key -n M-l next-window
-bind-key -n M-Left previous-window
-bind-key -n M-Right next-window
 
 # Window Re-order
 bind-key -n M-< swap-window -d -t -1
@@ -162,6 +162,12 @@ bind-key j select-pane -D
 bind-key k select-pane -U
 bind-key l select-pane -R
 
+# Pane resizing (repeatable)
+bind-key -r H resize-pane -L 5
+bind-key -r J resize-pane -D 5
+bind-key -r K resize-pane -U 5
+bind-key -r L resize-pane -R 5
+
 # Smart pane switching with awareness of vim splits.
 # See: https://github.com/christoomey/vim-tmux-navigator
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
@@ -170,16 +176,13 @@ bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
 bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
 bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
 bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
-if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
-    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
-if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
-    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+bind-key -n C-\\ if-shell "$is_vim" 'send-keys C-\\'  'select-pane -l'
 
 bind-key -T copy-mode-vi 'C-h' select-pane -L
 bind-key -T copy-mode-vi 'C-j' select-pane -D
 bind-key -T copy-mode-vi 'C-k' select-pane -U
 bind-key -T copy-mode-vi 'C-l' select-pane -R
-bind-key -T copy-mode-vi 'C-\' select-pane -l
+bind-key -T copy-mode-vi C-\\ select-pane -l
 
 # Bring back clear screen under tmux prefix
 bind-key C-h send-keys 'C-h'
@@ -198,19 +201,14 @@ bind-key B setw main-pane-height 30\; select-layout main-horizontal
 bind-key r command-prompt -I '#W' -p '(rename window)' "rename-window '%%'"
 bind-key R command-prompt -I '#S' -p '(rename session)' "rename-session '%%'"
 
-# Open a man page in new vertical pane
-bind-key / command-prompt -p 'Man>' "split-window -d -v 'exec man %%'"
+# Open a man page in popup
+bind-key / command-prompt -p 'Man>' "display-popup -E -w 80% -h 80% 'man %%'"
 
 # Quick view of processes
-bind-key P split-window -h 'exec htop'
-
-# Help screen: rebind list-keys window into a new pane
-bind-key ? split-window -h 'exec tmux list-keys | less'
+bind-key P display-popup -E -w 90% -h 90% 'htop'
 
 # Force a reload of the config file
-bind-key C-r source-file $XDG_CONFIG_HOME/tmux/config \; display "Config reloaded"
-
-bind-key * list-clients
+bind-key C-R source-file $XDG_CONFIG_HOME/tmux/config \; display "Config reloaded"
 
 # Search for previous error
 bind-key e copy-mode \; send-keys "?error" C-m
@@ -241,9 +239,6 @@ set -g set-clipboard on
 # sent the terminal code to enable it.
 bind-key ] paste-buffer -p
 
-# Trigger copy mode by Cmd-Up
-# bind -n M-Up copy-mode
-
 # Setup copy-mode vi bindings
 # $ tmux -f /dev/null list-keys -T copy-mode-vi
 unbind -Tcopy-mode-vi Enter
@@ -254,7 +249,6 @@ bind-key -Tcopy-mode-vi C-v send -X rectangle-toggle
 bind-key -Tcopy-mode-vi Escape send -X clear-selection
 
 # Yank
-# bind -T copy-mode-vi D send-keys -X copy-end-of-line
 if-shell 'test "$(uname -s)" = Darwin' {
     %hidden yank="pbcopy"
     bind -Tcopy-mode-vi y send -X copy-pipe-and-cancel "$yank"
@@ -288,8 +282,6 @@ bind-key -T off C-o \
     set -u window-status-current-style \;\
     refresh-client -S
 
-# bind-key a set-window-option synchronize-panes\; display-message "synchronize-panes is now #{?pane_synchronized,on,off}"
-
 #--------------------------------------------------------
 # Theme
 #--------------------------------------------------------
@@ -297,13 +289,9 @@ set -g status on
 set -g status-position top
 set -g status-justify left
 
-set -g status-keys vi
-
 # refresh 'status-left' and 'status-right' more often
 set -g status-interval 3
 
-#---------------------------------------
-# Theme
 # SOLARIZED TERMCOL
 # base03    brightblack
 # base02    black
@@ -322,24 +310,25 @@ set -g status-interval 3
 # cyan      cyan
 # green     green
 #---------------------------------------
-set -g status-style bg=black,fg=yellow,none
+# Status bar: base02 background with base1 text
+set -g status-style bg=black,fg=brightcyan,none
 
-set -g status-left-length 15
-set -g status-left '#{?client_prefix,#[fg=white],#[bg=brightblack]} #S '
+# Left: session name with prefix/copy indicators
+set -g status-left-length 25
+set -g status-left '#{?client_prefix,#[bg=brightred]#[fg=white]#[bold] PREFIX ,#{?pane_in_mode,#[bg=magenta]#[fg=white]#[bold] COPY ,#[bg=blue]#[fg=white]}} #S #[bg=black] '
 
-set -g status-right-style fg=black,bg=brightblue,none
-set -g status-right-length 83
-set -g status-right "#[fg=brightblack,bg=brightyellow] %Y-%m-%d %H:%M:%S #[fg=black,bg=brightblue] ⌂ #h "
+# Right: sync indicator, date/time and hostname
+set -g status-right-style none
+set -g status-right-length 60
+set -g status-right "#{?pane_synchronized,#[bg=red]#[fg=white] SYNC ,}#[fg=brightcyan,bg=black] %Y-%m-%d %H:%M #[fg=white,bg=blue] #h "
 
-set-window-option -g window-style ""
-set-window-option -g window-active-style ""
-set-window-option -g pane-active-border-style ""
-
-set-window-option -g window-status-style fg=brightblack,bg=brightblue,none
+# Inactive windows: muted base01 text
+set-window-option -g window-status-style fg=brightgreen,bg=black,none
 set-window-option -g window-status-separator ""
-set-window-option -g window-status-format "#[fg=brightblack,bg=brightblue] #I#[fg=brightblack,bg=brightblue]#F#[fg=brightblack,bg=brightblue] #W "
-set-window-option -g window-status-current-style fg=brightred,bg=brightblack,bright
-set-window-option -g window-status-current-format "#[fg=white,bg=blue] #I#[fg=white,bg=blue]#F#[fg=white,bg=blue] #W "
+set-window-option -g window-status-format " #I#F #W "
+# Current window: cyan background with black text (high contrast)
+set-window-option -g window-status-current-style fg=black,bg=cyan,bold
+set-window-option -g window-status-current-format " #I#{?window_zoomed_flag, Z,}#F #W "
 
 # pane border
 set -g pane-border-style fg=black
@@ -361,16 +350,14 @@ set-window-option -g window-status-bell-style fg=black,bg=red
 #--------------------------------------------------------
 # Plugins
 #--------------------------------------------------------
-# Config resurrect
-# Only the following variables and special chars are allowed: $HOME, $HOSTNAME, and ~.
-#set -g @resurrect-dir '~/.local/share/tmux/resurrect-sessions'
-set -g @resurrect-capture-pane-contents 'off'
-set -g @resurrect-strategy-vim 'off'
-set -g @resurrect-strategy-nvim 'off'
+# tmux-resurrect: save/restore sessions
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-strategy-nvim 'session'
+set -g @resurrect-processes 'ssh lazygit htop'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/resurrect/resurrect.tmux'
 
-# Config continuum
-set -g @continuum-save-interval '15'
+# tmux-continuum: auto-save and restore
+set -g @continuum-save-interval '10'
 set -g @continuum-restore 'on'
 run-shell '${XDG_DATA_HOME}/tmux/plugins/continuum/continuum.tmux'
 

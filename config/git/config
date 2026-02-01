@@ -319,7 +319,12 @@
 
     # Undo the last commit.
     undo = !git reset HEAD~1 --mixed
-    #===============================================
+
+    # Worktrees
+    wta = "!f() { git worktree add -b \"$1\" \".worktrees/$1\"; }; f"
+    wtr = "!f() { git worktree remove \".worktrees/$1\"; }; f"
+    wtl = worktree list
+    wtp = worktree prune
 
     #===============================================
     # http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
@@ -340,7 +345,6 @@
     # changes from your tree.
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     snapshots = !git stash list --grep snapshot
-    #===============================================
 
     #===============================================
     # https://stackoverflow.com/questions/9301782/need-to-reset-git-branch-to-origin-version/33244119#33244119
@@ -353,11 +357,10 @@
     #
     # If you then type y or just hit return, it will perform the reset. If you enter anything else the reset will not be carried out.
     catchup = "!f(){ echo -n \"reset \\033[0;33m$(git symbolic-ref -q --short HEAD)\\033[0m to \\033[0;33m$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))\\033[0m? (Y/n) \"; read -r and; if [ \"$and\" = \"y\" -o \"$and\" = \"Y\" -o -z \"$and\" ]; then git reset --hard $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); else echo \"catchup aborted\"; fi }; f"
-    #===============================================
 
 # vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true

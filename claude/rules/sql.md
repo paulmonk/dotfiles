@@ -1,8 +1,13 @@
 # SQL
 
+## Tooling
+
+- Use `sqlfluff lint` to lint code for best practices
+- Use `sqlfluff format` to format code
+
 ## General Best Practices
 
-- **Readability over brevity:** Optimize for readability, maintainability, and robustness rather than fewer lines. Newlines are cheap; people's time is expensive.
+- **Readability over brevity:** Optimise for readability, maintainability, and robustness rather than fewer lines. Newlines are cheap; people's time is expensive.
 - **Query size:** Avoid enormous `select` statements. Refactor into multiple smaller CTEs that are later joined back together.
 - **Identifiers:** Use lowercase `snake_case` for aliases and CTE names. Never use reserved words as identifiers.
 

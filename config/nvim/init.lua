@@ -3,9 +3,9 @@
 -- ===
 
 -- Bootstrap lazy.nvim
-require("config.lazy")
+require('config.lazy')
 
 -- Load core configuration
-require("config.options")
-require("config.keymaps")
-require("config.autocmds")
+require('config.options')
+require('config.keymaps')
+require('config.autocmds')

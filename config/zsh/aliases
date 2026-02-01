@@ -151,7 +151,15 @@ elif (( $+commands[vim] )); then
   alias vimdiff="vim -d"
 fi
 if (( $+commands[fzf] )); then
-  alias v="vi \$(fzf)"
+  unalias v 2>/dev/null
+  function v {
+    if [[ $# -eq 0 ]]; then
+      local file
+      file=$(fzf) && vi "$file"
+    else
+      vi "$@"
+    fi
+  }
 fi
 
 # Youtube DL

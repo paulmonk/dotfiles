@@ -1,5 +1,12 @@
 # Go
 
+## Tooling
+
+- Use `gofmt -w .` to format code
+- Use `go vet ./...` to lint code for best practices
+- Use `staticcheck ./...` (if available) to lint code for best practices
+- Use `go test ./...` to test code
+
 ## General Best Practices
 
 - Use the standard library where possible. Only pull in dependencies when they provide significant value.
@@ -10,7 +17,7 @@
 - **Initialisms:** Maintain consistent casing (`URL`, `HTTP`, `ID` not `Url`, `Http`, `Id`). All caps for initialisms regardless of position.
 - **Packages:** Name for what they provide, not generic terms like "util" or "helper". Consider how the call site reads.
 - **Control flow:** Avoid unnecessary `else` when `if` ends with `return`/`break`/`continue`. Indent error handling before happy path.
-- **Initialization:** Use `if err := ...; err != nil` to scope variables tightly. Prefer `:=` for non-zero values, `var` for zero-value declarations.
+- **Initialisation:** Use `if err := ...; err != nil` to scope variables tightly. Prefer `:=` for non-zero values, `var` for zero-value declarations.
 - **Composite literals:** Use field labels (`Name: value`) for resilience to struct changes. Omit explicit zeros when zero values suffice.
 - **Shadowing:** Avoid shadowing package names or outer variables. Use explicit assignment (`=`) instead of `:=` in nested scopes when reusing variables.
 - **Defer:** Use for cleanup (close files, unlock mutexes). Args evaluate at defer time, not call time (common gotcha).
@@ -32,7 +39,7 @@
 
 ## Data Structures
 
-- **Slices:** Use `slices` package for common operations (`slices.Contains`, `slices.Sort`). Prefer `nil` slices over empty initialized slices in function signatures. Preallocate capacity only when final size is known empirically.
+- **Slices:** Use `slices` package for common operations (`slices.Contains`, `slices.Sort`). Prefer `nil` slices over empty initialised slices in function signatures. Preallocate capacity only when final size is known empirically.
 - **Maps:** Use comma-ok idiom to distinguish missing keys from zero values. Use `maps` package for operations like `maps.Clone`.
 - **Embedding:** Promoted methods receive the inner type as receiver, not outer (can surprise you).
 
@@ -49,13 +56,13 @@
 - **Value receivers:** Use for small immutable types, basic types, or when the type is naturally a value (like `time.Time`).
 - **Consistency:** All methods on a type should use the same receiver type when possible.
 - **Pass values:** Avoid pointer parameters for small types; use pointers for large structs or when mutation is needed.
-- **Copying:** Never copy structs containing `sync.Mutex`, `sync.WaitGroup`, or similar synchronization primitives.
+- **Copying:** Never copy structs containing `sync.Mutex`, `sync.WaitGroup`, or similar synchronisation primitives.
 
 ## Concurrency
 
 - **Philosophy:** Share memory by communicating, not the other way around.
 - **Goroutine lifetime:** Make lifetimes explicit. Use `context.Context` for cancellation or `sync.WaitGroup` to track completion. Never fire-and-forget.
-- **Channels:** Unbuffered for synchronization, buffered for throughput. Use `select` with `default` for non-blocking ops.
+- **Channels:** Unbuffered for synchronisation, buffered for throughput. Use `select` with `default` for non-blocking ops.
 - **Patterns:** Buffered channel as semaphore; worker pool reading from shared channel; channel of channels for request/response.
 - **Synchronous by default:** Prefer synchronous functions; let callers add concurrency. Don't force async on consumers.
 - **Documentation:** Document mutating operations' thread-safety. Readers assume read-only ops are safe unless stated otherwise.
@@ -70,12 +77,12 @@
 - **Wrapped errors:** Use `errors.Is()` for wrapped errors, simple `==` for sentinel values.
 - **Adding context:** Add context without duplicating what the underlying error provides. Use `%w` to preserve error chain for programmatic inspection, `%v` to hide implementation details. Place `%w` at the end of format strings.
 - **Logging:** Avoid duplicate logging; return errors and let callers decide whether to log. Prefer `log/slog` for structured logging.
-- **Initialization failures:** Use `log.Fatal` for initialization failures, not `panic`. Internal panic-recover must never escape package boundaries.
+- **Initialisation failures:** Use `log.Fatal` for initialisation failures, not `panic`. Internal panic-recover must never escape package boundaries.
 
 ## Documentation
 
 - **Doc comments:** Required for all exported names. Start with the name being documented.
-- **Complete sentences:** Use proper capitalization and punctuation in doc comments.
+- **Complete sentences:** Use proper capitalisation and punctuation in doc comments.
 - **Concurrency safety:** Document mutating operations that are not thread-safe. Readers assume read-only operations are safe for concurrent use.
 - **Cleanup requirements:** Explicitly document when and how to clean up resources (Close, Stop, Cancel).
 - **Examples:** Include runnable examples in `_test.go` files for complex APIs; they appear in godoc.

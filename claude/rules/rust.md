@@ -1,5 +1,13 @@
 # Rust
 
+## Tooling
+
+- Use `cargo fmt` to format code
+- Use `cargo clippy --all --benches --tests --examples --all-features` to lint code for best practices
+- Use `cargo test` to test code
+
+## General Best Practices
+
 - Do NOT use unwraps or anything that can panic in Rust code, handle errors. Obviously in tests unwraps and panics are fine!
 - Prefer `crate::` over `super::` for imports in non-test code. One-level `super::` in test modules is acceptable. If you see deep `super::super::` chains, refactor to use `crate::`.
 - Avoid `pub use` on imports unless you are re-exposing a dependency so downstream consumers do not have to depend on it directly.

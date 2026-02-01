@@ -82,6 +82,7 @@
       "Skill(superpowers:*)",
       "WebSearch",
       "mcp__atlassian__*",
+      "mcp__aws-knowledge__*",
       "mcp__ide__getDiagnostics",
       "mcp__firecrawl__*",
       "mcp__github__*",
@@ -118,12 +119,6 @@
         "repo": "steveyegge/beads"
       }
     },
-    "cctools-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "pchalasani/claude-code-tools"
-      }
-    },
     "exa-mcp-server": {
       "source": {
         "source": "github",
@@ -150,7 +145,6 @@
     "context7@claude-plugins-official": true,
     "exa-mcp-server@exa-mcp-server": true,
     "playwright@claude-plugins-official": true,
-    "safety-hooks@cctools-plugins": true,
     "superpowers@superpowers-marketplace": true
   }
 }

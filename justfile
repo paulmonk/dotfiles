@@ -83,43 +83,80 @@ dotfiles-bootstrap: rcup-install
 # ================================
 # Tools
 # ================================
+[group('tools')]
+qmd:
+    @echo "--------------------------------"
+    @echo "Installing qmd"
+    @bun install -g https://github.com/tobi/qmd
+    @echo "--------------------------------"
+
+# Load the qmd LaunchAgent
+[group('tools')]
+qmd-agent-load:
+    @launchctl load ~/Library/LaunchAgents/local.qmd.update.plist
+
+# Unload the qmd LaunchAgent
+[group('tools')]
+qmd-agent-unload:
+    @launchctl unload ~/Library/LaunchAgents/local.qmd.update.plist
 
 # Setup Claude Code MCP servers
 [group('tools')]
-claude-code-mcp:
+claude-code-mcp: qmd
     @echo "--------------------------------"
-    @echo "Adding Claude Code MCP servers"
-    @claude mcp add-json --scope user github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer ${GITHUB_TOKEN}"}}'
-    @claude mcp add --scope user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
-    @claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY
-    @claude mcp add --scope user qmd -- ${BUN_INSTALL_BIN}/bin/qmd mcp
-    @echo "MCP servers configured. Set GITHUB_TOKEN env var for GitHub MCP."
+    @echo "Configuring Claude Code MCP servers"
+    @echo "  Ensuring github"
+    @claude mcp add-json --scope user github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer '"${GITHUB_PERSONAL_ACCESS_TOKEN}"'"}}' >/dev/null 2>&1 || true
+    @echo "  Ensuring aws-knowledge"
+    @claude mcp add-json --scope user aws-knowledge '{"type":"http","url":"https://knowledge-mcp.global.api.aws"}' >/dev/null 2>&1 || true
+    @echo "  Ensuring gcloud"
+    @claude mcp add --scope user gcloud -- npx -y @google-cloud/gcloud-mcp >/dev/null 2>&1 || true
+    @echo "  Ensuring huggingface"
+    @claude mcp add --scope user huggingface -- npx -y hf-mcp-server -t http "https://huggingface.co/mcp?login" >/dev/null 2>&1 || true
+    @echo "  Ensuring atlassian"
+    @claude mcp add --scope user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse >/dev/null 2>&1 || true
+    @echo "  Ensuring firecrawl"
+    @claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY >/dev/null 2>&1 || true
+    @echo "  Ensuring chrome-devtools"
+    @claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp >/dev/null 2>&1 || true
+    @echo "  Ensuring qmd"
+    @claude mcp add --scope user qmd -- ${BUN_INSTALL_BIN}/bin/qmd mcp >/dev/null 2>&1 || true
+    @echo "Done."
     @echo "--------------------------------"
 
 # Full install of all components
 [group('tools')]
-install: brew-bundle dotfiles-bootstrap
+install:
     @echo "--------------------------------"
-    @bun install -g https://github.com/tobi/qmd
+    @just dotfiles-bootstrap
     @just claude-code-mcp
+    @just qmd-agent-load
     @echo "--------------------------------"
 
 # ================================
 # Development
 # ================================
 
-# Lint shell scripts
+# Lint scripts
 [group('dev')]
 lint:
     @echo "--------------------------------"
-    @echo "Linting Shell scripts"
+    @echo "Linting shell scripts"
     @shfmt --apply-ignore --find . | xargs shellcheck
+    @echo "Linting Lua scripts"
+    @selene .
+    @echo "Linting Markdown files"
+    @markdownlint-cli2 "**/*.md"
     @echo "--------------------------------"
 
-# Format shell scripts
+# Format scripts
 [group('dev')]
 format:
     @echo "--------------------------------"
-    @echo "Formatting Shell scripts"
+    @echo "Formatting shell scripts"
     @shfmt --write --apply-ignore .
+    @echo "Formatting Lua scripts"
+    @stylua .
+    @echo "Formatting Markdown files"
+    @prettier --write "**/*.md"
     @echo "--------------------------------"

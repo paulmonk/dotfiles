@@ -71,4 +71,4 @@ REGEX='(^|\W)(-h|--help)($|\W)'
 # shellcheck disable=SC2015
 [[ "$*" =~ ${REGEX} ]] && usage || true
 
-make dotfiles
+just dotfiles

@@ -1,11 +1,18 @@
 # TypeScript
 
+## Tooling
+
+- If npm or pnpm scripts are configured, ask the user to confirm first. Otherwise:
+  - Use `tsc --noEmit` to type check code
+  - Use `eslint` to lint code for best practices
+  - Use `biome format` to format code. If unavailable, use `prettier` instead.
+
 ## General Best Practices
 
 - **Modern browsers:** Assume modern browser support unless otherwise specified. Skip polyfills for ES2020+ features.
-- **Immutability:** Favor `readonly`, `as const`, and immutable patterns. Avoid mutation where practical.
+- **Immutability:** Favour `readonly`, `as const`, and immutable patterns. Avoid mutation where practical.
 - **Pure functions:** Prefer functions without side effects. Isolate side effects at boundaries.
-- **Composition over inheritance:** Favor small composable functions and interfaces over class hierarchies.
+- **Composition over inheritance:** Favour small composable functions and interfaces over class hierarchies.
 - **Simplicity:** Avoid clever abstractions. Repetition is often cheaper than the wrong abstraction.
 - **Explicit over implicit:** Be explicit about types at boundaries, nullability, and error conditions.
 
@@ -51,10 +58,10 @@
 
 ## Classes
 
-- **Visibility:** Minimize exposure. Omit `public` modifier (it's the default). Use `private` or `protected` explicitly.
+- **Visibility:** Minimise exposure. Omit `public` modifier (it's the default). Use `private` or `protected` explicitly.
 - **readonly:** Mark properties never reassigned outside constructor.
 - **Parameter properties:** Use constructor parameter properties to reduce boilerplate.
-- **Field initializers:** Initialize members at declaration when possible.
+- **Field initializers:** Initialise members at declaration when possible.
 - **No private fields:** Use TypeScript `private` modifier, not `#ident` syntax.
 - **Getters must be pure:** No side effects in getters. Don't define pass-through accessors.
 - **No prototype manipulation:** Only framework code may touch prototypes.
@@ -84,7 +91,7 @@
 ## Type System
 
 - **Inference:** Rely on inference for trivially inferred types (literals, `new` expressions).
-- **Explicit generics:** Specify type parameters when initializing empty collections.
+- **Explicit generics:** Specify type parameters when initialising empty collections.
 - **Interfaces over type aliases:** Prefer `interface` for object types. Use `type` for unions, intersections, mapped types.
 - **Optional fields:** Use `?` syntax, not `| undefined`.
 - **No null in aliases:** Never include `| null` or `| undefined` in type alias definitions. Add at usage.

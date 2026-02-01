@@ -7,7 +7,6 @@
   "cursor.composer.shouldChimeAfterChatFinishes": true,
   "cursor.composer.textSizeScale": 1.15,
   "cursorpyright.disableLanguageServices": true,
-
   /*
     CODE Built-ins
     ============
@@ -16,16 +15,12 @@
   "accessibility.signals.terminalBell": {
     "sound": "on"
   },
-
   // breadcrumbs
   "breadcrumbs.enabled": true,
-
   // diffEditor
   "diffEditor.renderSideBySide": false,
-
   // debug
   "debug.allowBreakpointsEverywhere": true,
-
   // Dev Containers, force the installation of these extension always.
   "dev.containers.defaultExtensions": [
     "bierner.markdown-emoji",
@@ -43,12 +38,10 @@
     "waderyan.gitblame",
     "yzhang.markdown-all-in-one"
   ],
-
   // dotfiles install in dev containers
   "dotfiles.repository": "paulmonk/dotfiles",
   "dotfiles.targetPath": "~/projects/dotfiles",
   "dotfiles.installCommand": "~/projects/dotfiles/install",
-
   // editor
   "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.enabled": true,
@@ -106,7 +99,6 @@
   "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?",
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 120,
-
   // Do not modify my code, please:
   "editor.autoClosingBrackets": "never",
   "editor.autoClosingOvertype": "never",
@@ -125,7 +117,6 @@
   "editor.stickyScroll.enabled": false,
   "editor.tabCompletion": "off",
   "emmet.showExpandedAbbreviation": "never",
-
   // explorer
   "explorer.autoRevealExclude": {
     "**/dist": true
@@ -133,7 +124,6 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "extensions.ignoreRecommendations": true,
-
   // files
   "files.associations": {
     "*.md": "jinja-md",
@@ -199,17 +189,13 @@
   "git.openRepositoryInParentFolders": "never",
   "git.path": "/opt/homebrew/bin/git",
   "git.useEditorAsCommitInput": false,
-
   // search
   "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
-
   // security
   "security.workspace.trust.untrustedFiles": "prompt",
-
   // telemetry
   "telemetry.telemetryLevel": "off",
-
   // terminal
   "terminal.external.osxExec": "iTerm.app",
   "terminal.integrated.defaultProfile.osx": "zsh",
@@ -220,7 +206,6 @@
   "terminal.integrated.fontWeightBold": "normal",
   "terminal.integrated.macOptionIsMeta": true,
   "terminal.integrated.smoothScrolling": true,
-
   // UI
   "references.preferredLocation": "view",
   "outline.collapseItems": "alwaysCollapse",
@@ -238,14 +223,12 @@
   "workbench.startupEditor": "none",
   "workbench.tree.enableStickyScroll": false,
   "workbench.editor.enablePreviewFromQuickOpen": false,
-
   // Zen Mode
   "zenMode.centerLayout": true,
   "zenMode.fullScreen": false,
   "zenMode.hideStatusBar": false,
   "zenMode.hideLineNumbers": false,
   "zenMode.restore": true,
-
   /*
     Vim
     ============
@@ -273,7 +256,6 @@
   "vim.smartRelativeLine": true,
   "vim.useCtrlKeys": true,
   "vim.useSystemClipboard": true,
-
   // Normal Mode
   "vim.normalModeKeyBindings": [
     // C for c$ (change to end of line)
@@ -436,7 +418,6 @@
       "after": ["V"]
     }
   ],
-
   // Visual Mode
   "vim.visualModeKeyBindingsNonRecursive": [
     // Bind > and < in visual mode to indent/outdent lines (repeatable)
@@ -469,7 +450,6 @@
       "after": ["P"]
     }
   ],
-
   // Vim abbreviations styles
   "auto-correct.dictionary": [
     {
@@ -538,7 +518,6 @@
       }
     }
   ],
-
   /*
     Langs
     ============
@@ -563,7 +542,6 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "makefile.configureOnOpen": false,
-
   // Markdown
   "markdown.preview.fontSize": 16,
   "[markdown]": {
@@ -580,9 +558,7 @@
     "cSpell.advanced.feature.useReferenceProviderWithRename": true,
     "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/"
   },
-
   "php.suggest.basic": false,
-
   // Python
   "[python]": {
     "editor.tabSize": 4,
@@ -601,13 +577,11 @@
   },
   "python.languageServer": "None",
   "python.terminal.activateEnvironment": true,
-
   "notebook.codeActionsOnSave": {
     "notebook.source.fixAll": true,
     "notebook.source.organizeImports": true
   },
   "notebook.formatOnSave.enabled": true,
-
   // JS / TS
   "[javascript]": {
     "editor.tabSize": 2,
@@ -628,21 +602,17 @@
   "javascript.suggest.completeJSDocs": false,
   "javascript.suggest.autoImports": false,
   "javascript.updateImportsOnFileMove.enabled": "never",
-
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.jsxAttributeCompletionStyle": "none",
   "typescript.suggest.autoImports": false,
   "typescript.updateImportsOnFileMove.enabled": "never",
-
   // sql
   "[jinja-sql]": {
     "editor.defaultFormatter": "dorzey.vscode-sqlfluff"
   },
-
   // shell
   "shfmt.formatIgnored": false,
-
   // terraform
   "[terraform]": {
     "editor.defaultFormatter": "hashicorp.terraform",
@@ -651,12 +621,10 @@
   "[terraform-vars]": {
     "editor.tabSize": 2
   },
-
   // helm
   "[helm]": {
     "editor.defaultFormatter": "hashicorp.terraform"
   },
-
   // Docker Compose
   "[dockercompose]": {
     "editor.insertSpaces": true,
@@ -664,16 +632,13 @@
     "editor.autoIndent": "advanced",
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-
   // GitHub Actions Workflow
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-
   /*
     Tools
     ============
@@ -681,16 +646,12 @@
   // cSpell
   // The Language locale to use when spell checking. "en", "en-US" and "en-GB" are currently supported by default.
   "cSpell.language": "en,en-GB",
-
   // Controls the maximum number of spelling errors per document.
   "cSpell.maxNumberOfProblems": 100,
-
   // Controls the number of suggestions shown.
   "cSpell.numSuggestions": 8,
-
   // The minimum length of a word before checking it against a dictionary.
   "cSpell.minWordLength": 4,
-
   // Specify file types to spell check.
   "cSpell.enabledLanguageIds": [
     "csharp",
@@ -718,19 +679,14 @@
     "yaml",
     "yml"
   ],
-
   // Enable / Disable the spell checker.
   "cSpell.enabled": true,
-
   // Display the spell checker status on the status bar.
   "cSpell.showStatus": true,
-
   // Enable / Disable compound words like 'errormessage'
   "cSpell.allowCompoundWords": false,
-
   // Words to be ignored and not suggested.
   "cSpell.ignoreWords": ["behaviour"],
-
   // User words to add to dictionary.  Should only be in the user settings.
   "cSpell.userWords": [
     "dateadd",
@@ -752,7 +708,6 @@
     "varchar",
     "zipcode"
   ],
-
   // Specify paths/files to ignore.
   "cSpell.ignorePaths": [
     "node_modules", // this will ignore anything the node_modules directory
@@ -764,30 +719,24 @@
     "*.dll", // Ignore all .dll files.
     "**/*.dll" // Ignore all .dll files
   ],
-
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
   // For example "the" should be "the"`
   "cSpell.flagWords": ["the"],
-
   // Set the delay before spell checking the document. Default is 50.
   "cSpell.spellCheckDelayMs": 50,
-
   // Set Diagnostic Reporting Level
   //   Error - Report Spelling Issues as Errors
   //   Warning - Report Spelling Issues as Warnings
   //   Information - Report Spelling Issues as Information (default)
   //   Hint - Report Spelling Issues as Hints, will not show up in Problems
   "cSpell.diagnosticLevel": "Information",
-
   // dotenv
   "dotenv.enableAutocloaking": false,
-
   // errorlens
   "errorLens.messageEnabled": true,
   "errorLens.statusBarColorsEnabled": true,
   "errorLens.statusBarMessageEnabled": false,
-
   // eslint
   "eslint.format.enable": true,
   "eslint.rules.customizations": [
@@ -796,7 +745,11 @@
       "severity": "warn"
     }
   ],
-
+  // projectManager
+  "projectManager.git.baseFolders": ["~/projects"],
+  "projectManager.ignoreProjectsWithinProjects": true,
+  "projectManager.filterOnFullPath": true,
+  "projectManager.showParentFolderInfoOnDuplicates": true,
   // Misc
   "claudeCode.useTerminal": true,
   "dbt.perspectiveTheme": "Solarized Dark",

@@ -1,5 +1,4 @@
-Dotfiles
-========
+# Dotfiles
 
 User preference and configuration files that I use. Beware :wink:
 

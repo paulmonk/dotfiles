@@ -139,10 +139,9 @@ id_*
 # AI
 #---------------------------
 **/.claude/docs/**
+**/.claude/learnings/**
 **/.claude/plans/**
 **/.claude/settings.local.json
 *.worktrees/
 AGENTS.local.md
 CLAUDE.local.md
-TRASH-FILES.md
-TRASH/*

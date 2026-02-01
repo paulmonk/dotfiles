@@ -23,11 +23,11 @@ elif (( $+commands[ag] )); then
 fi
 
 # Default Opts
-# Solarized Dark color scheme
+# Solarized Dark High Contrast color scheme
 export FZF_DEFAULT_OPTS="
-  --color=bg+:#073642,bg:#002b36,spinner:#719e07,hl:#586e75
-  --color=fg:#839496,header:#586e75,info:#cb4b16,pointer:#719e07
-  --color=marker:#719e07,fg+:#839496,prompt:#719e07,hl+:#719e07
+  --color=bg+:#073642,bg:-1,spinner:#2aa198,hl:#268bd2
+  --color=fg:#839496,header:#93a1a1,info:#cb4b16,pointer:#2aa198
+  --color=marker:#2aa198,fg+:#fdf6e3,prompt:#2aa198,hl+:#2aa198
   --history ${XDG_DATA_HOME}/fzf/history
   --reverse --height 50% --multi
 "

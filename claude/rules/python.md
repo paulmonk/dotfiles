@@ -1,7 +1,12 @@
 # Python
 
+## Tooling
+
 - Use `uv` and `pyproject.toml` in all Python repos. Prefer `uv sync` for env and dependency resolution. Do not introduce `pip` venvs, Poetry, or `requirements.txt` unless asked.
-- Prefer using `ty` for type checking
+- Use `uv run ruff check` for linting/formatting.
+- Use `uv run ty` for type checking, if unavailable use `uv run mypy` instead.
+- Use `build-backend = "uv_build"` for the backend when building python
+  packages.
 
 ## General Best Practices
 
@@ -40,7 +45,7 @@
 
 - **Coverage:** Annotate public APIs and complex internal code.
 - **Abstract types:** Use `collections.abc` (`Sequence`, `Mapping`, `Iterable`) over `typing` equivalents.
-- **NewType:** Use `typing.NewType` to create distinct types from primitives for domain modeling.
+- **NewType:** Use `typing.NewType` to create distinct types from primitives for domain modelling.
 - **Nullable:** Explicitly mark with `X | None`. Never leave implicit.
 - **Forward references:** Use `from __future__ import annotations` or string quotes for forward declarations.
 - **Aliases:** Create type aliases for complex types with `CapWord` names.
@@ -96,10 +101,10 @@ if __name__ == '__main__':
 ## Libraries and Tools
 
 - **`collections.Counter`:** For efficiently counting hashable objects.
-- **`collections.defaultdict`:** For avoiding key checks when initializing dictionary values.
+- **`collections.defaultdict`:** For avoiding key checks when initialising dictionary values.
 - **`heapq`:** Use `nlargest()`, `nsmallest()`, `merge()` for efficient operations.
 - **`attrs`/`dataclasses`:** Use for classes with auto-generated boilerplate methods.
-- **Serialization:** JSON for cross-language, `pydantic` for runtime validation, `cattrs` for performance with dataclasses/attrs.
+- **Serialisation:** JSON for cross-language, `pydantic` for runtime validation, `cattrs` for performance with dataclasses/attrs.
 - **Regular expressions:** Use `re.VERBOSE` for readable regexes. Compile regexes used multiple times. Avoid regexes for simple string checks.
 - **Caching:** Use `functools.lru_cache` with care. Prefer immutable return types. Use `functools.cached_property` for methods.
 - **Pickle:** Avoid due to security risks. Prefer JSON, Protocol Buffers, or msgpack.
@@ -113,12 +118,12 @@ if __name__ == '__main__':
 - **Mocking:** Use `mock.create_autospec()` with `spec_set=True`. Prefer injecting dependencies via fixtures over patching.
 - **Temporary files:** Use pytest's `tmp_path` and `tmp_path_factory` fixtures.
 - **Deterministic inputs:** Do not use random inputs in unit tests. Use deterministic, easy-to-reason-about inputs.
-- **Test invariants:** Focus on invariant behaviors of public APIs, not implementation details.
+- **Test invariants:** Focus on invariant behaviours of public APIs, not implementation details.
 
 ## Error Handling
 
 - **Bare except:** Never use bare `except:`. Always catch specific exceptions.
-- **Scope:** Minimize try/except block scope. Only wrap the code that can raise.
+- **Scope:** Minimise try/except block scope. Only wrap the code that can raise.
 - **Re-raising:** Use bare `raise` to preserve stack trace. Use `raise NewException from original` to chain. Use `raise NewException from None` to suppress context.
 - **Messages:** Always include descriptive messages when raising.
 - **Converting to strings:** `repr(e)` is often better than `str(e)`. Use `traceback` module for full details.

@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 [*.{md,html,py}]
 indent_size = 2
 
+[*.{lua}]
+indent_style = tab
+
 [Makefile]
 indent_style = tab
 

@@ -1,7 +1,9 @@
 # Shell
 
-- Validate all scripts with `shellcheck`. Use `# shellcheck disable=SC####` with justification when suppressing.
-- Use `shfmt -i 2` for consistent formatting.
+## Tooling
+
+- Use `shellcheck` to lint code for best practices
+- Use `shfmt -i 2` to format code
 
 ## General Best Practices
 
