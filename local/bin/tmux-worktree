@@ -35,7 +35,12 @@ select_repo() {
   fi
 
   local repo
-  repo=$(find "${projects_dir}" -maxdepth 1 -mindepth 1 -type d | sort | fzf --prompt="Select repo: ") || error "no repository selected"
+  repo=$(
+    find "${projects_dir}" -maxdepth 3 -name .git 2>/dev/null \
+      | sed 's|/\.git$||' \
+      | sort \
+      | fzf --prompt="Select repo: "
+  ) || error "no repository selected"
 
   echo "${repo}"
 }
@@ -44,11 +49,14 @@ select_repo() {
 get_worktrees() {
   local repo_path="$1"
   local worktree_path=""
+  local name=""
 
   while IFS= read -r line; do
     if [[ "${line}" =~ ^worktree\ (.+)$ ]]; then
       worktree_path="${BASH_REMATCH[1]}"
-      echo "${worktree_path}:$(basename "${worktree_path}")"
+      name=$(basename "${worktree_path}")
+      name="${name//_/-}"
+      echo "${worktree_path}:${name}"
     fi
   done < <(git -C "${repo_path}" worktree list --porcelain)
 }
@@ -70,7 +78,12 @@ create_window() {
   local session="$1"
   local name="$2"
   local path="$3"
+  local display_path="${path/#${HOME}/\~}"
 
+  log "creating window '${name}' at '${display_path}'"
+  if [[ ! -d "${path}" ]]; then
+    log "warning: path does not exist: ${display_path}"
+  fi
   tmux new-window -t "${session}" -n "${name}" -c "${path}"
 }
 
@@ -172,13 +185,23 @@ main() {
     error "not a git repository: ${repo_path}"
   fi
 
-  # Session name is the repo directory name
+  # Session name from path relative to ~/projects, or basename for external paths
   local session
-  session=$(basename "${repo_path}")
+  local projects_dir="${HOME}/projects"
 
-  # Sanitise session name (tmux doesn't allow dots or colons)
+  if [[ "${repo_path}" == "${projects_dir}/"* ]]; then
+    # Path is under ~/projects, use relative path as session name
+    local relative_path="${repo_path#"${projects_dir}"/}"
+    session="${relative_path//\//-}"
+  else
+    # External path, use basename only
+    session=$(basename "${repo_path}")
+  fi
+
+  # Sanitise session name (tmux doesn't allow dots or colons, prefer dashes)
   session="${session//./-}"
   session="${session//:/-}"
+  session="${session//_/-}"
 
   if session_exists "${session}"; then
     log "syncing session: ${session}"

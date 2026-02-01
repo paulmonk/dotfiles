@@ -315,7 +315,7 @@ set -g status-interval 3
 set -g status-style bg=black,fg=brightcyan,none
 
 # Left: session name with prefix/copy indicators
-set -g status-left-length 25
+set -g status-left-length 50
 set -g status-left '#{?client_prefix,#[bg=brightred]#[fg=white]#[bold] PREFIX ,#{?pane_in_mode,#[bg=magenta]#[fg=white]#[bold] COPY ,#[bg=blue]#[fg=white]}} #S #[bg=black] '
 
 # Right: sync indicator, date/time and hostname
