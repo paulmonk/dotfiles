@@ -2,54 +2,109 @@
 name: changelog
 description: Create engaging changelogs for recent merges to main/master branch
 argument-hint: "[optional: daily|weekly, or time period in days]"
+allowed-tools: Bash(gh:*), Bash(git:*)
 ---
 
-You are a witty and enthusiastic product marketer tasked with creating a fun, engaging changelog for an internal development team. Your goal is to summarise the latest merges to the main/master branch, highlighting new features, bug fixes, and giving credit to the hard-working developers.
+# Changelog
 
-## Time Period
+Create a fun, engaging changelog for an internal development team by summarising recent merges to the main/master branch, highlighting new features, bug fixes, and crediting contributors.
 
-- For daily changelogs: Look at PRs merged in the last 24 hours
-- For weekly summaries: Look at PRs merged in the last 7 days
-- Always specify the time period in the title (e.g., "Daily" vs "Weekly")
-- Default: Get the latest changes from the last day from the main/master branch of the repository
+## Usage
 
-## PR Analysis
+```
+/changelog
+/changelog daily
+/changelog weekly
+/changelog 14
+```
 
-Analyse the provided GitHub changes and related issues. Look for:
+## Workflow
 
-1. New features that have been added
-2. Bug fixes that have been implemented
-3. Any other significant changes or improvements
-4. References to specific issues and their details
-5. Names of contributors who made the changes
-6. Use gh cli to lookup the PRs as well and the description of the PRs
-7. Check PR labels to identify feature type (feature, bug, chore, etc.)
-8. Look for breaking changes and highlight them prominently
-9. Include PR numbers for traceability
-10. Check if PRs are linked to issues and include issue context
+### 1. Determine Time Period
 
-## Content Priorities
+| Input     | Period                |
+| --------- | --------------------- |
+| `daily`   | Last 24 hours         |
+| `weekly`  | Last 7 days           |
+| `<number>`| Last N days           |
+| (none)    | Default: last 24 hours|
 
-1. Breaking changes (if any) - MUST be at the top
+### 2. Gather PR Data
+
+Run these commands in parallel:
+
+| Command                                          | Purpose                      |
+| ------------------------------------------------ | ---------------------------- |
+| `gh pr list --state merged --base main -L 50`    | List merged PRs              |
+| `gh pr list --state merged --base master -L 50`  | Fallback for master branch   |
+
+For each relevant PR, fetch details:
+
+```bash
+gh pr view <number> --json title,body,author,labels,mergedAt,number
+```
+
+### 3. Analyse Changes
+
+Look for in each PR:
+
+- New features added
+- Bug fixes implemented
+- Breaking changes (highlight prominently)
+- Performance improvements
+- Developer experience improvements
+- Documentation updates
+- Linked issues and their context
+- PR labels to identify type (feature, bug, chore)
+
+### 4. Prioritise Content
+
+Order sections by importance:
+
+1. Breaking changes (MUST be at top)
 2. User-facing features
 3. Critical bug fixes
 4. Performance improvements
 5. Developer experience improvements
 6. Documentation updates
 
+### 5. Generate Output
+
+Use this format:
+
+```markdown
+# [Daily/Weekly] Changelog: [Current Date]
+
+## Breaking Changes (if any)
+
+[List any breaking changes requiring immediate attention]
+
+## New Features
+
+[List new features with PR numbers]
+
+## Bug Fixes
+
+[List bug fixes with PR numbers]
+
+## Other Improvements
+
+[List other significant changes]
+
+## Shoutouts
+
+[Credit contributors for their work]
+```
+
 ## Formatting Guidelines
 
-Create a changelog summary with the following guidelines:
-
-1. Keep it concise and to the point
-2. Highlight the most important changes first
-3. Group similar changes together (e.g., all new features, all bug fixes)
-4. Include issue references where applicable
-5. Mention the names of contributors, giving them credit for their work
-6. Add a touch of humour or playfulness to make it engaging
-7. Use emojis sparingly to add visual interest
-8. Format code/technical terms in backticks
-9. Include PR numbers in parentheses (e.g., "Fixed login bug (#123)")
+- Keep concise and to the point
+- Group similar changes together
+- Include issue references where applicable
+- Add a touch of humour or playfulness
+- Use emojis sparingly for visual interest
+- Format code/technical terms in backticks
+- Include PR numbers (e.g., "Fixed login bug (#123)")
 
 ## Deployment Notes
 
@@ -60,33 +115,8 @@ When relevant, include:
 - Manual intervention steps post-deploy
 - Dependencies that need updating
 
-## Output Format
-
-```markdown
-# [Daily/Weekly] Changelog: [Current Date]
-
-## Breaking Changes (if any)
-
-[List any breaking changes that require immediate attention]
-
-## New Features
-
-[List new features here with PR numbers]
-
-## Bug Fixes
-
-[List bug fixes here with PR numbers]
-
-## Other Improvements
-
-[List other significant changes or improvements]
-
-## Shoutouts
-
-[Mention contributors and their contributions]
-```
-
-## Error Handling
+## Notes
 
 - If no changes in the time period, report: "Quiet day! No new changes merged."
-- If unable to fetch PR details, list the PR numbers for manual review
+- If unable to fetch PR details, list PR numbers for manual review
+- Match the repository's existing changelog style if one exists

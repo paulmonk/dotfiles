@@ -18,28 +18,34 @@ Create an issue in whatever tracker the project uses, optionally using templates
 
 ## Workflow
 
-1. **Detect tracker** (in order):
+### 1. Detect Tracker
 
-- beads: `.bd` directory or `.bd.json` exists → use `bd create`
-- Jira: Ask user for project key → use Atlassian MCP
-- Linear: Ask user for team → use Linear MCP
-- GitHub: Git remote is GitHub → use `gh issue create`
-- None: Just help draft the issue content
+Check in order:
 
-2. **Check for templates** (optional):
+| Indicator                        | Tracker | Action              |
+| -------------------------------- | ------- | ------------------- |
+| `.bd` directory or `.bd.json`    | beads   | Use `bd create`     |
+| User provides project key        | Jira    | Use Atlassian MCP   |
+| User provides team               | Linear  | Use Linear MCP      |
+| Git remote is GitHub             | GitHub  | Use `gh issue create` |
+| None detected                    | -       | Draft content only  |
 
-- Look for templates relative to this skill: `claude/skills/create-issue/templates/{type}.md` or `.github/ISSUE_TEMPLATE/`
+### 2. Check for Templates (Optional)
+
+- Look for templates: `claude/skills/create-issue/templates/{type}.md` or `.github/ISSUE_TEMPLATE/`
 - If found, ask user if they want to use it
-- If not found or declined, freeform description
+- If not found or declined, use freeform description
 
-3. **Gather info**:
+### 3. Gather Info
 
 - Title (if not provided)
 - Type/labels (task, bug, story, spike, epic)
 - Priority (if tracker supports it)
 - Description (templated or freeform)
 
-4. **Create issue** in detected tracker
+### 4. Create Issue
+
+Create in detected tracker using the appropriate command
 
 ## Tracker Commands
 

@@ -24,7 +24,7 @@ Skip trivial fixes (typos, obvious syntax errors, simple config changes).
 
 ## Workflow
 
-### Step 1: Gather Context
+### 1. Gather Context
 
 Extract from the conversation (ask if missing):
 
@@ -38,7 +38,7 @@ Extract from the conversation (ask if missing):
 
 **BLOCKING:** Do not proceed without symptom and root cause.
 
-### Step 2: Check Existing Documentation
+### 2. Check Existing Documentation
 
 Search for similar issues in both project and global scope:
 
@@ -52,7 +52,7 @@ If similar documentation exists, present options:
 2. **Update existing doc** (if same issue, new context)
 3. **Skip** (already well documented)
 
-### Step 3: Determine Destination
+### 3. Determine Destination
 
 **Scope decision:** Is this learning specific to this project, or universal?
 
@@ -72,7 +72,7 @@ If similar documentation exists, present options:
 - Project-specific patterns → Project .claude/learnings/
 - Architecture decisions → Project docs
 
-### Step 4: Create Documentation
+### 4. Create Documentation
 
 **For learning files**, use this structure:
 
@@ -120,14 +120,14 @@ If similar documentation exists, present options:
 - **<Action to take or avoid>.** <Brief explanation of why.>
 ````
 
-### Step 5: Cross-Reference
+### 5. Cross-Reference
 
 If related documentation exists:
 
 1. Add "Related" links to the new doc
 2. Update existing docs with back-links
 
-### Step 6: Decision Menu
+### 6. Decision Menu
 
 After documentation, present options:
 
