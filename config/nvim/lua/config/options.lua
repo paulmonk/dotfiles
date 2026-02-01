@@ -185,8 +185,7 @@ vim.g.vim_indent_cont = vim.o.shiftwidth
 vim.g.ruby_no_expensive = 1
 vim.g.PHP_removeCRwhenUnix = 0
 
--- Neovim runtime filetype
-vim.g.do_filetype_lua = 1
+-- Custom filetype detection
 vim.filetype.add({
 	filename = {
 		['go.sum'] = 'go',

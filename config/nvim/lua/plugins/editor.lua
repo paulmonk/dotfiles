@@ -158,9 +158,6 @@ return {
 		},
 	},
 
-	-- EditorConfig support
-	{ 'sgur/vim-editorconfig', event = 'BufRead' },
-
 	-- Highlight URLs
 	{ 'itchyny/vim-highlighturl', event = 'BufRead' },
 

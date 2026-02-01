@@ -24,6 +24,7 @@ set-option -s -a extended-keys always
 
 # Modern terminal features (tmux 3.2+)
 # RGB: 24-bit true colour, usstyle: undercurl and coloured underlines
+set -as terminal-features ",tmux-256color:RGB:usstyle"
 set -as terminal-features ",xterm-ghostty:RGB:usstyle"
 set -as terminal-features ",xterm-256color:RGB:usstyle"
 

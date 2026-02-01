@@ -146,16 +146,9 @@ function M.delete_trailing_whitespace()
 	vim.fn.setpos('.', pos)
 end
 
--- Expose functions globally for keymaps
-_G.custom_keymaps = M
-
 -- Jump keymaps
-map('n', '<Leader>jh', function()
-	M.jump_help_page()
-end, { desc = 'Jump to vim help' })
-map('n', '<Leader>jj', function()
-	M.jump_to_selection()
-end, { desc = 'Jump to URL/hex/github' })
+map('n', '<Leader>jh', M.jump_help_page, { desc = 'Jump to vim help' })
+map('n', '<Leader>jj', M.jump_to_selection, { desc = 'Jump to URL/hex/github' })
 
 -- Terminal mode navigation
 map('t', '<C-h>', '<C-\\><C-n><C-w>h', { desc = 'Go to left window' })

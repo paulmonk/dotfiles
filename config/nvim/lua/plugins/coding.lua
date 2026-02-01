@@ -129,7 +129,6 @@ return {
 		'coder/claudecode.nvim',
 		dependencies = { 'folke/snacks.nvim' },
 		lazy = false,
-		config = true,
 		opts = {
 			terminal = {
 				split_side = 'right',

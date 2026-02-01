@@ -227,29 +227,6 @@ autocmd('FileType', {
 	group = filetypes,
 	pattern = 'zsh',
 	callback = function()
-		local ok, ts_highlight = pcall(require, 'nvim-treesitter.highlight')
-		if ok then
-			ts_highlight.attach(0, 'bash')
-		end
+		pcall(vim.treesitter.start, 0, 'bash')
 	end,
-})
-
--- Helm filetype detection
-autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = filetypes,
-	pattern = { '*/templates/*.yaml', '*/templates/*.yml', '*/templates/*.tpl' },
-	command = 'setfiletype helm',
-})
-
--- Terraform filetype detection
-autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = filetypes,
-	pattern = { '*.tf', '*.tfvars' },
-	command = 'setfiletype terraform',
-})
-
-autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = filetypes,
-	pattern = '*.hcl',
-	command = 'setfiletype hcl',
 })

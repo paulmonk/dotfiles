@@ -52,6 +52,49 @@ join orders on customers.id = orders.customer_id
     and orders.total_amount >= 100
 ```
 
+## Performance
+
+The below applies to OLAP engines (BigQuery, Databricks, Spark, Snowflake):
+
+### Partitioning
+
+- **Filter on partition columns:** Always include partition columns in `where` to avoid full table scans.
+- **Use simple predicates:** Partition pruning works with `=`, `in`, `between`, `<`, `>`. Avoid functions on partition columns.
+- **Filter early:** Place partition filters in the earliest CTE that references the table.
+- BigQuery: Date/timestamp or integer range columns. Max 4,000 partitions per table.
+- Spark: Use `partitionBy()` when writing. Filter columns benefit most.
+- Databricks: Delta Lake uses `partitionBy()`. Avoid over-partitioning; target files of 1GB each.
+- Snowflake: Automatic micro-partitions. Define clustering keys to guide organisation.
+
+### Clustering
+
+- **Filter on cluster columns:** Clustered columns enable block/micro-partition pruning.
+- **Column order matters:** Filter on cluster columns in their defined order (leftmost first).
+- BigQuery: Up to 4 columns. Effective on tables/partitions over 64MB.
+- Spark: Use `bucketBy()` for similar benefits on join/filter columns.
+- Databricks: Use `OPTIMIZE ... ZORDER BY` for multi-dimensional clustering. Liquid clustering (`CLUSTER BY`) auto-maintains.
+- Snowflake: Up to 4 columns recommended. Check depth with `SYSTEM$CLUSTERING_INFORMATION`.
+
+### Join Strategies (Distributed Engines)
+
+- **Broadcast joins:** Small table replicated to all nodes. Avoids shuffle. Best under 10MB (Spark default threshold).
+- **Shuffle/hash joins:** Both sides redistributed by join key. Required for large-large joins.
+- **Sort-merge joins:** Both sides sorted, then merged. Efficient when pre-sorted.
+- **Collocated joins:** Tables partitioned on join key can join locally without shuffle.
+- **Avoid skew:** Highly skewed join keys cause hot spots. Consider pre-aggregating or salting.
+- Spark: `/*+ BROADCAST(t) */`, `/*+ MERGE(t) */`, `/*+ SHUFFLE_HASH(t) */`. Priority: broadcast > merge > shuffle_hash.
+- Databricks: Same Spark hints. Adaptive Query Execution (AQE) auto-optimises join strategy at runtime.
+- Snowflake: No hints. Ensure join columns have matching data types.
+
+```sql
+/* Spark: broadcast small dimension table */
+select /*+ BROADCAST(regions) */
+    orders.id
+    , regions.name
+from orders
+inner join regions on orders.region_id = regions.id
+```
+
 ## CTEs
 
 - **Single purpose:** CTEs should perform a single, logical unit of work.

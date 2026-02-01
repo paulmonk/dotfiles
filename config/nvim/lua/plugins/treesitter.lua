@@ -37,7 +37,7 @@ return {
 				'yaml',
 			}
 
-			-- Auto-install parsers
+			-- Enable treesitter highlighting for supported languages
 			vim.api.nvim_create_autocmd('FileType', {
 				callback = function()
 					local ft = vim.bo.filetype
@@ -45,13 +45,6 @@ return {
 					if vim.tbl_contains(ensure_installed, lang) then
 						pcall(vim.treesitter.start)
 					end
-				end,
-			})
-
-			-- Enable highlighting
-			vim.api.nvim_create_autocmd('FileType', {
-				callback = function()
-					pcall(vim.treesitter.start)
 				end,
 			})
 		end,

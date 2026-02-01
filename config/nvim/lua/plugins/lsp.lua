@@ -175,7 +175,7 @@ return {
 	-- Diagnostics
 	{
 		'folke/trouble.nvim',
-		cmd = { 'Trouble', 'TroubleToggle' },
+		cmd = 'Trouble',
 		keys = {
 			{
 				'<leader>xx',
@@ -214,8 +214,8 @@ return {
 
 	-- Symbols outline
 	{
-		'simrat39/symbols-outline.nvim',
-		cmd = { 'SymbolsOutline', 'SymbolsOutlineOpen' },
+		'hedyhli/outline.nvim',
+		cmd = { 'Outline', 'OutlineOpen' },
 		opts = {},
 	},
 }
