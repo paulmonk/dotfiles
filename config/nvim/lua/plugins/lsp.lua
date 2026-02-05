@@ -23,7 +23,7 @@ return {
 					map('n', 'gd', vim.lsp.buf.definition, 'Go to Definition')
 					map('n', 'K', vim.lsp.buf.hover, 'Hover')
 					map('n', 'gi', vim.lsp.buf.implementation, 'Go to Implementation')
-					map('n', '<C-k>', vim.lsp.buf.signature_help, 'Signature Help')
+					map('n', 'gK', vim.lsp.buf.signature_help, 'Signature Help')
 					map('n', '<leader>D', vim.lsp.buf.type_definition, 'Type Definition')
 					map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename')
 					map(

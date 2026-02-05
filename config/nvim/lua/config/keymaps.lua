@@ -158,3 +158,9 @@ map('t', '<C-j>', '<Cmd>TmuxNavigateDown<CR>', { desc = 'Go to lower window/pane
 map('t', '<C-k>', '<Cmd>TmuxNavigateUp<CR>', { desc = 'Go to upper window/pane' })
 map('t', '<C-l>', '<Cmd>TmuxNavigateRight<CR>', { desc = 'Go to right window/pane' })
 map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Normal mode navigation (vim-tmux-navigator)
+map('n', '<C-h>', '<Cmd>TmuxNavigateLeft<CR>', { desc = 'Go to left window/pane' })
+map('n', '<C-j>', '<Cmd>TmuxNavigateDown<CR>', { desc = 'Go to lower window/pane' })
+map('n', '<C-k>', '<Cmd>TmuxNavigateUp<CR>', { desc = 'Go to upper window/pane' })
+map('n', '<C-l>', '<Cmd>TmuxNavigateRight<CR>', { desc = 'Go to right window/pane' })
