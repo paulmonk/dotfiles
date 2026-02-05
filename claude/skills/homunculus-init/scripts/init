@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# Initialise the homunculus continuous learning system.
+#
+# Creates directory structure, identity.json, and verifies hook configuration.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
+readonly IDENTITY_FILE="${HOMUNCULUS_DIR}/identity.json"
+readonly SETTINGS_FILE="${HOME}/.claude/settings.json"
+
+# Creates the full homunculus directory structure.
+create_directories() {
+  mkdir -p "${HOMUNCULUS_DIR}/instincts/personal"
+  mkdir -p "${HOMUNCULUS_DIR}/instincts/inherited"
+  mkdir -p "${HOMUNCULUS_DIR}/evolved/skills"
+  mkdir -p "${HOMUNCULUS_DIR}/evolved/commands"
+  mkdir -p "${HOMUNCULUS_DIR}/evolved/agents"
+  mkdir -p "${HOMUNCULUS_DIR}/exports"
+  mkdir -p "${HOMUNCULUS_DIR}/observations.archive"
+  echo "Created directory structure"
+}
+
+# Creates identity.json with initial session count if it doesn't exist.
+create_identity() {
+  if [[ -f "${IDENTITY_FILE}" ]]; then
+    echo "identity.json already exists"
+    return
+  fi
+
+  local timestamp
+  timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+  cat >"${IDENTITY_FILE}" <<EOF
+{
+  "session_count": 0,
+  "created": "${timestamp}",
+  "evolution": {
+    "ready": []
+  }
+}
+EOF
+  echo "Created identity.json"
+}
+
+# Checks that the observe hook is configured in settings.json.
+verify_hooks() {
+  if grep -q "homunculus-observe" "${SETTINGS_FILE}" 2>/dev/null; then
+    echo "Hook configured: homunculus-observe"
+  else
+    echo "WARNING: homunculus-observe hook not found in settings.json" >&2
+  fi
+}
+
+# Runs all initialisation steps.
+#
+# Arguments:
+#   $@ - Unused, accepts any arguments for compatibility
+main() {
+  create_directories
+  create_identity
+  verify_hooks
+}
+
+main "$@"

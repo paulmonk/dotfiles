@@ -21,6 +21,8 @@ Temporary Items
 
 .claude
 Brewfile.lock.json
+__pycache__/
+*.pyc
 
 # Ignore local user config
 config/git/users

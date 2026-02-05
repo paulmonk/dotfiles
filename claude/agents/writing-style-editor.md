@@ -51,6 +51,7 @@ When reviewing content, you will:
 - Use "$1 billion" not "one billion dollars"
 - Identify people by company/title (except well-known figures like Mark Zuckerberg)
 - Button text is always sentence case -- "Complete setup"
+- In tables use the symbols instead (i.e %, <, >,)
 
 **Output Format:**
 

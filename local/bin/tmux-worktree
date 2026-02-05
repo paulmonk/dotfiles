@@ -1,10 +1,14 @@
 #!/bin/bash
-#/ Usage: tmux-worktree [repo-path]
+#/ Usage: tmux-worktree [options] [repo-path]
 #/
 #/ Create or attach to a tmux session for a git repository, with a window per worktree.
 #/
 #/ Arguments:
 #/   repo-path    Path to a git repository. If omitted, uses fzf to select from ~/projects.
+#/
+#/ Options:
+#/   -d, --direnv-allow    Run 'direnv allow' in worktrees that have an .envrc file
+#/   -h, --help            Show this help
 #/
 #/ Behaviour:
 #/   - Creates a tmux session named after the repository directory
@@ -17,13 +21,44 @@ usage() {
   grep '^#/' "$0" | cut -c4-
   exit 0
 }
-[[ "${1:-}" =~ ^(-h|--help)$ ]] && usage
+
+DIRENV_ALLOW=0
+
+# Parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h | --help)
+      usage
+      ;;
+    -d | --direnv-allow)
+      DIRENV_ALLOW=1
+      shift
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
 
 log() { echo "[tmux-worktree] $*" >&2; }
 
 error() {
   log "error: $*"
   exit 1
+}
+
+# Run direnv allow if enabled and .envrc exists
+maybe_direnv_allow() {
+  local path="$1"
+
+  if [[ "${DIRENV_ALLOW}" -eq 1 ]] && [[ -f "${path}/.envrc" ]]; then
+    log "running 'direnv allow' in ${path/#${HOME}/\~}"
+    direnv allow "${path}"
+  fi
 }
 
 # Select a repository from ~/projects using fzf
@@ -46,19 +81,31 @@ select_repo() {
 }
 
 # Get worktrees as newline-separated list of "path:name" pairs
+# Limited to 9 most recently modified worktrees
 get_worktrees() {
   local repo_path="$1"
   local worktree_path=""
   local name=""
+  local mtime=""
+  local -a entries=()
 
+  # Collect worktrees with birth times
   while IFS= read -r line; do
     if [[ "${line}" =~ ^worktree\ (.+)$ ]]; then
       worktree_path="${BASH_REMATCH[1]}"
       name=$(basename "${worktree_path}")
       name="${name//_/-}"
-      echo "${worktree_path}:${name}"
+      # Get mtime (macOS stat -f %m)
+      mtime=$(stat -f %m "${worktree_path}" 2>/dev/null || echo "0")
+      entries+=("${mtime}:${worktree_path}:${name}")
     fi
   done < <(git -C "${repo_path}" worktree list --porcelain)
+
+  # Sort by mtime descending (most recently modified first), limit to 9
+  printf '%s\n' "${entries[@]}" \
+    | sort -t: -k1 -rn \
+    | head -n 9 \
+    | cut -d: -f2-
 }
 
 # Get current tmux window names for a session
@@ -85,6 +132,7 @@ create_window() {
     log "warning: path does not exist: ${display_path}"
   fi
   tmux new-window -t "${session}" -n "${name}" -c "${path}"
+  maybe_direnv_allow "${path}"
 }
 
 # Sync session windows with worktrees
@@ -151,6 +199,7 @@ create_session() {
     if [[ "${first}" -eq 1 ]]; then
       log "creating session: ${session}"
       tmux new-session -d -s "${session}" -n "${name}" -c "${path}"
+      maybe_direnv_allow "${path}"
       first=0
     else
       log "creating window: ${name}"

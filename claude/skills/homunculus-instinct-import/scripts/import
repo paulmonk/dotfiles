@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+#
+# Import instincts from a tarball.
+#
+# Imports to inherited/ directory with confidence capped at 0.5.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
+readonly DEST_DIR="${HOMUNCULUS_DIR}/instincts/inherited"
+
+# Prints usage information.
+usage() {
+  cat <<'EOF'
+Usage: import FILE [OPTIONS]
+
+Arguments:
+  FILE                 Path to instincts tarball (.tar.gz)
+
+Options:
+  --dry-run            Preview contents without importing
+  -h, --help           Show this help
+EOF
+}
+
+# Shows tarball contents without extracting.
+#
+# Arguments:
+#   $1 - Path to tarball file
+preview() {
+  local file="${1}"
+  echo "Contents of ${file}:"
+  tar -tzf "${file}" | head -20
+  local total
+  total=$(tar -tzf "${file}" | wc -l | tr -d ' ')
+  if [[ "${total}" -gt 20 ]]; then
+    echo "... and $((total - 20)) more files"
+  fi
+}
+
+# Extracts instincts to inherited directory and caps confidence at 0.5.
+#
+# Arguments:
+#   $1 - Path to tarball file
+import_instincts() {
+  local file="${1}"
+
+  mkdir -p "${DEST_DIR}"
+
+  # Extract to inherited directory
+  tar -xzf "${file}" -C "${DEST_DIR}" --strip-components=1 2>/dev/null ||
+    tar -xzf "${file}" -C "${DEST_DIR}"
+
+  # Cap confidence at 0.5 for imported instincts
+  local count=0
+  for f in "${DEST_DIR}"/*.md; do
+    [[ -f "${f}" ]] || continue
+
+    # Update confidence to max 0.5
+    if grep -q "^confidence:" "${f}"; then
+      sed -i '' 's/^confidence:.*/confidence: 0.5/' "${f}"
+    fi
+    ((count++))
+  done
+
+  echo "Imported ${count} instincts to: ${DEST_DIR}"
+  echo "Confidence capped at 0.5 (must be earned through your usage)"
+}
+
+# Parses arguments and runs import or preview.
+#
+# Arguments:
+#   $@ - Command line arguments (FILE [--dry-run] [-h|--help])
+main() {
+  local file=""
+  local dry_run=false
+
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+    --dry-run)
+      dry_run=true
+      shift
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "Unknown option: ${1}" >&2
+      usage >&2
+      exit 1
+      ;;
+    *)
+      file="${1}"
+      shift
+      ;;
+    esac
+  done
+
+  if [[ -z "${file}" ]]; then
+    echo "Error: FILE argument required" >&2
+    usage >&2
+    exit 1
+  fi
+
+  if [[ ! -f "${file}" ]]; then
+    echo "Error: File not found: ${file}" >&2
+    exit 1
+  fi
+
+  if [[ "${dry_run}" == true ]]; then
+    preview "${file}"
+  else
+    import_instincts "${file}"
+  fi
+}
+
+main "$@"

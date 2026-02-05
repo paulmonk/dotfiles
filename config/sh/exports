@@ -174,6 +174,9 @@ fi
 # Facebook PathPicker
 export FPP_DIR="${XDG_CACHE_HOME}/fpp"
 
+# Firecrawl
+export FIRECRAWL_NO_TELEMETRY="1"
+
 # GCC
 export GCC_COLORS="1"
 

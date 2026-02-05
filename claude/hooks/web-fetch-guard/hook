@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#/ Encourages use of firecrawl over WebFetch for web content extraction.
+#/
+#/ Unconditionally denies WebFetch calls in favour of firecrawl,
+#/ which provides better content extraction and formatting.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  # Drain stdin (Claude keeps pipe open).
+  read_hook_input >/dev/null
+
+  deny_tool "Prefer firecrawl over WebFetch. Firecrawl provides better content extraction, handles JavaScript-rendered pages, and returns cleaner markdown."
+}
+
+main "$@"

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "BASH_DEFAULT_TIMEOUT_MS": "300000",
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
@@ -18,17 +19,111 @@
           {
             "type": "command",
             "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-start/hook"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/trash-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/grep-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/web-fetch-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/web-search-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/worktree-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-observe/hook"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/britfix/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-observe/hook"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt|permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify/hook"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-stop/hook"
           }
         ]
       }
@@ -40,49 +135,74 @@
   },
   "permissions": {
     "allow": [
-      "Bash(awk *)",
-      "Bash(bd *)",
-      "Bash(cat *)",
-      "Bash(cp *)",
-      "Bash(cut *)",
-      "Bash(diff *)",
-      "Bash(echo *)",
-      "Bash(find *)",
-      "Bash(gofmt *)",
-      "Bash(grep *)",
-      "Bash(hadolint *)",
-      "Bash(head *)",
-      "Bash(jq *)",
-      "Bash(just *)",
+      "Bash(ast-grep:*)",
+      "Bash(awk:*)",
+      "Bash(bd:*)",
+      "Bash(cat:*)",
+      "Bash(cd:*)",
+      "Bash(cp:*)",
+      "Bash(cut:*)",
+      "Bash(date:*)",
+      "Bash(diff:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(gh search:*)",
+      "Bash(git add:*)",
+      "Bash(git config:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git worktree add:*)",
+      "Bash(git worktree list:*)",
+      "Bash(gofmt:*)",
+      "Bash(grep:*)",
+      "Bash(hadolint:*)",
+      "Bash(head:*)",
+      "Bash(jq:*)",
+      "Bash(just:*)",
       "Bash(ln:*)",
-      "Bash(ls *)",
-      "Bash(make *)",
-      "Bash(mise *)",
-      "Bash(mkdir *)",
-      "Bash(mv *)",
-      "Bash(pytest *)",
-      "Bash(realpath *)",
-      "Bash(rg *)",
-      "Bash(ruff *)",
-      "Bash(rustfmt *)",
-      "Bash(sed *)",
-      "Bash(semgrep *)",
-      "Bash(shellcheck *)",
-      "Bash(shfmt *)",
-      "Bash(sort *)",
-      "Bash(tail *)",
-      "Bash(test *)",
+      "Bash(ls:*)",
+      "Bash(make:*)",
+      "Bash(mise:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(printf:*)",
+      "Bash(pytest:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(qmd search:*)",
+      "Bash(realpath:*)",
+      "Bash(rg:*)",
+      "Bash(ruff:*)",
+      "Bash(uv run ruff *)",
+      "Bash(rustfmt:*)",
+      "Bash(sed:*)",
+      "Bash(semgrep:*)",
+      "Bash(shellcheck:*)",
+      "Bash(shfmt:*)",
+      "Bash(sqlfluff:*)",
+      "Bash(uv run sqlfluff:*)",
+      "Bash(sort:*)",
+      "Bash(tail:*)",
+      "Bash(terminal-notifier:*)",
+      "Bash(test:*)",
+      "Bash(tmux:*)",
       "Bash(touch *)",
-      "Bash(ty *)",
-      "Bash(type *)",
-      "Bash(uniq *)",
-      "Bash(wc *)",
-      "Bash(which *)",
-      "Bash(xargs *)",
+      "Bash(trash:*)",
+      "Bash(tree:*)",
+      "Bash(ty:*)",
+      "Bash(uv run ty:*)",
+      "Bash(type:*)",
+      "Bash(uniq:*)",
+      "Bash(uv tool list:*)",
+      "Bash(wc:*)",
+      "Bash(which:*)",
+      "Bash(xargs:*)",
+      "Bash(yamllint:*)",
       "Skill(superpowers:*)",
       "WebSearch",
       "mcp__atlassian__*",
       "mcp__aws-knowledge__*",
+      "mcp__context7__*",
       "mcp__ide__getDiagnostics",
       "mcp__firecrawl__*",
       "mcp__github__*",
@@ -92,8 +212,6 @@
       "mcp__qmd__*"
     ],
     "deny": [
-      "Bash(rm:*)",
-      "Bash(rm -rf:*)",
       "Read(./.env)",
       "Read(./.env.*)",
       "Read(./secrets/**)",
@@ -112,6 +230,7 @@
     "command": "~/.claude/statusline",
     "padding": 0
   },
+  "outputStyle": "Personal",
   "extraKnownMarketplaces": {
     "beads-marketplace": {
       "source": {

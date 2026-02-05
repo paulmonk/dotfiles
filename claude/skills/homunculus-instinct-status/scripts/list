@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#
+# List instincts with their metadata.
+#
+# Outputs tab-separated: domain, confidence, name, trigger
+# Use with sort/awk to group by domain.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
+
+# Counts markdown files in a directory.
+#
+# Arguments:
+#   $1 - Directory path to search
+count_files() {
+  local dir="${1}"
+  find "${dir}" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' '
+}
+
+# Outputs instinct metadata as tab-separated values: domain, confidence, name, trigger.
+#
+# Arguments:
+#   $1 - Directory containing instinct markdown files
+list_instincts() {
+  local dir="${1}"
+
+  for f in "${dir}"/*.md; do
+    [[ -f "${f}" ]] || continue
+
+    local name confidence domain trigger
+    name=$(basename "${f}" .md)
+    confidence=$(grep "^confidence:" "${f}" | cut -d: -f2 | tr -d ' ')
+    domain=$(grep "^domain:" "${f}" | cut -d: -f2 | tr -d ' ')
+    trigger=$(grep "^trigger:" "${f}" | cut -d: -f2-)
+
+    printf "%s\t%s\t%s\t%s\n" "${domain}" "${confidence}" "${name}" "${trigger}"
+  done
+}
+
+# Lists instincts with optional domain filter.
+#
+# Arguments:
+#   $1 - Optional domain to filter by (e.g., "code-style")
+main() {
+  local filter_domain="${1:-}"
+
+  # Header
+  echo "Personal: $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
+  echo "Inherited: $(count_files "${HOMUNCULUS_DIR}/instincts/inherited")"
+  echo ""
+
+  # List personal instincts
+  if [[ -n "${filter_domain}" ]]; then
+    list_instincts "${HOMUNCULUS_DIR}/instincts/personal" | grep "^${filter_domain}" | sort
+  else
+    list_instincts "${HOMUNCULUS_DIR}/instincts/personal" | sort
+  fi
+}
+
+main "$@"

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#/ Advises using 'trash' instead of 'rm' for safer file deletion.
+#/
+#/ Intercepts Bash commands containing rm and suggests trash as alternative.
+#/ Files moved to trash can be recovered; rm deletions cannot.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  # Check for rm command patterns:
+  # - Starts with "rm " or is just "rm"
+  # - Follows command separators: ; && || | or newline
+  if echo "${command}" | grep -qE '(^|[;&|]\s*)rm(\s|$)'; then
+    deny_tool "Use \`trash\` instead of \`rm\` for safer file deletion. The trash command moves files to the system trash where they can be recovered if needed."
+    exit 0
+  fi
+
+  echo "${input}"
+}
+
+main "$@"

@@ -325,6 +325,24 @@
     wtr = "!f() { git worktree remove \".worktrees/$1\"; }; f"
     wtl = worktree list
     wtp = worktree prune
+    # Prune worktrees where the branch's PR has been merged
+    wtpm = "!f() { \
+      main_wt=$(git rev-parse --show-toplevel); \
+      git worktree list | while IFS= read -r line; do \
+        wt=$(echo \"$line\" | awk '{print $1}'); \
+        [ \"$wt\" = \"$main_wt\" ] && continue; \
+        branch=$(echo \"$line\" | sed 's/.*\\[\\([^]]*\\)\\].*/\\1/'); \
+        [ -z \"$branch\" ] && continue; \
+        state=$(gh pr view \"$branch\" --json state --jq '.state' 2>/dev/null); \
+        if [ \"$state\" = \"MERGED\" ]; then \
+          if ! git worktree remove \"$wt\" 2>/dev/null; then \
+            echo \"Skipping (dirty): $wt ($branch)\"; \
+          else \
+            echo \"Removed: $wt ($branch)\"; \
+          fi; \
+        fi; \
+      done; \
+    }; f"
 
     #===============================================
     # http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/

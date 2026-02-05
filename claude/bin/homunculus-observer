@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Process homunculus observations via claude CLI.
+# Called by launchd (com.claude.homunculus-observer).
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# launchd has minimal PATH; add common locations
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+readonly OBS_FILE="${HOME}/.claude/homunculus/observations.jsonl"
+readonly LOG_FILE="${HOME}/.claude/homunculus/observer.log"
+
+# Exit if no observations
+[[ -f "${OBS_FILE}" ]] || exit 0
+
+count=$(wc -l <"${OBS_FILE}" | tr -d ' ')
+[[ "${count}" -gt 0 ]] || exit 0
+
+echo "[$(date -Iseconds)] Processing ${count} observations" >>"${LOG_FILE}"
+
+echo "Process ${count} pending observations." | claude -p \
+  --agent homunculus-observer \
+  --permission-mode default \
+  --add-dir "${HOME}/.claude/homunculus" \
+  --allowedTools "Read" "Write" "Bash" "Grep" \
+  --no-session-persistence \
+  >>"${LOG_FILE}" 2>&1

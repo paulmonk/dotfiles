@@ -171,13 +171,12 @@ bind-key -r L resize-pane -R 5
 
 # Smart pane switching with awareness of vim splits.
 # See: https://github.com/christoomey/vim-tmux-navigator
-is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
-bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
-bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
-bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
-bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
-bind-key -n C-\\ if-shell "$is_vim" 'send-keys C-\\'  'select-pane -l'
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?|fzf)(diff)?$'"
+bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
+bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' 'select-pane -D'
+bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k' 'select-pane -U'
+bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l' 'select-pane -R'
+bind-key -n C-\\ if-shell "$is_vim" 'send-keys C-\\' 'select-pane -l'
 
 bind-key -T copy-mode-vi 'C-h' select-pane -L
 bind-key -T copy-mode-vi 'C-j' select-pane -D
@@ -213,6 +212,10 @@ bind-key C-R source-file $XDG_CONFIG_HOME/tmux/config \; display "Config reloade
 
 # Search for previous error
 bind-key e copy-mode \; send-keys "?error" C-m
+
+# AI
+ # Send newline (claude code/codex/etc)
+bind-key -n ‰ send-keys -H 0a
 
 # Disable Ctrl+Arrows to maintain word jump
 unbind-key -n C-Left

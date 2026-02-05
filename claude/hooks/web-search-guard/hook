@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#/ Encourages use of exa over WebSearch for web searches.
+#/
+#/ Unconditionally denies WebSearch calls in favour of exa,
+#/ which provides better search results and more control over search parameters.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  # Drain stdin (Claude keeps pipe open).
+  read_hook_input >/dev/null
+
+  deny_tool "Prefer exa over WebSearch. Exa provides more relevant results, better content extraction, and domain filtering options. For library documentation, use context7 instead."
+}
+
+main "$@"

@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/*.py"
+  - "**/pyproject.toml"
+---
+
 # Python
 
 ## Tooling
@@ -24,7 +30,7 @@
 - **Default arguments:** NEVER use mutable default arguments. Use `None` as sentinel.
 - **Properties:** Use `@property` for trivial computations. Avoid for expensive operations, side effects, or operations that can fail.
 - **Modules for namespacing:** Use modules as primary namespacing mechanism, not classes. Avoid methods that don't use `self`.
-- **Keyword/Positional arguments:** Use `*` for keyword-only and `/` for positional-only arguments.
+- **Keyword-only by default:** Functions with more than one parameter should make all but the first keyword-only using `*`. Use `/` for positional-only when parameter names are implementation details. Dataclasses should also use `kw_only`
 - **Power features:** Avoid metaclasses, bytecode manipulation, and dynamic attribute access unless truly necessary.
 
 ## Imports
@@ -33,6 +39,7 @@
 - **Grouping order:** Future imports, standard library, third-party packages, local imports. Separate groups with blank lines. Sort lexicographically within groups.
 - **Full pathnames:** Always use absolute imports. Avoid relative imports except within package internals.
 - **No wildcards:** Never use `from x import *`.
+- **Datetime:** Use `import datetime as dt` rather than `from datetime import datetime`. Access via `dt.datetime`, `dt.timedelta`, etc.
 
 ## Naming
 
@@ -50,6 +57,7 @@
 - **Forward references:** Use `from __future__ import annotations` or string quotes for forward declarations.
 - **Aliases:** Create type aliases for complex types with `CapWord` names.
 - **Containers:** Use `list[T]` for homogeneous sequences, `tuple[T, ...]` for variable-length, `tuple[T1, T2]` for fixed structure.
+- **Final:** Always include the type parameter for constants: `Final[int]`, `Final[Path]`, not bare `Final`.
 
 ## Docstrings
 

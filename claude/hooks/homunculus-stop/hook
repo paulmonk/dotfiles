@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Increment session count and update lastSession timestamp.
+# Always exits 0 to never block session close.
+
+# Note: errexit intentionally omitted so failures don't block session close.
+set -o errtrace -o pipefail -o nounset
+
+readonly STATE="${HOME}/.claude/homunculus/identity.json"
+
+[[ -f "${STATE}" ]] || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+tmp=$(mktemp)
+
+if jq --arg ts "${timestamp}" \
+  '.session_count += 1 | .last_session = $ts' \
+  "${STATE}" >"${tmp}"; then
+  mv "${tmp}" "${STATE}"
+fi
+
+exit 0

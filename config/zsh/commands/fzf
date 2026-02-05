@@ -87,6 +87,15 @@ if (( $+commands[tmux] )); then
     [ -n "${file}" ] && "${EDITOR}" "${file}"
   }
 
+  # fec [FUZZY PATTERN] - Open the selected file in VS Code
+  fec() {
+    local query file
+
+    query="${1}"
+    file=$(fzf-tmux --query="${query}" --select-1 --exit-0)
+    [ -n "${file}" ] && code "${file}"
+  }
+
   # fda - including hidden directories
   fda() {
     local dir

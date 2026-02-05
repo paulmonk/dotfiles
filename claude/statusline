@@ -2,25 +2,30 @@
 
 #/ Claude Code custom statusline
 #/
-#/ ▸ dotfiles  ⎇ master  ◆ Opus  ▪ 1.0.85  ●●●○○ 62%  $ $0.12
+#/ ▸ dotfiles  #abc123d  ⎇ master  ◆ Opus  ▪ 1.0.85  ●●●○○ 62%  ¤ $0.12
 #/
 #/ https://code.claude.com/docs/en/statusline
 
 set -o errexit -o errtrace -o pipefail -o nounset
 
-# Color codes (256-color palette to bypass Solarized ANSI remapping)
-COLOR_RED="\033[38;5;196m"
-COLOR_YELLOW="\033[38;5;214m"
-COLOR_GREEN="\033[38;5;34m"
-COLOR_RESET="\033[0m"
-COLOR_DIM="\033[38;5;236m"
+# Solarized Dark High Contrast - true color (24-bit RGB)
+readonly COLOR_RED="\033[38;2;220;50;47m"
+readonly COLOR_ORANGE="\033[38;2;203;75;22m"
+readonly COLOR_YELLOW="\033[38;2;181;137;0m"
+readonly COLOR_GREEN="\033[38;2;133;153;0m"
+readonly COLOR_CYAN="\033[38;2;42;161;152m"
+readonly COLOR_BLUE="\033[38;2;38;139;210m"
+readonly COLOR_BASE1="\033[38;2;147;161;161m"
+readonly COLOR_BASE00="\033[38;2;101;123;131m"
+readonly COLOR_RESET="\033[0m"
 
 # Icons (Unicode symbols, not emojis)
-ICON_PROJECT="▸"
-ICON_BRANCH="⎇"
-ICON_MODEL="◆"
-ICON_VERSION="▪"
-ICON_COST="$"
+readonly ICON_PROJECT="▸"
+readonly ICON_SESSION="#"
+readonly ICON_BRANCH="⎇"
+readonly ICON_MODEL="◆"
+readonly ICON_VERSION="▪"
+readonly ICON_COST="¤"
 
 input=$(cat)
 
@@ -29,12 +34,17 @@ get_project() {
   echo "$input" | jq -r '.workspace.current_dir // "unknown"' | xargs basename
 }
 
+# Extract first 7 chars of session ID for identifying concurrent sessions.
+get_session_id() {
+  echo "$input" | jq -r '.session_id // ""' | cut -c1-7
+}
+
 # Get the current git branch name, with "(wt)" suffix if in a worktree.
 get_git_info() {
   local branch="" wt_suffix=""
   if git rev-parse --git-dir >/dev/null 2>&1; then
     branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-    if [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]; then
+    if [[ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]]; then
       wt_suffix=" (wt)"
     fi
     echo "${branch}${wt_suffix}"
@@ -69,7 +79,7 @@ get_circles() {
   local pct=$1
   local filled="●" empty="○" circles=""
   for threshold in 20 40 60 80 90; do
-    if [ "$pct" -ge "$threshold" ]; then
+    if (( pct >= threshold )); then
       circles="${circles}${filled}"
     else
       circles="${circles}${empty}"
@@ -78,13 +88,13 @@ get_circles() {
   echo "$circles"
 }
 
-# Return ANSI color code based on context usage: green (<60%), yellow (60-79%), red (80%+).
+# Return ANSI color code based on context usage: green (<60%), orange (60-79%), red (80%+).
 get_color() {
   local pct=$1
-  if [ "$pct" -ge 80 ]; then
+  if (( pct >= 80 )); then
     echo "$COLOR_RED"
-  elif [ "$pct" -ge 60 ]; then
-    echo "$COLOR_YELLOW"
+  elif (( pct >= 60 )); then
+    echo "$COLOR_ORANGE"
   else
     echo "$COLOR_GREEN"
   fi
@@ -92,9 +102,10 @@ get_color() {
 
 # Assemble and print the statusline.
 main() {
-  local project branch model version pct circles color cost
+  local project session_id branch model version pct circles color cost
 
   project=$(get_project)
+  session_id=$(get_session_id)
   branch=$(get_git_info)
   model=$(get_model)
   version=$(get_version)
@@ -104,19 +115,23 @@ main() {
   cost=$(get_cost)
 
   # directory
-  printf "${COLOR_DIM}${ICON_PROJECT}${COLOR_RESET} %s" "$project"
+  printf "${COLOR_BASE1}${ICON_PROJECT} %s${COLOR_RESET}" "$project"
+  # session
+  if [[ -n "$session_id" ]]; then
+    printf "  ${COLOR_CYAN}${ICON_SESSION}%s${COLOR_RESET}" "$session_id"
+  fi
   # branch
-  if [ -n "$branch" ]; then
-    printf "  ${COLOR_DIM}${ICON_BRANCH}${COLOR_RESET} %s" "$branch"
+  if [[ -n "$branch" ]]; then
+    printf "  ${COLOR_BLUE}${ICON_BRANCH} %s${COLOR_RESET}" "$branch"
   fi
   # model
-  printf "  ${COLOR_DIM}${ICON_MODEL}${COLOR_RESET} %s" "$model"
+  printf "  ${COLOR_YELLOW}${ICON_MODEL} %s${COLOR_RESET}" "$model"
   # version
-  printf "  ${COLOR_DIM}${ICON_VERSION}${COLOR_RESET} %s" "$version"
+  printf "  ${COLOR_BASE00}${ICON_VERSION} %s${COLOR_RESET}" "$version"
   # context
   printf "  ${color}${circles} %d%%${COLOR_RESET}" "$pct"
   # cost
-  printf "  ${COLOR_DIM}${ICON_COST}${COLOR_RESET} %s" "$cost"
+  printf "  ${COLOR_YELLOW}${ICON_COST} %s${COLOR_RESET}" "$cost"
 }
 
 main

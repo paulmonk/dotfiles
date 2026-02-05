@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# Inject learned instincts and report pending observations at session start.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
+readonly INSTINCTS_DIR="${HOMUNCULUS_DIR}/instincts/personal"
+readonly OBS_FILE="${HOMUNCULUS_DIR}/observations.jsonl"
+
+# Output instincts if any exist
+if [[ -d "${INSTINCTS_DIR}" ]]; then
+  instinct_files=("${INSTINCTS_DIR}"/*.md)
+  if [[ -f "${instinct_files[0]}" ]]; then
+    echo "[INSTINCTS]"
+
+    # Group by domain, output trigger/action/confidence
+    for f in "${instinct_files[@]}"; do
+      [[ -f "$f" ]] || continue
+
+      # Extract frontmatter fields
+      domain=$(grep "^domain:" "$f" 2>/dev/null | cut -d: -f2 | tr -d ' "' | head -1)
+      trigger=$(grep "^trigger:" "$f" 2>/dev/null | cut -d: -f2- | sed 's/^ *"//;s/"$//' | head -1)
+      action=$(grep "^action:" "$f" 2>/dev/null | cut -d: -f2- | sed 's/^ *"//;s/"$//' | head -1)
+      confidence=$(grep "^confidence:" "$f" 2>/dev/null | cut -d: -f2 | tr -d ' ' | head -1)
+
+      [[ -n "${domain}" && -n "${action}" ]] || continue
+      echo "- ${domain}: ${trigger:-?} → ${action} (${confidence:-?})"
+    done
+    echo ""
+  fi
+fi
+
+# Report pending observations
+if [[ -f "${OBS_FILE}" ]]; then
+  count=$(wc -l <"${OBS_FILE}" | tr -d ' ')
+  if [[ "${count}" -gt 0 ]]; then
+    echo "[HOMUNCULUS] ${count} pending observations"
+  fi
+fi

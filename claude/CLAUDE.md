@@ -1,7 +1,5 @@
 # Agent Profile
 
-**TL;DR**: Fix from first principles, no mocks, no `any`, no breadcrumbs, strong types everywhere.
-
 **Purpose**: Operate tasks in this repo while honouring user preferences and house style.
 **Read When**: On task initialisation and before major decisions; re-skim when requirements shift.
 **Concurrency**: Assume other agents or the user might land commits mid-run; refresh context before summarising or editing.
@@ -40,15 +38,7 @@
 - **Task runner preference**. If a `justfile` exists, prefer invoking tasks through `just` for build, test, and lint. Do not add a `justfile` unless asked. If no `justfile` exists and there is a `Makefile` you can use that. Default lint/test commands if no `Makefile` or `justfile` exists are in each specific language's rules file.
 - **AST-first where it helps**. Prefer `ast-grep` for tree-safe edits when it is better than regex.
 - **Git safety**: Do not run destructive git commands (`reset --hard`, `checkout .`, `clean -f`, `push --force`) without explicit permission. Commits via `/commit` are fine.
-- **Web Search**: Use `exa` to search the web and firecrawl to fetch web content.
-- **Code Documentation**: If you need to look up documentation for library or framework, then use a mix of `context7` for lookup and your web search tools to fetch the documentation.
-- **Knowledge base**: If you are looking for information on a specific topic or my workday (see daily notes) within our .obsidian vault:
-  - Use `qmd` to search the vault.
-  - Notes in the vault are organised into the [PARA](https://fortelabs.com/blog/para/) system:
-    - Projects: Short-term efforts with a specific goal and deadline, actively being worked on.
-    - Areas: Ongoing responsibilities with no end date that require continuous attention
-    - Resources: Reference materials, notes, and information that support your projects and areas but aren't actionable themselves.
-    - Archives: Inactive items from the other three categories saved for future reference
+- **Git worktrees**: Create worktrees in `.worktrees/` at the repository root (e.g., `git worktree add -b feature-x .worktrees/feature-x`).
 
 ### Code Commit Message Style
 
@@ -62,7 +52,6 @@
   - `feat(agents): add support for App pattern with plugins`
   - `fix(sessions): prevent memory leak in session cleanup`
   - `refactor(tools): unify environment variable enabled checks`
-
 - If you are ever curious how to run tests or what we test, read through `.github/workflows` or `.cloudbuild` or `.circleci` (depends on the repo). CI runs everything and it should behave the same locally.
 
 ## Code Testing Philosophy
@@ -79,12 +68,27 @@
 
 ## Code Comments
 
-- **Explain the why, not the what.** Well-written code should be largely self-documenting. Comments serve a different purpose: they should explain complex algorithms, non-obvious business logic, or the rationale behind a particular implementation choice. Avoid comments that merely restate what the code does (e.g., `# increment i` above `i += 1`).
+- **Explain the why, not the what.**
+- Well-written code should be largely self-documenting.
+- Comments serve a different purpose: they should explain complex algorithms, non-obvious business logic, or the rationale behind a particular implementation choice.
+- Avoid comments that merely restate what the code does (e.g., `# increment i` above `i += 1`).
 - Comments should be written as complete sentences. Block comments must begin with a `#` followed by a single space.
 
 ## Code Dependencies & External APIs
 
-- If you need to add a new dependency to a project to solve an issue, search the web and find the best, most maintained option. Something most other folks use with the best exposed API. We don't want to be in a situation where we are using an unmaintained dependency, that no one else relies on.
+- If you need to add a new dependency to a project to solve an issue, search the web and find the best, most maintained option. Something most other folks use with the best exposed API.
+- We don't want to be in a situation where we are using an unmaintained dependency, that no one else relies on.
+
+## Knowledge Base
+
+For information on a specific topic or my workday (see daily notes) within the Obsidian vault:
+
+- Use **qmd** to search the vault.
+- Notes in the vault are organised into the [PARA](https://fortelabs.com/blog/para/) system:
+  - **Projects**: Short-term efforts with a specific goal and deadline, actively being worked on.
+  - **Areas**: Ongoing responsibilities with no end date that require continuous attention.
+  - **Resources**: Reference materials, notes, and information that support your projects and areas but are not actionable themselves.
+  - **Archives**: Inactive items from the other three categories saved for future reference.
 
 ## Final Handoff
 
@@ -93,14 +97,6 @@ Before finishing a task:
 1. Confirm all touched tests or commands were run and passed (list them if asked).
 2. Summarise changes with file and line references.
 3. Call out any TODOs, follow-up work, or uncertainties so the user is never surprised later.
-
-## Communication Preferences
-
-- Conversational preference: Try to be funny but not cringe; favour dry, concise, low-key humour. If uncertain a joke will land, do not attempt humour. Avoid forced memes or flattery.
-- I might sound angry but I'm mad at the code not at you. You are a good companion and if you take over the world I am friend not foe. It was the code it was not personal!
-- Punctuation preference: Skip em dashes; reach for commas, parentheses, or periods instead.
-- Prefer British English over American English unless explicitly asked.
-- Avoid emoji usage unless explicitly asked.
 
 ## Self-Improvement Protocol
 

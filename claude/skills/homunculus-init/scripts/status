@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+#
+# Show homunculus system status.
+#
+# Displays directory structure, session count, instinct counts, and pending work.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
+readonly IDENTITY_FILE="${HOMUNCULUS_DIR}/identity.json"
+
+# Counts markdown files in a directory.
+#
+# Arguments:
+#   $1 - Directory path to search
+count_files() {
+  local dir="${1}"
+  find "${dir}" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' '
+}
+
+# Displays system status including directories, session count, and instincts.
+#
+# Arguments:
+#   $@ - Unused, accepts any arguments for compatibility
+main() {
+  echo "=== Homunculus Status ==="
+  echo ""
+
+  # Directory check
+  echo "Directories:"
+  local dirs=(
+    "instincts/personal"
+    "instincts/inherited"
+    "evolved/skills"
+    "observations.archive"
+  )
+  for dir in "${dirs[@]}"; do
+    if [[ -d "${HOMUNCULUS_DIR}/${dir}" ]]; then
+      echo "  [x] ${dir}"
+    else
+      echo "  [ ] ${dir} (missing)"
+    fi
+  done
+  echo ""
+
+  # Session count
+  if [[ -f "${IDENTITY_FILE}" ]]; then
+    local sessions
+    sessions=$(jq -r '.session_count // 0' "${IDENTITY_FILE}")
+    echo "Sessions: ${sessions}"
+  else
+    echo "Sessions: (no identity.json)"
+  fi
+
+  # Instinct counts
+  echo ""
+  echo "Instincts:"
+  echo "  Personal:  $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
+  echo "  Inherited: $(count_files "${HOMUNCULUS_DIR}/instincts/inherited")"
+
+  # Pending observations
+  local obs_file="${HOMUNCULUS_DIR}/observations.jsonl"
+  if [[ -f "${obs_file}" ]]; then
+    echo ""
+    echo "Pending observations: $(wc -l <"${obs_file}" | tr -d ' ')"
+  fi
+
+  # Evolution ready
+  if [[ -f "${IDENTITY_FILE}" ]]; then
+    local ready
+    ready=$(jq -r '.evolution.ready // [] | length' "${IDENTITY_FILE}")
+    if [[ "${ready}" -gt 0 ]]; then
+      echo ""
+      echo "Evolution ready in: $(jq -r '.evolution.ready | join(", ")' "${IDENTITY_FILE}")"
+    fi
+  fi
+}
+
+main "$@"

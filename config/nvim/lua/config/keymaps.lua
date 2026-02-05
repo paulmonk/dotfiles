@@ -24,8 +24,10 @@ map('n', '<C-s>', '<cmd>w<CR>', { desc = 'Save file' })
 map('v', '<C-s>', '<cmd>w<CR>', { desc = 'Save file' })
 map('c', '<C-s>', '<cmd>w<CR>', { desc = 'Save file' })
 
--- Fast Quit
+-- Fast Quit (macro recording moved to M)
+map('n', 'q', '<cmd>q<CR>', { desc = 'Quit' })
 map('n', 'Q', '<cmd>q!<CR>', { desc = 'Quit without saving' })
+map('n', 'M', 'q', { desc = 'Record macro' })
 
 -- Toggle fold
 map('n', '<CR>', 'za', { desc = 'Toggle fold' })
@@ -150,9 +152,9 @@ end
 map('n', '<Leader>jh', M.jump_help_page, { desc = 'Jump to vim help' })
 map('n', '<Leader>jj', M.jump_to_selection, { desc = 'Jump to URL/hex/github' })
 
--- Terminal mode navigation
-map('t', '<C-h>', '<C-\\><C-n><C-w>h', { desc = 'Go to left window' })
-map('t', '<C-j>', '<C-\\><C-n><C-w>j', { desc = 'Go to lower window' })
-map('t', '<C-k>', '<C-\\><C-n><C-w>k', { desc = 'Go to upper window' })
-map('t', '<C-l>', '<C-\\><C-n><C-w>l', { desc = 'Go to right window' })
+-- Terminal mode navigation (uses vim-tmux-navigator for tmux pane support)
+map('t', '<C-h>', '<Cmd>TmuxNavigateLeft<CR>', { desc = 'Go to left window/pane' })
+map('t', '<C-j>', '<Cmd>TmuxNavigateDown<CR>', { desc = 'Go to lower window/pane' })
+map('t', '<C-k>', '<Cmd>TmuxNavigateUp<CR>', { desc = 'Go to upper window/pane' })
+map('t', '<C-l>', '<Cmd>TmuxNavigateRight<CR>', { desc = 'Go to right window/pane' })
 map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })

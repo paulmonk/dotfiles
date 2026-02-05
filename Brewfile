@@ -531,6 +531,8 @@ brew "httpie"
 brew "httpstat"
 # Add GitHub support to git on the command-line
 brew "hub"
+# Client library for huggingface.co hub
+brew "huggingface-cli"
 # Spell checker and morphological analyzer
 brew "hunspell"
 # Portable abstraction of the hierarchical topology of modern architectures
@@ -657,6 +659,8 @@ brew "luajit"
 brew "luv"
 # Security and system auditing tool to harden systems
 brew "lynis"
+# Fast, flexible, config-based cli for linting Markdown/CommonMark files
+brew "markdownlint-cli2"
 # Development kit for the Java programming language
 brew "openjdk"
 # Java-based project management
@@ -705,6 +709,8 @@ brew "nghttp2"
 brew "nmap"
 # Convert OpenDocument files to plain text
 brew "odt2txt"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
 # AI coding agent, built for the terminal
 brew "opencode"
 # Audio codecs extracted from Android open source project
@@ -865,6 +871,8 @@ brew "tree"
 brew "trivy"
 # Utilities for interacting with PyPI
 brew "twine"
+# Extremely fast Python type checker, written in Rust
+brew "ty"
 # Language Server Protocol implementation for TypeScript wrapping tsserver
 brew "typescript-language-server"
 # Extraction utility for .zip compressed archives
@@ -961,6 +969,8 @@ cask "chatgpt"
 cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
+# OpenAI's Codex desktop app for managing coding agents
+cask "codex-app"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # All-in-one toolbox for developers
@@ -1075,6 +1085,7 @@ cask "zen"
 # Video communication and virtual meeting platform
 cask "zoom"
 vscode "aaron-bond.better-comments"
+vscode "alefragnani.project-manager"
 vscode "altimateai.vscode-altimate-mcp-server"
 vscode "anthropic.claude-code"
 vscode "anysphere.cursorpyright"
@@ -1124,7 +1135,6 @@ vscode "ms-toolsai.jupyter-keymap"
 vscode "ms-toolsai.jupyter-renderers"
 vscode "ms-toolsai.vscode-jupyter-cell-tags"
 vscode "ms-toolsai.vscode-jupyter-slideshow"
-vscode "ms-vscode-remote.remote-containers"
 vscode "ms-vscode-remote.remote-ssh"
 vscode "ms-vscode-remote.remote-ssh-edit"
 vscode "ms-vscode-remote.remote-wsl"

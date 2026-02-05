@@ -163,6 +163,15 @@ if (( $+commands[fzf] )); then
       vi "$@"
     fi
   }
+
+  function c {
+    if [[ $# -eq 0 ]]; then
+      local file
+      file=$(fzf) && code "$file"
+    else
+      code "$@"
+    fi
+  }
 fi
 
 # Youtube DL

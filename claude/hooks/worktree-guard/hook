@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#/ Blocks file edits in main checkout when worktrees are configured.
+#/
+#/ Repos with a .worktrees/ directory require sessions to run from within it.
+#/ This enforces development discipline by preventing accidental edits to the
+#/ main checkout when worktrees are available.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input tool_name cwd file_path git_root
+  input=$(read_hook_input)
+
+  tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
+  case "${tool_name}" in
+    Edit | Write | MultiEdit | NotebookEdit) ;;
+    *)
+      echo "${input}"
+      exit 0
+      ;;
+  esac
+
+  cwd=$(echo "${input}" | jq -r '.cwd // ""')
+  [[ -z "${cwd}" ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Find git root.
+  git_root=$(git -C "${cwd}" rev-parse --show-toplevel 2>/dev/null || echo "")
+  [[ -z "${git_root}" ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Only enforce if .worktrees/ exists (opt-in).
+  [[ ! -d "${git_root}/.worktrees" ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Get the file path being edited.
+  file_path=$(echo "${input}" | jq -r '.tool_input.file_path // ""')
+
+  # Allow if cwd is within worktrees.
+  [[ "${cwd}" == *"/.worktrees/"* ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Allow if target file is within worktrees.
+  [[ "${file_path}" == *"/.worktrees/"* ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Deny: editing main checkout when worktrees exist.
+  deny_tool "Edits require a worktree. Use /using-git-worktrees to create one, then start Claude from there."
+}
+
+main "$@"

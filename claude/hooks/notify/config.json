@@ -1,0 +1,23 @@
+{
+  "events": {
+    "idle_prompt": {
+      "enabled": true,
+      "title": "Claude Code",
+      "message": "Waiting for input",
+      "sound": "default"
+    },
+    "permission_prompt": {
+      "enabled": true,
+      "title": "Claude Code",
+      "message": "Permission needed",
+      "sound": "default"
+    },
+    "stop": {
+      "enabled": true,
+      "title": "Claude Code",
+      "message": "Task completed",
+      "sound": "default",
+      "cooldown_seconds": 30
+    }
+  }
+}

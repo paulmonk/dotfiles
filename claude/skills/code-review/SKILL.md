@@ -166,7 +166,7 @@ Agents filter their output by confidence to minimize false positives:
 
 ## Output Format
 
-For PR reviews, post a comment using this format:
+For PR reviews, post a comment back to the user (NOT on the pull request itself) using this format:
 
 ```markdown
 ### Code Review

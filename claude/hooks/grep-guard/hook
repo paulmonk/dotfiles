@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#/ Advises using rg, ast-grep, or semgrep instead of grep.
+#/
+#/ Intercepts Bash commands containing grep and suggests modern alternatives.
+#/ rg (ripgrep) is faster, ast-grep handles AST-aware searches, and semgrep
+#/ provides semantic code analysis.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  # Check for grep command patterns:
+  # - Starts with "grep " or is just "grep"
+  # - Follows command separators: ; && || | or newline
+  # Exclude ripgrep (rg) and ast-grep which are fine
+  if echo "${command}" | grep -qE '(^|[;&|]\s*)grep(\s|$)'; then
+    deny_tool "Prefer rg (ripgrep) over grep for faster searches. For AST-aware code searches use ast-grep, for semantic analysis use semgrep."
+    exit 0
+  fi
+
+  echo "${input}"
+}
+
+main "$@"
