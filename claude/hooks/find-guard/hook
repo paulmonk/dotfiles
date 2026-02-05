@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#/ Advises using fd instead of find.
+#/
+#/ Intercepts Bash commands containing find and suggests fd as a faster,
+#/ more intuitive alternative with sensible defaults.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  if echo "${command}" | grep -qE '(^|[;&|]\s*)find(\s|$)'; then
+    deny_tool "Prefer fd over find. fd is faster, respects .gitignore, and has simpler syntax."
+    exit 0
+  fi
+
+  echo "${input}"
+}
+
+main "$@"

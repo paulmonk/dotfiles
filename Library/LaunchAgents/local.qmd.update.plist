@@ -2,21 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
-    <string>local.qmd.update</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/bin/bash</string>
-        <string>-c</string>
-        <string>$HOME/.local/share/bun/bin/qmd update && $HOME/.local/share/bun/bin/qmd embed</string>
-    </array>
-    <key>StartInterval</key>
-    <integer>3600</integer>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>StandardErrorPath</key>
-    <string>/tmp/qmd-update.err</string>
-    <key>StandardOutPath</key>
-    <string>/tmp/qmd-update.log</string>
+  <key>Label</key>
+  <string>local.qmd.update</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/fdautil</string>
+    <string>exec</string>
+    <string>/opt/homebrew/bin/gtimeout</string>
+    <string>1800</string>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>$HOME/.local/bin/qmd-update</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>3600</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardErrorPath</key>
+  <string>/tmp/qmd-update.err</string>
+  <key>StandardOutPath</key>
+  <string>/tmp/qmd-update.out</string>
 </dict>
 </plist>

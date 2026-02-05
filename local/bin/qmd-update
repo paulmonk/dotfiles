@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Update qmd index and embeddings.
+# Called by launchd (local.qmd.update).
+set -o errexit -o errtrace -o pipefail -o nounset
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:${HOME}/.local/share/bun/bin:${PATH}"
+export NO_COLOR=1
+
+notify() {
+  terminal-notifier \
+    -title "LaunchAgent: QMD Update" \
+    -message "$1" \
+    -sound default \
+    -group "qmd-update" \
+    2>/dev/null || true
+}
+
+if qmd update && qmd embed; then
+  notify "Index updated"
+else
+  notify "Update failed"
+  exit 1
+fi

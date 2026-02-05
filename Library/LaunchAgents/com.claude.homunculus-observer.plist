@@ -4,18 +4,21 @@
 <dict>
   <key>Label</key>
   <string>com.claude.homunculus-observer</string>
-
   <key>ProgramArguments</key>
   <array>
+    <string>/opt/homebrew/bin/gtimeout</string>
+    <string>600</string>
     <string>/bin/bash</string>
     <string>-c</string>
     <string>$HOME/.local/bin/homunculus-observer</string>
   </array>
-
   <key>StartInterval</key>
   <integer>1800</integer>
-
   <key>RunAtLoad</key>
   <false/>
+  <key>StandardOutPath</key>
+  <string>/tmp/homunculus-observer.out</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/homunculus-observer.err</string>
 </dict>
 </plist>

@@ -15,11 +15,11 @@ main() {
 
   tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
   case "${tool_name}" in
-    Edit | Write | MultiEdit | NotebookEdit) ;;
-    *)
-      echo "${input}"
-      exit 0
-      ;;
+  Edit | Write | MultiEdit | NotebookEdit) ;;
+  *)
+    echo "${input}"
+    exit 0
+    ;;
   esac
 
   cwd=$(echo "${input}" | jq -r '.cwd // ""')
@@ -52,6 +52,12 @@ main() {
 
   # Allow if target file is within worktrees.
   [[ "${file_path}" == *"/.worktrees/"* ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Allow plan files (plan mode writes here regardless of cwd).
+  [[ "${file_path}" == *"/.claude/plans/"* ]] && {
     echo "${input}"
     exit 0
   }

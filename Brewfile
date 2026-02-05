@@ -213,6 +213,8 @@ brew "libmpc"
 brew "gcc"
 # YAML Parser
 brew "libyaml"
+# LLVM's OpenMP runtime library
+brew "libomp", link: true
 # Optimized BLAS library
 brew "openblas"
 # Package for scientific computing with Python
@@ -239,8 +241,6 @@ brew "cryptography"
 brew "ctop"
 # HTTP/2 C Library
 brew "libnghttp2"
-# Tool for downloading RTMP streaming media
-brew "rtmpdump"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Tools to manipulate dates with a focus on financial data
@@ -613,8 +613,6 @@ brew "libmemcached"
 brew "libmicrohttpd"
 # MNG/JNG reference library
 brew "libmng"
-# LLVM's OpenMP runtime library
-brew "libomp", link: true
 # Portable library for network traffic capture
 brew "libpcap"
 # Library for parsing/normalizing street addresses around the world
@@ -797,6 +795,8 @@ brew "rkhunter"
 brew "rmlint"
 # Utility that provides fast incremental file transfer
 brew "rsync"
+# Tool for downloading RTMP streaming media
+brew "rtmpdump"
 # Audio time stretcher tool and library
 brew "rubberband"
 # Powerful, clean, object-oriented scripting language
@@ -880,7 +880,7 @@ brew "unzip"
 # URI parsing library (strictly RFC 3986 compliant)
 brew "uriparser"
 # Cross-platform Rust rewrite of the GNU coreutils
-brew "uutils-coreutils", link: false
+brew "uutils-coreutils"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Vi 'workalike' with many additional features
@@ -1012,6 +1012,8 @@ cask "jordanbaird-ice"
 cask "karabiner-elements"
 # Open-source keystroke visualiser
 cask "keycastr"
+# Create, manage and debug system and user services
+cask "launchcontrol"
 # Link-Layer MAC spoofing GUI for macOS
 cask "linkliar"
 # Host-based application firewall
