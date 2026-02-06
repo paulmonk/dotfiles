@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
-# Process homunculus observations via claude CLI.
-# Called by launchd (com.claude.homunculus-observer).
+#/ Usage: homunculus-observer
+#/
+#/ Feeds pending observations into the homunculus-observer Claude agent, which
+#/ distils them into reusable instinct files. Scheduled via launchd
+#/ (local.claude.homunculus-observer). Safe to run manually.
+#/
+#/ Exits silently when there are no observations to process.
+#/
+#/ Logs:  ~/.claude/homunculus/observer.log
+#/ Plist: ~/Library/LaunchAgents/local.claude.homunculus-observer.plist
 set -o errexit -o errtrace -o pipefail -o nounset
 
-# launchd has minimal PATH; add common locations
+# launchd inherits a minimal PATH that lacks Homebrew.
 export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 
 readonly OBS_FILE="${HOME}/.claude/homunculus/observations.jsonl"
 readonly LOG_FILE="${HOME}/.claude/homunculus/observer.log"
 
-# Exit if no observations
-[[ -f "${OBS_FILE}" ]] || exit 0
-
-count=$(wc -l <"${OBS_FILE}" | tr -d ' ')
-[[ "${count}" -gt 0 ]] || exit 0
-
-{
-  echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "[$(date -Iseconds)] Processing ${count} observations"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-} >>"${LOG_FILE}"
-
+# Send a macOS notification. Failures are swallowed; nice-to-have, not critical.
 notify() {
   terminal-notifier \
     -title "LaunchAgent: Homunculus Observer" \
@@ -31,16 +27,51 @@ notify() {
     2>/dev/null || true
 }
 
-if claude -p \
-  --agent homunculus-observer \
-  --permission-mode default \
-  --add-dir "${HOME}/.claude/homunculus" \
-  --allowedTools "Read" "Write" "Bash" "Grep" \
-  --no-session-persistence \
-  <<<"Process ${count} pending observations." \
-  >>"${LOG_FILE}" 2>&1; then
-  notify "Processed ${count} observations"
-else
-  notify "Failed processing ${count} observations"
-  exit 1
-fi
+# Log a visible run header. Args: $1=observation count.
+log_start() {
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "[$(date -Iseconds)] Processing $1 observations"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+} >>"${LOG_FILE}"
+
+# Log completion with wall-clock duration. Args: $1=epoch start time.
+log_finish() {
+  local end_time
+  end_time=$(date +%s)
+  local duration=$((end_time - $1))
+  echo "[$(date -Iseconds)] Finished in ${duration}s" >>"${LOG_FILE}"
+}
+
+main() {
+  [[ -f "${OBS_FILE}" ]] || exit 0
+
+  local count
+  count=$(wc -l <"${OBS_FILE}" | tr -d ' ')
+  [[ "${count}" -gt 0 ]] || exit 0
+
+  local start_time
+  start_time=$(date +%s)
+  log_start "${count}"
+
+  # The agent reads observations.jsonl, clusters patterns, and writes instinct
+  # files to ~/.claude/homunculus/instincts/. It archives processed observations
+  # on success so they are not reprocessed next run.
+  if claude -p \
+    --agent homunculus-observer \
+    --permission-mode default \
+    --add-dir "${HOME}/.claude/homunculus" \
+    --allowedTools "Read" "Write" "Bash" "Grep" \
+    --no-session-persistence \
+    <<<"Process ${count} pending observations." \
+    >>"${LOG_FILE}" 2>&1; then
+    log_finish "${start_time}"
+    notify "Processed ${count} observations"
+  else
+    log_finish "${start_time}"
+    notify "Failed processing ${count} observations"
+    exit 1
+  fi
+}
+
+main "$@"

@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
-# Update qmd index and embeddings.
-# Called by launchd (local.qmd.update).
+#/ Usage: qmd-update
+#/
+#/ Rebuilds the qmd search index and refreshes embeddings for the Obsidian
+#/ vault. Scheduled via launchd (local.qmd.update) with full disk access via
+#/ fdautil. Safe to run manually.
+#/
+#/ Logs:  /tmp/qmd-update.out, /tmp/qmd-update.err
+#/ Plist: ~/Library/LaunchAgents/local.qmd.update.plist
 set -o errexit -o errtrace -o pipefail -o nounset
 
+# launchd inherits a minimal PATH that lacks Homebrew and Bun.
 export PATH="/opt/homebrew/bin:/usr/local/bin:${HOME}/.local/share/bun/bin:${PATH}"
 export NO_COLOR=1
 
+readonly LOG_FILE="/tmp/qmd-update.out"
+
+# Send a macOS notification. Failures are swallowed; nice-to-have, not critical.
 notify() {
   terminal-notifier \
     -title "LaunchAgent: QMD Update" \
@@ -15,9 +25,34 @@ notify() {
     2>/dev/null || true
 }
 
-if qmd update && qmd embed; then
-  notify "Index updated"
-else
-  notify "Update failed"
-  exit 1
-fi
+# Log a run start timestamp.
+log_start() {
+  echo "[$(date -Iseconds)] Starting qmd update" >>"${LOG_FILE}"
+}
+
+# Log completion with wall-clock duration. Args: $1=epoch start time.
+log_finish() {
+  local end_time
+  end_time=$(date +%s)
+  local duration=$((end_time - $1))
+  echo "[$(date -Iseconds)] Finished in ${duration}s" >>"${LOG_FILE}"
+}
+
+main() {
+  local start_time
+  start_time=$(date +%s)
+
+  log_start
+
+  # Reindex changed files, then regenerate embeddings for new/modified entries.
+  if qmd update && qmd embed; then
+    log_finish "${start_time}"
+    notify "Index updated"
+  else
+    log_finish "${start_time}"
+    notify "Update failed"
+    exit 1
+  fi
+}
+
+main "$@"

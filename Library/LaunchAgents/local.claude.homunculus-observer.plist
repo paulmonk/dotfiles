@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.claude.homunculus-observer</string>
+  <string>local.claude.homunculus-observer</string>
   <key>ProgramArguments</key>
   <array>
     <string>/opt/homebrew/bin/gtimeout</string>
-    <string>600</string>
+    <string>900</string>
     <string>/bin/bash</string>
     <string>-c</string>
     <string>$HOME/.local/bin/homunculus-observer</string>

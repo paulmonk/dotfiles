@@ -197,6 +197,10 @@ bind-key S setw synchronize-panes
 bind-key b setw main-pane-width 90\; select-layout main-vertical
 bind-key B setw main-pane-height 30\; select-layout main-horizontal
 
+# Toggle pane orientation (horizontal/vertical)
+bind-key | select-layout even-horizontal
+bind-key - select-layout even-vertical
+
 # Use a tick for renaming the window prompt
 bind-key r command-prompt -I '#W' -p '(rename window)' "rename-window '%%'"
 bind-key R command-prompt -I '#S' -p '(rename session)' "rename-session '%%'"

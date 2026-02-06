@@ -31,7 +31,7 @@ flowchart TD
     G --> G2[Update last_session]
 
     J --> K{5+ in domain?}
-    K -->|Yes| M[/homunculus-evolve]
+    K -->|Yes| M["/homunculus-evolve"]
     M --> N[Skills, Commands, Agents]
     K -->|No| E
 ```
@@ -120,10 +120,10 @@ Observer runs via macOS launchd (every 30 minutes):
 
 ```bash
 # Load the agent
-launchctl load ~/Library/LaunchAgents/com.claude.homunculus-observer.plist
+launchctl load ~/Library/LaunchAgents/local.claude.homunculus-observer.plist
 
 # Run manually
-launchctl start com.claude.homunculus-observer
+launchctl start local.claude.homunculus-observer
 
 # Check status
 launchctl list | grep homunculus
