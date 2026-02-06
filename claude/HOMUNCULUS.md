@@ -31,7 +31,7 @@ flowchart TD
     G --> G2[Update last_session]
 
     J --> K{5+ in domain?}
-    K -->|Yes| M["/homunculus-evolve"]
+    K -->|Yes| M[homunculus-evolve]
     M --> N[Skills, Commands, Agents]
     K -->|No| E
 ```
@@ -74,9 +74,8 @@ created: 2026-02-01T14:30:00Z
 | ------------------------------ | ----------- |
 | Observation capture (hooks)    | **100%**    |
 | Session tracking (stop hook)   | **100%**    |
-| Observer spawning (start hook) | **100%**    |
+| Observer processing (launchd)  | **100%**    |
 | Instinct creation              | **100%**    |
-| Skills (instinct-apply)        | ~50-80%     |
 
 The critical path is fully deterministic via hooks. Skills enhance the experience but aren't required.
 
@@ -90,6 +89,7 @@ The critical path is fully deterministic via hooks. Skills enhance the experienc
 ├── instincts/
 │   ├── personal/               # Auto-learned instincts (*.md)
 │   └── inherited/              # Imported from others
+├── exports/                    # Exported instinct tarballs
 └── evolved/
     ├── skills/
     ├── commands/
@@ -110,7 +110,7 @@ The critical path is fully deterministic via hooks. Skills enhance the experienc
 
 | Hook                | Trigger       | Purpose                                          |
 | ------------------- | ------------- | ------------------------------------------------ |
-| `homunculus-start`  | Session start | Report pending observation count                 |
+| `homunculus-start`  | Session start | Inject learned instincts, report pending observations |
 | `homunculus-stop`   | Session end   | Increment `session_count`, update `last_session` |
 | `homunculus-observe`| Tool use      | Capture observations to `observations.jsonl`     |
 
@@ -130,12 +130,6 @@ launchctl list | grep homunculus
 ```
 
 Logs: `~/.claude/homunculus/observer.log`
-
-## Skills
-
-| Skill                       | When It Activates                         |
-| --------------------------- | ----------------------------------------- |
-| `homunculus-instinct-apply` | During work - surfaces relevant instincts |
 
 ## Confidence Scoring
 
@@ -192,7 +186,7 @@ When 5+ instincts accumulate in a domain, evolution can create a specialist skil
 
 - Check observations exist: `wc -l ~/.claude/homunculus/observations.jsonl`
 - Need 3+ occurrences of a pattern
-- Observer spawns automatically via `homunculus-start` hook
+- Observer runs via launchd every 30 minutes
 
 **Session count not incrementing:**
 
