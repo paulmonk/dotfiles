@@ -29,10 +29,13 @@ main() {
   # Directory check
   echo "Directories:"
   local dirs=(
+    "observations"
+    "observations.archive"
     "instincts/personal"
     "instincts/inherited"
+    "sessions"
+    "episodes"
     "evolved/skills"
-    "observations.archive"
   )
   for dir in "${dirs[@]}"; do
     if [[ -d "${HOMUNCULUS_DIR}/${dir}" ]]; then
@@ -59,10 +62,10 @@ main() {
   echo "  Inherited: $(count_files "${HOMUNCULUS_DIR}/instincts/inherited")"
 
   # Pending observations
-  local obs_file="${HOMUNCULUS_DIR}/observations.jsonl"
-  if [[ -f "${obs_file}" ]]; then
+  local obs_dir="${HOMUNCULUS_DIR}/observations"
+  if compgen -G "${obs_dir}/*.jsonl" >/dev/null 2>&1; then
     echo ""
-    echo "Pending observations: $(wc -l <"${obs_file}" | tr -d ' ')"
+    echo "Pending observations: $(cat "${obs_dir}"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
   fi
 
   # Evolution ready

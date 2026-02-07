@@ -40,7 +40,7 @@ cat ~/.claude/homunculus/instincts/personal/[NAME].md
 ### Pending observations
 
 ```bash
-wc -l < ~/.claude/homunculus/observations.jsonl 2>/dev/null || echo "0"
+cat ~/.claude/homunculus/observations/*.jsonl 2>/dev/null | wc -l | tr -d ' '
 ```
 
 ## Output Format

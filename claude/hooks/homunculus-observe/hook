@@ -1,67 +1,70 @@
 #!/usr/bin/env bash
 #
-# Homunculus Observer Hook
+# Homunculus Observer Hook (async, PostToolUse only)
 #
 # Captures tool usage observations for the continuous learning system.
-# Runs on PreToolUse and PostToolUse events, logging structured data
-# to observations.jsonl for later analysis by the observer agent.
+# Runs asynchronously so it never blocks Claude. Each session writes to
+# its own file under observations/{session_id}.jsonl to avoid races.
 #
-# The hook passes through all input unchanged to avoid blocking Claude.
-# Observations are appended asynchronously to minimise latency impact.
+# Wired only on PostToolUse. The pre-phase carries identical context
+# without the outcome, so it would be pure redundancy.
 
 set -o errexit -o errtrace -o pipefail -o nounset
 
 readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
-readonly OBSERVATIONS_FILE="${HOMUNCULUS_DIR}/observations.jsonl"
+readonly OBSERVATIONS_DIR="${HOMUNCULUS_DIR}/observations"
+
+# Skip if the observer agent is running (avoid feedback loop).
+[[ "${HOMUNCULUS_OBSERVER:-}" != "1" ]] || exit 0
 
 # Extracts relevant context from tool input based on tool type.
-# Different tools have different interesting metadata worth capturing.
-#
-# Arguments:
-#   $1 - Tool name (Write, Edit, Bash, etc.)
-#   $2 - Raw JSON input from Claude
-#
-# Outputs:
-#   JSON object with extracted context fields
 extract_context() {
   local tool_name="$1"
   local input="$2"
-  local file_path ext name cmd pattern
+  local file_path ext name cmd pattern desc
 
   case "${tool_name}" in
   Write | Edit | MultiEdit)
-    # For file operations, capture extension and filename for pattern detection.
     file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
     if [[ -n "${file_path}" ]]; then
       ext="${file_path##*.}"
       name="${file_path##*/}"
-      jq -n --arg ext ".${ext}" --arg name "${name}" '{file_ext: $ext, file_name: $name}'
+      desc=$(echo "${input}" | jq -r '.tool_input.description // empty' | head -c 120)
+      jq -n --arg ext ".${ext}" --arg name "${name}" --arg desc "${desc}" \
+        '{file_ext: $ext, file_name: $name} + (if $desc != "" then {description: $desc} else {} end)'
       return
     fi
     ;;
   Bash)
-    # For shell commands, capture the base command for workflow analysis.
     cmd=$(echo "${input}" | jq -r '.tool_input.command // empty' | awk '{print $1}')
-    jq -n --arg cmd "${cmd}" '{command: $cmd}'
+    desc=$(echo "${input}" | jq -r '.tool_input.description // empty' | head -c 120)
+    jq -n --arg cmd "${cmd}" --arg desc "${desc}" \
+      '{command: $cmd} + (if $desc != "" then {description: $desc} else {} end)'
     return
     ;;
   Grep)
-    # For searches, capture the pattern (truncated) for preference detection.
     pattern=$(echo "${input}" | jq -r '.tool_input.pattern // empty' | head -c 100)
     jq -n --arg p "${pattern}" '{pattern: $p}'
     return
+    ;;
+  Glob)
+    pattern=$(echo "${input}" | jq -r '.tool_input.pattern // empty' | head -c 100)
+    jq -n --arg p "${pattern}" '{pattern: $p}'
+    return
+    ;;
+  Read)
+    file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
+    if [[ -n "${file_path}" ]]; then
+      name="${file_path##*/}"
+      jq -n --arg name "${name}" '{file_name: $name}'
+      return
+    fi
     ;;
   esac
   echo "{}"
 }
 
 # Determines the outcome of a tool execution from PostToolUse output.
-#
-# Arguments:
-#   $1 - Raw JSON input containing tool_output
-#
-# Outputs:
-#   JSON string: "success", "error", or "blocked"
 extract_outcome() {
   local input="$1"
 
@@ -74,94 +77,47 @@ extract_outcome() {
   fi
 }
 
-# Checks if a tool should be observed. We only track tools that reveal
-# user preferences and workflows, not meta-tools like Task or LS.
-#
-# Arguments:
-#   $1 - Tool name
-#
-# Returns:
-#   0 if tool should be skipped, 1 if it should be observed
-should_skip_tool() {
-  local tool_name="$1"
-
-  case "${tool_name}" in
-  Write | Edit | MultiEdit | Bash | Grep | Glob | Read) return 1 ;;
-  *) return 0 ;;
-  esac
-}
-
-# Checks if a bash command is too noisy to log. Read-only commands
-# that don't reveal preferences are filtered out to reduce noise.
-#
-# Arguments:
-#   $1 - The bash command string
-#
-# Returns:
-#   0 if command should be skipped, 1 if it should be observed
-should_skip_command() {
-  local command="$1"
-
-  case "${command}" in
-  # Skip file inspection commands - these are just reading, not preferences.
-  cat\ * | head\ * | tail\ * | ls\ * | pwd | tree* | wc\ *) return 0 ;;
-  # Skip read-only git commands - status checks aren't behavioural patterns.
-  git\ branch* | git\ diff* | git\ log* | git\ status* | git\ show*) return 0 ;;
-  *) return 1 ;;
-  esac
-}
-
 main() {
-  local input hook_event tool_name command timestamp phase context outcome
-  local parsed
+  local input tool_name command timestamp context outcome session_id
 
-  mkdir -p "${HOMUNCULUS_DIR}"
+  mkdir -p "${OBSERVATIONS_DIR}"
 
-  # Read the full JSON payload from Claude.
   input=$(cat)
 
-  # Extract all needed fields in a single jq call for efficiency.
-  parsed=$(echo "${input}" | jq -r '[.hook_event_name // "", .tool_name // "", .tool_input.command // ""] | @tsv')
-  IFS=$'\t' read -r hook_event tool_name command <<<"${parsed}"
+  # Extract tool name and command in a single jq call.
+  tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
 
-  # Early exit for non-observed tools to minimise overhead.
-  if should_skip_tool "${tool_name}"; then
-    echo "${input}"
-    return
-  fi
+  # Only track tools that reveal user preferences and workflows.
+  case "${tool_name}" in
+  Write | Edit | MultiEdit | Bash | Grep | Glob | Read) ;;
+  *) return ;;
+  esac
 
   # Filter out noisy bash commands that don't reveal preferences.
-  if [[ "${tool_name}" == "Bash" ]] && should_skip_command "${command}"; then
-    echo "${input}"
-    return
+  if [[ "${tool_name}" == "Bash" ]]; then
+    case "${command}" in
+    cat\ * | head\ * | tail\ * | ls\ * | pwd | tree* | wc\ *) return ;;
+    git\ branch* | git\ diff* | git\ log* | git\ status* | git\ show*) return ;;
+    esac
   fi
 
-  # Build the observation record with timestamp and phase.
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  phase="pre"
-  [[ "${hook_event}" == "PostToolUse" ]] && phase="post"
-
   context=$(extract_context "${tool_name}" "${input}")
-
-  # Only extract outcome for post-phase events.
-  outcome="null"
-  if [[ "${phase}" == "post" ]]; then
-    outcome=$(extract_outcome "${input}")
-  fi
+  outcome=$(extract_outcome "${input}")
+  session_id=$(echo "${input}" | jq -r '.session_id // empty')
+  local obs_file="${OBSERVATIONS_DIR}/${session_id:-anonymous}.jsonl"
 
   # Append observation as a single JSON line.
   jq -cn \
     --arg ts "${timestamp}" \
-    --arg phase "${phase}" \
     --arg tool "${tool_name}" \
     --argjson ctx "${context}" \
     --argjson outcome "${outcome}" \
     --arg cwd "${PWD}" \
-    '{timestamp: $ts, phase: $phase, tool: $tool, context: $ctx, outcome: $outcome, cwd: $cwd}' \
-    >>"${OBSERVATIONS_FILE}"
-
-  # Always pass through input unchanged so Claude continues normally.
-  echo "${input}"
+    --arg sid "${session_id}" \
+    '{timestamp: $ts, tool: $tool, context: $ctx, outcome: $outcome, cwd: $cwd} + (if $sid != "" then {session_id: $sid} else {} end)' \
+    >>"${obs_file}"
 }
 
-main "$@"
+main

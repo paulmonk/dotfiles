@@ -7,7 +7,6 @@
 #/   repo-path    Path to a git repository. If omitted, uses fzf to select from ~/projects.
 #/
 #/ Options:
-#/   -d, --direnv-allow    Run 'direnv allow' in worktrees that have an .envrc file
 #/   -h, --help            Show this help
 #/
 #/ Behaviour:
@@ -22,17 +21,11 @@ usage() {
   exit 0
 }
 
-DIRENV_ALLOW=0
-
 # Parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h | --help)
       usage
-      ;;
-    -d | --direnv-allow)
-      DIRENV_ALLOW=1
-      shift
       ;;
     -*)
       echo "Unknown option: $1" >&2
@@ -51,11 +44,11 @@ error() {
   exit 1
 }
 
-# Run direnv allow if enabled and .envrc exists
+# Run direnv allow if direnv is installed and .envrc exists
 maybe_direnv_allow() {
   local path="$1"
 
-  if [[ "${DIRENV_ALLOW}" -eq 1 ]] && [[ -f "${path}/.envrc" ]]; then
+  if command -v direnv >/dev/null 2>&1 && [[ -f "${path}/.envrc" ]]; then
     log "running 'direnv allow' in ${path/#${HOME}/\~}"
     direnv allow "${path}"
   fi

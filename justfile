@@ -113,8 +113,6 @@ claude-code-mcp: qmd
     @claude mcp add --scope user gcloud -- npx -y @google-cloud/gcloud-mcp >/dev/null 2>&1 || true
     @echo "  Ensuring huggingface"
     @claude mcp add --scope user huggingface -- npx -y hf-mcp-server -t http "https://huggingface.co/mcp?login" >/dev/null 2>&1 || true
-    @echo "  Ensuring atlassian"
-    @claude mcp add --scope user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse >/dev/null 2>&1 || true
     @echo "  Ensuring firecrawl"
     @claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY >/dev/null 2>&1 || true
     @echo "  Ensuring chrome-devtools"
@@ -146,7 +144,7 @@ lint:
     @echo "Linting Lua scripts"
     @selene .
     @echo "Linting Markdown files"
-    @markdownlint-cli2 "**/*.md"
+    @rumdl check .
     @echo "--------------------------------"
 
 # Format scripts
@@ -158,5 +156,5 @@ format:
     @echo "Formatting Lua scripts"
     @stylua .
     @echo "Formatting Markdown files"
-    @prettier --write "**/*.md"
+    @rumdl fmt .
     @echo "--------------------------------"

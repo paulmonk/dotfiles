@@ -803,6 +803,8 @@ brew "rubberband"
 brew "ruby"
 # Extremely fast Python linter, written in Rust
 brew "ruff"
+# Markdown Linter and Formatter written in Rust
+brew "rumdl"
 # Safe, concurrent, practical language
 brew "rust"
 # Experimental Rust compiler front-end for IDEs
@@ -1153,6 +1155,7 @@ vscode "oven.bun-vscode"
 vscode "redhat.vscode-yaml"
 vscode "ritwickdey.liveserver"
 vscode "rust-lang.rust-analyzer"
+vscode "rvben.rumdl"
 vscode "samuelcolvin.jinjahtml"
 vscode "scala-lang.scala"
 vscode "scalameta.metals"

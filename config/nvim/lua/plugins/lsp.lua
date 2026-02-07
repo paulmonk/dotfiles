@@ -59,7 +59,6 @@ return {
 				'json-lsp',
 				'bash-language-server',
 				'dockerfile-language-server',
-				'markdownlint-cli2',
 				'biome',
 			},
 		},
@@ -134,7 +133,7 @@ return {
 				sh = { 'shfmt' },
 				terraform = { 'terraform_fmt' },
 				sql = { 'sqlfluff' },
-				markdown = { 'prettier' },
+				markdown = { 'rumdl' },
 			},
 			format_on_save = {
 				timeout_ms = 500,
@@ -158,7 +157,7 @@ return {
 				dockerfile = { 'hadolint' },
 				terraform = { 'tfsec' },
 				lua = { 'selene' },
-				markdown = { 'markdownlint-cli2' },
+				markdown = { 'rumdl' },
 			}
 
 			vim.api.nvim_create_autocmd(

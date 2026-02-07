@@ -1,40 +1,149 @@
 #!/usr/bin/env bash
 #
-# Inject learned instincts and report pending observations at session start.
+# Inject learned instincts at session start, using qmd for smart retrieval
+# when available, falling back to dumping all instincts.
 
 set -o errexit -o errtrace -o pipefail -o nounset
 
 readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
 readonly INSTINCTS_DIR="${HOMUNCULUS_DIR}/instincts/personal"
-readonly OBS_FILE="${HOMUNCULUS_DIR}/observations.jsonl"
+readonly EVOLVED_DIR="${HOMUNCULUS_DIR}/evolved/skills"
+readonly OBS_DIR="${HOMUNCULUS_DIR}/observations"
+readonly MAX_INSTINCTS=15
 
-# Output instincts if any exist
-if [[ -d "${INSTINCTS_DIR}" ]]; then
-  instinct_files=("${INSTINCTS_DIR}"/*.md)
-  if [[ -f "${instinct_files[0]}" ]]; then
-    echo "[INSTINCTS]"
+# Read the SessionStart payload for context.
+input=$(cat)
+readonly input
+SESSION_CWD=$(echo "${input}" | jq -r '.cwd // empty' 2>/dev/null)
+readonly SESSION_CWD
 
-    # Group by domain, output trigger/action/confidence
-    for f in "${instinct_files[@]}"; do
-      [[ -f "$f" ]] || continue
+# Build a search query from the project context.
+build_query() {
+  local parts=()
+  local project_name
+  project_name=$(basename "${SESSION_CWD:-}")
 
-      # Extract frontmatter fields
-      domain=$(grep "^domain:" "$f" 2>/dev/null | cut -d: -f2 | tr -d ' "' | head -1)
-      trigger=$(grep "^trigger:" "$f" 2>/dev/null | cut -d: -f2- | sed 's/^ *"//;s/"$//' | head -1)
-      action=$(grep "^action:" "$f" 2>/dev/null | cut -d: -f2- | sed 's/^ *"//;s/"$//' | head -1)
-      confidence=$(grep "^confidence:" "$f" 2>/dev/null | cut -d: -f2 | tr -d ' ' | head -1)
+  if [[ -n "${project_name}" ]]; then
+    parts+=("${project_name}")
+  fi
 
-      [[ -n "${domain}" && -n "${action}" ]] || continue
-      echo "- ${domain}: ${trigger:-?} → ${action} (${confidence:-?})"
+  # Detect language/framework hints from the project directory.
+  if [[ -n "${SESSION_CWD}" ]] && [[ -d "${SESSION_CWD}" ]]; then
+    [[ -f "${SESSION_CWD}/Cargo.toml" ]] && parts+=("rust cargo")
+    [[ -f "${SESSION_CWD}/go.mod" ]] && parts+=("go golang")
+    [[ -f "${SESSION_CWD}/package.json" ]] && parts+=("javascript typescript node")
+    [[ -f "${SESSION_CWD}/pyproject.toml" || -f "${SESSION_CWD}/setup.py" ]] && parts+=("python")
+    [[ -f "${SESSION_CWD}/justfile" ]] && parts+=("just task runner")
+    [[ -f "${SESSION_CWD}/Makefile" ]] && parts+=("make build")
+    [[ -f "${SESSION_CWD}/dbt_project.yml" ]] && parts+=("dbt sql analytics")
+    [[ -d "${SESSION_CWD}/.terraform" ]] && parts+=("terraform infrastructure")
+    [[ -f "${SESSION_CWD}/Dockerfile" ]] && parts+=("docker container")
+  fi
+
+  echo "${parts[*]}"
+}
+
+# Format an instinct file into a compact one-liner.
+format_instinct() {
+  local f="$1"
+  local domain trigger action confidence
+
+  domain=$(sed -n 's/^domain: *//p' "$f" | tr -d '"' | head -1)
+  trigger=$(sed -n 's/^trigger: *//p' "$f" | sed 's/^"//;s/"$//' | head -1)
+  action=$(sed -n 's/^action: *//p' "$f" | sed 's/^"//;s/"$//' | head -1)
+  confidence=$(sed -n 's/^confidence: *//p' "$f" | head -1)
+
+  [[ -n "${domain}" && -n "${action}" ]] || return
+  echo "- ${domain}: ${trigger:-?} → ${action} (${confidence:-?})"
+}
+
+# Resolve qmd:// URIs to real file paths.
+resolve_qmd_uri() {
+  local collection="$1"
+  local base_dir="$2"
+  sed "s|^qmd://${collection}/|${base_dir}/|"
+}
+
+# Smart retrieval via qmd: query the instincts collection and return the
+# top N most relevant instinct file paths.
+smart_retrieve() {
+  local query="$1"
+
+  # qmd query uses hybrid search (BM25 + vector + reranking).
+  qmd query "${query}" -c homunculus-instincts -n "${MAX_INSTINCTS}" --files 2>/dev/null |
+    awk -F, '{print $3}' |
+    resolve_qmd_uri "homunculus-instincts" "${INSTINCTS_DIR}"
+}
+
+# Fallback: return all instinct file paths.
+all_instincts() {
+  local files=("${INSTINCTS_DIR}"/*.md)
+  if [[ -f "${files[0]}" ]]; then
+    printf '%s\n' "${files[@]}"
+  fi
+}
+
+main() {
+  [[ -d "${INSTINCTS_DIR}" ]] || return
+
+  # Inject evolved skills first (they supersede individual instincts).
+  local evolved_files=("${EVOLVED_DIR}"/*.md)
+  if [[ -f "${evolved_files[0]:-}" ]]; then
+    echo "[EVOLVED SKILLS]"
+    for f in "${evolved_files[@]}"; do
+      local skill_name skill_desc
+      skill_name=$(sed -n 's/^name: *//p' "$f" | head -1)
+      skill_desc=$(sed -n 's/^description: *//p' "$f" | head -1)
+      [[ -n "${skill_name}" ]] || continue
+      echo "- ${skill_name}: ${skill_desc:-no description}"
     done
     echo ""
   fi
-fi
 
-# Report pending observations
-if [[ -f "${OBS_FILE}" ]]; then
-  count=$(wc -l <"${OBS_FILE}" | tr -d ' ')
-  if [[ "${count}" -gt 0 ]]; then
-    echo "[HOMUNCULUS] ${count} pending observations"
+  local query instinct_files all_files
+  all_files=$(all_instincts)
+  query=$(build_query)
+
+  # Use qmd for smart retrieval if available and the query is meaningful.
+  if command -v qmd >/dev/null 2>&1 && [[ -n "${query}" ]]; then
+    instinct_files=$(smart_retrieve "${query}")
   fi
-fi
+
+  # Fall back to all instincts if smart retrieval returned nothing.
+  if [[ -z "${instinct_files:-}" ]]; then
+    instinct_files="${all_files}"
+  fi
+
+  [[ -n "${instinct_files}" ]] || return
+
+  local count total
+  count=$(echo "${instinct_files}" | wc -l | tr -d ' ')
+  if [[ -n "${all_files}" ]]; then
+    total=$(echo "${all_files}" | wc -l | tr -d ' ')
+  else
+    total=0
+  fi
+
+  echo "[INSTINCTS]"
+  while IFS= read -r f; do
+    [[ -f "$f" ]] || continue
+    format_instinct "$f"
+  done <<<"${instinct_files}"
+
+  if [[ "${count}" -lt "${total}" ]]; then
+    echo ""
+    echo "[HOMUNCULUS] Showing ${count}/${total} instincts (filtered by project context: ${query})"
+  fi
+  echo ""
+
+  # Report pending observations.
+  if compgen -G "${OBS_DIR}/*.jsonl" >/dev/null 2>&1; then
+    local obs_count
+    obs_count=$(cat "${OBS_DIR}"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')
+    if [[ "${obs_count}" -gt 0 ]]; then
+      echo "[HOMUNCULUS] ${obs_count} pending observations"
+    fi
+  fi
+}
+
+main

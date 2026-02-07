@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#/ Guards against expensive BigQuery queries.
+#/
+#/ Denies bq query commands that lack a --maximum_bytes_billed flag. BigQuery
+#/ enforces the cap server-side, rejecting queries that would exceed it.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+readonly BYTES_PER_GIB=1073741824
+readonly LIMIT_GIB=10
+readonly LIMIT_BYTES=$((LIMIT_GIB * BYTES_PER_GIB))
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  # Fast path: no bq anywhere in the string.
+  if [[ "${command}" != *"bq"* ]]; then
+    echo "${input}"
+    return 0
+  fi
+
+  # Only guard the query subcommand.
+  if ! echo "${command}" | grep -qE '(^|[;&|]\s*)bq\s+.*\bquery\b'; then
+    echo "${input}"
+    return 0
+  fi
+
+  # Extract the value if the flag is present, otherwise require it.
+  local billed
+  billed=$(echo "${command}" | grep -oE '\-\-maximum_bytes_billed[= ]+([0-9]+)' | grep -oE '[0-9]+') || true
+
+  if [[ -z "${billed}" ]]; then
+    deny_tool "bq query requires a cost cap. Add --maximum_bytes_billed=${LIMIT_BYTES} to your command (${LIMIT_GIB} GiB limit)."
+    return 0
+  fi
+
+  if ((billed > LIMIT_BYTES)); then
+    deny_tool "maximum_bytes_billed=${billed} exceeds the ${LIMIT_GIB} GiB limit. Use --maximum_bytes_billed=${LIMIT_BYTES} or lower."
+    return 0
+  fi
+
+  echo "${input}"
+}
+
+main "$@"

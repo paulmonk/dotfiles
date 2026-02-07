@@ -37,15 +37,19 @@ Sets up the directory structure and verifies configuration for the continuous le
 ```
 ~/.claude/homunculus/
 ├── identity.json
+├── observations/
+│   └── {session_id}.jsonl
+├── observations.archive/
 ├── instincts/
 │   ├── personal/
 │   └── inherited/
+├── sessions/
+├── episodes/
 ├── evolved/
 │   ├── skills/
 │   ├── commands/
 │   └── agents/
-├── exports/
-└── observations.archive/
+└── exports/
 ```
 
 ## Example Output
