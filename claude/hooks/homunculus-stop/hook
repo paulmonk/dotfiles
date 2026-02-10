@@ -15,7 +15,7 @@ readonly SESSIONS_DIR="${HOMUNCULUS_DIR}/sessions"
 readonly LOG_FILE="${HOMUNCULUS_DIR}/observer.log"
 readonly LOCK_FILE="${HOMUNCULUS_DIR}/observer.lock"
 
-[[ -f "${STATE}" ]] || exit 0
+[[ -f ${STATE} ]] || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 
 # Read the Stop hook payload for session metadata.
@@ -48,7 +48,7 @@ generate_session_summary() {
   # Extract tool usage stats and touched files from this session's observations.
   local session_obs="${OBS_DIR}/${SESSION_ID}.jsonl"
   local tools_json files_json
-  if [[ -f "${session_obs}" ]] && [[ -s "${session_obs}" ]]; then
+  if [[ -f ${session_obs} ]] && [[ -s ${session_obs} ]]; then
     tools_json=$(jq -rs '[.[].tool] | group_by(.) | map({(.[0]): length}) | add // {}' "${session_obs}" 2>/dev/null || echo '{}')
     files_json=$(jq -rs '[.[] | select(.context.file_name != null) | .context.file_name] | unique' "${session_obs}" 2>/dev/null || echo '[]')
   else
@@ -60,7 +60,7 @@ generate_session_summary() {
   local tools_yaml
   tools_yaml=$(echo "${tools_json}" | jq -r 'to_entries | sort_by(-.value) | map(.key) | .[]' 2>/dev/null)
   local tools_list=""
-  if [[ -n "${tools_yaml}" ]]; then
+  if [[ -n ${tools_yaml} ]]; then
     tools_list=$(echo "${tools_yaml}" | paste -sd, - | sed 's/,/, /g')
   fi
 
@@ -78,7 +78,7 @@ generate_session_summary() {
       awk -F, '{print $3}' |
       sed "s|^qmd://homunculus-sessions/||" |
       while IFS= read -r candidate; do
-        if [[ "${candidate}" != "${current_basename}" ]]; then
+        if [[ ${candidate} != "${current_basename}" ]]; then
           echo "${candidate}"
           break
         fi
@@ -92,7 +92,7 @@ generate_session_summary() {
     echo "directory: ${SESSION_CWD:-unknown}"
     echo "session_id: ${SESSION_ID:0:7}"
     echo "tools_used: [${tools_list}]"
-    if [[ -n "${continues_from}" ]]; then
+    if [[ -n ${continues_from} ]]; then
       echo "continues_from: ${continues_from}"
     fi
     echo "---"
@@ -100,7 +100,7 @@ generate_session_summary() {
     echo "# Session: ${project_name}"
     echo ""
     echo "## Files touched"
-    if [[ -n "${files_list}" ]]; then
+    if [[ -n ${files_list} ]]; then
       echo "${files_list}" | while read -r f; do echo "- ${f}"; done
     else
       echo "- (none recorded)"
@@ -141,7 +141,7 @@ run_observer() {
 
   local count
   count=$(cat "${OBS_DIR}"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')
-  [[ "${count}" -gt 0 ]] || return
+  [[ ${count} -gt 0 ]] || return
 
   local start_time
   start_time=$(date +%s)

@@ -8,11 +8,12 @@ metadata:
 
 # Homunculus Init
 
-Sets up the directory structure and verifies configuration for the continuous learning system.
+Sets up the directory structure and verifies configuration for the
+continuous learning system.
 
 ## Usage
 
-```
+```text
 /homunculus-init
 /homunculus-init --status
 ```
@@ -34,9 +35,10 @@ Sets up the directory structure and verifies configuration for the continuous le
 
 ## What It Creates
 
-```
+```text
 ~/.claude/homunculus/
 ├── identity.json
+├── convictions.md
 ├── observations/
 │   └── {session_id}.jsonl
 ├── observations.archive/
@@ -45,16 +47,12 @@ Sets up the directory structure and verifies configuration for the continuous le
 │   └── inherited/
 ├── sessions/
 ├── episodes/
-├── evolved/
-│   ├── skills/
-│   ├── commands/
-│   └── agents/
 └── exports/
 ```
 
 ## Example Output
 
-```
+```text
 Created directory structure
 Created identity.json
 Hook configured: homunculus-observe
@@ -64,7 +62,6 @@ Hook configured: homunculus-observe
 Directories:
   [x] instincts/personal
   [x] instincts/inherited
-  [x] evolved/skills
   [x] observations.archive
 
 Sessions: 0

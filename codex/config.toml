@@ -1,0 +1,77 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# =================================================================================
+# Codex example configuration (config.toml)
+#
+# This file lists all keys Codex reads from config.toml, their default values,
+# and concise explanations. Values here mirror the effective defaults compiled
+# into the CLI. Adjust as needed.
+#
+# Notes
+# - Root keys must appear before tables in TOML.
+# - Optional keys that default to "unset" are shown commented out with notes.
+# - MCP servers, profiles, and model providers are examples; remove or edit.
+# =================================================================================
+model = "gpt-5.3-codex"
+
+# Project instructions
+project_doc_fallback_filenames = ["CLAUDE.md"]
+project_doc_max_bytes = 131_072
+
+# Updates installed via Homebrew
+check_for_update_on_startup = false
+
+# Notifications: Codex passes a JSON string as argv[1].
+# agent-notify auto-detects the Codex payload format.
+notify = ["agent-notify"]
+
+# =================================================================================
+# UI, Notifications, and Misc (tables)
+# =================================================================================
+[tui]
+# Desktop notifications from the TUI: boolean or filtered list. Default: true
+# Examples: false | ["agent-turn-complete", "approval-requested"]
+notifications = false
+
+# Show onboarding tooltips in the welcome screen. Default: true
+show_tooltips = false
+
+[feedback]
+# Control whether users can submit feedback from `/feedback`.
+enabled = false
+
+# =================================================================================
+# MCP servers
+# =================================================================================
+[mcp_servers.aws-knowledge]
+url = "https://knowledge-mcp.global.api.aws"
+enabled = true
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+enabled = true
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp"]
+enabled = true
+
+[mcp_servers.firecrawl]
+command = "npx"
+args = ["-y", "firecrawl-mcp"]
+env_vars = ["FIRECRAWL_API_KEY"]
+enabled = true
+
+[mcp_servers.gcloud]
+command = "npx"
+args = ["-y", "@google-cloud/gcloud-mcp"]
+enabled = true
+
+[mcp_servers.gh_grep]
+url = "https://mcp.grep.app"
+enabled = true
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@anthropic-ai/mcp-server-playwright"]
+enabled = true

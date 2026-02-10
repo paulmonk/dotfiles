@@ -1056,6 +1056,8 @@ cask "slack"
 cask "sloth"
 # Control your Sonos system
 cask "sonos"
+# Dictation tool including LLM reformatting
+cask "superwhisper"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Mesh VPN based on WireGuard
@@ -1080,8 +1082,6 @@ cask "warp"
 cask "whatsapp"
 # Network protocol analyzer
 cask "wireshark-app"
-# Voice-to-text dictation with AI-powered auto-editing
-cask "wispr-flow"
 # Application for configuring any YubiKey
 cask "yubico-yubikey-manager"
 # Gecko based web browser
@@ -1095,6 +1095,7 @@ vscode "anthropic.claude-code"
 vscode "anysphere.cursorpyright"
 vscode "anysphere.remote-containers"
 vscode "astral-sh.ty"
+vscode "bedirt.gpt-token-counter-live"
 vscode "bierner.markdown-emoji"
 vscode "biomejs.biome"
 vscode "bradlc.vscode-tailwindcss"

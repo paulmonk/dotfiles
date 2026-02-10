@@ -1,6 +1,8 @@
 # Issue Tracking with Beads
 
-When a project uses **beads** (`bd`), use it for tracking work across sessions. Run `bd prime` for full workflow context or `bd hooks install` for auto-injection.
+When a project uses **beads** (`bd`), use it for tracking work
+across sessions. Run `bd prime` for full workflow context or
+`bd hooks install` for auto-injection.
 
 | Command                                      | Purpose                                   |
 | -------------------------------------------- | ----------------------------------------- |
@@ -11,4 +13,5 @@ When a project uses **beads** (`bd`), use it for tracking work across sessions. 
 | `bd close <id>`                              | Complete and close an issue               |
 | `bd sync`                                    | Sync with git remote (run at session end) |
 
-Issue types: `task`, `bug`, `story`, `epic`, `spike`. Priority: 1 (highest) to 4 (lowest).
+Issue types: `task`, `bug`, `story`, `epic`, `spike`.
+Priority: 1 (highest) to 4 (lowest).

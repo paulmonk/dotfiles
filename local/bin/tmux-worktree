@@ -24,16 +24,16 @@ usage() {
 # Parse options
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -h | --help)
-      usage
-      ;;
-    -*)
-      echo "Unknown option: $1" >&2
-      usage
-      ;;
-    *)
-      break
-      ;;
+  -h | --help)
+    usage
+    ;;
+  -*)
+    echo "Unknown option: $1" >&2
+    usage
+    ;;
+  *)
+    break
+    ;;
   esac
 done
 
@@ -58,16 +58,16 @@ maybe_direnv_allow() {
 select_repo() {
   local projects_dir="${HOME}/projects"
 
-  if [[ ! -d "${projects_dir}" ]]; then
+  if [[ ! -d ${projects_dir} ]]; then
     error "projects directory not found: ${projects_dir}"
   fi
 
   local repo
   repo=$(
-    find "${projects_dir}" -maxdepth 3 -name .git 2>/dev/null \
-      | sed 's|/\.git$||' \
-      | sort \
-      | fzf --prompt="Select repo: "
+    find "${projects_dir}" -maxdepth 3 -name .git 2>/dev/null |
+      sed 's|/\.git$||' |
+      sort |
+      fzf --prompt="Select repo: "
   ) || error "no repository selected"
 
   echo "${repo}"
@@ -84,7 +84,7 @@ get_worktrees() {
 
   # Collect worktrees with birth times
   while IFS= read -r line; do
-    if [[ "${line}" =~ ^worktree\ (.+)$ ]]; then
+    if [[ ${line} =~ ^worktree\ (.+)$ ]]; then
       worktree_path="${BASH_REMATCH[1]}"
       name=$(basename "${worktree_path}")
       name="${name//_/-}"
@@ -95,10 +95,10 @@ get_worktrees() {
   done < <(git -C "${repo_path}" worktree list --porcelain)
 
   # Sort by mtime descending (most recently modified first), limit to 9
-  printf '%s\n' "${entries[@]}" \
-    | sort -t: -k1 -rn \
-    | head -n 9 \
-    | cut -d: -f2-
+  printf '%s\n' "${entries[@]}" |
+    sort -t: -k1 -rn |
+    head -n 9 |
+    cut -d: -f2-
 }
 
 # Get current tmux window names for a session
@@ -121,7 +121,7 @@ create_window() {
   local display_path="${path/#${HOME}/\~}"
 
   log "creating window '${name}' at '${display_path}'"
-  if [[ ! -d "${path}" ]]; then
+  if [[ ! -d ${path} ]]; then
     log "warning: path does not exist: ${display_path}"
   fi
   tmux new-window -t "${session}" -n "${name}" -c "${path}"
@@ -143,7 +143,7 @@ sync_session() {
   # Get current window names
   local -a current_windows=()
   while IFS= read -r window; do
-    [[ -n "${window}" ]] && current_windows+=("${window}")
+    [[ -n ${window} ]] && current_windows+=("${window}")
   done < <(get_window_names "${session}")
 
   # Create windows for new worktrees
@@ -153,13 +153,13 @@ sync_session() {
     local found=0
 
     for existing in "${current_windows[@]}"; do
-      if [[ "${existing}" == "${name}" ]]; then
+      if [[ ${existing} == "${name}" ]]; then
         found=1
         break
       fi
     done
 
-    if [[ "${found}" -eq 0 ]]; then
+    if [[ ${found} -eq 0 ]]; then
       log "creating window: ${name}"
       create_window "${session}" "${name}" "${path}"
     fi
@@ -170,13 +170,13 @@ sync_session() {
     local found=0
 
     for name in "${worktree_names[@]}"; do
-      if [[ "${name}" == "${window}" ]]; then
+      if [[ ${name} == "${window}" ]]; then
         found=1
         break
       fi
     done
 
-    if [[ "${found}" -eq 0 ]]; then
+    if [[ ${found} -eq 0 ]]; then
       log "removing window: ${window}"
       tmux kill-window -t "${session}:${window}" 2>/dev/null || true
     fi
@@ -189,7 +189,7 @@ create_session() {
   local first=1
 
   while IFS=':' read -r path name; do
-    if [[ "${first}" -eq 1 ]]; then
+    if [[ ${first} -eq 1 ]]; then
       log "creating session: ${session}"
       tmux new-session -d -s "${session}" -n "${name}" -c "${path}"
       maybe_direnv_allow "${path}"
@@ -200,7 +200,7 @@ create_session() {
     fi
   done < <(get_worktrees "${repo_path}")
 
-  if [[ "${first}" -eq 1 ]]; then
+  if [[ ${first} -eq 1 ]]; then
     error "no worktrees found in repository"
   fi
 }
@@ -219,7 +219,7 @@ main() {
   repo_path="${repo_path/#\~/${HOME}}"
 
   # Validate repo path
-  if [[ ! -d "${repo_path}" ]]; then
+  if [[ ! -d ${repo_path} ]]; then
     error "directory not found: ${repo_path}"
   fi
 
@@ -231,7 +231,7 @@ main() {
   local session
   local projects_dir="${HOME}/projects"
 
-  if [[ "${repo_path}" == "${projects_dir}/"* ]]; then
+  if [[ ${repo_path} == "${projects_dir}/"* ]]; then
     # Path is under ~/projects, use relative path as session name
     local relative_path="${repo_path#"${projects_dir}"/}"
     session="${relative_path//\//-}"
@@ -253,7 +253,7 @@ main() {
   fi
 
   # Attach or switch to session
-  if [[ -n "${TMUX:-}" ]]; then
+  if [[ -n ${TMUX:-} ]]; then
     tmux switch-client -t "${session}"
   else
     tmux attach-session -t "${session}"

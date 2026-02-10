@@ -13,18 +13,18 @@ main() {
   input=$(read_hook_input)
 
   tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
-  [[ "${tool_name}" != "Bash" ]] && {
+  [[ ${tool_name} != "Bash" ]] && {
     echo "${input}"
     exit 0
   }
 
   run_in_background=$(echo "${input}" | jq -r '.tool_input.run_in_background // false')
-  [[ "${run_in_background}" != "true" ]] && {
+  [[ ${run_in_background} != "true" ]] && {
     echo "${input}"
     exit 0
   }
 
-  if [[ -z "${TMUX:-}" ]]; then
+  if [[ -z ${TMUX:-} ]]; then
     deny_tool "Background tasks require a tmux session. Start tmux first, then retry."
     exit 0
   fi

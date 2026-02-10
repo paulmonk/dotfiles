@@ -7,11 +7,12 @@ allowed-tools: Bash(mkdir /tmp/claude/plugins) Bash(mv ~/.claude/plugins/cache "
 
 # Plugin Update
 
-Clear the Claude Code plugin cache and metadata to force all plugins to reinstall fresh on next startup.
+Clear the Claude Code plugin cache and metadata to force all
+plugins to reinstall fresh on next startup.
 
 ## Usage
 
-```
+```text
 /plugin-update
 ```
 

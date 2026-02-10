@@ -3,6 +3,7 @@
   "env": {
     "BASH_DEFAULT_TIMEOUT_MS": "300000",
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_BUG_COMMAND": "1",
@@ -10,132 +11,6 @@
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
     "DISABLE_TELEMETRY": "1"
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-start/hook"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/tmux-guard/hook"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/trash-guard/hook"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/grep-guard/hook"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/find-guard/hook"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/bq-guard/hook"
-          }
-        ]
-      },
-      {
-        "matcher": "WebFetch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/web-fetch-guard/hook"
-          }
-        ]
-      },
-      {
-        "matcher": "WebSearch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/web-search-guard/hook"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/worktree-guard/hook"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/britfix/hook",
-            "async": true
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-recall/hook",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-observe/hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "idle_prompt|permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify/hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify/hook"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-stop/hook",
-            "async": true
-          }
-        ]
-      }
-    ]
   },
   "attribution": {
     "commit": "",
@@ -245,8 +120,10 @@
       "Bash(realpath:*)",
       "Bash(rg:*)",
       "Bash(ruff:*)",
+      "Bash(rumdl:*)",
       "Bash(rustfmt:*)",
       "Bash(sed:*)",
+      "Bash(selene:*)",
       "Bash(semgrep:*)",
       "Bash(shellcheck:*)",
       "Bash(shfmt:*)",
@@ -294,10 +171,9 @@
       "mcp__context7__*",
       "mcp__ide__getDiagnostics",
       "mcp__firecrawl__*",
-      "mcp__github__*",
-      "mcp__plugin_context7_context7__*",
-      "mcp__plugin_exa-mcp-server_exa__*",
-      "mcp__plugin_playwright_playwright__*",
+      "mcp__gh_grep__*",
+      "mcp__exa__*",
+      "mcp__playwright__*",
       "mcp__qmd__*"
     ],
     "deny": [
@@ -312,14 +188,151 @@
     ],
     "defaultMode": "plan"
   },
-  "plansDirectory": "./.claude/plans",
-  "showTurnDuration": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-start/hook",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/trash-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/grep-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/find-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/bq-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/web-fetch-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/web-search-guard/hook"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/worktree-guard/hook"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/britfix/hook",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-recall/hook",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-observe/hook",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify/hook",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify/hook",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/homunculus-stop/hook",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline",
     "padding": 0
   },
-  "outputStyle": "Personal",
+  "enabledPlugins": {
+    "beads@beads-marketplace": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "differential-review@trailofbits": true,
+    "insecure-defaults@trailofbits": true,
+    "marketing-skills@marketingskills": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "sharp-edges@trailofbits": true,
+    "static-analysis@trailofbits": true,
+    "superpowers@superpowers-marketplace": true
+  },
   "extraKnownMarketplaces": {
     "beads-marketplace": {
       "source": {
@@ -331,12 +344,6 @@
       "source": {
         "source": "github",
         "repo": "dbt-labs/dbt-agent-skills"
-      }
-    },
-    "exa-mcp-server": {
-      "source": {
-        "source": "github",
-        "repo": "exa-labs/exa-mcp-server"
       }
     },
     "superpowers-marketplace": {
@@ -352,17 +359,7 @@
       }
     }
   },
-  "enabledPlugins": {
-    "beads@beads-marketplace": true,
-    "claude-code-setup@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "differential-review@trailofbits": true,
-    "exa-mcp-server@exa-mcp-server": true,
-    "insecure-defaults@trailofbits": true,
-    "playwright@claude-plugins-official": true,
-    "sharp-edges@trailofbits": true,
-    "static-analysis@trailofbits": true,
-    "superpowers@superpowers-marketplace": true
-  }
+  "outputStyle": "Personal",
+  "plansDirectory": "./.claude/plans",
+  "showTurnDuration": true
 }

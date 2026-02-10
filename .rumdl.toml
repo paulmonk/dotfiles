@@ -1,0 +1,6 @@
+[global]
+exclude = ["local/share/tmux/plugins/**"]
+disable = ["MD036", "MD041"]
+
+[MD013]
+code_blocks = false

@@ -1,2 +1,6 @@
 [global]
 flavor = "gfm"
+line-length = 100
+
+[MD013]
+code_blocks = false

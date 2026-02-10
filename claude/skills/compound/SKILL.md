@@ -6,7 +6,9 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash(git add:*), Bash(git status:*
 
 # Compound
 
-Capture and document solutions to non-trivial problems so knowledge compounds over time. Triggers on confirmation phrases or manual invocation after solving a problem.
+Capture and document solutions to non-trivial problems so
+knowledge compounds over time. Triggers on confirmation
+phrases or manual invocation after solving a problem.
 
 ## Trigger Phrases
 
@@ -18,7 +20,7 @@ Skip trivial fixes (typos, obvious syntax errors, simple config changes).
 
 ## Usage
 
-```
+```text
 /compound
 ```
 
@@ -48,7 +50,8 @@ grep -r "<symptom-keywords>" .claude/learnings/ ~/.claude/learnings/ docs/ 2>/de
 
 If similar documentation exists, present options:
 
-1. **Create new doc with cross-reference** (recommended if different root cause)
+1. **Create new doc with cross-reference** (recommended if
+   different root cause)
 2. **Update existing doc** (if same issue, new context)
 3. **Skip** (already well documented)
 
@@ -76,7 +79,7 @@ If similar documentation exists, present options:
 
 **For learning files**, use this structure:
 
-````markdown
+`````markdown
 # <Descriptive Title>
 
 **Date:** YYYY-MM-DD
@@ -102,7 +105,6 @@ If similar documentation exists, present options:
 // After (fixed)
 ...
 ```
-````
 
 ## Prevention
 
@@ -111,12 +113,11 @@ If similar documentation exists, present options:
 ## Related
 
 - <links to related issues or docs>
-
-````
+`````
 
 **For CLAUDE.md rules**, keep concise:
 
-```markdown
+````markdown
 - **<Action to take or avoid>.** <Brief explanation of why.>
 ````
 
@@ -157,7 +158,7 @@ Avoid:
 
 **Global learning file** (`~/.claude/learnings/2026-02-01-go-nil-map.md`):
 
-````markdown
+`````markdown
 # Go nil map panic on assignment
 
 **Date:** 2026-02-01
@@ -186,18 +187,16 @@ m["key"] = 1  // panic
 m := make(map[string]int)
 m["key"] = 1  // works
 ```
-````
 
 ## Prevention
 
 Always initialise maps with `make()` or a literal `{}`.
 Consider using struct fields with initialisation in constructor.
-
-````
+`````
 
 **CLAUDE.md rule**:
 
-```markdown
+````markdown
 - **Initialise Go maps before use.** The zero value is nil; assignment to nil maps panics.
 ````
 
@@ -205,5 +204,10 @@ Consider using struct fields with initialisation in constructor.
 
 - Only document non-trivial solutions (multiple investigation attempts)
 - Prefer patterns over one-off fixes
-- **Scope rule:** If you'll hit this again in other projects, it's global (`~/.claude/`). If it's specific to this codebase, it's project-level (`.claude/` in project root).
-- Create the learnings directory if it doesn't exist: `mkdir -p .claude/learnings` or `mkdir -p ~/.claude/learnings`
+- **Scope rule:** If you'll hit this again in other
+  projects, it's global (`~/.claude/`). If it's specific
+  to this codebase, it's project-level (`.claude/` in
+  project root).
+- Create the learnings directory if it doesn't exist:
+  `mkdir -p .claude/learnings` or
+  `mkdir -p ~/.claude/learnings`

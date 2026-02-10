@@ -26,7 +26,7 @@ Provide a short summary in the Title above. Examples of good PR titles:
 - Make it obvious it works, include screenshots or pastes of output so it's clear what the reviewer should expect.
 -->
 
-## Checklist:
+## Checklist
 
 <!---
 This checklist is mostly useful as a reminder of small things that can easily be

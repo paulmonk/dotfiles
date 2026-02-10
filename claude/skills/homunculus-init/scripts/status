@@ -35,7 +35,6 @@ main() {
     "instincts/inherited"
     "sessions"
     "episodes"
-    "evolved/skills"
   )
   for dir in "${dirs[@]}"; do
     if [[ -d "${HOMUNCULUS_DIR}/${dir}" ]]; then
@@ -47,7 +46,7 @@ main() {
   echo ""
 
   # Session count
-  if [[ -f "${IDENTITY_FILE}" ]]; then
+  if [[ -f ${IDENTITY_FILE} ]]; then
     local sessions
     sessions=$(jq -r '.session_count // 0' "${IDENTITY_FILE}")
     echo "Sessions: ${sessions}"
@@ -68,13 +67,34 @@ main() {
     echo "Pending observations: $(cat "${obs_dir}"/*.jsonl 2>/dev/null | wc -l | tr -d ' ')"
   fi
 
-  # Evolution ready
-  if [[ -f "${IDENTITY_FILE}" ]]; then
+  # Convictions
+  local convictions_file="${HOMUNCULUS_DIR}/convictions.md"
+  if [[ -f ${convictions_file} ]]; then
+    local conviction_count
+    conviction_count=$(grep -c '^- ' "${convictions_file}" 2>/dev/null || echo 0)
+    echo ""
+    echo "Convictions: ${conviction_count}"
+  fi
+
+  # Promoted instincts
+  local promoted_count=0
+  for f in "${HOMUNCULUS_DIR}/instincts/personal/"*.md; do
+    [[ -f $f ]] || continue
+    if grep -q "^promoted: true" "$f"; then
+      promoted_count=$((promoted_count + 1))
+    fi
+  done
+  if [[ ${promoted_count} -gt 0 ]]; then
+    echo "Promoted instincts: ${promoted_count}"
+  fi
+
+  # Promotion candidates (meet criteria but not yet promoted)
+  if [[ -f ${IDENTITY_FILE} ]]; then
     local ready
-    ready=$(jq -r '.evolution.ready // [] | length' "${IDENTITY_FILE}")
-    if [[ "${ready}" -gt 0 ]]; then
+    ready=$(jq -r '.promotion.ready // [] | length' "${IDENTITY_FILE}" 2>/dev/null || echo 0)
+    if [[ ${ready} -gt 0 ]]; then
       echo ""
-      echo "Evolution ready in: $(jq -r '.evolution.ready | join(", ")' "${IDENTITY_FILE}")"
+      echo "Promotion candidates in: $(jq -r '.promotion.ready | join(", ")' "${IDENTITY_FILE}")"
     fi
   fi
 }

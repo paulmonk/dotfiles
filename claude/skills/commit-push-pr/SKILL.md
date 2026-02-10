@@ -6,11 +6,12 @@ allowed-tools: Bash(git checkout:*), Bash(git add:*), Bash(git status:*), Bash(g
 
 # Commit Push PR
 
-Complete workflow that commits changes, pushes the branch, and creates a pull request in one step.
+Complete workflow that commits changes, pushes the branch,
+and creates a pull request in one step.
 
 ## Usage
 
-```
+```text
 /commit-push-pr
 ```
 
@@ -37,7 +38,8 @@ If currently on `main` or `master`:
 ### 3. Stage and Commit
 
 - Stage relevant files (prefer specific files over `git add -A`)
-- Create commit with appropriate message following Conventional Commits
+- Create commit with appropriate message following
+  Conventional Commits
 
 ### 4. Push to Remote
 
@@ -54,11 +56,15 @@ EOF
 )"
 ```
 
-Substitute the template body using the contents of the `.github/PULL_REQUEST_TEMPLATE.md` file in the repository.
+Substitute the template body using the contents of the
+`.github/PULL_REQUEST_TEMPLATE.md` file in the repository.
 
-If no template is found, use the default template from [./templates/pull-request.md](pull-request.md).
+If no template is found, use the default template from
+[./templates/pull-request.md](templates/pull-request.md).
 
-Ensure you follow the guidance of the template to fill our the PR appropriately. It may have guidance for the title and body of the PR.
+Ensure you follow the guidance of the template to fill out
+the PR appropriately. It may have guidance for the title
+and body of the PR.
 
 ### 6. Return PR URL
 
@@ -66,7 +72,8 @@ Output the PR URL so the user can view it.
 
 ## Notes
 
-- All steps should be completed in a single message using parallel tool calls where possible
+- All steps should be completed in a single message using
+  parallel tool calls where possible
 - Do not use any other tools besides those listed
 - Do not send any other text or messages besides tool calls
 - Requires GitHub CLI (`gh`) to be installed and authenticated

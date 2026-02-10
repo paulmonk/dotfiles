@@ -1,0 +1,76 @@
+---
+minimum_pre_commit_version: 2.9.0
+
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
+# These are the submodules code, we need to ignore this.
+exclude: ^local/share/tmux/plugins/
+
+repos:
+  # Basic config for all filetypes
+  # ======
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        stages: [pre-commit]
+      - id: end-of-file-fixer
+        stages: [pre-commit]
+      - id: check-added-large-files
+        stages: [pre-commit]
+      - id: check-yaml
+        stages: [pre-commit]
+      - id: check-json
+        stages: [pre-commit]
+        exclude: ^Library/
+      - id: check-toml
+        stages: [pre-commit]
+
+  - repo: https://github.com/sirosen/texthooks
+    rev: 815307a61a62d48c84412f34f3e6789a2cd9179a # frozen: 0.7.1
+    hooks:
+      - id: fix-smartquotes
+      - id: fix-spaces
+      - id: fix-ligatures
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: 8f2901e453e79dc8c524a8e43268721aa91931a6 # frozen: v4.3.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  # Markdown
+  # ======
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: e2cb0cd6d4b373e8bb5647166b9ff1e5652315ea # frozen: v0.1.17
+    hooks:
+      - id: rumdl
+
+  # Shell
+  # ======
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: 745eface02aef23e168a8afb6b5737818efbea95 # frozen: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        exclude: (^|/)\.?z(shrc|shenv|profile|login|logout)$|config/zsh/|p10k\.zsh$
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: 2a30809d16bc7a60d9b97353c797f42b510d3368 # frozen: v3.12.0-2
+    hooks:
+      - id: shfmt
+        exclude: (^|/)\.?z(shrc|shenv|profile|login|logout)$|config/zsh/|p10k\.zsh$
+
+  # Local
+  # ======
+  - repo: local
+    hooks:
+      - id: selene
+        name: selene
+        entry: selene
+        language: system
+        types: [lua]
+      - id: stylua
+        name: stylua
+        entry: stylua --check
+        language: system
+        types: [lua]

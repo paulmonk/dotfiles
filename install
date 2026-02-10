@@ -69,6 +69,6 @@ usage() {
 REGEX='(^|\W)(-h|--help)($|\W)'
 
 # shellcheck disable=SC2015
-[[ "$*" =~ ${REGEX} ]] && usage || true
+[[ $* =~ ${REGEX} ]] && usage || true
 
 just dotfiles

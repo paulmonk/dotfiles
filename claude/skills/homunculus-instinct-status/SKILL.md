@@ -12,7 +12,7 @@ Shows all learned instincts with their confidence scores, grouped by domain.
 
 ## Usage
 
-```
+```text
 /homunculus-instinct-status
 /homunculus-instinct-status --domain code-style
 ```
@@ -47,7 +47,7 @@ cat ~/.claude/homunculus/observations/*.jsonl 2>/dev/null | wc -l | tr -d ' '
 
 Present the script output as a table grouped by domain:
 
-```
+```text
 ## CODE-STYLE (3)
 
 | Confidence | Name | Trigger |

@@ -8,11 +8,12 @@ disable-model-invocation: true
 
 # Create Issue
 
-Create an issue in whatever tracker the project uses, optionally using templates for structured descriptions.
+Create an issue in whatever tracker the project uses, optionally
+using templates for structured descriptions.
 
 ## Usage
 
-```
+```text
 /create-issue [type] [title]
 ```
 
@@ -32,7 +33,9 @@ Check in order:
 
 ### 2. Check for Templates (Optional)
 
-- Look for templates: `claude/skills/create-issue/templates/{type}.md` or `.github/ISSUE_TEMPLATE/`
+- Look for templates:
+  `claude/skills/create-issue/templates/{type}.md` or
+  `.github/ISSUE_TEMPLATE/`
 - If found, ask user if they want to use it
 - If not found or declined, use freeform description
 

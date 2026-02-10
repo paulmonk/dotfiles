@@ -219,7 +219,12 @@ autocmd('FileType', {
 -- Detect dbt SQL files (uses dbtpal's syntax)
 autocmd({ 'BufRead', 'BufNewFile' }, {
 	group = filetypes,
-	pattern = { '*/models/*.sql', '*/macros/*.sql', '*/analyses/*.sql', '*/tests/*.sql' },
+	pattern = {
+		'*/models/*.sql',
+		'*/macros/*.sql',
+		'*/analyses/*.sql',
+		'*/tests/*.sql',
+	},
 	command = 'setlocal filetype=dbt',
 })
 

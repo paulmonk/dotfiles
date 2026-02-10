@@ -6,11 +6,12 @@ allowed-tools: Bash(git branch:*), Bash(git worktree:*)
 
 # Clean Branches
 
-Clean up stale local branches that have been deleted from the remote repository, including any associated git worktrees.
+Clean up stale local branches that have been deleted from the remote
+repository, including any associated git worktrees.
 
 ## Usage
 
-```
+```text
 /clean-branches
 ```
 
@@ -24,7 +25,8 @@ Identify branches with `[gone]` status:
 git branch -v
 ```
 
-Note: Branches with a `+` prefix have associated worktrees that must be removed first.
+Note: Branches with a `+` prefix have associated worktrees that
+must be removed first.
 
 ### 2. List Worktrees
 

@@ -6,11 +6,13 @@ allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git
 
 # Commit
 
-Create a git commit by analyzing staged and unstaged changes, then generating an appropriate commit message that matches the repository's style.
+Create a git commit by analysing staged and unstaged changes, then
+generating an appropriate commit message that matches the
+repository's style.
 
 ## Usage
 
-```
+```text
 /commit
 ```
 
@@ -27,18 +29,20 @@ Run these commands in parallel to understand the current state:
 | `git branch --show-current` | Identify current branch          |
 | `git log --oneline -10`     | Match existing commit style      |
 
-### 2. Analyze Changes
+### 2. Analyse Changes
 
 - Identify what type of change this is (feat, fix, refactor, docs, test, chore)
 - Determine the scope from affected files/directories
-- Summarize the "why" not the "what"
+- Summarise the "why" not the "what"
 
 ### 3. Stage and Commit
 
 In a single message with parallel tool calls:
 
 1. Stage relevant files with `git add` (prefer specific files over `git add -A`)
-2. Create the commit with an appropriate message (Run `git config --get commit.template` to get the commit template and use it)
+2. Create the commit with an appropriate message
+   (Run `git config --get commit.template` to get the commit
+   template and use it)
 
 ### 4. Security Checks
 

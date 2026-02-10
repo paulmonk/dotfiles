@@ -25,10 +25,10 @@ format_session_hits() {
   local hit date project file_name="$2"
 
   while IFS= read -r hit; do
-    [[ -f "${hit}" ]] || continue
+    [[ -f ${hit} ]] || continue
     date=$(sed -n 's/^date: *//p' "${hit}" | head -1)
     project=$(sed -n 's/^project: *//p' "${hit}" | head -1)
-    if [[ -n "${date}" ]]; then
+    if [[ -n ${date} ]]; then
       printf '[%s] %s: edited %s\n' "${date}" "${project}" "${file_name}"
     fi
   done <<<"${hits}"
@@ -40,9 +40,9 @@ format_episode_hits() {
   local hit title
 
   while IFS= read -r hit; do
-    [[ -f "${hit}" ]] || continue
+    [[ -f ${hit} ]] || continue
     title=$(sed -n 's/^# *//p' "${hit}" | head -1)
-    if [[ -n "${title}" ]]; then
+    if [[ -n ${title} ]]; then
       printf '[episode] %s\n' "${title}"
     fi
   done <<<"${hits}"
@@ -56,7 +56,7 @@ main() {
 
   input=$(cat)
   file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
-  [[ -n "${file_path}" ]] || return
+  [[ -n ${file_path} ]] || return
 
   file_name=$(basename "${file_path}")
 
@@ -83,15 +83,15 @@ main() {
   session_hits=$(cat "${session_tmp}")
   episode_hits=$(cat "${episode_tmp}")
 
-  if [[ -n "${session_hits}" ]]; then
+  if [[ -n ${session_hits} ]]; then
     memories+=$(format_session_hits "${session_hits}" "${file_name}")
   fi
 
-  if [[ -n "${episode_hits}" ]]; then
+  if [[ -n ${episode_hits} ]]; then
     memories+=$(format_episode_hits "${episode_hits}")
   fi
 
-  if [[ -n "${memories}" ]]; then
+  if [[ -n ${memories} ]]; then
     printf '[RECALL] Past interactions with %s:\n%s\n' "${file_name}" "${memories}"
   fi
 }

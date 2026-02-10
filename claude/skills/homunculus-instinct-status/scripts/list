@@ -26,7 +26,7 @@ list_instincts() {
   local dir="${1}"
 
   for f in "${dir}"/*.md; do
-    [[ -f "${f}" ]] || continue
+    [[ -f ${f} ]] || continue
 
     local name confidence domain trigger
     name=$(basename "${f}" .md)
@@ -51,7 +51,7 @@ main() {
   echo ""
 
   # List personal instincts
-  if [[ -n "${filter_domain}" ]]; then
+  if [[ -n ${filter_domain} ]]; then
     list_instincts "${HOMUNCULUS_DIR}/instincts/personal" | grep "^${filter_domain}" | sort
   else
     list_instincts "${HOMUNCULUS_DIR}/instincts/personal" | sort

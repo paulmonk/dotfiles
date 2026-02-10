@@ -7,11 +7,13 @@ allowed-tools: Bash(gh:*), Bash(git:*)
 
 # Changelog
 
-Create a fun, engaging changelog for an internal development team by summarising recent merges to the main/master branch, highlighting new features, bug fixes, and crediting contributors.
+Create a fun, engaging changelog for an internal development team
+by summarising recent merges to the main/master branch, highlighting
+new features, bug fixes, and crediting contributors.
 
 ## Usage
 
-```
+```text
 /changelog
 /changelog daily
 /changelog weekly

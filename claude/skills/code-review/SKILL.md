@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Comprehensive code review using specialized agents
+description: Comprehensive code review using specialised agents
 allowed-tools: Read,Glob,Grep,Task,TaskCreate,TaskList,TaskUpdate,Bash(git diff:*),Bash(git blame:*),Bash(git log:*),Bash(git status:*),Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*)
 argument-hint: "[review-aspects] or [PR number/URL]"
 disable-model-invocation: true
@@ -8,11 +8,12 @@ disable-model-invocation: true
 
 # Code Review
 
-Run a comprehensive code review using multiple specialized agents, each focusing on a different aspect of code quality.
+Run a comprehensive code review using multiple specialised
+agents, each focusing on a different aspect of code quality.
 
 ## Usage
 
-```
+```text
 /code-review [aspects]           # Review local changes (git diff)
 /code-review [PR-number-or-URL]  # Review a specific PR
 /code-review tests errors        # Review specific aspects only
@@ -40,20 +41,28 @@ Run a comprehensive code review using multiple specialized agents, each focusing
 
 ### 3. Launch Review Agents
 
-For each applicable aspect, launch a specialized agent from `.claude/agents/` using the Task tool:
+For each applicable aspect, launch a specialised agent
+from `.claude/agents/` using the Task tool:
 
-**Sequential approach** (default): Easier to understand, each report completes before next
-**Parallel approach** (add `parallel` argument): Faster for comprehensive review
+**Sequential approach** (default): Easier to understand,
+each report completes before next
+**Parallel approach** (add `parallel` argument): Faster
+for comprehensive review
 
 **Orchestration guidance:**
 
-- **Sequential** when agents build on each other's output: code-reviewer → code-simplifier → comment-analyzer (each refines the previous)
-- **Parallel** when agents analyze independently: type-design-analyzer + silent-failure-hunter (no shared context needed)
-- After fixes, re-run code-reviewer to verify resolution before closing review
+- **Sequential** when agents build on each other's output:
+  code-reviewer, code-simplifier, comment-analyzer
+  (each refines the previous)
+- **Parallel** when agents analyse independently:
+  type-design-analyzer + silent-failure-hunter
+  (no shared context needed)
+- After fixes, re-run code-reviewer to verify resolution
+  before closing review
 
 Example Task invocation:
 
-```
+```text
 Task tool with:
   subagent_type: "code-reviewer"  # Agent name from .claude/agents/
   prompt: "Review the changes in: <list of files or git diff output>"
@@ -76,13 +85,14 @@ Each agent has detailed instructions in its file. Key outputs:
 - **code-reviewer**: Confidence scores 0-100, only reports >= 80
 - **code-test-analyzer**: Criticality ratings 1-10 (10 = essential)
 - **code-silent-failure-hunter**: Severity levels CRITICAL/HIGH/MEDIUM
-- **code-comment-analyzer**: Identifies comment rot and misleading elements
+- **code-comment-analyzer**: Identifies comment rot and
+  misleading elements
 - **code-type-design-analyzer**: Rates 4 dimensions 1-10 each
 - **code-simplifier**: Preserves functionality while improving clarity
 
 ### 5. Aggregate Results
 
-After agents complete, summarize findings by severity:
+After agents complete, summarise findings by severity:
 
 ```markdown
 # Code Review Summary
@@ -113,7 +123,7 @@ After agents complete, summarize findings by severity:
 
 ## Confidence Scoring
 
-Agents filter their output by confidence to minimize false positives:
+Agents filter their output by confidence to minimise false positives:
 
 | Score  | Meaning                                      |
 | ------ | -------------------------------------------- |
@@ -139,20 +149,20 @@ Agents filter their output by confidence to minimize false positives:
 
 **Full review of local changes:**
 
-```
+```text
 /code-review
 ```
 
 **Review specific PR:**
 
-```
+```text
 /code-review 123
 /code-review https://github.com/org/repo/pull/123
 ```
 
 **Specific aspects only:**
 
-```
+```text
 /code-review tests errors    # Test coverage and error handling only
 /code-review comments        # Documentation accuracy only
 /code-review simplify        # Code simplification only
@@ -160,13 +170,14 @@ Agents filter their output by confidence to minimize false positives:
 
 **Parallel execution:**
 
-```
+```text
 /code-review all parallel    # Launch all agents in parallel
 ```
 
 ## Output Format
 
-For PR reviews, post a comment back to the user (NOT on the pull request itself) using this format:
+For PR reviews, post a comment back to the user
+(NOT on the pull request itself) using this format:
 
 ```markdown
 ### Code Review
@@ -192,8 +203,10 @@ No issues found.
 
 - Use `gh` for GitHub interactions, not web fetch
 - Create a todo list before starting
-- Cite and link each issue (include CLAUDE.md reference if applicable)
-- Links must use full SHA: `https://github.com/org/repo/blob/abc123.../file.ts#L13-L17`
+- Cite and link each issue (include CLAUDE.md reference
+  if applicable)
+- Links must use full SHA:
+  `https://github.com/org/repo/blob/abc123.../file.ts#L13-L17`
 - Run early (before creating PR) rather than after
 - Focus on changes, not entire codebase
 - Re-run after fixes to verify resolution

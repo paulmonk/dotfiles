@@ -12,13 +12,14 @@ Adjusts confidence on a learned instinct based on user feedback.
 
 ## Usage
 
-```
+```text
 /homunculus-feedback <instinct-name> wrong    # Reduce to minimum (0.20)
 /homunculus-feedback <instinct-name> weak     # Reduce confidence by 0.15
 /homunculus-feedback <instinct-name> strong   # Boost confidence by 0.10
 ```
 
-The `<instinct-name>` is the filename without `.md` (e.g., `code-style-hook-file-patterns`).
+The `<instinct-name>` is the filename without `.md`
+(e.g., `code-style-hook-file-patterns`).
 
 ## Implementation
 
@@ -38,11 +39,14 @@ fi
 
 ### Apply feedback
 
-Read the current confidence from the instinct file, then update based on the action:
+Read the current confidence from the instinct file, then
+update based on the action:
 
-- **wrong**: Set confidence to `0.20` (minimum floor, same as decay minimum)
+- **wrong**: Set confidence to `0.20` (minimum floor,
+  same as decay minimum)
 - **weak**: Reduce confidence by `0.15`, minimum `0.20`
-- **strong**: Increase confidence by `0.10`, maximum `0.90`, and update `last_seen` to now
+- **strong**: Increase confidence by `0.10`, maximum
+  `0.90`, and update `last_seen` to now
 
 Use `sed -i ''` to update the YAML frontmatter in-place:
 

@@ -17,13 +17,13 @@ read_hook_input() {
     buffer+="${char}"
 
     # Track JSON structure to know when we have a complete object.
-    if [[ "${escape}" == true ]]; then
+    if [[ ${escape} == true ]]; then
       escape=false
-    elif [[ "${char}" == $'\\' && "${in_string}" == true ]]; then
+    elif [[ ${char} == $'\\' && ${in_string} == true ]]; then
       escape=true
-    elif [[ "${char}" == '"' ]]; then
-      in_string=$([[ "${in_string}" == true ]] && echo false || echo true)
-    elif [[ "${in_string}" == false ]]; then
+    elif [[ ${char} == '"' ]]; then
+      in_string=$([[ ${in_string} == true ]] && echo false || echo true)
+    elif [[ ${in_string} == false ]]; then
       case "${char}" in
       '{') ((++depth)) ;;
       '}')
@@ -38,7 +38,7 @@ read_hook_input() {
   done
 
   # EOF reached; return whatever we have if it's valid JSON.
-  if [[ -n "${buffer}" ]] && echo "${buffer}" | jq -e . >/dev/null 2>&1; then
+  if [[ -n ${buffer} ]] && echo "${buffer}" | jq -e . >/dev/null 2>&1; then
     echo "${buffer}"
     return 0
   fi

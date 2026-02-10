@@ -70,7 +70,7 @@ get_used_pct() {
 get_cost() {
   local cost
   cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-  printf "\$%.2f" "$cost"
+  printf '$%.2f' "$cost"
 }
 
 # Build circles based on percentage thresholds
@@ -79,7 +79,7 @@ get_circles() {
   local pct=$1
   local filled="●" empty="○" circles=""
   for threshold in 20 40 60 80 90; do
-    if (( pct >= threshold )); then
+    if ((pct >= threshold)); then
       circles="${circles}${filled}"
     else
       circles="${circles}${empty}"
@@ -91,9 +91,9 @@ get_circles() {
 # Return ANSI color code based on context usage: green (<60%), orange (60-79%), red (80%+).
 get_color() {
   local pct=$1
-  if (( pct >= 80 )); then
+  if ((pct >= 80)); then
     echo "$COLOR_RED"
-  elif (( pct >= 60 )); then
+  elif ((pct >= 60)); then
     echo "$COLOR_ORANGE"
   else
     echo "$COLOR_GREEN"
@@ -117,11 +117,11 @@ main() {
   # directory
   printf "${COLOR_BASE1}${ICON_PROJECT} %s${COLOR_RESET}" "$project"
   # session
-  if [[ -n "$session_id" ]]; then
+  if [[ -n $session_id ]]; then
     printf "  ${COLOR_CYAN}${ICON_SESSION}%s${COLOR_RESET}" "$session_id"
   fi
   # branch
-  if [[ -n "$branch" ]]; then
+  if [[ -n $branch ]]; then
     printf "  ${COLOR_BLUE}${ICON_BRANCH} %s${COLOR_RESET}" "$branch"
   fi
   # model

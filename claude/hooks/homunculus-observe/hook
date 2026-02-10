@@ -15,7 +15,7 @@ readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
 readonly OBSERVATIONS_DIR="${HOMUNCULUS_DIR}/observations"
 
 # Skip if the observer agent is running (avoid feedback loop).
-[[ "${HOMUNCULUS_OBSERVER:-}" != "1" ]] || exit 0
+[[ ${HOMUNCULUS_OBSERVER:-} != "1" ]] || exit 0
 
 # Extracts relevant context from tool input based on tool type.
 extract_context() {
@@ -26,7 +26,7 @@ extract_context() {
   case "${tool_name}" in
   Write | Edit | MultiEdit)
     file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
-    if [[ -n "${file_path}" ]]; then
+    if [[ -n ${file_path} ]]; then
       ext="${file_path##*.}"
       name="${file_path##*/}"
       desc=$(echo "${input}" | jq -r '.tool_input.description // empty' | head -c 120)
@@ -54,7 +54,7 @@ extract_context() {
     ;;
   Read)
     file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
-    if [[ -n "${file_path}" ]]; then
+    if [[ -n ${file_path} ]]; then
       name="${file_path##*/}"
       jq -n --arg name "${name}" '{file_name: $name}'
       return
@@ -95,7 +95,7 @@ main() {
   esac
 
   # Filter out noisy bash commands that don't reveal preferences.
-  if [[ "${tool_name}" == "Bash" ]]; then
+  if [[ ${tool_name} == "Bash" ]]; then
     case "${command}" in
     cat\ * | head\ * | tail\ * | ls\ * | pwd | tree* | wc\ *) return ;;
     git\ branch* | git\ diff* | git\ log* | git\ status* | git\ show*) return ;;

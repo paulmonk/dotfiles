@@ -1,0 +1,10 @@
+# Require a cost cap on bq query commands.
+prefix_rule(
+    pattern = ["bq", "query"],
+    decision = "prompt",
+    justification = "bq query requires a --maximum_bytes_billed flag to prevent expensive queries. Add --maximum_bytes_billed=10737418240 (10 GiB limit).",
+    match = [
+        "bq query --use_legacy_sql=false 'SELECT 1'",
+        "bq query 'SELECT * FROM dataset.table'",
+    ],
+)

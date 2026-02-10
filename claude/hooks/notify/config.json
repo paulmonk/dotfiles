@@ -1,11 +1,5 @@
 {
   "events": {
-    "idle_prompt": {
-      "enabled": true,
-      "title": "Claude Code",
-      "message": "Waiting for input",
-      "sound": "default"
-    },
     "permission_prompt": {
       "enabled": true,
       "title": "Claude Code",

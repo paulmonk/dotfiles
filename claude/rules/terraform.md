@@ -7,7 +7,8 @@ paths:
 
 # Terraform
 
-Infrastructure as Code using Terraform/OpenTofu, orchestrated with Terragrunt.
+Infrastructure as Code using Terraform/OpenTofu, orchestrated
+with Terragrunt.
 
 ## Tooling
 
@@ -28,13 +29,15 @@ Infrastructure as Code using Terraform/OpenTofu, orchestrated with Terragrunt.
 
 ## Repository Structure
 
-Separate modules from live (deployment) repos. Choose between traditional or stacks-based organisation.
+Separate modules from live (deployment) repos. Choose between
+traditional or stacks-based organisation.
 
 ### Traditional Structure
 
-Individual `terragrunt.hcl` files per resource, organised by account/project and region:
+Individual `terragrunt.hcl` files per resource, organised by
+account/project and region:
 
-```
+```text
 infrastructure-live/
 ├── terragrunt.hcl              # Root config (providers, state)
 ├── _common/                    # Shared templates
@@ -50,9 +53,10 @@ infrastructure-live/
 
 ### Stacks Structure
 
-`terragrunt.stack.hcl` files that reference a units catalogue and generate configs:
+`terragrunt.stack.hcl` files that reference a units catalogue and
+generate configs:
 
-```
+```text
 infrastructure-live/
 ├── terragrunt.hcl              # Root config (providers, state)
 ├── catalog/                    # Units catalog (or external git repo)
@@ -66,18 +70,23 @@ infrastructure-live/
 │       └── terragrunt.stack.hcl   # Defines which units to deploy
 ```
 
-Run `terragrunt stack generate` to create the actual `terragrunt.hcl` files (by default in `.terragrunt-stack/`, or in-place with `no_dot_terragrunt_stack = true`).
+Run `terragrunt stack generate` to create the actual
+`terragrunt.hcl` files (by default in `.terragrunt-stack/`, or
+in-place with `no_dot_terragrunt_stack = true`).
 
 ### Conventions
 
 - Prefix non-deployable folders with `_`
-- Right-size modules: group resources that deploy together and share ownership
+- Right-size modules: group resources that deploy together and
+  share ownership
 - State paths mirror folder structure
-- Use three-part naming for module repositories: `terraform-<PROVIDER>-<NAME>`
+- Use three-part naming for module repositories:
+  `terraform-<PROVIDER>-<NAME>`
 
 ## Variable Hierarchy
 
-Load variables at appropriate levels using `find_in_parent_folders()`:
+Load variables at appropriate levels using
+`find_in_parent_folders()`:
 
 ```hcl
 locals {
@@ -180,12 +189,15 @@ Commands:
 
 ## Terraform HCL Style
 
-The following applies to all `.tf` files, whether hand-written or in modules.
+The following applies to all `.tf` files, whether hand-written or
+in modules.
 
 ### Code Formatting
 
-- Place arguments at the top of blocks, followed by nested blocks with one blank line separation
-- Put meta-arguments (count, for_each) first, followed by other arguments, then nested blocks
+- Place arguments at the top of blocks, followed by nested blocks
+  with one blank line separation
+- Put meta-arguments (count, for_each) first, followed by other
+  arguments, then nested blocks
 - Place lifecycle blocks last, separated by blank lines
 - Separate top-level blocks with one blank line
 
@@ -193,76 +205,92 @@ The following applies to all `.tf` files, whether hand-written or in modules.
 
 - Define data sources before the resources that reference them
 - Group related resources together (networking, compute, storage)
-- Order resource parameters: meta-arguments, resource-specific parameters, nested blocks, lifecycle, depends_on
+- Order resource parameters: meta-arguments, resource-specific
+  parameters, nested blocks, lifecycle, depends_on
 
 ### Resource Naming
 
 - Use descriptive nouns separated by underscores
 - Do not include the resource type in the resource name
-- Example: `resource "aws_instance" "web_server" {}` not `resource "aws_instance" "webserver_instance" {}`
+- Example: `resource "aws_instance" "web_server" {}` not
+  `resource "aws_instance" "webserver_instance" {}`
 
 ### Variables and Outputs
 
 - Define `type` and `description` for every variable
 - Include reasonable `default` values for optional variables
 - Set `sensitive = true` for passwords and private keys
-- Order variable parameters: type, description, default, sensitive, validation blocks
+- Order variable parameters: type, description, default,
+  sensitive, validation blocks
 - Order output parameters: description, value, sensitive
 - Use descriptive names with underscores
 
 ### Comments
 
 - Use `#` for comments (not `//` or `/* */`)
-- Write self-documenting code; use comments only to clarify complexity
-- Add comments above resource blocks to explain non-obvious business logic
+- Write self-documenting code; use comments only to clarify
+  complexity
+- Add comments above resource blocks to explain non-obvious
+  business logic
 
 ### Local Values
 
-- Use local values sparingly to avoid making code harder to understand
+- Use local values sparingly to avoid making code harder to
+  understand
 - Define in `locals.tf` if referenced across multiple files
 - Define at the top of a file if specific to that file only
 
 ### Dynamic Resource Management
 
 - Use `count` for nearly identical resources
-- Use `for_each` when resources need distinct values that cannot be derived from integers
-- Use `count` with conditional expressions: `count = var.enable_feature ? 1 : 0`
+- Use `for_each` when resources need distinct values that cannot
+  be derived from integers
+- Use `count` with conditional expressions:
+  `count = var.enable_feature ? 1 : 0`
 
 ### Provider Configuration
 
 - Always include a default provider configuration
 - Define all providers in the same file (`providers.tf`)
 - Define the default provider first, then aliased providers
-- Use `alias` as the first parameter in non-default provider blocks
+- Use `alias` as the first parameter in non-default provider
+  blocks
 
 ### Version Management
 
-- Pin Terraform version using `required_version` in terraform block
-- Pin provider versions using exact versions in `required_providers`
+- Pin Terraform version using `required_version` in terraform
+  block
+- Pin provider versions using exact versions in
+  `required_providers`
 - Pin module versions when sourcing from registries
-- Prefer the pessimistic constraint operator (`~>`) for modules and providers
-- Avoid open-ended constraints (`>`, `>=` without upper bound) in production
+- Prefer the pessimistic constraint operator (`~>`) for modules
+  and providers
+- Avoid open-ended constraints (`>`, `>=` without upper bound) in
+  production
 
 ### Security and Secrets
 
-- Never commit `terraform.tfstate` files or `.terraform` directories
+- Never commit `terraform.tfstate` files or `.terraform`
+  directories
 - Use dynamic provider credentials when possible
 - Access secrets from external secret management systems
 - Use environment variables for provider credentials
 
 ### Testing and Validation
 
-- Write Terraform tests for modules using the test framework
+- Write Terraform tests for modules using the test
+  framework
 - Use variable validation blocks for restrictive requirements
 - Include input validation with meaningful error messages
 
 ## Terraform Modules
 
-When creating reusable Terraform modules (not Terragrunt units):
+When creating reusable Terraform modules (not Terragrunt
+units):
 
 ### Module Structure
 
-```
+```text
 terraform-<provider>-<name>/
 ├── README.md
 ├── main.tf
@@ -284,5 +312,7 @@ terraform-<provider>-<name>/
 ### Guidance
 
 - Keep modules focused on single infrastructure concerns
-- Split large configurations into logical files (e.g., `network.tf`, `compute.tf`)
-- Include `README.md` for external-facing nested modules; omit for internal-only
+- Split large configurations into logical files
+  (e.g., `network.tf`, `compute.tf`)
+- Include `README.md` for external-facing nested modules; omit
+  for internal-only

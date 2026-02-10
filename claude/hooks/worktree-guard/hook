@@ -23,14 +23,14 @@ main() {
   esac
 
   cwd=$(echo "${input}" | jq -r '.cwd // ""')
-  [[ -z "${cwd}" ]] && {
+  [[ -z ${cwd} ]] && {
     echo "${input}"
     exit 0
   }
 
   # Find git root.
   git_root=$(git -C "${cwd}" rev-parse --show-toplevel 2>/dev/null || echo "")
-  [[ -z "${git_root}" ]] && {
+  [[ -z ${git_root} ]] && {
     echo "${input}"
     exit 0
   }
@@ -45,19 +45,19 @@ main() {
   file_path=$(echo "${input}" | jq -r '.tool_input.file_path // ""')
 
   # Allow if cwd is within worktrees.
-  [[ "${cwd}" == *"/.worktrees/"* ]] && {
+  [[ ${cwd} == *"/.worktrees/"* ]] && {
     echo "${input}"
     exit 0
   }
 
   # Allow if target file is within worktrees.
-  [[ "${file_path}" == *"/.worktrees/"* ]] && {
+  [[ ${file_path} == *"/.worktrees/"* ]] && {
     echo "${input}"
     exit 0
   }
 
   # Allow plan files (plan mode writes here regardless of cwd).
-  [[ "${file_path}" == *"/.claude/plans/"* ]] && {
+  [[ ${file_path} == *"/.claude/plans/"* ]] && {
     echo "${input}"
     exit 0
   }
