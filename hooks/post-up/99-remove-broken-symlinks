@@ -9,3 +9,4 @@ find "${HOME}/.ssh" -maxdepth 1 -type l ! -exec test -e {} \; -delete
 
 # Recursively from the following directories.
 find "${XDG_CONFIG_HOME}" -type l ! -exec test -e {} \; -delete
+find "${HOME}/.claude" -type l ! -exec test -e {} \; -delete

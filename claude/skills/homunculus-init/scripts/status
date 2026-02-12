@@ -32,9 +32,9 @@ main() {
     "observations"
     "observations.archive"
     "instincts/personal"
-    "instincts/inherited"
     "sessions"
     "episodes"
+    "logs"
   )
   for dir in "${dirs[@]}"; do
     if [[ -d "${HOMUNCULUS_DIR}/${dir}" ]]; then
@@ -56,9 +56,7 @@ main() {
 
   # Instinct counts
   echo ""
-  echo "Instincts:"
-  echo "  Personal:  $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
-  echo "  Inherited: $(count_files "${HOMUNCULUS_DIR}/instincts/inherited")"
+  echo "Instincts: $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
 
   # Pending observations
   local obs_dir="${HOMUNCULUS_DIR}/observations"

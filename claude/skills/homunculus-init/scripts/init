@@ -15,10 +15,9 @@ create_directories() {
   mkdir -p "${HOMUNCULUS_DIR}/observations"
   mkdir -p "${HOMUNCULUS_DIR}/observations.archive"
   mkdir -p "${HOMUNCULUS_DIR}/instincts/personal"
-  mkdir -p "${HOMUNCULUS_DIR}/instincts/inherited"
   mkdir -p "${HOMUNCULUS_DIR}/sessions"
   mkdir -p "${HOMUNCULUS_DIR}/episodes"
-  mkdir -p "${HOMUNCULUS_DIR}/exports"
+  mkdir -p "${HOMUNCULUS_DIR}/logs"
   echo "Created directory structure"
 }
 

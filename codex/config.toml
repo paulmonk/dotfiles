@@ -73,5 +73,5 @@ enabled = true
 
 [mcp_servers.playwright]
 command = "npx"
-args = ["-y", "@anthropic-ai/mcp-server-playwright"]
+args = ["-y", "@playwright/mcp"]
 enabled = true

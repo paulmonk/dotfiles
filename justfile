@@ -64,12 +64,13 @@ brew-bundle-dump:
 rcup-install: brew-install
     @{{ prefix }}/bin/brew install --quiet rcm
 
-# Sync dotfiles symlinks only (no hooks)
+# Sync dotfiles symlinks only (no hooks, except dead symlink cleanup)
 [group('dotfiles')]
 dotfiles: rcup-install
     @echo "--------------------------------"
     @echo "Syncing dotfiles"
     @RCRC="{{ justfile_directory() }}/config/rcm/rcrc" PATH="{{ default_path }}" {{ prefix }}/bin/rcup -d {{ justfile_directory() }} -K -f -v
+    @{{ justfile_directory() }}/hooks/post-up/99-remove-broken-symlinks
     @echo "--------------------------------"
 
 # Bootstrap dotfiles with pre and post hooks
@@ -127,9 +128,12 @@ coding-agents: qmd
     claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY >/dev/null 2>&1 || true
     echo "  Ensuring chrome-devtools"
     claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp >/dev/null 2>&1 || true
+    echo "  Ensuring deepwiki"
+    claude mcp add --scope user -t http deepwiki https://mcp.deepwiki.com/mcp >/dev/null 2>&1 || true
     if [[ -n "${BUN_INSTALL_BIN:-}" ]]; then
       echo "  Ensuring qmd"
-      claude mcp add --scope user qmd -- "${BUN_INSTALL_BIN}/qmd" mcp >/dev/null 2>&1 || true
+      # Blank BUN_INSPECT_CONNECT_TO so Cursor's injected debug socket doesn't hang bun.
+      claude mcp add --scope user -e BUN_INSPECT_CONNECT_TO= qmd -- "${BUN_INSTALL_BIN}/qmd" mcp >/dev/null 2>&1 || true
     else
       echo "  [warn] BUN_INSTALL_BIN not set; skipping qmd MCP server" >&2
     fi

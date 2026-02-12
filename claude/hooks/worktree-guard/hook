@@ -28,7 +28,7 @@ main() {
     exit 0
   }
 
-  # Find git root.
+  # Find git root of cwd.
   git_root=$(git -C "${cwd}" rev-parse --show-toplevel 2>/dev/null || echo "")
   [[ -z ${git_root} ]] && {
     echo "${input}"
@@ -43,6 +43,32 @@ main() {
 
   # Get the file path being edited.
   file_path=$(echo "${input}" | jq -r '.tool_input.file_path // ""')
+
+  # If the target file lives in a different repo, apply that repo's worktree
+  # policy instead. Editing a file in a repo without .worktrees/ should not
+  # be blocked by the cwd repo's requirement.
+  if [[ -n ${file_path} ]]; then
+    local file_dir file_git_root
+    file_dir=$(dirname "${file_path}")
+    file_git_root=$(git -C "${file_dir}" rev-parse --show-toplevel 2>/dev/null || echo "")
+    if [[ -n ${file_git_root} && ${file_git_root} != "${git_root}" ]]; then
+      [[ ! -d "${file_git_root}/.worktrees" ]] && {
+        echo "${input}"
+        exit 0
+      }
+      # The other repo also uses worktrees; check if the file is inside one.
+      [[ ${file_path} == *"/.worktrees/"* ]] && {
+        echo "${input}"
+        exit 0
+      }
+      deny_tool "Edits require a worktree. The target file's repo (${file_git_root}) uses worktrees."
+    fi
+    # Target file is not in any git repo; allow it through.
+    if [[ -z ${file_git_root} ]]; then
+      echo "${input}"
+      exit 0
+    fi
+  fi
 
   # Allow if cwd is within worktrees.
   [[ ${cwd} == *"/.worktrees/"* ]] && {

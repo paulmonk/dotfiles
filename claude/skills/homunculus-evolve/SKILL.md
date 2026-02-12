@@ -1,8 +1,8 @@
 ---
 name: homunculus-evolve
 description: >-
-  Promote mature instincts to permanent convictions. Use when
-  instincts have high confidence and proven longevity.
+  Preview or force-promote instincts to convictions. Use to
+  inspect candidates or override automatic promotion.
 allowed-tools: Bash Read Write Edit
 metadata:
   user-invocable: "true"
@@ -10,8 +10,12 @@ metadata:
 
 # Promote Instincts to Convictions
 
+Promotions run automatically after each observer pass. This skill
+remains as an escape hatch for forcing promotions, previewing
+candidates, or checking staleness manually.
+
 Scans instincts for promotion candidates (mature, high-confidence
-patterns) and promotes them to permanent convictions.
+patterns) and promotes them to convictions.
 
 ## Usage
 
@@ -81,8 +85,8 @@ If the file does not exist, create it with the header:
 ```markdown
 # Convictions
 
-Instincts promoted to permanent rules after sustained high confidence.
-These are injected at session start and do not decay.
+Instincts promoted after sustained high confidence.
+Injected at session start. Auto-revoked if confidence drops below 0.40.
 
 ```
 
@@ -105,18 +109,8 @@ jq '.last_promotion = "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"' \
 
 ### Staleness check
 
-After processing promotions, scan for promoted instincts that have decayed:
-
-```bash
-for f in ~/.claude/homunculus/instincts/personal/*.md; do
-  [ -f "$f" ] || continue
-  grep -q "^promoted: true" "$f" || continue
-  confidence=$(sed -n 's/^confidence: *//p' "$f" | head -1)
-  if awk "BEGIN{exit(!($confidence < 0.40))}"; then
-    echo "WARNING: Promoted instinct $(basename "$f") has decayed to $confidence."
-    echo "  The conviction may be stale. Consider removing it from convictions.md."
-  fi
-done
-```
-
-Report any stale promoted instincts to the user.
+Stale convictions are auto-revoked by the stop hook when the
+underlying instinct's confidence drops below 0.40. In preview
+mode, report any promoted instincts approaching staleness
+(confidence below 0.50) so the user can reinforce or remove
+them before auto-revocation kicks in.

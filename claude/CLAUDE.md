@@ -59,6 +59,9 @@ mid-run; refresh context before summarising or editing.
 - **Library docs**: Use **context7** MCP for up-to-date library
   documentation and code examples. Prefer it over web search when
   looking up API references.
+- **Repo docs**: Use **deepwiki** MCP to read documentation or
+  ask questions about any public GitHub repository. Useful when
+  exploring unfamiliar open-source projects or dependencies.
 - **File search**: Use `fd` instead of `find`. fd is faster,
   respects `.gitignore`, and has simpler syntax.
 - **Text search**: Use `rg` (ripgrep) instead of `grep`. For

@@ -12,7 +12,7 @@ readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
 readonly STATE="${HOMUNCULUS_DIR}/identity.json"
 readonly OBS_DIR="${HOMUNCULUS_DIR}/observations"
 readonly SESSIONS_DIR="${HOMUNCULUS_DIR}/sessions"
-readonly LOG_FILE="${HOMUNCULUS_DIR}/observer.log"
+readonly LOG_FILE="${HOMUNCULUS_DIR}/logs/observer.log"
 readonly LOCK_FILE="${HOMUNCULUS_DIR}/observer.lock"
 
 [[ -f ${STATE} ]] || exit 0
@@ -101,7 +101,7 @@ generate_session_summary() {
     echo ""
     echo "## Files touched"
     if [[ -n ${files_list} ]]; then
-      echo "${files_list}" | while read -r f; do echo "- ${f}"; done
+      while read -r f; do echo "- ${f}"; done <<<"${files_list}"
     else
       echo "- (none recorded)"
     fi
@@ -118,6 +118,112 @@ notify() {
     -sound default \
     -group "homunculus-observer" \
     2>/dev/null || true
+}
+
+# Promote instincts that meet all deterministic criteria to
+# convictions, and revoke stale ones. Runs after the observer updates confidence/last_seen so
+# decisions are based on fresh data. No LLM needed.
+promote_mature_instincts() {
+  local instincts_dir="${HOMUNCULUS_DIR}/instincts/personal"
+  local convictions="${HOMUNCULUS_DIR}/convictions.md"
+  local now f promoted_count=0
+  local confidence created last_seen created_ts last_seen_ts
+  local action name ts tmp
+  local conf stale_name
+  now=$(date +%s)
+
+  for f in "${instincts_dir}"/*.md; do
+    [[ -f ${f} ]] || continue
+    grep -q "^promoted: true" "${f}" && continue
+
+    confidence=$(sed -n 's/^confidence: *//p' "${f}" | head -1)
+    created=$(sed -n 's/^created: *//p' "${f}" | head -1)
+    last_seen=$(sed -n 's/^last_seen: *//p' "${f}" | head -1)
+
+    [[ -n ${confidence} && -n ${created} && -n ${last_seen} ]] || continue
+
+    # Confidence >= 0.75
+    awk -v c="${confidence}" 'BEGIN{exit(!(c+0 >= 0.75))}' || continue
+
+    # Created >= 14 days ago (survived 2+ decay cycles).
+    created_ts=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" \
+      "${created}" +%s 2>/dev/null) || continue
+    ((now - created_ts >= 14 * 86400)) || continue
+
+    # Last seen within 7 days (still actively relevant).
+    last_seen_ts=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" \
+      "${last_seen}" +%s 2>/dev/null) || continue
+    ((now - last_seen_ts <= 7 * 86400)) || continue
+
+    action=$(sed -n 's/^action: *"*//p' "${f}" | sed 's/"$//' | head -1)
+    [[ -n ${action} ]] || continue
+    name=$(basename "${f}" .md | sed 's/^[^-]*-//')
+
+    # Create convictions file with header if missing.
+    if [[ ! -f ${convictions} ]]; then
+      cat >"${convictions}" <<'HEADER'
+# Convictions
+
+Instincts promoted after sustained high confidence.
+Injected at session start. Auto-revoked if the underlying
+instinct's confidence drops below 0.40.
+
+HEADER
+    fi
+
+    echo "- **${name}**: ${action}" >>"${convictions}"
+
+    # Mark instinct as promoted (scoped to frontmatter block).
+    sed -i '' '/^---$/,/^---$/{
+      /^last_seen:/a\
+promoted: true\
+promoted_to: ~/.claude/homunculus/convictions.md
+    }' "${f}"
+
+    promoted_count=$((promoted_count + 1))
+  done
+
+  if ((promoted_count > 0)); then
+    ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    tmp=$(mktemp)
+    if jq --arg ts "${ts}" '.last_promotion = $ts' \
+      "${STATE}" >"${tmp}"; then
+      mv "${tmp}" "${STATE}"
+    fi
+    echo "[$(date -Iseconds)] Promoted ${promoted_count} instinct(s) to convictions" >>"${LOG_FILE}"
+    notify "Promoted ${promoted_count} instinct(s) to convictions"
+  fi
+
+  # Revoke stale convictions where the underlying instinct has decayed
+  # below 0.40. The instinct stays at its floor so it can be re-promoted
+  # if the pattern resurfaces.
+  for f in "${instincts_dir}"/*.md; do
+    [[ -f ${f} ]] || continue
+    grep -q "^promoted: true" "${f}" || continue
+
+    conf=$(sed -n 's/^confidence: *//p' "${f}" | head -1)
+    [[ -n ${conf} ]] || continue
+    if awk -v c="${conf}" 'BEGIN{exit(!(c+0 < 0.40))}'; then
+      stale_name=$(basename "${f}" .md | sed 's/^[^-]*-//')
+
+      if [[ -f ${convictions} ]] && grep -qF "- **${stale_name}**:" "${convictions}"; then
+        if grep -Fv "- **${stale_name}**:" "${convictions}" >"${convictions}.tmp"; then
+          mv "${convictions}.tmp" "${convictions}"
+        else
+          rm -f "${convictions}.tmp"
+        fi
+      fi
+
+      # Scoped to frontmatter to avoid clobbering body content.
+      sed -i '' '/^---$/,/^---$/{
+        /^promoted: true$/d
+        /^promoted_to:/d
+      }' "${f}"
+
+      echo "[$(date -Iseconds)] Revoked stale conviction: ${stale_name} (confidence ${conf})" >>"${LOG_FILE}"
+      notify "Revoked stale conviction: ${stale_name}"
+    fi
+  done
 }
 
 # Run the observer agent to process accumulated observations.
@@ -163,6 +269,7 @@ run_observer() {
     <<<"Process ${count} pending observations from ${OBS_DIR}/ directory." \
     >>"${LOG_FILE}" 2>&1; then
     echo "[$(date -Iseconds)] Finished in $(($(date +%s) - start_time))s" >>"${LOG_FILE}"
+    promote_mature_instincts 2>>"${LOG_FILE}" || true
   else
     echo "[$(date -Iseconds)] Failed in $(($(date +%s) - start_time))s" >>"${LOG_FILE}"
     notify "Failed processing ${count} observations"

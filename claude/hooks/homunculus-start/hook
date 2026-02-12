@@ -98,7 +98,7 @@ all_instincts() {
 main() {
   [[ -d ${INSTINCTS_DIR} ]] || return
 
-  # Inject convictions first (permanent rules, higher priority than instincts).
+  # Inject convictions first (higher priority than instincts).
   if [[ -f ${CONVICTIONS_FILE} ]]; then
     echo "[CONVICTIONS]"
     # Skip the markdown header, output only the rule lines.

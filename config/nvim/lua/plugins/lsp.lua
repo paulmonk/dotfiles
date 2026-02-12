@@ -155,7 +155,7 @@ return {
 				go = { 'revive' },
 				sh = { 'shellcheck' },
 				dockerfile = { 'hadolint' },
-				terraform = { 'tfsec' },
+				terraform = { 'trivy', 'tflint' },
 				lua = { 'selene' },
 				markdown = { 'rumdl' },
 			}

@@ -43,11 +43,12 @@ continuous learning system.
 │   └── {session_id}.jsonl
 ├── observations.archive/
 ├── instincts/
-│   ├── personal/
-│   └── inherited/
+│   └── personal/
 ├── sessions/
 ├── episodes/
-└── exports/
+├── logs/
+│   └── observer.log
+└── observer.lock
 ```
 
 ## Example Output
@@ -61,12 +62,9 @@ Hook configured: homunculus-observe
 
 Directories:
   [x] instincts/personal
-  [x] instincts/inherited
   [x] observations.archive
+  [x] logs
 
 Sessions: 0
-
-Instincts:
-  Personal:  0
-  Inherited: 0
+Instincts: 0
 ```

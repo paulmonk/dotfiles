@@ -46,8 +46,7 @@ main() {
   local filter_domain="${1:-}"
 
   # Header
-  echo "Personal: $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
-  echo "Inherited: $(count_files "${HOMUNCULUS_DIR}/instincts/inherited")"
+  echo "Instincts: $(count_files "${HOMUNCULUS_DIR}/instincts/personal")"
   echo ""
 
   # List personal instincts

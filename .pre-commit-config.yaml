@@ -54,6 +54,9 @@ repos:
     hooks:
       - id: shellcheck
         exclude: (^|/)\.?z(shrc|shenv|profile|login|logout)$|config/zsh/|p10k\.zsh$
+        # Shellcheck can not follow the source file if not in the file
+        # selection, which is not guaranteed if it did not change.
+        args: [--exclude=SC1091]
   - repo: https://github.com/scop/pre-commit-shfmt
     rev: 2a30809d16bc7a60d9b97353c797f42b510d3368 # frozen: v3.12.0-2
     hooks:

@@ -49,7 +49,8 @@ flowchart TD
     observer -->|create/reinforce| instincts
     observer -->|notable one-offs| episodes
     observer -->|clustering flags| identity
-    instincts -->|"confidence >= 0.75\n14+ days old"| promote["/homunculus-evolve"]
+    stop -->|"auto-promote\nafter observer"| promote["promote_mature_instincts()"]
+    instincts -->|"confidence >= 0.75\n14+ days old\nlast seen <= 7 days"| promote
     promote -->|append rule| convictions["convictions.md"]
 
     start -.->|smart retrieval| c1
@@ -63,9 +64,9 @@ flowchart TD
     episodes ---|indexed by| c3
 ```
 
-**Only manual step:** `/homunculus-evolve` to promote mature
-instincts to permanent convictions. Everything else is
-automatic.
+**Fully automatic.** Promotion runs in the stop hook after
+each observer pass. `/homunculus-evolve` remains as an escape
+hatch for previewing candidates or forcing promotion.
 
 ### Data Lifecycle
 
@@ -74,18 +75,34 @@ flowchart LR
     obs["Observation\n(tool event)"]
     ep["Episode\n(notable one-off)"]
     inst["Instinct\n(confirmed pattern)"]
-    rule["Conviction\n(permanent)"]
+    rule["Conviction\n(revoked if stale)"]
 
     obs -->|"passes quality gate"| inst
     obs -->|"interesting\nbut unconfirmed"| ep
     ep -->|"pattern recurs"| inst
-    inst -->|"confidence >= 0.75\n14+ days old\n(/homunculus-evolve)"| rule
+    inst -->|"confidence >= 0.75\n14+ days old\nlast seen <= 7 days"| rule
 
     style obs fill:#f5f5f5,stroke:#999
     style ep fill:#fff3cd,stroke:#ffc107
     style inst fill:#d4edda,stroke:#28a745
     style rule fill:#cce5ff,stroke:#007bff
 ```
+
+### Design Principles
+
+The homunculus system is built on the premise that memory
+isn't stored, it's maintained. Naive memory (store
+everything, retrieve forever) decays into noise. Each
+mechanism in the pipeline addresses a specific maintenance
+concern:
+
+| Principle | Mechanism |
+| --------- | --------- |
+| **Durable, but not permanent.** Patterns that stop appearing should fade. | Confidence decay (0.05/week), auto-revocation of stale convictions below 0.40. |
+| **Curated, not accumulated.** Not every observation deserves to become memory. | Quality gate, 3-occurrence threshold, episode staging area. |
+| **Resolve reality, not preserve history.** When behaviour changes, memory should follow. | Contradiction detection (reduces confidence by 0.10), reinforcement resets decay clock. |
+| **Purposeful forgetting.** Transient context should naturally fade. | Instincts decay to a 0.20 floor (deprioritised, never deleted). Convictions auto-revoke. |
+| **Scale with time.** More sessions should improve signal, not increase noise. | Deduplication, confidence-weighted retrieval, qmd hybrid search over growing collections. |
 
 ## What's an Instinct?
 
@@ -261,6 +278,8 @@ omitted, exits 0 always).
 4. Triggers the observer agent in the background to process
    accumulated observations (sets `HOMUNCULUS_OBSERVER=1` to
    prevent the observer from observing itself)
+5. After a successful observer run, auto-promotes qualifying
+   instincts to convictions and auto-revokes stale ones
 
 ### homunculus-recall (PostToolUse, async)
 
@@ -331,15 +350,17 @@ new_confidence = max(0.20, confidence - 0.05 * floor((now - last_seen) / 7 days)
 The agent prompt lives at
 `claude/agents/homunculus-observer.md`. Sends a macOS
 notification on failure only. Logs to
-`~/.claude/homunculus/observer.log`.
+`~/.claude/homunculus/logs/observer.log`.
 
 ## Promotion
 
-Mature instincts graduate to permanent rules in
-`convictions.md` via `/homunculus-evolve`. Convictions are
-injected at session start (before instincts) and do not decay.
-This replaces the old evolution system which clustered
-instincts into skill files that were just reformatted noise.
+Mature instincts graduate to convictions in `convictions.md`
+automatically after each observer pass. Convictions are
+injected at session start (before instincts). They don't
+decay independently, but are auto-revoked if the underlying
+instinct's confidence drops below 0.40. `/homunculus-evolve`
+remains as an escape hatch for previewing candidates or
+forcing promotion.
 
 **Promotion criteria** (all must be met):
 
@@ -357,8 +378,8 @@ A concise rule appended to `~/.claude/homunculus/convictions.md`:
 ```markdown
 # Convictions
 
-Instincts promoted to permanent rules after sustained high confidence.
-These are injected at session start and do not decay.
+Instincts promoted after sustained high confidence.
+Injected at session start. Auto-revoked if confidence drops below 0.40.
 
 - **launchctl operations**: Use `sleep 5` between `launchctl unload` and `launchctl load`.
   Validate plist with `plutil -lint` before loading.
@@ -372,11 +393,10 @@ These are injected at session start and do not decay.
   in convictions.md)
 - The observer still tracks reinforcement (updates
   `last_seen`)
-- If a promoted instinct decays below 0.40,
-  `/homunculus-evolve` warns the conviction may be stale
-
-Preview with `/homunculus-evolve`, promote with
-`/homunculus-evolve --promote`.
+- If a promoted instinct decays below 0.40, the stop hook
+  auto-revokes the conviction from `convictions.md` and
+  unsets `promoted: true` so the instinct can be re-promoted
+  if the pattern resurfaces
 
 ## qmd Integration
 
@@ -400,18 +420,17 @@ graph database or external services.
 ```text
 ~/.claude/homunculus/
 ├── identity.json               # Session count, last_session, promotion timestamps
-├── convictions.md              # Promoted instincts (permanent rules, no decay)
+├── convictions.md              # Promoted instincts (auto-revoked if stale)
 ├── observations/               # Pending per-session observation files
 │   └── {session_id}.jsonl      # One file per session (avoids cross-session races)
 ├── observations.archive/       # Processed observation files
 ├── instincts/
-│   ├── personal/               # Auto-learned instincts (*.md)
+│   └── personal/               # Auto-learned instincts (*.md)
 ├── sessions/                   # Session summaries (*.md)
 ├── episodes/                   # Notable one-off events (*.md)
-├── exports/                    # Exported instinct tarballs
-├── observer.lock               # Lock file preventing concurrent observer runs
-├── observer.log                # Observer run logs
-└── last-processing.log         # Last processing summary
+├── logs/
+│   └── observer.log            # Observer run logs
+└── observer.lock               # Prevents concurrent observer runs
 ```
 
 ## Slash Commands
@@ -420,7 +439,7 @@ graph database or external services.
 | ----------------------------- | ----------------------------------------------- |
 | `/homunculus-init`            | Initialise directory structure and verify setup |
 | `/homunculus-instinct-status` | Show learned instincts with confidence levels   |
-| `/homunculus-evolve`          | Promote mature instincts to convictions         |
+| `/homunculus-evolve`          | Preview/force promote instincts to convictions  |
 | `/homunculus-feedback`        | Correct instinct confidence (wrong/weak/strong) |
 
 ## Confidence Scoring
@@ -466,9 +485,10 @@ graph database or external services.
 # 2. Check what's been learned
 /homunculus-instinct-status
 
-# 3. Promote mature instincts to permanent convictions
+# 3. Promotion happens automatically after observer runs
+#    Use /homunculus-evolve to preview or force-promote
 /homunculus-evolve              # Preview candidates
-/homunculus-evolve --promote    # Promote to convictions.md
+/homunculus-evolve --promote    # Force promote now
 ```
 
 ## Troubleshooting
@@ -496,8 +516,7 @@ graph database or external services.
 **Check observer output:**
 
 ```bash
-cat ~/.claude/homunculus/observer.log
-cat ~/.claude/homunculus/last-processing.log
+cat ~/.claude/homunculus/logs/observer.log
 ```
 
 ## Claude Code Auto Memory

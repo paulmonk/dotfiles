@@ -227,10 +227,6 @@ brew "cjson"
 brew "cmake"
 # Fix common misspellings in source code and text files
 brew "codespell"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
-# OpenAI's coding agent that runs in your terminal
-brew "codex"
 # Color-highlighted diff(1) output
 brew "colordiff"
 # GNU File, Shell, and Text utilities
@@ -709,6 +705,8 @@ brew "nmap"
 brew "odt2txt"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # AI coding agent, built for the terminal
 brew "opencode"
 # Audio codecs extracted from Android open source project
@@ -787,6 +785,8 @@ brew "rapidjson"
 brew "rav1e"
 # RC file (dotfile) management
 brew "rcm"
+# Fast, configurable, extensible, flexible, and beautiful linter for Go
+brew "revive"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
 # Rootkit hunter
@@ -971,6 +971,8 @@ cask "chatgpt"
 cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
 # OpenAI's Codex desktop app for managing coding agents
 cask "codex-app"
 # Write, edit, and chat about your code with AI
