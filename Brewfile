@@ -11,12 +11,40 @@ tap "withgraphite/tap"
 brew "abseil"
 # Run your GitHub Actions locally
 brew "act"
+# GNU multiple precision arithmetic library
+brew "gmp"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
+# Static checker for GitHub Actions workflow files
+brew "actionlint"
 # Open-source formatting library for C++
 brew "fmt"
-# Plugin manager for zsh, inspired by antigen and antibody
-brew "antidote"
 # Generic-purpose lossless compression algorithm by Google
 brew "brotli"
+# Asynchronous DNS library
+brew "c-ares"
+# Mozilla CA certificate store
+brew "ca-certificates"
+# HTTP/2 C Library
+brew "libnghttp2"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Multi-platform support library with a focus on asynchronous I/O
+brew "libuv"
+# Extremely Fast Compression algorithm
+brew "lz4"
+# Library for command-line editing
+brew "readline"
+# General-purpose data compression with high compression ratio
+brew "xz"
+# Zstandard is a real-time compression algorithm
+brew "zstd"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Browser automation CLI for AI agents
+brew "agent-browser"
+# Plugin manager for zsh, inspired by antigen and antibody
+brew "antidote"
 # Library and utilities for processing GIFs
 brew "giflib"
 # Performance-portable, length-agnostic SIMD with runtime dispatch
@@ -27,34 +55,22 @@ brew "imath"
 brew "jpeg-turbo"
 # Library for manipulating PNG images
 brew "libpng"
-# Extremely Fast Compression algorithm
-brew "lz4"
-# General-purpose data compression with high compression ratio
-brew "xz"
-# Zstandard is a real-time compression algorithm
-brew "zstd"
 # TIFF library and utilities
 brew "libtiff"
 # Color management engine supporting ICC profiles
 brew "little-cms2"
 # High dynamic-range image file format
 brew "openexr"
-# Image format providing lossless and lossy compression for web images
-brew "webp"
 # New file format for still image compression
 brew "jpeg-xl"
 # Perceptual video quality assessment based on multi-method fusion
 brew "libvmaf"
+# Image format providing lossless and lossy compression for web images
+brew "webp"
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"
 # AWS SDK for C++
 brew "aws-sdk-cpp"
-# Asynchronous DNS library
-brew "c-ares"
-# Mozilla CA certificate store
-brew "ca-certificates"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Protocol buffers (Google's data interchange format)
 brew "protobuf"
 # Alternative to backtracking PCRE-style regular expression engines
@@ -63,8 +79,6 @@ brew "re2"
 brew "grpc"
 # Library for decimal floating point arithmetic
 brew "mpdecimal"
-# Library for command-line editing
-brew "readline"
 # High-performance theorem prover
 brew "z3"
 # Next-gen compiler infrastructure
@@ -145,8 +159,6 @@ brew "libxcb"
 brew "broot"
 # Freely available high-quality data compressor
 brew "bzip2"
-# GNU multiple precision arithmetic library
-brew "gmp"
 # Glorious Glasgow Haskell Compilation System
 brew "ghc"
 # Command-line interface for Cabal and Hackage
@@ -171,6 +183,10 @@ brew "lzo"
 brew "pixman"
 # Vector graphics library with cross-device output support
 brew "cairo"
+# Execute Rust code carefully, with extra checking along the way
+brew "cargo-careful"
+# Cargo plugin for linting your dependencies
+brew "cargo-deny"
 # Insanely fast image printing in your terminal
 brew "catimg"
 # Mozilla CA bundle for Python
@@ -235,8 +251,6 @@ brew "coreutils"
 brew "cryptography"
 # Top-like interface for container metrics
 brew "ctop"
-# HTTP/2 C Library
-brew "libnghttp2"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Tools to manipulate dates with a focus on financial data
@@ -337,10 +351,6 @@ brew "editorconfig-checker"
 brew "popt"
 # Powerful wavelet image compressor
 brew "epsilon"
-# Multi-platform support library with a focus on asynchronous I/O
-brew "libuv"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
 # AST-based pattern checker for JavaScript
 brew "eslint"
 # EXIF parsing library
@@ -721,6 +731,10 @@ brew "pugixml"
 brew "tbb"
 # Open Visual Inference And Optimization toolkit for AI inference
 brew "openvino"
+# High-performance formatting tool for JavaScript and TypeScript
+brew "oxfmt"
+# High-performance linter for JavaScript and TypeScript written in Rust
+brew "oxlint"
 # 7-Zip (high compression file archiver) implementation
 brew "p7zip"
 # Swiss-army knife of markup format conversion
@@ -737,6 +751,8 @@ brew "pgcli"
 brew "pidof"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
+# Audits Python environments and dependency trees for known vulnerabilities
+brew "pip-audit"
 # Python dependency management tool
 brew "pipenv"
 # Execute binaries from Python packages in isolated environments
@@ -817,8 +833,6 @@ brew "selene"
 brew "tree-sitter"
 # Easily detect and prevent bugs and anti-patterns in your codebase
 brew "semgrep"
-# Static analysis and lint tool, for (ba)sh scripts
-brew "shellcheck"
 # Bash syntax highlighter that encourages/fixes variables quoting
 brew "shellharden"
 # Autoformat shell script source code
@@ -903,6 +917,8 @@ brew "wimlib"
 brew "wireguard-go"
 # Tools for the WireGuard secure network tunnel
 brew "wireguard-tools"
+# CLI for Git worktree management, designed for parallel AI agent workflows
+brew "worktrunk"
 # Cross-platform C++ GUI toolkit
 brew "wxwidgets"
 # Validating XML parser
@@ -929,6 +945,8 @@ brew "yt-dlp"
 brew "zeromq"
 # Compression and file packaging/archive utility
 brew "zip"
+# Find security issues in GitHub Actions setups
+brew "zizmor"
 # General-purpose lossless data-compression library
 brew "zlib"
 # Shell extension to navigate your filesystem faster
@@ -1155,6 +1173,7 @@ vscode "naumovs.color-highlight"
 vscode "oderwat.indent-rainbow"
 vscode "opentofu.vscode-opentofu"
 vscode "oven.bun-vscode"
+vscode "oxc.oxc-vscode"
 vscode "redhat.vscode-yaml"
 vscode "ritwickdey.liveserver"
 vscode "rust-lang.rust-analyzer"

@@ -5,9 +5,9 @@
 - If npm or pnpm scripts are configured, ask the user
   to confirm first. Otherwise:
   - Use `tsc --noEmit` to type check code
-  - Use `eslint` to lint code for best practices
-  - Use `biome format` to format code. If unavailable,
-    use `prettier` instead.
+  - Use `oxlint` to lint code for best practices
+  - Use `oxfmt` to format code. If unavailable, use
+    `biome format` instead.
 
 ## General Best Practices
 

@@ -278,7 +278,7 @@
     alias = !git config -l | grep ^alias | cut -c 7- | sort
 
     # Remove branches that have already been merged with master or main
-    # a.k.a. ‘delete merged’
+    # a.k.a. 'delete merged'
     brdm = "!git branch --merged | grep -v '\\*\\|master|main' | xargs -n 1 git branch -d"
 
     # List contributors with number of commits
@@ -321,10 +321,6 @@
     undo = !git reset HEAD~1 --mixed
 
     # Worktrees
-    wta = "!f() { git worktree add -b \"$1\" \".worktrees/$1\"; }; f"
-    wtr = "!f() { git worktree remove \".worktrees/$1\"; }; f"
-    wtl = worktree list
-    wtp = worktree prune
     # Prune worktrees where the branch's PR has been merged
     wtpm = "!f() { \
       main_wt=$(git rev-parse --show-toplevel); \
@@ -347,7 +343,7 @@
     #===============================================
     # http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
 
-    # Sometimes you find you want to change a file that’s in a repository but
+    # Sometimes you find you want to change a file that's in a repository but
     # by no means want to check in your edits.
     assume   = update-index --assume-unchanged
     unassume = update-index --no-assume-unchanged

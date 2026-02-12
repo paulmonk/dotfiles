@@ -72,8 +72,21 @@ alias type="type -a"
 alias v="vi"
 alias x="unarchive"
 
-# AI
+# AI (default tool)
 alias ai="claude"
+
+# Bypasses all permission prompts. This is the recommended way to run Claude
+# for maximum throughput, pair it with sandboxing.
+alias claude-yolo="claude --dangerously-skip-permissions"
+
+# claude-local wraps claude with the local server env vars and
+# disables telemetry pings that won't reach Anthropic anyway.
+claude-local() {
+  ANTHROPIC_BASE_URL=http://localhost:1234 \
+  ANTHROPIC_AUTH_TOKEN=lmstudio \
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+  claude "$@"
+}
 
 # Python
 alias pip="python -m pip"
@@ -221,7 +234,7 @@ if [[ "${KERNEL}" == "Darwin" ]]; then
   alias dnsflush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 
   # Empty the Trash on all mounted volumes and the main HDD
-  # Also, clear Apple’s System Logs to improve shell startup speed
+  # Also, clear Apple's System Logs to improve shell startup speed
   alias emptytrash=" \
           sudo rm -rfv /Volumes/*/.Trashes; \
           sudo rm -rfv ~/.Trash; \
@@ -233,7 +246,7 @@ if [[ "${KERNEL}" == "Darwin" ]]; then
   alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
   alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-  # Clean up LaunchServices to remove duplicates in the “Open With” menu
+  # Clean up LaunchServices to remove duplicates in the "Open With" menu
   alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
   # No `md5sum`, so use `md5` as a fallback

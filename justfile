@@ -116,8 +116,6 @@ coding-agents: qmd
     claude mcp add-json --scope user aws-knowledge '{"type":"http","url":"https://knowledge-mcp.global.api.aws"}' >/dev/null 2>&1 || true
     echo "  Ensuring gcloud"
     claude mcp add --scope user gcloud -- npx -y @google-cloud/gcloud-mcp >/dev/null 2>&1 || true
-    echo "  Ensuring huggingface"
-    claude mcp add --scope user huggingface -- npx -y hf-mcp-server -t http "https://huggingface.co/mcp?login" >/dev/null 2>&1 || true
     echo "  Ensuring context7"
     claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp >/dev/null 2>&1 || true
     echo "  Ensuring exa"
@@ -136,6 +134,14 @@ coding-agents: qmd
       claude mcp add --scope user -e BUN_INSPECT_CONNECT_TO= qmd -- "${BUN_INSTALL_BIN}/qmd" mcp >/dev/null 2>&1 || true
     else
       echo "  [warn] BUN_INSTALL_BIN not set; skipping qmd MCP server" >&2
+    fi
+
+    # Worktrunk
+    echo "Configuring worktrunk"
+    if command -v wt >/dev/null 2>&1; then
+      wt config shell install 2>/dev/null || true
+    else
+      echo "  [warn] worktrunk not installed; skipping" >&2
     fi
 
     # Codex: generate AGENTS.md from Claude Code sources

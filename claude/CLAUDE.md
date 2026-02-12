@@ -83,9 +83,10 @@ mid-run; refresh context before summarising or editing.
 - **Git safety**: Do not run destructive git commands
   (`reset --hard`, `checkout .`, `clean -f`, `push --force`)
   without explicit permission. Commits via `/commit` are fine.
-- **Git worktrees**: Create worktrees in `.worktrees/` at the
-  repository root
-  (e.g., `git worktree add -b feature-x .worktrees/feature-x`).
+- **Git worktrees**: Create worktrees with
+  `wt switch -c <branch>` (uses `.worktrees/` at repository
+  root). Use `wt list` to view, `wt merge <target>` to
+  squash-merge back, `wt remove` to clean up.
 
 ### Code Commit Message Style
 

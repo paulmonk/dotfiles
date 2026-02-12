@@ -60,6 +60,7 @@ return {
 				'bash-language-server',
 				'dockerfile-language-server',
 				'biome',
+				'oxlint',
 			},
 		},
 		config = function(_, opts)
@@ -150,8 +151,8 @@ return {
 			local lint = require('lint')
 			lint.linters_by_ft = {
 				python = { 'ruff', 'mypy' },
-				javascript = { 'biomejs' },
-				typescript = { 'biomejs' },
+				javascript = { 'oxlint' },
+				typescript = { 'oxlint' },
 				go = { 'revive' },
 				sh = { 'shellcheck' },
 				dockerfile = { 'hadolint' },

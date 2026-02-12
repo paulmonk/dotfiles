@@ -61,7 +61,7 @@ main() {
         echo "${input}"
         exit 0
       }
-      deny_tool "Edits require a worktree. The target file's repo (${file_git_root}) uses worktrees."
+      deny_tool "Edits require a worktree. Run: wt switch -c <branch-name>"
     fi
     # Target file is not in any git repo; allow it through.
     if [[ -z ${file_git_root} ]]; then
@@ -89,7 +89,7 @@ main() {
   }
 
   # Deny: editing main checkout when worktrees exist.
-  deny_tool "Edits require a worktree. Fetch the latest changes on the main branch first (git fetch origin && git pull), then use /using-git-worktrees to create one and start Claude from there."
+  deny_tool "Edits require a worktree. Run: wt switch -c <branch-name>"
 }
 
 main "$@"

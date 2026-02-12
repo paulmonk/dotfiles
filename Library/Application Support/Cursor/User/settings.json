@@ -477,7 +477,7 @@
         "lastest": "latest",
         "{les,compar,compari}sion{,s}": "{les,compari,compari}son{}",
         "mispell": "misspell",
-        "mispelled": "misspelled",
+        "mispelled": "misspelt",
         "{,un}nec{ce,ces,e}sar{y,ily}": "{}nec{es}sar{}",
         "{,un}orgin{,al}": "{}origin{}",
         "persistan{ce,t,tly}": "persisten{}",
@@ -585,19 +585,19 @@
   // JS / TS
   "[javascript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "javascript.suggest.completeJSDocs": false,
   "javascript.suggest.autoImports": false,
@@ -737,14 +737,8 @@
   "errorLens.messageEnabled": true,
   "errorLens.statusBarColorsEnabled": true,
   "errorLens.statusBarMessageEnabled": false,
-  // eslint
-  "eslint.format.enable": true,
-  "eslint.rules.customizations": [
-    {
-      "rule": "*",
-      "severity": "warn"
-    }
-  ],
+  // oxc
+  "oxc.lint.enable": true,
   // projectManager
   "projectManager.git.baseFolders": ["~/projects"],
   "projectManager.ignoreProjectsWithinProjects": true,

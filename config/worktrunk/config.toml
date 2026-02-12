@@ -1,0 +1,71 @@
+# Keep the .worktrees/ convention used across all repos.
+worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+
+# LLM-generated commit messages using Claude via conventional commits.
+[commit.generation]
+command = "claude -p --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
+template = """
+Write a commit message for the staged changes below.
+
+<format>
+- Use Conventional Commits: <type>(<scope>): <description>
+- Types: feat, fix, refactor, docs, test, chore
+- Subject: lowercase after type, present tense, 50 chars or less
+- For material changes, add a blank line then a body paragraph
+  explaining the why (not the what), wrapped at 72 characters
+- Output only the commit message, no quotes or code blocks
+</format>
+
+<style>
+- Imperative mood: "add feature" not "added feature"
+- Match recent commit style if available
+</style>
+
+<diffstat>
+{{ git_diff_stat }}
+</diffstat>
+
+<diff>
+{{ git_diff }}
+</diff>
+
+<context>
+Branch: {{ branch }}
+{% if recent_commits %}<recent_commits>
+{% for commit in recent_commits %}- {{ commit }}
+{% endfor %}</recent_commits>{% endif %}
+</context>
+"""
+squash-template = """
+Combine these commits into a single commit message.
+
+<format>
+- Use Conventional Commits: <type>(<scope>): <description>
+- Types: feat, fix, refactor, docs, test, chore
+- Subject: lowercase after type, present tense, 50 chars or less
+- For material changes, add a blank line then a body paragraph
+  explaining the why (not the what), wrapped at 72 characters
+- Output only the commit message, no quotes or code blocks
+</format>
+
+<style>
+- Imperative mood: "add feature" not "added feature"
+- Match the style of commits being squashed
+</style>
+
+<commits branch="{{ branch }}" target="{{ target_branch }}">
+{% for commit in commits %}- {{ commit }}
+{% endfor %}</commits>
+
+<diffstat>
+{{ git_diff_stat }}
+</diffstat>
+
+<diff>
+{{ git_diff }}
+</diff>
+"""
+
+# Run direnv allow in every new worktree automatically.
+[post-create]
+direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow || true"

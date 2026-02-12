@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#/ Logs every Bash command to ~/.claude/bash-commands.log with a timestamp.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  if [[ -n ${command} ]]; then
+    printf '[%s] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${command}" \
+      >>"${HOME}/.claude/bash-commands.log"
+  fi
+
+  echo "${input}"
+}
+
+main "$@"

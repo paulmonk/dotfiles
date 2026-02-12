@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+#/ Blocks usage of the wrong package manager for the current project.
+#/
+#/ Detects the project's package manager from lockfiles and denies
+#/ commands that use a different one. Supports JS (npm, pnpm, yarn,
+#/ bun) and Python (uv, pip, poetry, pipenv) ecosystems.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+# Detect the JS package manager from lockfiles.
+#
+# Arguments:
+#   $1 - Project directory to check.
+#
+# Outputs:
+#   The detected package manager name, or empty if none found.
+detect_js_manager() {
+  local dir="${1}"
+
+  if [[ -f "${dir}/pnpm-lock.yaml" ]]; then
+    echo "pnpm"
+  elif [[ -f "${dir}/yarn.lock" ]]; then
+    echo "yarn"
+  elif [[ -f "${dir}/bun.lockb" || -f "${dir}/bun.lock" ]]; then
+    echo "bun"
+  elif [[ -f "${dir}/package-lock.json" ]]; then
+    echo "npm"
+  fi
+}
+
+# Detect the Python package manager from lockfiles.
+#
+# Arguments:
+#   $1 - Project directory to check.
+#
+# Outputs:
+#   The detected package manager name, or empty if none found.
+detect_python_manager() {
+  local dir="${1}"
+
+  if [[ -f "${dir}/uv.lock" ]]; then
+    echo "uv"
+  elif [[ -f "${dir}/poetry.lock" ]]; then
+    echo "poetry"
+  elif [[ -f "${dir}/Pipfile.lock" ]]; then
+    echo "pipenv"
+  fi
+}
+
+# Check if a command starts with a given package manager name.
+#
+# Arguments:
+#   $1 - The command string.
+#   $2 - The package manager name to match.
+#
+# Returns:
+#   0 if the command uses the given manager, 1 otherwise.
+command_uses() {
+  local command="${1}" manager="${2}"
+  echo "${command}" | grep -qE "(^|[;&|]\s*)${manager}(\s|$)"
+}
+
+main() {
+  local input command project_dir
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+  [[ -z ${command} ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  project_dir="${CLAUDE_PROJECT_DIR:-.}"
+
+  # JS ecosystem: deny wrong package manager.
+  local js_manager
+  js_manager=$(detect_js_manager "${project_dir}")
+
+  if [[ -n ${js_manager} ]]; then
+    local -a js_all=(npm pnpm yarn bun)
+    for wrong in "${js_all[@]}"; do
+      if [[ ${wrong} != "${js_manager}" ]] && command_uses "${command}" "${wrong}"; then
+        # Backticks are markdown formatting, not command substitution.
+        # shellcheck disable=SC2016
+        deny_tool "This project uses \`${js_manager}\`, not \`${wrong}\`. Use \`${js_manager}\` instead."
+        exit 0
+      fi
+    done
+  fi
+
+  # Python ecosystem: deny wrong package manager.
+  local py_manager
+  py_manager=$(detect_python_manager "${project_dir}")
+
+  if [[ -n ${py_manager} ]]; then
+    local -a py_all=(pip poetry pipenv uv)
+    for wrong in "${py_all[@]}"; do
+      if [[ ${wrong} != "${py_manager}" ]] && command_uses "${command}" "${wrong}"; then
+        # Backticks are markdown formatting, not command substitution.
+        # shellcheck disable=SC2016
+        deny_tool "This project uses \`${py_manager}\`, not \`${wrong}\`. Use \`${py_manager}\` instead."
+        exit 0
+      fi
+    done
+  fi
+
+  echo "${input}"
+}
+
+main "$@"
