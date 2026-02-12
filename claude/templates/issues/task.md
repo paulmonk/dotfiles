@@ -13,7 +13,7 @@ _<Describe why this task needs to be done>_
 
 ## Acceptance Criteria
 
-_<Acceptance criteria are a set of conditions that a story must meet
+_<Acceptance criteria are a set of conditions that a task must meet
 in order to be considered complete or done. Another way of thinking
-about them is as a test which must pass for the story to be accepted
+about them is as a test which must pass for the task to be accepted
 by the stakeholder.>_

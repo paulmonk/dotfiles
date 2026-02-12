@@ -1,7 +1,7 @@
 ---
 name: commit-push-pr
 description: Commit, push, and open a PR in one step
-allowed-tools: Bash(git checkout:*), Bash(git add:*), Bash(git status:*), Bash(git push:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(gh pr create:*)
+allowed-tools: Bash(git checkout:*), Bash(git add:*), Bash(git status:*), Bash(git push:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(gh pr create:*), Read, Glob
 ---
 
 # Commit Push PR
@@ -45,7 +45,17 @@ If currently on `main` or `master`:
 
 - Push the branch to origin with tracking: `git push -u origin <branch>`
 
-### 5. Create Draft Pull Request
+### 5. Find PR Template
+
+Search for a PR template in the repository using Glob:
+
+1. `**/*PULL_REQUEST_TEMPLATE*` (covers `.github/` and
+   `.github/PULL_REQUEST_TEMPLATE/` locations)
+2. If found, use `Read` to get its contents
+3. If not found, use the default template from
+   [./templates/pull-request.md](templates/pull-request.md)
+
+### 6. Create Draft Pull Request
 
 Use `gh pr create` with:
 
@@ -56,17 +66,11 @@ EOF
 )"
 ```
 
-Substitute the template body using the contents of the
-`.github/PULL_REQUEST_TEMPLATE.md` file in the repository.
-
-If no template is found, use the default template from
-[./templates/pull-request.md](templates/pull-request.md).
-
 Ensure you follow the guidance of the template to fill out
 the PR appropriately. It may have guidance for the title
 and body of the PR.
 
-### 6. Return PR URL
+### 7. Return PR URL
 
 Output the PR URL so the user can view it.
 

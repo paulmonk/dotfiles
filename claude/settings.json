@@ -227,7 +227,11 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/bq-guard/hook"
+            "command": "~/.claude/hooks/bq-query-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/bd-create-guard/hook"
           }
         ]
       },

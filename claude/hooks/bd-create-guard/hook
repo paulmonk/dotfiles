@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#/ Enforces issue templates on bd create commands.
+#/
+#/ Denies bd create commands that lack required template sections.
+#/ All issues need --acceptance; bugs also need Steps to Reproduce.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input command
+  input=$(read_hook_input)
+
+  command=$(echo "${input}" | jq -r '.tool_input.command // ""')
+
+  # Only intercept "bd create" (not create-form, close, etc.).
+  if [[ ! "${command}" =~ bd[[:space:]]+create([[:space:]]|$) ]]; then
+    echo "${input}"
+    return 0
+  fi
+
+  # Allow --dry-run for previewing.
+  if [[ "${command}" =~ --dry-run ]]; then
+    echo "${input}"
+    return 0
+  fi
+
+  # Require --acceptance flag on all issues.
+  if [[ ! "${command}" =~ --acceptance ]]; then
+    deny_tool "bd create requires --acceptance flag. Include acceptance criteria, e.g.:
+  --acceptance=\"- [ ] Criterion 1
+- [ ] Criterion 2\"
+
+For bugs, also include '## Steps to Reproduce' in --description."
+    return 0
+  fi
+
+  # For bugs, require Steps to Reproduce in the description.
+  if [[ "${command}" =~ --type=bug ]] || [[ "${command}" =~ --type[[:space:]]bug ]]; then
+    if [[ ! "${command}" =~ "Steps to Reproduce" ]] && [[ ! "${command}" =~ "steps to reproduce" ]]; then
+      deny_tool "Bug issues require '## Steps to Reproduce' in the --description field."
+      return 0
+    fi
+  fi
+
+  echo "${input}"
+}
+
+main "$@"

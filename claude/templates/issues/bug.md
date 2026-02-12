@@ -16,15 +16,7 @@ _<What should be happening?>_
 
 ---
 
-## Additional Debug Info
+## Acceptance Criteria
 
-_<Include what would aim the engineer in understanding the
-environment the bug services, some examples included below>_
-
-**Operating System:**
-
-**Device:**
-
-**Time:**
-
-**User ID:**
+_<Conditions that must be met for this bug to be considered
+fixed.>_
