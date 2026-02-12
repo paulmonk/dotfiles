@@ -1,9 +1,3 @@
----
-paths:
-  - "**/*.py"
-  - "**/pyproject.toml"
----
-
 # Python
 
 ## Tooling

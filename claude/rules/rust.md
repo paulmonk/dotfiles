@@ -1,9 +1,3 @@
----
-paths:
-  - "**/*.rs"
-  - "**/Cargo.toml"
----
-
 # Rust
 
 ## Tooling

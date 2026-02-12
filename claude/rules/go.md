@@ -1,10 +1,3 @@
----
-paths:
-  - "**/*.go"
-  - "**/go.mod"
-  - "**/go.sum"
----
-
 # Go
 
 ## Tooling

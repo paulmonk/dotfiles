@@ -1,10 +1,3 @@
----
-paths:
-  - "**/*.{ts,tsx,js,jsx}"
-  - "**/package.json"
-  - "**/tsconfig.json"
----
-
 # TypeScript
 
 ## Tooling

@@ -1,10 +1,3 @@
----
-paths:
-  - "**/*.tf"
-  - "**/*.tfvars"
-  - "**/*.hcl"
----
-
 # Terraform
 
 Infrastructure as Code using Terraform/OpenTofu, orchestrated

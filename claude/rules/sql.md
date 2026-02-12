@@ -1,8 +1,3 @@
----
-paths:
-  - "**/*.sql"
----
-
 # SQL
 
 ## Tooling
