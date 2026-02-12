@@ -23,13 +23,17 @@ readonly C_RESET="\033[0m"
 # Read all stdin JSON in one go, extract everything in a single jq call.
 # Uses remaining_percentage (accounts for compaction reserves) with
 # fallback to raw token calculation.
+#
+# Delimiter: pipe (|) instead of @tsv because bash IFS=$'\t' read
+# treats consecutive tabs as one delimiter, swallowing empty fields.
 input=$(cat)
 
-IFS=$'\t' read -r current_dir session_id model_name cost duration_ms ctx_used cache_pct < <(
+current_dir="" session_id="" model_name="" cost="" duration_ms="" ctx_used="" cache_pct=""
+IFS='|' read -r current_dir session_id model_name cost duration_ms ctx_used cache_pct < <(
   echo "$input" | jq -r '[
-    .workspace.current_dir // "unknown",
-    .session_id // "",
-    .model.display_name // "Unknown",
+    (.workspace.current_dir // "unknown"),
+    (.session_id // ""),
+    (.model.display_name // "Unknown"),
     (try (.cost.total_cost_usd // 0 | . * 100 | floor / 100) catch 0),
     (.cost.total_duration_ms // 0),
     (try (
@@ -49,11 +53,11 @@ IFS=$'\t' read -r current_dir session_id model_name cost duration_ms ctx_used ca
          ((.input_tokens // 0) + (.cache_read_input_tokens // 0))) | floor
       else 0 end
     ) catch 0)
-  ] | @tsv'
+  ] | join("|")'
 )
 
-# Fallback if jq failed entirely.
-if [[ -z ${current_dir} ]] && [[ -z ${model_name} ]]; then
+# Fallback if jq failed entirely or partially.
+if [[ -z ${current_dir} ]] || [[ -z ${model_name} ]]; then
   current_dir=$(echo "$input" | jq -r '.workspace.current_dir // "unknown"' 2>/dev/null)
   session_id=$(echo "$input" | jq -r '.session_id // ""' 2>/dev/null)
   model_name=$(echo "$input" | jq -r '.model.display_name // "Unknown"' 2>/dev/null)

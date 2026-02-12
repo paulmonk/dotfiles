@@ -112,16 +112,10 @@ coding-agents: qmd
     echo "Configuring Claude Code MCP servers"
     echo "  Ensuring gh_grep"
     claude mcp add-json --scope user gh_grep '{"type":"http","url":"https://mcp.grep.app"}' >/dev/null 2>&1 || true
-    echo "  Ensuring aws-knowledge"
-    claude mcp add-json --scope user aws-knowledge '{"type":"http","url":"https://knowledge-mcp.global.api.aws"}' >/dev/null 2>&1 || true
-    echo "  Ensuring gcloud"
-    claude mcp add --scope user gcloud -- npx -y @google-cloud/gcloud-mcp >/dev/null 2>&1 || true
     echo "  Ensuring context7"
     claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp >/dev/null 2>&1 || true
     echo "  Ensuring exa"
     claude mcp add --scope user exa -- npx -y exa-mcp-server -e EXA_API_KEY >/dev/null 2>&1 || true
-    echo "  Ensuring playwright"
-    claude mcp add --scope user playwright -- npx -y @playwright/mcp >/dev/null 2>&1 || true
     echo "  Ensuring firecrawl"
     claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY >/dev/null 2>&1 || true
     echo "  Ensuring chrome-devtools"

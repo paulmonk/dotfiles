@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 365,
   "env": {
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
@@ -14,11 +15,6 @@
     "commit": "",
     "pr": ""
   },
-  "alwaysThinkingEnabled": true,
-  "cleanupPeriodDays": 365,
-  "enableAllProjectMcpServers": false,
-  "plansDirectory": "./.claude/plans",
-  "showTurnDuration": true,
   "permissions": {
     "deny": [
       "Bash(rm -rf *)",
@@ -54,10 +50,7 @@
       "Read(~/Library/Application Support/**/solflare*/**)"
     ]
   },
-  "defaultMode": "plan",
-  "sandbox": {
-    "enabled": true
-  },
+  "enableAllProjectMcpServers": false,
   "hooks": {
     "SessionStart": [
       {
@@ -204,42 +197,6 @@
       }
     ]
   },
-  "outputStyle": "Personal",
-  "spinnerVerbs": {
-    "mode": "replace",
-    "verbs": [
-      "All constants are variables",
-      "Debug is human, de-fix divine",
-      "Eschewing obfuscation",
-      "Backed up the system lately?",
-      "Chaos is King and Magic is loose",
-      "Ahead warp factor one, Mr. Sulu",
-      "Doing gets it done",
-      "What soon grows old? Gratitude",
-      "The superfluous is very necessary",
-      "When does later become never?",
-      "Never trust a computer you can't repair",
-      "Heisenberg might have been here",
-      "core error - bus dumped",
-      "An adequate bootstrap is a contradiction",
-      "Weekends were made for programming",
-      "How can you work when the system's so crowded?",
-      "A man paints with his brains not his hands",
-      "Innovation is hard to schedule",
-      "Life is a series of rude awakenings",
-      "Coincidences are spiritual puns",
-      "All great discoveries are made by mistake",
-      "Death is nature's way of saying Howdy",
-      "Don't look back, the lemmings are gaining",
-      "I've got a very bad feeling about this",
-      "New York is real. The rest is done with mirrors",
-      "A hammer sometimes misses its mark, a bouquet never",
-      "Anger is momentary madness",
-      "Bank error in your favour. Collect $200",
-      "Dammit Jim, I'm an actor, not a doctor",
-      "It is easier to run down a hill than up one"
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline",
@@ -254,7 +211,8 @@
     "marketing-skills@marketingskills": true,
     "sharp-edges@trailofbits": true,
     "static-analysis@trailofbits": true,
-    "superpowers@superpowers-marketplace": true
+    "superpowers@superpowers-marketplace": true,
+    "agent-browser@agent-browser": true
   },
   "extraKnownMarketplaces": {
     "agent-browser": {
@@ -305,5 +263,69 @@
         "repo": "trailofbits/skills-curated"
       }
     }
-  }
+  },
+  "outputStyle": "Personal",
+  "sandbox": {
+    "enabled": true
+  },
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Tonight's the night",
+      "Taking out the trash",
+      "Following the code",
+      "Hiding in plain sight",
+      "Studying the blood splatter",
+      "Preparing the slide deck",
+      "I think, therefore I code",
+      "To ship or not to ship",
+      "The only thing we have to fear is production",
+      "Give me liberty or give me a debugger",
+      "That's one small step for a function",
+      "I came, I saw, I refactored",
+      "The unexamined code is not worth deploying",
+      "Fortune favours the bold commit",
+      "In the middle of difficulty lies opportunity",
+      "Not all those who wander are lost in the codebase",
+      "Elementary, my dear Watson",
+      "Here's looking at you, kid",
+      "After all, tomorrow is another deploy",
+      "May the source be with you",
+      "I'm going to make him an offer he can't refactor",
+      "We're going to need a bigger buffer",
+      "Houston, we have a problem",
+      "What we've got here is failure to communicate",
+      "I'll be back after this build",
+      "You can't handle the root cause",
+      "The truth is rarely pure and never simple",
+      "All happy codebases are alike",
+      "It was the best of times, it was the worst of bugs",
+      "So it goes",
+      "Stay hungry, stay foolish, stay shipping",
+      "The impediment to action advances action",
+      "Simplicity is the ultimate sophistication",
+      "Move fast and fix things",
+      "If you gaze into the abyss, the abyss gazes back",
+      "Do or do not, there is no try-catch",
+      "Hello, friend",
+      "Control is an illusion",
+      "People always make the best exploits",
+      "Is any of it real?",
+      "Give a man a zero-day and he has access for a day",
+      "This system will self-destruct in five minutes",
+      "Sacred cows make great hamburgers",
+      "If in doubt, mumble",
+      "It's later than you think",
+      "Save the whales. Collect the whole set",
+      "All your files have been destroyed (sorry)",
+      "The discs are getting full; purge a file today",
+      "Grub first, then ethics",
+      "Beware of geeks bearing graft",
+      "Any excuse will serve a tyrant"
+    ]
+  },
+  "alwaysThinkingEnabled": true,
+  "plansDirectory": "./.claude/plans",
+  "showTurnDuration": true,
+  "defaultMode": "plan"
 }

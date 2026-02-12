@@ -49,7 +49,10 @@ detect_python_manager() {
   fi
 }
 
-# Check if a command starts with a given package manager name.
+# Check if a command invokes a given package manager.
+#
+# Matches direct invocation (e.g. "pip install") and Python module
+# invocation (e.g. "python -m pip install", "python3.12 -m pip").
 #
 # Arguments:
 #   $1 - The command string.
@@ -59,7 +62,8 @@ detect_python_manager() {
 #   0 if the command uses the given manager, 1 otherwise.
 command_uses() {
   local command="${1}" manager="${2}"
-  echo "${command}" | grep -qE "(^|[;&|]\s*)${manager}(\s|$)"
+  echo "${command}" | grep -qE "(^|[;&|]\s*)${manager}(\s|$)" ||
+    echo "${command}" | grep -qE "(^|[;&|]\s*)python[0-9.]*\s+-m\s+${manager}(\s|$)"
 }
 
 main() {
