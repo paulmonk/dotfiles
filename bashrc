@@ -52,6 +52,20 @@ PROMPT_COMMAND='history -a; echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 # Loading...
 #-------------------------
+# Shell history
+if command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init bash)"
+fi
+
+# Direnv
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook bash)"
+fi
+
+if command -v wt >/dev/null 2>&1; then
+  eval "$(command wt config shell init bash)"
+fi
+
 if command -v broot >/dev/null 2>&1; then
   source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
 fi

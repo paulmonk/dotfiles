@@ -143,6 +143,11 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 
+# Worktrunk
+if (( $+commands[wt])); then
+  eval "$(command wt config shell init zsh)"
+fi
+
 # Broot
 if (( $+commands[broot])) && [[ -x "${XDG_CONFIG_HOME}/broot/launcher/bash/br" ]]; then
   source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"

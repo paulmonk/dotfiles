@@ -1,16 +1,24 @@
 #!/bin/sh
+# Clean up broken symlinks left behind when dotfiles are removed or renamed.
+# Scoped to directories managed by rcm (see config/rcm/rcrc).
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-# Remove any broken symlinks:
-# non-recursively from the following directories.
+# Non-recursive: top-level dotfiles and .ssh (keep .ssh shallow for safety).
 find "${HOME}" -maxdepth 1 -type l ! -exec test -e {} \; -delete
 find "${HOME}/.ssh" -maxdepth 1 -type l ! -exec test -e {} \; -delete
 
-# Recursively from the following directories.
-find "${XDG_CONFIG_HOME}" -type l ! -exec test -e {} \; -delete
-find "${HOME}/.claude" -type l ! -exec test -e {} \; -delete
-
-# Remove empty directories left behind after symlink cleanup.
-find "${XDG_CONFIG_HOME}" -type d -empty -delete
-find "${HOME}/.claude" -type d -empty -delete
+# Recursive: directories entirely managed by rcm.
+for dir in \
+  "${XDG_CONFIG_HOME}" \
+  "${HOME}/.local/bin" \
+  "${HOME}/.local/share" \
+  "${HOME}/.claude" \
+  "${HOME}/.codex" \
+  "${HOME}/Library/Application Support/Code" \
+  "${HOME}/Library/Application Support/Cursor" \
+  "${HOME}/Library/LaunchAgents"; do
+  [ -d "${dir}" ] || continue
+  find "${dir}" -type l ! -exec test -e {} \; -delete
+  find "${dir}" -type d -empty -delete
+done

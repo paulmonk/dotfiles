@@ -69,3 +69,9 @@ Combine these commits into a single commit message.
 # Run direnv allow in every new worktree automatically.
 [post-create]
 direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow || true"
+prek = "command -v prek >/dev/null 2>&1 && [ -f .pre-commit-config.yaml ] && prek install || true"
+
+# Copy gitignored files (node_modules, target/, .next/, etc.) from the main
+# worktree using copy-on-write. Scoped by .worktreeinclude when present.
+[post-start]
+copy = "wt step copy-ignored"

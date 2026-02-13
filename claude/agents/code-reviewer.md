@@ -24,6 +24,10 @@ project rules (typically in CLAUDE.md) including:
 - Function declarations and error handling
 - Logging, testing practices, and naming conventions
 
+If a project has no rules defined or the rules are mising parts of the above,
+use the global defined rules to guide you. For instance if this is a Python
+project, then reference the Python rules and general coding rules.
+
 **Bug Detection**: Identify actual bugs that will impact
 functionality:
 

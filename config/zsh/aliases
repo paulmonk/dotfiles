@@ -72,22 +72,6 @@ alias type="type -a"
 alias v="vi"
 alias x="unarchive"
 
-# AI (default tool)
-alias ai="claude"
-
-# Bypasses all permission prompts. This is the recommended way to run Claude
-# for maximum throughput, pair it with sandboxing.
-alias claude-yolo="claude --dangerously-skip-permissions"
-
-# claude-local wraps claude with the local server env vars and
-# disables telemetry pings that won't reach Anthropic anyway.
-claude-local() {
-  ANTHROPIC_BASE_URL=http://localhost:1234 \
-  ANTHROPIC_AUTH_TOKEN=lmstudio \
-  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
-  claude "$@"
-}
-
 # Python
 alias pip="python -m pip"
 alias py="python"
@@ -200,6 +184,32 @@ elif (( $+commands[wget] )); then
   alias get="wget --continue --progress=bar --timestamping"
 fi
 
+# Worktrunk: ergonomic worktree management
+if (( $+commands[wt] )); then
+  alias wtsc='wt switch --create'
+  alias wts='wt switch'
+  alias wtl='wt list'
+  alias wtm='wt merge'
+  alias wtr='wt remove'
+fi
+
+# Claude
+if (( $+commands[claude] )); then
+  alias ai="claude"
+
+  # Bypasses all permission prompts. This is the recommended way to run Claude
+  # for maximum throughput, pair it with sandboxing.
+  alias claude-yolo="claude --dangerously-skip-permissions"
+
+  # claude-local wraps claude with the local server env vars and
+  # disables telemetry pings that won't reach Anthropic anyway.
+  claude-local() {
+    ANTHROPIC_BASE_URL=http://localhost:1234 \
+    ANTHROPIC_AUTH_TOKEN=lmstudio \
+    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+    claude "$@"
+  }
+fi
 
 # Network aliases
 # -------------------------

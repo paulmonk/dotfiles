@@ -237,6 +237,18 @@ run_observer() {
   export HOMUNCULUS_OBSERVER=1
 
   # Prevent concurrent runs (rapid session closes, manual triggers).
+  # If a lock exists, check whether the holder is still alive. Stale
+  # locks from crashed observer processes would block all future runs.
+  if [[ -f ${LOCK_FILE} ]]; then
+    local stale_pid
+    stale_pid=$(cat "${LOCK_FILE}" 2>/dev/null)
+    if [[ -n ${stale_pid} ]] && kill -0 "${stale_pid}" 2>/dev/null; then
+      return
+    fi
+    # Holder is dead, reclaim the lock.
+    rm -f "${LOCK_FILE}"
+    echo "[$(date -Iseconds)] Reclaimed stale lock from PID ${stale_pid}" >>"${LOG_FILE}"
+  fi
   if ! (
     set -o noclobber
     echo $$ >"${LOCK_FILE}"

@@ -759,8 +759,6 @@ brew "pipenv"
 brew "pipx"
 # Library to simplify the interaction with PKCS#11
 brew "pkcs11-helper"
-# Object-relational database system
-brew "postgresql@14"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Pre-commit re-implemented in Rust
