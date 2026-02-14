@@ -1,8 +1,7 @@
 ---
 name: plugin-update
 description: Clear Claude Code plugin cache to force fresh install on restart
-allowed-tools: Bash(mkdir /tmp/claude/plugins) Bash(mv ~/.claude/plugins/cache "/tmp/claude/plugins/cache-$(date
-+%s)"), Bash(mv ~/.claude/plugins/installed_plugins.json "/tmp/claude/plugins/installed_plugins-$(date +%s).json")
+allowed-tools: Bash
 ---
 
 # Plugin Update

@@ -12,12 +12,14 @@ readonly SETTINGS_FILE="${HOME}/.claude/settings.json"
 
 # Creates the full homunculus directory structure.
 create_directories() {
+  mkdir -p "${HOMUNCULUS_DIR}/conversations"
+  mkdir -p "${HOMUNCULUS_DIR}/convictions"
+  mkdir -p "${HOMUNCULUS_DIR}/episodes"
+  mkdir -p "${HOMUNCULUS_DIR}/instincts/personal"
+  mkdir -p "${HOMUNCULUS_DIR}/logs"
   mkdir -p "${HOMUNCULUS_DIR}/observations"
   mkdir -p "${HOMUNCULUS_DIR}/observations.archive"
-  mkdir -p "${HOMUNCULUS_DIR}/instincts/personal"
   mkdir -p "${HOMUNCULUS_DIR}/sessions"
-  mkdir -p "${HOMUNCULUS_DIR}/episodes"
-  mkdir -p "${HOMUNCULUS_DIR}/logs"
   echo "Created directory structure"
 }
 
@@ -49,6 +51,24 @@ verify_hooks() {
   fi
 }
 
+# Ensures qmd collections exist for each homunculus data directory.
+setup_qmd_collections() {
+  command -v qmd >/dev/null 2>&1 || return
+
+  local -A collections=(
+    [homunculus - instincts]="${HOMUNCULUS_DIR}/instincts/personal"
+    [homunculus - sessions]="${HOMUNCULUS_DIR}/sessions"
+    [homunculus - episodes]="${HOMUNCULUS_DIR}/episodes"
+    [homunculus - conversations]="${HOMUNCULUS_DIR}/conversations"
+  )
+
+  local name
+  for name in "${!collections[@]}"; do
+    qmd collection add "${collections[$name]}" --name "${name}" --mask "*.md" 2>/dev/null || true
+  done
+  echo "Verified qmd collections"
+}
+
 # Runs all initialisation steps.
 #
 # Arguments:
@@ -57,6 +77,7 @@ main() {
   create_directories
   create_identity
   verify_hooks
+  setup_qmd_collections
 }
 
 main "$@"

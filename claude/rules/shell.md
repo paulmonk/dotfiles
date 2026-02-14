@@ -1,10 +1,5 @@
 # Shell
 
-## Tooling
-
-- Use `shellcheck` to lint code for best practices
-- Use `shfmt -i 2` to format code
-
 ## General Best Practices
 
 - **Small utilities only:** Limit shell to small utilities,

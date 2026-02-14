@@ -1,13 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+# Import personal GPG key and ensure GNUPGHOME permissions.
+set -o errexit -o errtrace -o pipefail -o nounset
 
-GNUPGHOME="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg"
+readonly GNUPGHOME="${XDG_CONFIG_HOME:-${HOME}/.config}/gnupg"
+readonly MY_GPG_KEY_ID="0x06E2E2310CB5DB04"
 
-# Import my key
-MY_GPG_KEY_ID="0x06E2E2310CB5DB04"
 if ! gpg -k | grep "${MY_GPG_KEY_ID}" >/dev/null; then
-  # Import Public Key
   curl -s https://keybase.io/pmonk/key.asc | gpg --import
-  # Verify key as trusted.
   if gpg -k | grep "${MY_GPG_KEY_ID}" >/dev/null; then
     gpg --list-keys --fingerprint --with-colons |
       sed -E -n -e 's/^fpr:::::::::([0-9A-F]+):$/\1:6:/p' |
@@ -15,5 +14,4 @@ if ! gpg -k | grep "${MY_GPG_KEY_ID}" >/dev/null; then
   fi
 fi
 
-# Ensure permissions on GNUPGHOME
 chmod -R 700 "${GNUPGHOME}"

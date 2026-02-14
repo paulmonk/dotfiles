@@ -3,7 +3,7 @@ worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
 
 # LLM-generated commit messages using Claude via conventional commits.
 [commit.generation]
-command = "claude -p --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
+command = "MAX_THINKING_TOKENS=0 claude -p --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
 template = """
 Write a commit message for the staged changes below.
 
@@ -70,6 +70,7 @@ Combine these commits into a single commit message.
 [post-create]
 direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow || true"
 prek = "command -v prek >/dev/null 2>&1 && [ -f .pre-commit-config.yaml ] && prek install || true"
+python-uv = "[ -f pyproject.toml ] && [ -f uv.lock ] && uv venv --clear && uv sync || true"
 
 # Copy gitignored files (node_modules, target/, .next/, etc.) from the main
 # worktree using copy-on-write. Scoped by .worktreeinclude when present.

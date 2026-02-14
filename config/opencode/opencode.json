@@ -4,6 +4,49 @@
   "theme": "tokyonight",
   "autoupdate": false,
   "instructions": ["~/.claude/rules/*.md"],
+  "permission": {
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "~/.ssh/*": "deny",
+      "~/.gnupg/*": "deny",
+      "~/.aws/*": "deny",
+      "~/.azure/*": "deny",
+      "~/.config/gcloud/*": "deny",
+      "~/.config/gh/*": "deny",
+      "~/.git-credentials": "deny",
+      "~/.docker/config.json": "deny",
+      "~/.kube/*": "deny",
+      "~/.npmrc": "deny",
+      "~/.npm/*": "deny",
+      "~/.pypirc": "deny",
+      "~/.gem/credentials": "deny",
+      "~/Library/Keychains/*": "deny",
+      "~/Library/Application Support/*metamask*": "deny",
+      "~/Library/Application Support/*electrum*": "deny",
+      "~/Library/Application Support/*exodus*": "deny",
+      "~/Library/Application Support/*phantom*": "deny",
+      "~/Library/Application Support/*solflare*": "deny"
+    },
+    "bash": {
+      "*": "ask",
+      "rm *": "deny",
+      "sudo *": "deny",
+      "mkfs *": "deny",
+      "dd *": "deny",
+      "git push --force*": "deny",
+      "git push *--force*": "deny",
+      "git reset --hard*": "deny"
+    },
+    "edit": {
+      "*": "allow",
+      "~/.bashrc": "deny",
+      "~/.zshrc": "deny",
+      "~/.ssh/*": "deny"
+    }
+  },
   "formatter": {
     "britfix": {
       "command": ["britfix", "--input", "$FILE", "--no-backup"],

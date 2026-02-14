@@ -1,9 +1,11 @@
 #!/bin/bash
+# Apply macOS system defaults for UI, keyboard, trackpad, dock, etc.
+set -o errexit -o errtrace -o pipefail -o nounset
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   # Close any open System Preferences panes, to prevent them from overriding
   # settings we're about to change
-  osascript -e 'tell application "System Preferences" to quit'
+  osascript -e 'tell application "System Preferences" to quit' || true
 
   # Ask for the administrator password upfront
   sudo -v
@@ -269,27 +271,27 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
   # Show item info near icons on the desktop and in other icon views
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
+  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" "${HOME}/Library/Preferences/com.apple.finder.plist"
 
   # Show item info to the right of the icons on the desktop
-  /usr/libexec/PlistBuddy -c "Set DesktopViewSettings:IconViewSettings:labelOnBottom false" ~/Library/Preferences/com.apple.finder.plist
+  /usr/libexec/PlistBuddy -c "Set DesktopViewSettings:IconViewSettings:labelOnBottom false" "${HOME}/Library/Preferences/com.apple.finder.plist"
 
   # Enable snap-to-grid for icons on the desktop and in other icon views
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" "${HOME}/Library/Preferences/com.apple.finder.plist"
 
   # Increase grid spacing for icons on the desktop and in other icon views
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:gridSpacing 100" ~/Library/Preferences/com.apple.finder.plist
+  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:gridSpacing 100" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:gridSpacing 100" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:gridSpacing 100" "${HOME}/Library/Preferences/com.apple.finder.plist"
 
   # Increase the size of icons on the desktop and in other icon views
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
+  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 80" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 80" "${HOME}/Library/Preferences/com.apple.finder.plist"
+  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 80" "${HOME}/Library/Preferences/com.apple.finder.plist"
 
   # Use list view in all Finder windows by default
   # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
@@ -302,7 +304,8 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 
   # Show the ~/Library folder
-  chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+  chflags nohidden "${HOME}/Library"
+  xattr -d com.apple.FinderInfo "${HOME}/Library" 2>/dev/null || true
 
   # Show the /Volumes folder
   sudo chflags nohidden /Volumes
@@ -621,7 +624,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     "Safari" \
     "SystemUIServer" \
     "Terminal"; do
-    killall "${app}" &>/dev/null
+    killall "${app}" &>/dev/null || true
   done
   echo "Done. Note that some of these changes require a logout/restart to take effect."
 fi

@@ -15,40 +15,33 @@ continuous learning system.
 
 ```text
 /homunculus-init
-/homunculus-init --status
 ```
 
 ## Implementation
 
-### Full initialisation
-
 ```bash
 ~/.claude/skills/homunculus-init/scripts/init
-~/.claude/skills/homunculus-init/scripts/status
 ```
 
-### Status only
-
-```bash
-~/.claude/skills/homunculus-init/scripts/status
-```
+After initialisation, run `/homunculus-status` to verify.
 
 ## What It Creates
 
 ```text
 ~/.claude/homunculus/
+├── conversations/
+├── convictions/
+├── episodes/
 ├── identity.json
-├── convictions.md
+├── instincts/
+│   └── personal/
+├── logs/
+│   └── observer.log
 ├── observations/
 │   └── {session_id}.jsonl
 ├── observations.archive/
-├── instincts/
-│   └── personal/
-├── sessions/
-├── episodes/
-├── logs/
-│   └── observer.log
-└── observer.lock
+├── observer.lock
+└── sessions/
 ```
 
 ## Example Output
@@ -57,14 +50,5 @@ continuous learning system.
 Created directory structure
 Created identity.json
 Hook configured: homunculus-observe
-
-=== Homunculus Status ===
-
-Directories:
-  [x] instincts/personal
-  [x] observations.archive
-  [x] logs
-
-Sessions: 0
-Instincts: 0
+Verified qmd collections
 ```

@@ -2,7 +2,7 @@
 name: changelog
 description: Create engaging changelogs for recent merges to main/master branch
 argument-hint: "[optional: daily|weekly, or time period in days]"
-allowed-tools: Bash(gh:*), Bash(git:*)
+allowed-tools: Bash
 ---
 
 # Changelog

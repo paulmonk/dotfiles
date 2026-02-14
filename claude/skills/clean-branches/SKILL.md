@@ -1,7 +1,7 @@
 ---
 name: clean-branches
 description: Clean up local branches deleted from remote, including worktrees
-allowed-tools: Bash(git branch:*), Bash(git worktree:*)
+allowed-tools: Bash
 ---
 
 # Clean Branches

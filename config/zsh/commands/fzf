@@ -136,6 +136,59 @@ if (( $+commands[tmux] )); then
     fi
   }
 
+  # tp [path] - Create or attach to a tmux session for a directory.
+  # If no path given, uses fzf to select from ~/projects.
+  tp() {
+    local dir session projects_dir="${HOME}/projects"
+
+    if [[ $# -ge 1 ]]; then
+      dir="${1}"
+    else
+      dir=$(fd --type d --max-depth 3 --hidden --no-ignore \
+        --glob '.git' "${projects_dir}" 2>/dev/null |
+        sed 's|/\.git/$||' |
+        sort |
+        fzf --prompt="Select project: ") || return
+    fi
+
+    dir="${dir%/}"
+
+    if [[ ! -d "${dir}" ]]; then
+      echo "tp: not a directory: ${dir}" >&2
+      return 1
+    fi
+
+    # Session name: relative to ~/projects (slashes become dashes), or basename
+    if [[ "${dir}" == "${projects_dir}/"* ]]; then
+      session="${dir#"${projects_dir}"/}"
+      session="${session//\//-}"
+    else
+      session="${dir:t}"
+    fi
+
+    # Sanitise for tmux (no dots, colons, or underscores)
+    session="${session//./-}"
+    session="${session//:/-}"
+    session="${session//_/-}"
+
+    if tmux has-session -t "${session}" 2>/dev/null; then
+      if [[ -n "${TMUX:-}" ]]; then
+        tmux switch-client -t "${session}"
+      else
+        tmux attach-session -t "${session}"
+      fi
+      return
+    fi
+
+    tmux new-session -d -s "${session}" -c "${dir}"
+
+    if [[ -n "${TMUX:-}" ]]; then
+      tmux switch-client -t "${session}"
+    else
+      tmux attach-session -t "${session}"
+    fi
+  }
+
   # fts [FUZZY PATTERN] - Select selected tmux session
   #   - Bypass fuzzy finder if there's only one match (--select-1)
   #   - Exit if there's no match (--exit-0)

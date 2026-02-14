@@ -1,13 +1,5 @@
 # Go
 
-## Tooling
-
-- Use `gofmt -w .` to format code
-- Use `go vet ./...` and/or `revive` to lint code for best practices
-- Use `staticcheck ./...` (if available) to lint code
-  for best practices
-- Use `go test ./...` to test code
-
 ## General Best Practices
 
 - Use the standard library where possible. Only pull in

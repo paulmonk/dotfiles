@@ -70,6 +70,8 @@ dotfiles: rcup-install
     @echo "--------------------------------"
     @echo "Syncing dotfiles"
     @RCRC="{{ justfile_directory() }}/config/rcm/rcrc" PATH="{{ default_path }}" {{ prefix }}/bin/rcup -d {{ justfile_directory() }} -K -f -v
+    @echo "--------------------------------"
+    @echo "Removing Broken Symlinks"
     @{{ justfile_directory() }}/hooks/post-up/99-remove-broken-symlinks
     @echo "--------------------------------"
 

@@ -1,12 +1,5 @@
 # Rust
 
-## Tooling
-
-- Use `cargo fmt` to format code
-- Use `cargo clippy --all --benches --tests --examples --all-features`
-  to lint code for best practices
-- Use `cargo test` to test code
-
 ## General Best Practices
 
 - Do NOT use unwraps or anything that can panic in Rust code,
@@ -24,3 +17,33 @@
 - If tests live in the same Rust module as non-test code, keep
   them at the bottom inside `mod tests {}`; avoid inventing inline
   modules like `mod my_name_tests`.
+
+## Cargo.toml Lints
+
+When creating new Rust projects, include these clippy lints:
+
+```toml
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+# Panic prevention
+unwrap_used = "deny"
+expect_used = "warn"
+panic = "deny"
+panic_in_result_fn = "deny"
+unimplemented = "deny"
+# No cheating
+allow_attributes = "deny"
+# Code hygiene
+dbg_macro = "deny"
+todo = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+# Safety
+await_holding_lock = "deny"
+large_futures = "deny"
+exit = "deny"
+mem_forget = "deny"
+# Pedantic relaxations (too noisy)
+module_name_repetitions = "allow"
+similar_names = "allow"
+```

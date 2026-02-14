@@ -1,10 +1,5 @@
 # SQL
 
-## Tooling
-
-- Use `sqlfluff lint` to lint code for best practices
-- Use `sqlfluff format` to format code
-
 ## General Best Practices
 
 - **Readability over brevity:** Optimise for readability,

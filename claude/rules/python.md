@@ -1,17 +1,5 @@
 # Python
 
-## Tooling
-
-- Use `uv` and `pyproject.toml` in all Python repos.
-  Prefer `uv sync` for env and dependency resolution.
-  Do not introduce `pip` venvs, Poetry, or
-  `requirements.txt` unless asked.
-- Use `uv run ruff check` for linting/formatting.
-- Use `uv run ty` for type checking, if unavailable use
-  `uv run mypy` instead.
-- Use `build-backend = "uv_build"` for the backend when
-  building python packages.
-
 ## General Best Practices
 
 - **Constants:** Use immutable global constant

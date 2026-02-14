@@ -1,7 +1,7 @@
 ---
 name: compound
 description: Document solved problems to compound knowledge across sessions
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(mkdir:*)
+allowed-tools: Bash, Read, Write, Edit, Grep, Glob
 ---
 
 # Compound

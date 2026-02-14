@@ -3,23 +3,6 @@
 Infrastructure as Code using Terraform/OpenTofu, orchestrated
 with Terragrunt.
 
-## Tooling
-
-### Terragrunt
-
-- Use `terragrunt hclfmt` to format `.hcl` files
-- Use `terragrunt validate-inputs` to validate inputs
-- Use `terragrunt run-all <command>` for multi-unit operations
-- Use `terragrunt stack generate` for stacks
-
-### Terraform
-
-- Use `terraform fmt` to format `.tf` files
-- Use `terraform validate` to check syntax and internal consistency
-- Use `tflint` for linting code for best practices
-- Use `checkov` or `tfsec` for security compliance
-- Use `terraform-docs` to generate documentation
-
 ## Repository Structure
 
 Separate modules from live (deployment) repos. Choose between

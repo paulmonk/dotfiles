@@ -1,8 +1,8 @@
 ---
 name: code-review
 description: Comprehensive code review using specialised agents
-allowed-tools: Read,Glob,Grep,Task,TaskCreate,TaskList,TaskUpdate,Bash(git diff:*),Bash(git blame:*),Bash(git log:*),Bash(git status:*),Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*)
-argument-hint: "[review-aspects] or [PR number/URL]"
+allowed-tools: Bash, Read, Glob, Grep, Task
+argument-hint: "[review-aspects] or [PR/MR number or URL]"
 disable-model-invocation: true
 ---
 
@@ -15,19 +15,36 @@ agents, each focusing on a different aspect of code quality.
 
 ```text
 /code-review [aspects]           # Review local changes (git diff)
-/code-review [PR-number-or-URL]  # Review a specific PR
+/code-review [number-or-URL]     # Review a specific PR/MR
 /code-review tests errors        # Review specific aspects only
 ```
 
 ## Workflow
 
-### 1. Determine Review Scope
+### 1. Detect Forge
 
-- If argument is a number or URL: fetch the PR with `gh pr view`
+Detect the forge from the git remote URL:
+
+```bash
+git remote get-url origin
+```
+
+| Remote pattern          | Forge  | CLI    | View command       |
+| ----------------------- | ------ | ------ | ------------------ |
+| `github.com`            | GitHub | `gh`   | `gh pr view`       |
+| `gitlab.com` or custom  | GitLab | `glab` | `glab mr view`     |
+
+Store the detected forge, CLI, and terminology (PR vs MR)
+for use throughout the review.
+
+### 2. Determine Review Scope
+
+- If argument is a number or URL: fetch with the detected
+  CLI (`gh pr view` or `glab mr view`)
 - Otherwise: use `git diff` to identify changed files
 - Parse arguments for specific review aspects
 
-### 2. Available Review Aspects
+### 3. Available Review Aspects
 
 | Aspect     | Agent Focus                              | When Applicable         |
 | ---------- | ---------------------------------------- | ----------------------- |
@@ -39,7 +56,7 @@ agents, each focusing on a different aspect of code quality.
 | `simplify` | Clarity and maintainability              | After passing review    |
 | `all`      | Run all applicable reviews               | Default                 |
 
-### 3. Launch Review Agents
+### 4. Launch Review Agents
 
 For each applicable aspect, launch a specialised agent
 from `.claude/agents/` using the Task tool:
@@ -69,7 +86,7 @@ Task tool with:
   model: as specified below
 ```
 
-### 4. Agents (defined in `.claude/agents/`)
+### 5. Agents (defined in `.claude/agents/`)
 
 | Agent                        | Aspect     | When to Run             |
 | ---------------------------- | ---------- | ----------------------- |
@@ -90,7 +107,7 @@ Each agent has detailed instructions in its file. Key outputs:
 - **code-type-design-analyzer**: Rates 4 dimensions 1-10 each
 - **code-simplifier**: Preserves functionality while improving clarity
 
-### 5. Aggregate Results
+### 6. Aggregate Results
 
 After agents complete, summarise findings by severity:
 
@@ -153,11 +170,12 @@ Agents filter their output by confidence to minimise false positives:
 /code-review
 ```
 
-**Review specific PR:**
+**Review specific PR/MR:**
 
 ```text
 /code-review 123
 /code-review https://github.com/org/repo/pull/123
+/code-review https://gitlab.com/org/repo/-/merge_requests/123
 ```
 
 **Specific aspects only:**
@@ -201,12 +219,14 @@ No issues found.
 
 ## Notes
 
-- Use `gh` for GitHub interactions, not web fetch
+- Use the detected CLI (`gh` or `glab`) for forge
+  interactions, not web fetch
 - Create a todo list before starting
 - Cite and link each issue (include CLAUDE.md reference
   if applicable)
 - Links must use full SHA:
-  `https://github.com/org/repo/blob/abc123.../file.ts#L13-L17`
+  - GitHub: `https://github.com/org/repo/blob/abc123.../file.ts#L13-L17`
+  - GitLab: `https://gitlab.com/org/repo/-/blob/abc123.../file.ts#L13-17`
 - Run early (before creating PR) rather than after
 - Focus on changes, not entire codebase
 - Re-run after fixes to verify resolution

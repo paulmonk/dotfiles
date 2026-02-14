@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+# Apply default application associations via duti.
+set -o errexit -o errtrace -o pipefail -o nounset
 
 if command -v duti >/dev/null 2>&1; then
-  XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+  readonly XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
   duti "${XDG_CONFIG_HOME}/duti/config"
 fi

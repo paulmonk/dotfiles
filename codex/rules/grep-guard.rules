@@ -1,0 +1,11 @@
+# Prefer ripgrep (rg) over grep for faster, .gitignore-aware searches.
+prefix_rule(
+    pattern = ["grep"],
+    decision = "prompt",
+    justification = "Use rg (ripgrep) instead of grep. It is faster, respects .gitignore, and has saner defaults.",
+    match = [
+        "grep -r pattern .",
+        "grep -rn TODO src/",
+        "grep 'search term' file.txt",
+    ],
+)

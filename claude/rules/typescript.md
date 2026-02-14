@@ -1,14 +1,5 @@
 # TypeScript
 
-## Tooling
-
-- If npm or pnpm scripts are configured, ask the user
-  to confirm first. Otherwise:
-  - Use `tsc --noEmit` to type check code
-  - Use `oxlint` to lint code for best practices
-  - Use `oxfmt` to format code. If unavailable, use
-    `biome format` instead.
-
 ## General Best Practices
 
 - **Modern browsers:** Assume modern browser support
@@ -205,6 +196,25 @@
 - **No block comments:** Use multiple `//` lines,
   not `/* */`.
 - **Markdown in JSDoc:** Write JSDoc content in Markdown.
+
+## tsconfig.json Strictness
+
+When creating new TypeScript projects, enable these compiler
+options:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  }
+}
+```
 
 ## Disallowed
 

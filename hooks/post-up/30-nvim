@@ -1,12 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+# Symlink local nvim config and install plugins.
+set -o errexit -o errtrace -o pipefail -o nounset
 
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+readonly XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 
-# Symlink additional local config for nvim config
 ln -sf "${XDG_CONFIG_HOME}/nvim-local/local.vim" "${XDG_CONFIG_HOME}/nvim/config/local.vim"
 ln -sf "${XDG_CONFIG_HOME}/nvim-local/local.plugins.yaml" "${XDG_CONFIG_HOME}/nvim/config/local.plugins.yaml"
 
-# Symlink nvim to vim config for compat
+# Symlink nvim to vim config for compat.
 ln -sf "${XDG_CONFIG_HOME}/nvim" "${HOME}/.vim"
 
 cd "${XDG_CONFIG_HOME}/nvim" && make test && make install

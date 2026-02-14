@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+# Disable Apple press-and-hold for VSCode (enables key repeat).
+set -o errexit -o errtrace -o pipefail -o nounset
 
-# disable the Apple press and hold for VSCode only
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false

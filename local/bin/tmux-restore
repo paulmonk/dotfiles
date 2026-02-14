@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#/ Usage: tmux-restore
+#/
+#/ Restores tmux sessions from frozen YAML files created by tmux-freeze.
+#/ Called by tmux config on server start via run-shell. Safe to run manually.
+#/ Sessions that already exist are skipped.
+#/
+#/ Input: ${XDG_DATA_HOME}/tmux/frozen-sessions/*.yaml
+#/ Log:   ${XDG_DATA_HOME}/tmux/frozen-sessions/restore.log
+set -o errexit -o errtrace -o pipefail -o nounset
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+readonly FREEZE_DIR="${XDG_DATA_HOME}/tmux/frozen-sessions"
+readonly LOG_FILE="${FREEZE_DIR}/restore.log"
+
+log() {
+  echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}"
+}
+
+main() {
+  # Nothing to restore if the directory is missing or empty.
+  if [[ ! -d "${FREEZE_DIR}" ]]; then
+    return 0
+  fi
+
+  local files
+  files=("${FREEZE_DIR}"/*.yaml)
+  if [[ ! -f "${files[0]}" ]]; then
+    return 0
+  fi
+
+  # Get existing sessions (may be empty on fresh server start).
+  local existing_sessions=""
+  if tmux list-sessions -F '#{session_name}' &>/dev/null; then
+    existing_sessions=$(tmux list-sessions -F '#{session_name}')
+  fi
+
+  local file session_name
+  for file in "${files[@]}"; do
+    session_name=$(basename "${file}" .yaml)
+
+    # Skip if this session already exists.
+    if [[ -n "${existing_sessions}" ]] && echo "${existing_sessions}" | grep -qxF "${session_name}"; then
+      log "Skipped (already exists): ${session_name}"
+      continue
+    fi
+
+    if tmuxp load -d "${file}" 2>>"${LOG_FILE}"; then
+      log "Restored: ${session_name}"
+    else
+      log "Failed to restore: ${session_name}"
+    fi
+  done
+}
+
+main "$@"

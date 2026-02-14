@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#/ Blocks background Bash commands outside tmux sessions.
+#/ Blocks background Bash commands and Task agents outside tmux sessions.
 #/
 #/ Background tasks detach from Claude's process tree, making their output
 #/ unrecoverable if the terminal closes. Tmux provides session persistence.
@@ -13,7 +13,7 @@ main() {
   input=$(read_hook_input)
 
   tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
-  [[ ${tool_name} != "Bash" ]] && {
+  [[ ${tool_name} != "Bash" && ${tool_name} != "Task" ]] && {
     echo "${input}"
     exit 0
   }

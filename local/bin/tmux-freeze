@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#/ Usage: tmux-freeze
+#/
+#/ Freezes all running tmux sessions to YAML files using tmuxp. Triggered by
+#/ tmux hooks on structural changes (new session, new window, detach, close).
+#/ Prunes freeze files for sessions that no longer exist.
+#/
+#/ Output: ${XDG_DATA_HOME}/tmux/frozen-sessions/<session>.yaml
+#/ Log:    ${XDG_DATA_HOME}/tmux/frozen-sessions/freeze.log
+set -o errexit -o errtrace -o pipefail -o nounset
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+readonly FREEZE_DIR="${XDG_DATA_HOME}/tmux/frozen-sessions"
+readonly LOG_FILE="${FREEZE_DIR}/freeze.log"
+
+log() {
+  echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}"
+}
+
+main() {
+  mkdir -p "${FREEZE_DIR}"
+
+  # Bail if the tmux server isn't running.
+  if ! tmux list-sessions &>/dev/null; then
+    log "No tmux server running, skipping freeze"
+    return 0
+  fi
+
+  # Freeze each session.
+  local session
+  while IFS= read -r session; do
+    if tmuxp freeze -y -f yaml --force "${session}" -o "${FREEZE_DIR}/${session}.yaml" 2>>"${LOG_FILE}"; then
+      log "Frozen: ${session}"
+    else
+      log "Failed to freeze: ${session}"
+    fi
+  done < <(tmux list-sessions -F '#{session_name}')
+
+  # Re-capture live sessions before pruning to avoid a race where a session
+  # created during the freeze loop gets its file incorrectly deleted.
+  local live_sessions
+  live_sessions=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
+
+  # Prune freeze files for sessions that no longer exist.
+  local file session_name
+  for file in "${FREEZE_DIR}"/*.yaml; do
+    [[ -f "${file}" ]] || continue
+    session_name=$(basename "${file}" .yaml)
+    if ! echo "${live_sessions}" | grep -qxF "${session_name}"; then
+      rm -f "${file}"
+      log "Pruned: ${session_name}"
+    fi
+  done
+}
+
+main "$@"

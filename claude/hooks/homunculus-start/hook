@@ -10,7 +10,7 @@ set -o errexit -o errtrace -o pipefail -o nounset
 
 readonly HOMUNCULUS_DIR="${HOME}/.claude/homunculus"
 readonly INSTINCTS_DIR="${HOMUNCULUS_DIR}/instincts/personal"
-readonly CONVICTIONS_FILE="${HOMUNCULUS_DIR}/convictions.md"
+readonly CONVICTIONS_DIR="${HOMUNCULUS_DIR}/convictions"
 readonly OBS_DIR="${HOMUNCULUS_DIR}/observations"
 readonly MAX_INSTINCTS=15
 # Skip the qmd query when the instinct count is low enough that
@@ -53,12 +53,12 @@ build_query() {
 
 # Format an instinct as a compact index line: trigger + confidence only.
 # The full action is in the file; the agent reads it on demand.
-# Skips instincts already promoted to convictions.md.
+# Skips instincts already promoted to convictions/.
 format_instinct() {
   local f="$1"
   local domain trigger confidence
 
-  # Skip promoted instincts (already in convictions.md).
+  # Skip promoted instincts (already in convictions/).
   grep -q "^promoted: true" "$f" && return
 
   domain=$(sed -n 's/^domain: *//p' "$f" | tr -d '"' | head -1)
@@ -99,10 +99,16 @@ main() {
   [[ -d ${INSTINCTS_DIR} ]] || return
 
   # Inject convictions first (higher priority than instincts).
-  if [[ -f ${CONVICTIONS_FILE} ]]; then
+  if [[ -d ${CONVICTIONS_DIR} ]] && compgen -G "${CONVICTIONS_DIR}/*.md" >/dev/null 2>&1; then
     echo "[CONVICTIONS]"
-    # Skip the markdown header, output only the rule lines.
-    sed -n '/^- /p' "${CONVICTIONS_FILE}"
+    local cf c_name c_action
+    for cf in "${CONVICTIONS_DIR}"/*.md; do
+      [[ -f ${cf} ]] || continue
+      c_name=$(sed -n 's/^name: *//p' "${cf}" | head -1)
+      c_action=$(sed -n 's/^action: *"*//p' "${cf}" | sed 's/"$//' | head -1)
+      [[ -n ${c_name} && -n ${c_action} ]] || continue
+      echo "- **${c_name}**: ${c_action}"
+    done
     echo ""
   fi
 

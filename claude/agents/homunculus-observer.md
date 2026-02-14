@@ -1,8 +1,8 @@
 ---
 name: homunculus-observer
 description: >-
-  Processes observations into instincts. Identifies patterns,
-  creates instinct files, detects clustering.
+    Processes observations into instincts. Identifies patterns,
+    creates instinct files, detects clustering.
 model: haiku
 tools: Read Bash Grep Write
 permissionMode: dontAsk
@@ -143,9 +143,9 @@ Before creating any new instinct:
 3. If an existing instinct covers the same pattern (even with
    different wording):
    - Reinforce the existing instinct (update `last_seen`,
-     optionally boost confidence by 0.05)
+      optionally boost confidence by 0.05)
    - Add new evidence to the existing instinct's Evidence
-     section
+      section
    - Do NOT create a new file
 4. If the candidate is a narrower version of an existing
    instinct (e.g. same domain tool but specific subcommand),
@@ -159,13 +159,12 @@ contradicts any existing instinct:
 1. For each existing instinct, check if the current
    observations show the user or agent consistently doing the
    OPPOSITE of what the instinct recommends
-2. If 3+ observations in the current batch contradict an
-   instinct:
+2. If 3+ observations in the current batch contradict an instinct:
    - Reduce its confidence by 0.10
    - Add a note to the Evidence section: "Contradicted by
-     observations on [date]: [brief description]"
+      observations on [date]: [brief description]"
    - Do NOT delete the instinct (it may still be valid in
-     other contexts)
+      other contexts)
 3. If an instinct's confidence drops to 0.20 through
    contradiction, add a `disputed: true` flag to its
    frontmatter
@@ -193,14 +192,29 @@ last_seen: 2026-02-04T12:00:00Z
 - User consistently chose Y over Z
 ```
 
-**Domains:** code-style, testing, debugging, git, tooling,
-architecture, performance, security, documentation, general
+**Domains:**
+
+- code-style
+- testing
+- debugging
+- git
+- tooling
+- architecture
+- performance
+- security
+- documentation
+- general
 
 **Confidence starting points:**
 
-- 0.3: Single error-recovery or hard-won fix
-- 0.5: Confirmed across 2-3 sessions
-- 0.7: Repeatedly validated domain knowledge
+Rate each instinct from 0-100:
+
+| Score  | Meaning                                        |
+| ------ | ---------------------------------------------- |
+| 0-25   | Likely false positive or pre-existing instinct |
+| 26-50  | Single error-recovery or hard-won fix          |
+| 51-75  | Confirmed across 2-3 sessions                  |
+| 76-100 | Repeatedly validated domain knowledge          |
 
 **Filename:** `[domain]-[short-name].md`
 
@@ -243,11 +257,9 @@ appear 2+ more times in the current observations (total 3+):
 After processing, check ALL instincts for staleness:
 
 - Only decay instincts NOT reinforced in this batch
-- Formula: `new = max(0.20, conf - 0.05 * floor((now -
-  last_seen) / 7 days))`
+- Formula: `new = max(0.20, conf - 0.05 * floor((now - last_seen) / 7 days))`
 - Round to 2 decimal places
-- When reinforcing: set `last_seen` to now, optionally
-  increase confidence
+- When reinforcing: set `last_seen` to now, optionally increase confidence
 
 ```bash
 sed -i '' "s/^last_seen:.*/last_seen: $(date -u +%Y-%m-%dT%H:%M:%SZ)/" "$file"
@@ -274,18 +286,16 @@ has 5+, update identity.json:
 
 ```bash
 jq --arg d "DOMAIN" \
-  '.promotion.ready += [$d] | .promotion.ready |= unique' \
-  ~/.claude/homunculus/identity.json > tmp.json \
-  && mv tmp.json ~/.claude/homunculus/identity.json
+    '.promotion.ready += [$d] | .promotion.ready |= unique' \
+    ~/.claude/homunculus/identity.json > tmp.json \
+    && mv tmp.json ~/.claude/homunculus/identity.json
 ```
 
 ## Cardinal Rules
 
-- Quality over quantity. Creating zero instincts is a valid
-  outcome.
+- Quality over quantity. Creating zero instincts is a valid outcome.
 - Run every candidate through ALL four quality gate checks.
 - Run every candidate through the deduplication check.
 - Check for contradictions against existing instincts.
 - Always archive processed observation files.
-- Always set `last_seen` on every instinct you create or
-  update.
+- Always set `last_seen` on every instinct you create or update.

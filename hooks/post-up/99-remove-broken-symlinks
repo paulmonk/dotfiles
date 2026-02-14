@@ -1,24 +1,70 @@
-#!/bin/sh
+#!/bin/bash
 # Clean up broken symlinks left behind when dotfiles are removed or renamed.
 # Scoped to directories managed by rcm (see config/rcm/rcrc).
+set -o errexit -o errtrace -o pipefail -o nounset
 
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+readonly XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 
-# Non-recursive: top-level dotfiles and .ssh (keep .ssh shallow for safety).
-find "${HOME}" -maxdepth 1 -type l ! -exec test -e {} \; -delete
-find "${HOME}/.ssh" -maxdepth 1 -type l ! -exec test -e {} \; -delete
+LINK_COUNT=0
+DIR_COUNT=0
 
-# Recursive: directories entirely managed by rcm.
-for dir in \
-  "${XDG_CONFIG_HOME}" \
-  "${HOME}/.local/bin" \
-  "${HOME}/.local/share" \
-  "${HOME}/.claude" \
-  "${HOME}/.codex" \
-  "${HOME}/Library/Application Support/Code" \
-  "${HOME}/Library/Application Support/Cursor" \
-  "${HOME}/Library/LaunchAgents"; do
-  [ -d "${dir}" ] || continue
-  find "${dir}" -type l ! -exec test -e {} \; -delete
-  find "${dir}" -type d -empty -delete
-done
+remove_broken_link() {
+  local link="$1"
+  local target
+  target=$(readlink "${link}" 2>/dev/null || echo "unknown")
+  echo "  removed broken symlink: ${link} -> ${target}"
+  rm -f "${link}"
+  ((++LINK_COUNT))
+}
+
+remove_empty_dir() {
+  local dir="$1"
+  echo "  removed empty directory: ${dir}"
+  rmdir "${dir}"
+  ((++DIR_COUNT))
+}
+
+# Remove broken symlinks in a directory (non-recursive).
+clean_shallow() {
+  local dir="$1"
+  [[ -d ${dir} ]] || return 0
+  while IFS= read -r -d '' link; do
+    remove_broken_link "${link}"
+  done < <(find "${dir}" -maxdepth 1 -type l ! -exec test -e {} \; -print0)
+}
+
+# Remove broken symlinks and empty directories (recursive).
+clean_deep() {
+  local dir="$1"
+  [[ -d ${dir} ]] || return 0
+  while IFS= read -r -d '' link; do
+    remove_broken_link "${link}"
+  done < <(find "${dir}" -type l ! -exec test -e {} \; -print0)
+  while IFS= read -r -d '' empty; do
+    remove_empty_dir "${empty}"
+  done < <(find "${dir}" -type d -empty -print0)
+}
+
+main() {
+  # Non-recursive: top-level dotfiles and .ssh (keep .ssh shallow for safety).
+  clean_shallow "${HOME}"
+  clean_shallow "${HOME}/.ssh"
+
+  # Recursive: directories entirely managed by rcm.
+  clean_deep "${XDG_CONFIG_HOME}"
+  clean_deep "${HOME}/.local/bin"
+  clean_deep "${HOME}/.local/share"
+  clean_deep "${HOME}/.claude"
+  clean_deep "${HOME}/.codex"
+  clean_deep "${HOME}/Library/Application Support/Code"
+  clean_deep "${HOME}/Library/Application Support/Cursor"
+  clean_deep "${HOME}/Library/LaunchAgents"
+
+  if ((LINK_COUNT == 0 && DIR_COUNT == 0)); then
+    echo "no broken symlinks found"
+  else
+    echo "cleaned up ${LINK_COUNT} broken symlink(s) and ${DIR_COUNT} empty directory(ies)"
+  fi
+}
+
+main "$@"

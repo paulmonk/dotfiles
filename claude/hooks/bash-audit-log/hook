@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
-#/ Logs every Bash command to ~/.claude/bash-commands.log with a timestamp.
+#/ Logs every Bash command to per-session files in ~/.claude/logs/bash/.
+#/ Uses the session_id from hook input for the filename, falling back to
+#/ the current date. Logs older than 90 days are pruned.
 set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly LOG_DIR="${HOME}/.claude/logs/bash"
+readonly RETENTION_DAYS=90
 
 # shellcheck source=claude/lib/hook-io.sh
 source "${HOME}/.claude/lib/hook-io.sh"
 
 main() {
-  local input command
+  local input command session log_file
   input=$(read_hook_input)
 
   command=$(echo "${input}" | jq -r '.tool_input.command // ""')
 
   if [[ -n ${command} ]]; then
+    mkdir -p "${LOG_DIR}"
+
+    session=$(echo "${input}" | jq -r '.session_id // empty')
+    session="${session:-$(date -u '+%Y-%m-%d')}"
+    log_file="${LOG_DIR}/${session}.log"
+
     printf '[%s] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${command}" \
-      >>"${HOME}/.claude/bash-commands.log"
+      >>"${log_file}"
+
+    # Prune old logs once per session (first entry is the sentinel).
+    if [[ $(wc -l <"${log_file}") -eq 1 ]]; then
+      if ! find "${LOG_DIR}" -name '*.log' -mtime "+${RETENTION_DAYS}" -delete 2>/dev/null; then
+        printf '[%s] warning: log pruning failed\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >>"${log_file}"
+      fi
+    fi
   fi
 
   echo "${input}"

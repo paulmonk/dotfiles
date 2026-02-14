@@ -18,6 +18,12 @@ model = "gpt-5.3-codex"
 project_doc_fallback_filenames = ["CLAUDE.md"]
 project_doc_max_bytes = 131_072
 
+# Sandbox: confine writes to workspace, disable network by default.
+sandbox_mode = "workspace-write"
+
+# Auto-approve commands in sandbox; escalate to user on failure.
+approval_policy = "on-failure"
+
 # Updates installed via Homebrew
 check_for_update_on_startup = false
 

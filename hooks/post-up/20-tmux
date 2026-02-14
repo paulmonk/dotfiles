@@ -1,3 +1,6 @@
-#!/bin/sh
-XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-mkdir -p "${XDG_DATA_HOME}/tmux/resurrect-sessions"
+#!/bin/bash
+# Create tmux session freeze directory for tmuxp.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+mkdir -p "${XDG_DATA_HOME}/tmux/frozen-sessions"
