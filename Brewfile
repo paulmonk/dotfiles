@@ -261,6 +261,8 @@ brew "dbus"
 brew "detect-secrets"
 # Utility to replace problematic characters in filenames
 brew "detox"
+# Reference implementation for the Development Containers specification
+brew "devcontainer"
 # Asynchronous event library
 brew "libevent"
 # International domain name library (IDNA2008, Punycode and TR46)
@@ -441,6 +443,8 @@ brew "git-delta"
 brew "git-extras"
 # Audit git repos for secrets
 brew "gitleaks"
+# Open-source GitLab command-line tool
+brew "glab"
 # Alternative to top/htop
 brew "glances"
 # Render markdown on the CLI
@@ -663,8 +667,6 @@ brew "luajit"
 brew "luv"
 # Security and system auditing tool to harden systems
 brew "lynis"
-# Fast, flexible, config-based cli for linting Markdown/CommonMark files
-brew "markdownlint-cli2"
 # Development kit for the Java programming language
 brew "openjdk"
 # Java-based project management

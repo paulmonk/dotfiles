@@ -201,6 +201,9 @@ if (( $+commands[claude] )); then
   # for maximum throughput, pair it with sandboxing.
   alias claude-yolo="claude --dangerously-skip-permissions"
 
+  # Bypasses approval prompts but keeps workspace sandbox intact.
+  alias codex-yolo="codex --full-auto"
+
   # claude-local wraps claude with the local server env vars and
   # disables telemetry pings that won't reach Anthropic anyway.
   claude-local() {

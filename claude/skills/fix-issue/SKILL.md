@@ -214,102 +214,13 @@ Address all findings from the review. For each:
 After addressing findings, re-run the quality pipeline
 (step 8). Iterate until clean.
 
-### 11. Commit and Push
+### 11. Commit, Push, and Open PR
 
 Delete the plan file (`.claude/plans/fix-<issue-id>.md`).
 
-Stage relevant files (prefer specific files over `git add -A`).
-Do NOT stage files that may contain secrets (`.env`,
-`credentials.json`, `*.pem`, `*.key`).
-
-#### Commit message format
-
-Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
-
-- Format: `<type>(<scope>): <description>`
-- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
-- Subject: lowercase after type, present tense, 50 chars max
-- Blank line between subject and body
-- Body: wrap at 72 chars, explain the why not the what
-- Reference the issue: `Closes #N` or `Closes <beads-id>`
-
-If the project has a commit template
-(`git config --get commit.template`), follow it.
-
-Push with tracking:
-
-```bash
-git push -u origin $(git branch --show-current)
-```
-
-If the push fails due to workflow auth errors, pull and retry:
-
-```bash
-git pull origin main --rebase && git push -u origin $(git branch --show-current)
-```
-
-### 12. Create PR/MR
-
-#### Find template
-
-Search for a PR/MR template in the repository using Glob:
-
-**GitHub:** `**/*PULL_REQUEST_TEMPLATE*`
-
-**GitLab:**
-`**/.gitlab/merge_request_templates/*` or
-`.gitlab/merge_request_templates/Default.md`
-
-If not found, use the default template from
-[./templates/pull-request.md](templates/pull-request.md).
-
-#### Create draft
-
-Write the body to a temp file to preserve formatting:
-
-```bash
-cat > /tmp/claude/pr-body.md <<'EOF'
-<TEMPLATE_BODY>
-EOF
-```
-
-**GitHub:**
-
-```bash
-GH_PROMPT_DISABLED=1 GIT_TERMINAL_PROMPT=0 \
-  gh pr create --draft \
-    --title "<TITLE>" \
-    --body-file /tmp/claude/pr-body.md \
-    --head "$(git branch --show-current)"
-```
-
-**GitLab:**
-
-```bash
-glab mr create --draft \
-  --title "<TITLE>" \
-  --description "$(cat /tmp/claude/pr-body.md)" \
-  --source-branch "$(git branch --show-current)"
-```
-
-Title must be under 70 chars. Description should map changes
-back to the issue requirements.
-
-### 13. Link Back to Issue
-
-**Forge issues:** The PR description should contain
-`Closes #N`. Optionally post a summary comment on the issue
-linking to the PR.
-
-**Beads issues:** Close with a reason:
-
-```bash
-bd close <id> --reason="Fixed in PR/MR <url>"
-```
-
-### 14. Return Result
-
-Output the PR/MR URL so the user can view it.
+Invoke `/commit-push-pr <issue-id>` to commit the changes, push
+the branch, and create a draft PR/MR. The issue ID ensures the
+commit message and PR body reference the issue correctly.
 
 ## Notes
 

@@ -74,10 +74,12 @@ mid-run; refresh context before summarising or editing.
 | Web search        | **exa** MCP       | Built-in web search            |
 | Library docs      | **context7** MCP  | Web search for API references  |
 | Repo docs         | **deepwiki** MCP  | Manual GitHub repo exploration |
+| Issue management  | `bd`              | Issue and task tracking local  |
 | File search       | `fd`              | `find`                         |
 | Text search       | `rg` (ripgrep)    | `grep`                         |
 | AST code search   | `ast-grep`        | Regex for structural patterns  |
 | Semantic analysis | `semgrep`         | Manual review                  |
+| Code intelligence | **serena** MCP    | Manual symbol navigation       |
 | File deletion     | `trash`           | `rm` (moves to system trash)   |
 
 ## Knowledge Base
@@ -97,23 +99,10 @@ within the Obsidian vault:
       themselves.
   - **Archives**: Inactive items from the other three categories
       saved for future reference.
-- Use **qmd** to also search for previous conversations if needed.
+- Previous conversation summaries are indexed in the **qmd**
+  `memory-episodes` collection. Use this to recall past sessions.
 
 ## Development
-
-### Tool Preferences
-
-| Purpose           | Tool              | Replaces                       |
-| ----------------- | ----------------- | ------------------------------ |
-| Web scraping      | **firecrawl** MCP | `curl`, `wget`, built-in fetch |
-| Web search        | **exa** MCP       | Built-in web search            |
-| Library docs      | **context7** MCP  | Web search for API references  |
-| Repo docs         | **deepwiki** MCP  | Manual GitHub repo exploration |
-| File search       | `fd`              | `find`                         |
-| Text search       | `rg` (ripgrep)    | `grep`                         |
-| AST code search   | `ast-grep`        | Regex for structural patterns  |
-| Semantic analysis | `semgrep`         | Manual review                  |
-| File deletion     | `trash`           | `rm` (moves to system trash)   |
 
 ### Comments
 
@@ -138,8 +127,8 @@ within the Obsidian vault:
 ### Tooling & Workflow
 
 - **Task runner**. If a `justfile` exists, prefer `just` for
-  build, test, and lint. If no `justfile` exists, use a `Makefile`
-  if present.
+  build, test, and lint. If no `justfile` exists, look for a `Makefile`
+  and use `make` if the file exists.
 - **Git safety**: Do not run destructive git commands
   (`reset --hard`, `checkout .`, `clean -f`, `push --force`)
   without explicit permission.
@@ -162,8 +151,6 @@ within the Obsidian vault:
 Do not introduce `pip`, Poetry, or `requirements.txt` unless
 asked.
 
-Refer to the [Python Rules](./rules/python.md) for more guidelines.
-
 ### Go
 
 | Purpose | Tool                                                  |
@@ -173,8 +160,6 @@ Refer to the [Python Rules](./rules/python.md) for more guidelines.
 | Lint    | `go vet ./...` · `staticcheck ./...` · `revive ./...` |
 | Format  | `gofmt -w .`                                          |
 
-Refer to the [Go Rules](./rules/go.md) for more guidelines.
-
 ### Rust
 
 | Purpose | Tool                                                             |
@@ -183,8 +168,6 @@ Refer to the [Go Rules](./rules/go.md) for more guidelines.
 | Test    | `cargo test`                                                     |
 | Lint    | `cargo clippy --all --benches --tests --examples --all-features` |
 | Format  | `cargo fmt`                                                      |
-
-Refer to the [Go Rules](./rules/rust.md) for more guidelines.
 
 ### TypeScript / Node
 
@@ -198,8 +181,6 @@ Refer to the [Go Rules](./rules/rust.md) for more guidelines.
 If npm or pnpm scripts are configured, check with the user
 first.
 
-Refer to the [TypeScript Rules](./rules/typescript.md) for more guidelines.
-
 ### Terraform / Terragrunt
 
 | Purpose  | Tool                                                |
@@ -209,8 +190,6 @@ Refer to the [TypeScript Rules](./rules/typescript.md) for more guidelines.
 | Lint     | `tflint`                                            |
 | Security | `checkov` or `trivy`                                |
 | Docs     | `terraform-docs`                                    |
-
-Refer to the [Terraform Rules](./rules/terraform.md) for more guidelines.
 
 ### GitHub Actions
 
@@ -226,16 +205,12 @@ Refer to the [Terraform Rules](./rules/terraform.md) for more guidelines.
 | Lint    | `shellcheck`    |
 | Format  | `shfmt -i 2 -w` |
 
-Refer to the [Shell Rules](./rules/shell.md) for more guidelines.
-
 ### SQL
 
 | Purpose | Tool              |
 | ------- | ----------------- |
 | Lint    | `sqlfluff lint`   |
 | Format  | `sqlfluff format` |
-
-Refer to the [Shell Rules](./rules/sql.md) for more guidelines.
 
 ### Commit Messages
 

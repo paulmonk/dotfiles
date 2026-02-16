@@ -74,11 +74,6 @@
           {
             "type": "command",
             "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-start/hook",
-            "async": true
           }
         ]
       }
@@ -164,31 +159,6 @@
             "async": true
           }
         ]
-      },
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/britfix/hook",
-            "async": true
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-recall/hook",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/homunculus-observe/hook",
-            "async": true
-          }
-        ]
       }
     ],
     "Notification": [
@@ -214,7 +184,7 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/homunculus-stop/hook",
+            "command": "~/.claude/hooks/memory-episodes-stop/hook",
             "async": true
           }
         ]
@@ -295,7 +265,8 @@
   },
   "outputStyle": "Personal",
   "sandbox": {
-    "enabled": true
+    "enabled": true,
+    "excludedCommands": ["git", "docker"]
   },
   "spinnerVerbs": {
     "mode": "replace",
@@ -355,6 +326,7 @@
   },
   "alwaysThinkingEnabled": true,
   "plansDirectory": "./.claude/plans",
+  "skipDangerousModePermissionPrompt": true,
   "showTurnDuration": true,
   "defaultMode": "plan"
 }

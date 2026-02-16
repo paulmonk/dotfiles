@@ -20,8 +20,8 @@ main() {
     return 0
   fi
 
-  # Allow --dry-run for previewing.
-  if [[ "${command}" =~ --dry-run ]]; then
+  # Allow --help, --dry-run, and -h for previewing.
+  if [[ "${command}" =~ (--help|-h|--dry-run) ]]; then
     echo "${input}"
     return 0
   fi

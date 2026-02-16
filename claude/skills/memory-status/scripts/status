@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+# Show memory-episodes system status: file counts, type breakdown,
+# date range, and recent entries.
+#
+# Works on macOS and Linux.
+
+set -o errexit -o errtrace -o pipefail -o nounset
+shopt -s nullglob
+
+readonly MEMORY_DIR="${HOME}/.claude/memory-episodes"
+
+if [[ ! -d ${MEMORY_DIR} ]]; then
+  echo "Memory directory not found: ${MEMORY_DIR}"
+  exit 1
+fi
+
+md_files=("${MEMORY_DIR}"/*.md)
+total=${#md_files[@]}
+
+echo "=== Memory Episodic Status ==="
+echo ""
+echo "Total files: ${total}"
+
+# Breakdown by frontmatter type: field.
+echo ""
+echo "By type:"
+if ((total > 0)); then
+  for type_name in session conversation episode; do
+    count=$(grep -rl "^type: ${type_name}$" "${md_files[@]}" 2>/dev/null | wc -l | tr -d ' ')
+    echo "  ${type_name}: ${count}"
+  done
+
+  tagged=$(grep -rl "^type:" "${md_files[@]}" 2>/dev/null | wc -l | tr -d ' ')
+  untagged=$((total - tagged))
+  if ((untagged > 0)); then
+    echo "  untagged: ${untagged}"
+  fi
+else
+  echo "  (no files)"
+fi
+
+# Date range from filenames (sorted alphabetically since they start with timestamps).
+echo ""
+if ((total > 0)); then
+  mapfile -t sorted < <(printf '%s\n' "${md_files[@]}" | sort)
+  echo "Oldest: $(basename "${sorted[0]}")"
+  echo "Newest: $(basename "${sorted[-1]}")"
+fi
+
+# Recent 5 entries by modification time.
+echo ""
+echo "Recent entries:"
+if ((total > 0)); then
+  # BSD stat (macOS) uses -f, GNU stat (Linux) uses -c.
+  if stat -f '%m' /dev/null >/dev/null 2>&1; then
+    recent=$(stat -f '%m %N' "${md_files[@]}" 2>/dev/null | sort -rn | head -5 | awk '{print $2}')
+  else
+    recent=$(stat -c '%Y %n' "${md_files[@]}" 2>/dev/null | sort -rn | head -5 | awk '{print $2}')
+  fi
+  if [[ -n ${recent} ]]; then
+    while read -r f; do
+      local_name=$(basename "${f}")
+      project=$(sed -n 's/^project: *//p' "${f}" | head -1)
+      type_val=$(sed -n 's/^type: *//p' "${f}" | head -1)
+      echo "  ${local_name} [${type_val:-unknown}] ${project:-}"
+    done <<<"${recent}"
+  else
+    echo "  (could not read file metadata)"
+  fi
+else
+  echo "  (no files)"
+fi
+
+# qmd collection status.
+echo ""
+if command -v qmd >/dev/null 2>&1; then
+  if qmd status 2>/dev/null | grep -q "memory-episodes"; then
+    echo "qmd: memory-episodes collection indexed"
+  else
+    echo "qmd: memory-episodes collection NOT found (run: qmd update && qmd embed)"
+  fi
+else
+  echo "qmd: not installed"
+fi

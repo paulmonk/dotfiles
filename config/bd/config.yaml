@@ -1,0 +1,9 @@
+# Global beads configuration
+# Symlinked to ~/.config/bd/config.yaml by rcm
+#
+# Overrides per-project .beads/config.yaml defaults.
+# Per-project settings still take precedence when set.
+
+# Stealth mode: do not run git operations during bd sync.
+# Flush to JSONL only; manual git workflow.
+no-git-ops: true

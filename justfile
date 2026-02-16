@@ -66,11 +66,11 @@ rcup-install: brew-install
 
 # Sync dotfiles symlinks only (no hooks, except dead symlink cleanup)
 [group('dotfiles')]
-dotfiles: rcup-install
+dotfiles: rcup-install coding-agents
     @echo "--------------------------------"
     @echo "Syncing dotfiles"
     @RCRC="{{ justfile_directory() }}/config/rcm/rcrc" PATH="{{ default_path }}" {{ prefix }}/bin/rcup -d {{ justfile_directory() }} -K -f -v
-    @echo "--------------------------------"
+    echo "--------"
     @echo "Removing Broken Symlinks"
     @{{ justfile_directory() }}/hooks/post-up/99-remove-broken-symlinks
     @echo "--------------------------------"
@@ -124,6 +124,8 @@ coding-agents: qmd
     claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp >/dev/null 2>&1 || true
     echo "  Ensuring deepwiki"
     claude mcp add --scope user -t http deepwiki https://mcp.deepwiki.com/mcp >/dev/null 2>&1 || true
+    echo "  Ensuring serena"
+    claude mcp add --scope user serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant >/dev/null 2>&1 || true
     if [[ -n "${BUN_INSTALL_BIN:-}" ]]; then
       echo "  Ensuring qmd"
       # Blank BUN_INSPECT_CONNECT_TO so Cursor's injected debug socket doesn't hang bun.
@@ -132,15 +134,17 @@ coding-agents: qmd
       echo "  [warn] BUN_INSTALL_BIN not set; skipping qmd MCP server" >&2
     fi
 
-    # Worktrunk
-    echo "Configuring worktrunk"
-    if command -v wt >/dev/null 2>&1; then
-      wt config shell install 2>/dev/null || true
-    else
-      echo "  [warn] worktrunk not installed; skipping" >&2
+    # Setup Claude Code Devcontainers
+    echo "--------"
+    echo "Ensuring Claude Devcontainer"
+    if [[ ! -d "$HOME/.claude-devcontainer" ]]; then
+      echo "  Claude DevContainer not found, installing..."
+      git clone https://github.com/trailofbits/claude-code-devcontainer $HOME/.claude-devcontainer
+      "$HOME"/.claude-devcontainer/install.sh self-install
     fi
 
     # Codex: generate AGENTS.md from Claude Code sources
+    echo "--------"
     echo "Generating Codex AGENTS.md"
     if [[ ! -f claude/CLAUDE.md ]]; then
       echo "Error: claude/CLAUDE.md not found" >&2

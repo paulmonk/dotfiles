@@ -1,33 +1,45 @@
 # Issue Tracking with Beads
 
 When a project has a `.beads/` directory, use `bd` for all issue
-tracking. Run `bd prime` for full workflow context or
-`bd hooks install` for auto-injection.
+tracking.
+
+## Session Start
+
+If `.beads/` exists and `bd prime` output was not already
+injected (e.g. by the beads plugin), run `bd prime` to load
+workflow context. In Claude Code the plugin handles this
+automatically. In Codex and OpenCode, run it manually at
+session start.
+
+## Plans Require Issues
+
+When entering plan mode, ensure the work is tracked by a beads
+issue. If you are already working on an existing issue, link
+the plan to it. Otherwise, create an issue before writing the
+plan.
+
+Exceptions (no issue needed):
+
+- Pure research or exploration with no code changes.
+- The plan is a continuation of an issue already in context.
 
 ## Core Workflow
 
-- Use `bd create` directly (not the `beads:create` skill) so
-  PreToolUse hooks can enforce templates.
 - Always include `--acceptance` with checklist items.
 - Run `bd lint <id>` after creating to verify the issue passes.
 - Apply area labels when creating issues.
 
 ## Issue Templates
 
-Templates live in `claude/templates/issues/{type}.md`. Read the
-template for the issue type before creating. The `bd-create-guard`
-hook enforces `--acceptance` on all types and `Steps to Reproduce`
-on bugs.
+Templates live in `~/.config/bd/templates/{type}.md`. Read
+the template for the issue type before creating.
 
 Fill in the template sections as `--description` and extract the
 acceptance criteria into `--acceptance`:
 
 ```bash
 bd create --title="..." --type=task --priority=2 \
-  --description="$(cat <<'EOF'
-<sections from claude/templates/issues/task.md>
-EOF
-)" \
+  --description="<sections from template>" \
   --acceptance="- [ ] Criterion 1
 - [ ] Criterion 2"
 ```
@@ -36,14 +48,14 @@ EOF
 
 ### Finding Work
 
-| Command                   | Purpose                                     |
-| ------------------------- | ------------------------------------------- |
-| `bd ready`                | Find unblocked work ready to start          |
-| `bd list --status=open`   | All open issues                             |
-| `bd list --status=in_progress` | Active work                            |
-| `bd show <id>`            | Detailed issue view with dependencies       |
-| `bd stale`                | Find forgotten issues                       |
-| `bd find-duplicates`      | Find semantically similar issues            |
+| Command                        | Purpose                            |
+| ------------------------------ | ---------------------------------- |
+| `bd ready`                     | Find unblocked work ready to start |
+| `bd list --status=open`        | All open issues                    |
+| `bd list --status=in_progress` | Active work                        |
+| `bd show <id>`                 | Detailed issue view                |
+| `bd stale`                     | Find forgotten issues              |
+| `bd find-duplicates`           | Find semantically similar issues   |
 
 ### Creating and Updating
 
@@ -58,13 +70,13 @@ EOF
 
 ### Dependencies and Blocking
 
-| Command                       | Purpose                                  |
-| ----------------------------- | ---------------------------------------- |
-| `bd dep add <issue> <dep>`    | Issue depends on dep                     |
-| `bd blocked`                  | Show all blocked issues                  |
-| `bd defer <id>`               | Ice-box an issue (removes from ready)    |
-| `bd undefer <id>`             | Bring deferred issue back                |
-| `bd graph --all`              | Visualise dependency DAG                 |
+| Command                    | Purpose                               |
+| -------------------------- | ------------------------------------- |
+| `bd dep add <issue> <dep>` | Issue depends on dep                  |
+| `bd blocked`               | Show all blocked issues               |
+| `bd defer <id>`            | Ice-box an issue (removes from ready) |
+| `bd undefer <id>`          | Bring deferred issue back             |
+| `bd graph --all`           | Visualise dependency DAG              |
 
 ### Querying
 
@@ -72,16 +84,6 @@ EOF
 | --------------------------- | ----------------------------------------- |
 | `bd query "expr"`           | Rich filtering with boolean ops and dates |
 | `bd label add <id> <label>` | Add area label                            |
-
-### Persistence and Sync
-
-| Command                       | Purpose                                |
-| ----------------------------- | -------------------------------------- |
-| `bd sync`                     | Sync with git remote (session end)     |
-| `bd sync --status`            | Check sync status without syncing      |
-| `bd kv set <key> <value>`     | Store persistent key-value data        |
-| `bd kv get <key>`             | Retrieve persistent data               |
-| `bd worktree create <name>`   | Create worktree with beads redirect    |
 
 ## Labels
 

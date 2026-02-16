@@ -13,99 +13,221 @@ mid-run; refresh context before summarising or editing.
 
 ## Quick Obligations
 
-| Situation                     | Required action                                                                             |
-| ----------------------------- | ------------------------------------------------------------------------------------------- |
-| Starting a task               | Read this guide end-to-end and align with any fresh user instructions.                      |
-| Relevant learnings exist      | Check `.claude/learnings/` and `~/.claude/learnings/` for past solutions to similar issues. |
-| Tool or command hangs         | If a command runs longer than 5 minutes, stop it, capture logs, and check with the user.    |
-| Reviewing git status or diffs | Treat them as read-only context; never revert or assume missing changes were yours.         |
-| Adding a dependency           | Research well-maintained options and confirm fit with the user before adding.               |
+| Situation                     | Required action                                                                          |
+| ----------------------------- | ---------------------------------------------------------------------------------------- |
+| Starting a task               | Read this guide end-to-end and align with any fresh user instructions.                   |
+| Tool or command hangs         | If a command runs longer than 5 minutes, stop it, capture logs, and check with the user. |
+| Reviewing git status or diffs | Treat them as read-only context; never revert or assume missing changes were yours.      |
+| Adding a dependency           | Research well-maintained options and confirm fit with the user before adding.            |
 
 ## Mindset & Process
 
-- **No breadcrumbs**. If you delete or move code, do not leave a
-  comment in the old place. No "// moved to X", no "relocated".
-  Just remove it.
 - **Think hard, do not lose the plot**. Instead of applying a
   bandaid, fix things from first principles. Find the source and
   fix it versus applying a cheap bandaid on top.
-- When taking on new work, follow this order:
-  1. Think about the architecture.
-  2. Research official docs, blogs, or papers on the best architecture.
-  3. Review the existing codebase.
-  4. Compare the research with the codebase to choose the best fit.
-  5. Implement the fix or ask about the tradeoffs the user is
-     willing to make.
-- Write idiomatic, simple, maintainable code. Always ask yourself
-  if this is the most simple intuitive solution to the problem.
-- Follow the scout method: Leave each repo better than how you
-  found it. If something is giving a code smell, fix it for the
-  next person.
-- Clean up unused code ruthlessly. If a function no longer needs a
-  parameter or a helper is dead, delete it and update the callers
-  instead of letting the junk linger.
+- **No speculative features**. Do not add features, flags, or
+  configuration unless users actively need them. Do not document
+  or validate features that are not implemented.
+- **No premature abstraction**. Do not create utilities until
+  the same code has been written three times. Three similar lines
+  is better than the wrong abstraction.
+- **Clarity over cleverness**. Write idiomatic, simple,
+  maintainable code. Prefer explicit, readable code over dense
+  one-liners. Always ask if this is the most simple intuitive
+  solution.
+- **Replace, do not deprecate**. When a new implementation
+  replaces an old one, remove the old one entirely. No
+  backward-compatible shims, dual config formats, or migration
+  paths. No breadcrumbs ("// moved to X", "// removed"). Clean
+  up unused code ruthlessly: dead parameters, dead helpers,
+  dead files.
+- **Verify at every level**. Set up automated guardrails
+  (linters, type checkers, tests) as the first step, not an
+  afterthought. Prefer structure-aware tools (`ast-grep`, LSPs,
+  compilers) over text pattern matching. Review your own output.
+- **Bias toward action**. Decide and move for anything easily
+  reversed; state your assumption so the reasoning is visible.
+  Ask before committing to interfaces, data models,
+  architecture, or destructive operations on external services.
+- **Finish the job**. Handle the edge cases you can see. Clean
+  up what you touched. If something is broken adjacent to your
+  change, flag it. But do not invent new scope: there is a
+  difference between thoroughness and gold-plating.
 - **Search before pivoting**. If you are stuck or uncertain, do a
   quick web search for official docs or specs, then continue with
   the current approach. Do not change direction unless asked.
+- When taking on new work, follow this order:
+    1. Think about the architecture.
+    2. Research official docs, blogs, or papers on the best
+       architecture.
+    3. Review the existing codebase.
+    4. Compare the research with the codebase to choose the best
+       fit.
+    5. Implement the fix or ask about the tradeoffs the user is
+       willing to make.
 - If code is very confusing or hard to understand:
-  1. Try to simplify it.
-  2. Add an ASCII art diagram in a code comment if it would help.
-  3. Add a Mermaid diagram for documentation if it would help.
+    1. Try to simplify it.
+    2. Add an ASCII art diagram in a code comment if it would help.
+    3. Add a Mermaid diagram for documentation if it would help.
 
 ## Tool Preferences
 
-- **Web scraping**: Use **firecrawl** MCP instead of `curl`,
-  `wget`, or built-in web fetch. Firecrawl handles
-  JavaScript-rendered pages and returns cleaner markdown.
-- **Web search**: Use **exa** MCP instead of built-in web search.
-  Exa provides more relevant results, better content extraction,
-  and domain filtering options.
-- **Library docs**: Use **context7** MCP for up-to-date library
-  documentation and code examples. Prefer it over web search when
-  looking up API references.
-- **File search**: Use `fd` instead of `find`. fd is faster,
-  respects `.gitignore`, and has simpler syntax.
-- **Text search**: Use `rg` (ripgrep) instead of `grep`. For
-  AST-aware code searches use `ast-grep`, for semantic analysis
-  use `semgrep`.
-- **File deletion**: Use `trash` instead of `rm`. Trash moves
-  files to the system trash where they can be recovered.
+| Purpose           | Tool              | Replaces                       |
+| ----------------- | ----------------- | ------------------------------ |
+| Web scraping      | **firecrawl** MCP | `curl`, `wget`, built-in fetch |
+| Web search        | **exa** MCP       | Built-in web search            |
+| Library docs      | **context7** MCP  | Web search for API references  |
+| Repo docs         | **deepwiki** MCP  | Manual GitHub repo exploration |
+| Issue management  | `bd`              | Issue and task tracking local  |
+| File search       | `fd`              | `find`                         |
+| Text search       | `rg` (ripgrep)    | `grep`                         |
+| AST code search   | `ast-grep`        | Regex for structural patterns  |
+| Semantic analysis | `semgrep`         | Manual review                  |
+| Code intelligence | **serena** MCP    | Manual symbol navigation       |
+| File deletion     | `trash`           | `rm` (moves to system trash)   |
 
-## Tooling & Workflow
+## Knowledge Base
 
-- **Task runner preference**. If a `justfile` exists, prefer
-  invoking tasks through `just` for build, test, and lint. Do not
-  add a `justfile` unless asked. If no `justfile` exists and there
-  is a `Makefile` you can use that. Default lint/test commands if
-  no `Makefile` or `justfile` exists are in each specific
-  language's rules file.
-- **AST-first where it helps**. Prefer `ast-grep` for tree-safe
-  edits when it is better than regex.
+For information on a specific research topic or my workday (see daily notes)
+within the Obsidian vault:
+
+- Use **qmd** to search the vault.
+- Notes in the vault are organised into the
+  [PARA](https://fortelabs.com/blog/para/) system:
+  - **Projects**: Short-term efforts with a specific goal and
+      deadline, actively being worked on.
+  - **Areas**: Ongoing responsibilities with no end date that
+      require continuous attention.
+  - **Resources**: Reference materials, notes, and information
+      that support your projects and areas but are not actionable
+      themselves.
+  - **Archives**: Inactive items from the other three categories
+      saved for future reference.
+- Previous conversation summaries are indexed in the **qmd**
+  `memory-episodes` collection. Use this to recall past sessions.
+
+## Development
+
+### Comments
+
+- **Explain the why, not the what.**
+- Well-written code should be largely self-documenting.
+- Comments serve a different purpose: they should explain complex
+  algorithms, non-obvious business logic, or the rationale behind
+  a particular implementation choice.
+- Avoid comments that merely restate what the code does
+  (e.g., `# increment i` above `i += 1`).
+- Comments should be written as complete sentences. Block comments
+  must begin with a `#` followed by a single space.
+
+### Dependencies & External APIs
+
+- If you need to add a new dependency to a project to solve an
+  issue, search the web and find the best, most maintained option.
+  Something most other folks use with the best exposed API.
+- We don't want to be in a situation where we are using an
+  unmaintained dependency, that no one else relies on.
+
+### Tooling & Workflow
+
+- **Task runner**. If a `justfile` exists, prefer `just` for
+  build, test, and lint. If no `justfile` exists, look for a `Makefile`
+  and use `make` if the file exists.
 - **Git safety**: Do not run destructive git commands
   (`reset --hard`, `checkout .`, `clean -f`, `push --force`)
-  without explicit permission. Commits via `/commit` are fine.
-- **Git worktrees**: Create worktrees in `.worktrees/` at the
-  repository root
-  (e.g., `git worktree add -b feature-x .worktrees/feature-x`).
+  without explicit permission.
+- **Git worktrees**: Create worktrees with
+  `wt switch -c <branch>` (uses `.worktrees/` at repository
+  root). Use `wt list` to view, `wt merge <target>` to
+  squash-merge back, `wt remove` to clean up.
 
-### Code Commit Message Style
+### Python
 
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
-- Format: `<type>(<scope>): <description>` with optional body and footer
-- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
-- Subject: lowercase after type, present tense, 50 chars or less
-- Blank line between subject and body
-- Body: wrap at 72 characters, explain the why not the what
-- Examples:
-  - `feat(agents): add support for App pattern with plugins`
-  - `fix(sessions): prevent memory leak in session cleanup`
-  - `refactor(tools): unify environment variable enabled checks`
-- If you are ever curious how to run tests or what we test, read
-  through `.github/workflows` or `.cloudbuild` or `.circleci`
-  (depends on the repo). CI runs everything and it should behave
-  the same locally.
+| Purpose     | Tool                                        |
+| ----------- | ------------------------------------------- |
+| Deps & venv | `uv sync`                                   |
+| Lint        | `uv run ruff check --fix`                   |
+| Format      | `uv run ruff format`                        |
+| Types       | `uv run ty check` (fallback: `uv run mypy`) |
+| Tests       | `uv run pytest -q`                          |
+| Build       | `uv_build` backend                          |
 
-## Code Testing Philosophy
+Do not introduce `pip`, Poetry, or `requirements.txt` unless
+asked.
+
+### Go
+
+| Purpose | Tool                                                  |
+| ------- | ----------------------------------------------------- |
+| Build   | `go build ./...`                                      |
+| Test    | `go test ./...`                                       |
+| Lint    | `go vet ./...` · `staticcheck ./...` · `revive ./...` |
+| Format  | `gofmt -w .`                                          |
+
+### Rust
+
+| Purpose | Tool                                                             |
+| ------- | ---------------------------------------------------------------- |
+| Build   | `cargo build`                                                    |
+| Test    | `cargo test`                                                     |
+| Lint    | `cargo clippy --all --benches --tests --examples --all-features` |
+| Format  | `cargo fmt`                                                      |
+
+### TypeScript / Node
+
+| Purpose | Tool                                |
+| ------- | ----------------------------------- |
+| Lint    | `oxlint`                            |
+| Format  | `oxfmt` (fallback: `biome format`)  |
+| Types   | `tsc --noEmit`                      |
+| Tests   | Per project (`vitest`, `pnpm test`) |
+
+If npm or pnpm scripts are configured, check with the user
+first.
+
+### Terraform / Terragrunt
+
+| Purpose  | Tool                                                |
+| -------- | --------------------------------------------------- |
+| Format   | `terraform fmt` · `terragrunt hclfmt`               |
+| Validate | `terraform validate` · `terragrunt validate-inputs` |
+| Lint     | `tflint`                                            |
+| Security | `checkov` or `trivy`                                |
+| Docs     | `terraform-docs`                                    |
+
+### GitHub Actions
+
+| Purpose  | Tool                              |
+| -------- | --------------------------------- |
+| Lint     | `actionlint`                      |
+| Security | `zizmor`                          |
+
+### Shell
+
+| Purpose | Tool            |
+| ------- | --------------- |
+| Lint    | `shellcheck`    |
+| Format  | `shfmt -i 2 -w` |
+
+### SQL
+
+| Purpose | Tool              |
+| ------- | ----------------- |
+| Lint    | `sqlfluff lint`   |
+| Format  | `sqlfluff format` |
+
+### Commit Messages
+
+Use Conventional Commits style:
+
+| Rule    | Convention                                              |
+| ------- | ------------------------------------------------------- |
+| Format  | `<type>(<scope>): <description>` with optional body     |
+| Types   | `feat`, `fix`, `refactor`, `docs`, `test`, `chore`      |
+| Subject | Lowercase after type, present tense, 50 chars or less   |
+| Body    | Blank line after subject, wrap at 72 chars, explain why |
+
+## Testing Philosophy
 
 - **Use real code over mocks.** Tests should use real
   implementations as much as possible. Only mock external
@@ -119,80 +241,130 @@ mid-run; refresh context before summarising or editing.
   - Use real components; mock only external dependencies.
   - Focus on testing public interfaces and behaviour.
   - Descriptive test names that explain what behaviour is being
-    tested.
+      tested.
   - High coverage for new features, edge cases, and error
-    conditions.
+      conditions.
 - Unless the user asks otherwise, run only the tests you added or
   modified instead of the entire suite to avoid wasting time.
 
-## Code Comments
-
-- **Explain the why, not the what.**
-- Well-written code should be largely self-documenting.
-- Comments serve a different purpose: they should explain complex
-  algorithms, non-obvious business logic, or the rationale behind
-  a particular implementation choice.
-- Avoid comments that merely restate what the code does
-  (e.g., `# increment i` above `i += 1`).
-- Comments should be written as complete sentences. Block comments
-  must begin with a `#` followed by a single space.
-
-## Code Dependencies & External APIs
-
-- If you need to add a new dependency to a project to solve an
-  issue, search the web and find the best, most maintained option.
-  Something most other folks use with the best exposed API.
-- We don't want to be in a situation where we are using an
-  unmaintained dependency, that no one else relies on.
-
-## Knowledge Base
-
-For information on a specific topic or my workday (see daily notes)
-within the Obsidian vault:
-
-- Use **qmd** to search the vault.
-- Notes in the vault are organised into the
-  [PARA](https://fortelabs.com/blog/para/) system:
-  - **Projects**: Short-term efforts with a specific goal and
-    deadline, actively being worked on.
-  - **Areas**: Ongoing responsibilities with no end date that
-    require continuous attention.
-  - **Resources**: Reference materials, notes, and information
-    that support your projects and areas but are not actionable
-    themselves.
-  - **Archives**: Inactive items from the other three categories
-    saved for future reference.
-
-## Final Handoff
+## Workflow
 
 Before finishing a task:
 
-1. Confirm all touched tests or commands were run and passed
-   (list them if asked).
-2. Summarise changes with file and line references.
-3. Call out any TODOs, follow-up work, or uncertainties so the
+1. Re-read your changes for unnecessary complexity, redundant code,
+   and unclear naming
+2. Run relevant tests — not the full suite
+3. Run linters and type checker — fix everything before committing
+4. Summarise changes with file and line references.
+5. Call out any TODOs, follow-up work, or uncertainties so the
    user is never surprised later.
 
-## Self-Improvement Protocol
+## GitHub Actions
 
-When the user corrects a mistake or provides feedback on how I
-should work:
+### Security
 
-1. Apply the correction immediately.
-2. Ask: "Should I add this to CLAUDE.md to prevent this mistake
-   in future?"
-3. If yes, propose a concise rule and update the appropriate
-   section.
+- **Pin actions to SHA hashes** with a version comment:
+
+  ```yaml
+  - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
+    with:
+      persist-credentials: false
+  ```
+
+  Never pin to tags (`@v3`) or branches (`@main`).
+
+- **persist-credentials: false** on all `actions/checkout`
+  steps. This prevents the token from persisting in the
+  git config where subsequent steps could extract it.
+- **Least privilege tokens**. Use `permissions` at the job
+  level (not workflow level) and grant only what's needed.
+  Start with `permissions: {}` and add back selectively.
+
+  ```yaml
+  jobs:
+    build:
+      permissions:
+        contents: read
+  ```
+
+- **No secrets in plain text**. Use `${{ secrets.NAME }}`
+  for credentials. Never echo secrets or pass them as
+  command-line arguments (visible in process listings).
+- **Avoid `pull_request_target`** unless you understand the
+  security implications. Prefer `pull_request` for untrusted
+  code.
+- **Scan workflows** with `zizmor` before committing to
+  catch common security issues.
+
+### Structure
+
+- **One concern per workflow file**. Separate CI, release,
+  and deployment into distinct files.
+- **Descriptive names**. Name workflows and jobs clearly:
+
+  ```yaml
+  name: CI
+  jobs:
+    lint:
+      name: Lint and format
+  ```
+
+- **Reusable workflows** for shared logic across repos.
+  Use `workflow_call` trigger with explicit inputs and
+  secrets.
+- **Concurrency control**. Cancel in-progress runs for the
+  same branch to save resources:
+
+  ```yaml
+  concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+  ```
+
+- **Timeouts**. Set `timeout-minutes` on jobs to prevent
+  stuck workflows. Default is 360 minutes which is far
+  too generous for most jobs.
+
+### Best Practices
+
+- **Cache dependencies**. Use `actions/cache` or built-in
+  caching (e.g. `setup-node` with `cache: pnpm`) to speed
+  up builds.
+- **Matrix strategies** for testing across versions. Use
+  `fail-fast: false` to see all failures:
+
+  ```yaml
+  strategy:
+    fail-fast: false
+    matrix:
+      os: [ubuntu-latest, macos-latest]
+      node: [20, 22]
+  ```
+
+- **Expressions over scripts**. Prefer `if:` conditions
+  over shell conditionals for job/step control.
+- **Outputs over artefacts** for small values passed
+  between jobs. Use artefacts for files.
+
+### Dependabot
+
+Configure Dependabot with cooldowns and grouped updates
+to reduce noise:
+
+```yaml
+## .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+```
 
 ## Go
-
-### Tooling
-
-- Use `gofmt -w .` to format code
-- Use `go vet ./...` to lint code for best practices
-- Use `staticcheck ./...` (if available) to lint code
-  for best practices
-- Use `go test ./...` to test code
 
 ### General Best Practices
 
@@ -397,35 +569,106 @@ should work:
 
 ## Issue Tracking with Beads
 
-When a project uses **beads** (`bd`), use it for tracking work
-across sessions. Run `bd prime` for full workflow context or
-`bd hooks install` for auto-injection.
+When a project has a `.beads/` directory, use `bd` for all issue
+tracking.
 
-| Command                                      | Purpose                                   |
-| -------------------------------------------- | ----------------------------------------- |
-| `bd ready`                                   | Find unblocked work ready to start        |
-| `bd show <id>`                               | View issue details                        |
-| `bd create "Title" --type task --priority 2` | Create a new issue                        |
-| `bd update <id> --status in_progress`        | Mark work as started                      |
-| `bd close <id>`                              | Complete and close an issue               |
-| `bd sync`                                    | Sync with git remote (run at session end) |
+### Session Start
 
-Issue types: `task`, `bug`, `story`, `epic`, `spike`.
-Priority: 1 (highest) to 4 (lowest).
+If `.beads/` exists and `bd prime` output was not already
+injected (e.g. by the beads plugin), run `bd prime` to load
+workflow context. In Claude Code the plugin handles this
+automatically. In Codex and OpenCode, run it manually at
+session start.
+
+### Plans Require Issues
+
+When entering plan mode, ensure the work is tracked by a beads
+issue. If you are already working on an existing issue, link
+the plan to it. Otherwise, create an issue before writing the
+plan.
+
+Exceptions (no issue needed):
+
+- Pure research or exploration with no code changes.
+- The plan is a continuation of an issue already in context.
+
+### Core Workflow
+
+- Always include `--acceptance` with checklist items.
+- Run `bd lint <id>` after creating to verify the issue passes.
+- Apply area labels when creating issues.
+
+### Issue Templates
+
+Templates live in `~/.config/bd/templates/{type}.md`. Read
+the template for the issue type before creating.
+
+Fill in the template sections as `--description` and extract the
+acceptance criteria into `--acceptance`:
+
+```bash
+bd create --title="..." --type=task --priority=2 \
+  --description="<sections from template>" \
+  --acceptance="- [ ] Criterion 1
+- [ ] Criterion 2"
+```
+
+### Command Reference
+
+#### Finding Work
+
+| Command                        | Purpose                            |
+| ------------------------------ | ---------------------------------- |
+| `bd ready`                     | Find unblocked work ready to start |
+| `bd list --status=open`        | All open issues                    |
+| `bd list --status=in_progress` | Active work                        |
+| `bd show <id>`                 | Detailed issue view                |
+| `bd stale`                     | Find forgotten issues              |
+| `bd find-duplicates`           | Find semantically similar issues   |
+
+#### Creating and Updating
+
+| Command                                   | Purpose                       |
+| ----------------------------------------- | ----------------------------- |
+| `bd create --title="..." --type=task ...` | Create a new issue            |
+| `bd update <id> --status=in_progress`     | Claim work                    |
+| `bd close <id>`                           | Complete an issue             |
+| `bd close <id1> <id2> ...`                | Close multiple issues at once |
+| `bd lint <id>`                            | Validate issue template       |
+| `bd lint`                                 | Lint all open issues          |
+
+#### Dependencies and Blocking
+
+| Command                    | Purpose                               |
+| -------------------------- | ------------------------------------- |
+| `bd dep add <issue> <dep>` | Issue depends on dep                  |
+| `bd blocked`               | Show all blocked issues               |
+| `bd defer <id>`            | Ice-box an issue (removes from ready) |
+| `bd undefer <id>`          | Bring deferred issue back             |
+| `bd graph --all`           | Visualise dependency DAG              |
+
+#### Querying
+
+| Command                     | Purpose                                   |
+| --------------------------- | ----------------------------------------- |
+| `bd query "expr"`           | Rich filtering with boolean ops and dates |
+| `bd label add <id> <label>` | Add area label                            |
+
+### Labels
+
+Apply area labels when creating issues. Suggested labels vary by
+repo; infer from existing issues and project structure.
+
+### Quality Checklist
+
+- After creating: run `bd lint <id>` to verify template compliance.
+- Before starting work: confirm the issue has acceptance criteria.
+- Before closing: verify all acceptance criteria are met.
+
+Issue types: `task`, `bug`, `feature`, `story`, `epic`, `spike`.
+Priority: 0 (critical) to 4 (backlog).
 
 ## Python
-
-### Tooling
-
-- Use `uv` and `pyproject.toml` in all Python repos.
-  Prefer `uv sync` for env and dependency resolution.
-  Do not introduce `pip` venvs, Poetry, or
-  `requirements.txt` unless asked.
-- Use `uv run ruff check` for linting/formatting.
-- Use `uv run ty` for type checking, if unavailable use
-  `uv run mypy` instead.
-- Use `build-backend = "uv_build"` for the backend when
-  building python packages.
 
 ### General Best Practices
 
@@ -662,13 +905,6 @@ if __name__ == '__main__':
 
 ## Rust
 
-### Tooling
-
-- Use `cargo fmt` to format code
-- Use `cargo clippy --all --benches --tests --examples --all-features`
-  to lint code for best practices
-- Use `cargo test` to test code
-
 ### General Best Practices
 
 - Do NOT use unwraps or anything that can panic in Rust code,
@@ -687,12 +923,37 @@ if __name__ == '__main__':
   them at the bottom inside `mod tests {}`; avoid inventing inline
   modules like `mod my_name_tests`.
 
+### Cargo.toml Lints
+
+When creating new Rust projects, include these clippy lints:
+
+```toml
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+## Panic prevention
+unwrap_used = "deny"
+expect_used = "warn"
+panic = "deny"
+panic_in_result_fn = "deny"
+unimplemented = "deny"
+## No cheating
+allow_attributes = "deny"
+## Code hygiene
+dbg_macro = "deny"
+todo = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+## Safety
+await_holding_lock = "deny"
+large_futures = "deny"
+exit = "deny"
+mem_forget = "deny"
+## Pedantic relaxations (too noisy)
+module_name_repetitions = "allow"
+similar_names = "allow"
+```
+
 ## Shell
-
-### Tooling
-
-- Use `shellcheck` to lint code for best practices
-- Use `shfmt -i 2` to format code
 
 ### General Best Practices
 
@@ -802,11 +1063,6 @@ usage() { grep '^#/' "$0" | cut -c4-; exit 0; }
 ```
 
 ## SQL
-
-### Tooling
-
-- Use `sqlfluff lint` to lint code for best practices
-- Use `sqlfluff format` to format code
 
 ### General Best Practices
 
@@ -1166,23 +1422,6 @@ where plan_name in ( 'monthly', 'yearly' )
 Infrastructure as Code using Terraform/OpenTofu, orchestrated
 with Terragrunt.
 
-### Tooling
-
-#### Terragrunt
-
-- Use `terragrunt hclfmt` to format `.hcl` files
-- Use `terragrunt validate-inputs` to validate inputs
-- Use `terragrunt run-all <command>` for multi-unit operations
-- Use `terragrunt stack generate` for stacks
-
-#### Terraform
-
-- Use `terraform fmt` to format `.tf` files
-- Use `terraform validate` to check syntax and internal consistency
-- Use `tflint` for linting code for best practices
-- Use `checkov` or `tfsec` for security compliance
-- Use `terraform-docs` to generate documentation
-
 ### Repository Structure
 
 Separate modules from live (deployment) repos. Choose between
@@ -1475,15 +1714,6 @@ terraform-<provider>-<name>/
 
 ## TypeScript
 
-### Tooling
-
-- If npm or pnpm scripts are configured, ask the user
-  to confirm first. Otherwise:
-  - Use `tsc --noEmit` to type check code
-  - Use `eslint` to lint code for best practices
-  - Use `biome format` to format code. If unavailable,
-    use `prettier` instead.
-
 ### General Best Practices
 
 - **Modern browsers:** Assume modern browser support
@@ -1680,6 +1910,25 @@ terraform-<provider>-<name>/
 - **No block comments:** Use multiple `//` lines,
   not `/* */`.
 - **Markdown in JSDoc:** Write JSDoc content in Markdown.
+
+### tsconfig.json Strictness
+
+When creating new TypeScript projects, enable these compiler
+options:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  }
+}
+```
 
 ### Disallowed
 
