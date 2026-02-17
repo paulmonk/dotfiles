@@ -1,4 +1,17 @@
+---
+paths: **/*.rs, **/Cargo.{toml,lock}
+---
+
 # Rust
+
+## Tooling
+
+| Purpose | Tool                                                             |
+| ------- | ---------------------------------------------------------------- |
+| Build   | `cargo build`                                                    |
+| Test    | `cargo test`                                                     |
+| Lint    | `cargo clippy --all --benches --tests --examples --all-features` |
+| Format  | `cargo fmt`                                                      |
 
 ## General Best Practices
 

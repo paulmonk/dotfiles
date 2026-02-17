@@ -1,4 +1,18 @@
+---
+paths: **/*.{tf,tfvars,hcl}
+---
+
 # Terraform
+
+## Tooling
+
+| Purpose  | Tool                                                |
+| -------- | --------------------------------------------------- |
+| Format   | `terraform fmt` · `terragrunt hclfmt`               |
+| Validate | `terraform validate` · `terragrunt validate-inputs` |
+| Lint     | `tflint`                                            |
+| Security | `checkov` or `trivy`                                |
+| Docs     | `terraform-docs`                                    |
 
 Infrastructure as Code using Terraform/OpenTofu, orchestrated
 with Terragrunt.

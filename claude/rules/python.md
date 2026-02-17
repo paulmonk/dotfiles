@@ -1,4 +1,22 @@
+---
+paths: **/*.py, **/pyproject.toml, **/setup.{py,cfg}
+---
+
 # Python
+
+## Tooling
+
+| Purpose     | Tool                                        |
+| ----------- | ------------------------------------------- |
+| Deps & venv | `uv sync`                                   |
+| Lint        | `uv run ruff check --fix`                   |
+| Format      | `uv run ruff format`                        |
+| Types       | `uv run ty check` (fallback: `uv run mypy`) |
+| Tests       | `uv run pytest -q`                          |
+| Build       | `uv_build` backend                          |
+
+Do not introduce `pip`, Poetry, or `requirements.txt` unless
+asked.
 
 ## General Best Practices
 
@@ -104,9 +122,10 @@
 - **Containers:** Use `list[T]` for homogeneous
   sequences, `tuple[T, ...]` for variable-length,
   `tuple[T1, T2]` for fixed structure.
-- **Final:** Always include the type parameter for
-  constants: `Final[int]`, `Final[Path]`, not bare
-  `Final`.
+- **Final:** Only use Final type for true immutable constants.
+  `Final` only prevents reassignment, not mutation.
+  A `Final[dict]` can still be modified in place.
+  Pair with immutable types (tuple, frozenset, `Mapping`, `Sequence`).
 
 ## Docstrings
 

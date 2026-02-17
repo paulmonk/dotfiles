@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#/ Directs the agent to read language rules for extensionless files.
+#/
+#/ Path-based rules only match on file extensions. Scripts without
+#/ extensions (e.g. hook files, bin stubs) declare their language via
+#/ shebang instead. This PostToolUse hook reads the first line of the
+#/ file after a Read/Write/Edit, detects the interpreter, and tells
+#/ the agent to read the matching rules file.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+# Maps a shebang interpreter to the corresponding rules file.
+shebang_to_rules() {
+  local interpreter="${1}"
+  case "${interpreter}" in
+  *bash* | */sh | */sh\ *) echo "${HOME}/.claude/rules/shell.md" ;;
+  *python*) echo "${HOME}/.claude/rules/python.md" ;;
+  *node*) echo "${HOME}/.claude/rules/typescript.md" ;;
+  *) echo "" ;;
+  esac
+}
+
+main() {
+  local input file_path first_line rules_file
+  input=$(read_hook_input)
+
+  file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
+
+  # No file path in the tool input.
+  [[ -z "${file_path}" ]] && exit 0
+
+  # Only handle extensionless files; path-based rules cover the rest.
+  [[ "${file_path##*/}" == *.* ]] && exit 0
+
+  # File doesn't exist on disk (e.g. deleted or not yet created).
+  [[ ! -f "${file_path}" ]] && exit 0
+
+  # First line isn't a shebang.
+  first_line=$(head -1 "${file_path}")
+  [[ "${first_line}" != "#!"* ]] && exit 0
+
+  # Interpreter doesn't map to a known rules file.
+  rules_file=$(shebang_to_rules "${first_line#\#!}")
+  [[ -z "${rules_file}" || ! -f "${rules_file}" ]] && exit 0
+
+  jq -cn --arg path "${rules_file}" '{
+    hookSpecificOutput: {
+      hookEventName: "PostToolUse",
+      additionalContext: ("Shebang detected. Read " + $path + " for the language rules that apply to this file.")
+    }
+  }'
+}
+
+main "$@"

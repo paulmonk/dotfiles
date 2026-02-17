@@ -125,7 +125,7 @@ coding-agents: qmd
     echo "  Ensuring deepwiki"
     claude mcp add --scope user -t http deepwiki https://mcp.deepwiki.com/mcp >/dev/null 2>&1 || true
     echo "  Ensuring serena"
-    claude mcp add --scope user serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant >/dev/null 2>&1 || true
+    claude mcp add --scope user serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --open-web-dashboard False >/dev/null 2>&1 || true
     if [[ -n "${BUN_INSTALL_BIN:-}" ]]; then
       echo "  Ensuring qmd"
       # Blank BUN_INSPECT_CONNECT_TO so Cursor's injected debug socket doesn't hang bun.

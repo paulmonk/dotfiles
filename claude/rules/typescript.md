@@ -1,4 +1,20 @@
+---
+paths: **/*.{ts,tsx,js,jsx}, **/tsconfig*.json
+---
+
 # TypeScript
+
+## Tooling
+
+| Purpose | Tool                                |
+| ------- | ----------------------------------- |
+| Lint    | `oxlint`                            |
+| Format  | `oxfmt` (fallback: `biome format`)  |
+| Types   | `tsc --noEmit`                      |
+| Tests   | Per project (`vitest`, `pnpm test`) |
+
+If npm or pnpm scripts are configured, check with the user
+first.
 
 ## General Best Practices
 

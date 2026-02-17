@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#/ Forces path-based rules to load before creating new files.
+#/
+#/ Claude Code only loads path-based rules (paths: frontmatter in
+#/ .claude/rules/) on Read, not Write. When creating a new file, the
+#/ rules for that file type are never seen. This hook creates the file
+#/ empty and denies the Write, forcing Claude to Read first (loading
+#/ the rules), then Write/Edit with rules in context.
+#/
+#/ Workaround for: https://github.com/anthropics/claude-code/issues/23478
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input file_path
+  input=$(read_hook_input)
+
+  file_path=$(echo "${input}" | jq -r '.tool_input.file_path // empty')
+
+  # No file path means nothing to check.
+  [[ -z "${file_path}" ]] && exit 0
+
+  # File already exists; Write is an overwrite, rules were loaded on
+  # the preceding Read (which is required before Edit/Write of
+  # existing files). Let it through.
+  [[ -f "${file_path}" ]] && exit 0
+
+  # File does not exist. Create it empty so a subsequent Read will
+  # trigger path-based rule loading.
+  mkdir -p "$(dirname "${file_path}")"
+  touch "${file_path}"
+
+  deny_tool "File '${file_path}' did not exist. It was created empty so path-based rules can load. Read this file first, then Write/Edit with the rules in context."
+}
+
+main "$@"

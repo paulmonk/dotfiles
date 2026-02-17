@@ -1,4 +1,15 @@
+---
+paths: **/.github/workflows/*.{yml,yaml}, **/.github/actions/**, **/.github/dependabot.yml
+---
+
 # GitHub Actions
+
+## Tooling
+
+| Purpose  | Tool         |
+| -------- | ------------ |
+| Lint     | `actionlint` |
+| Security | `zizmor`     |
 
 ## Security
 

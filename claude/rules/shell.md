@@ -1,4 +1,15 @@
+---
+paths: **/*.{sh,bash}
+---
+
 # Shell
+
+## Tooling
+
+| Purpose | Tool             |
+| ------- | ---------------- |
+| Lint    | `shellcheck`     |
+| Format  | `shfmt -i 2 -w`  |
 
 ## General Best Practices
 

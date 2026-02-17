@@ -1,4 +1,15 @@
+---
+paths: **/*.sql
+---
+
 # SQL
+
+## Tooling
+
+| Purpose | Tool              |
+| ------- | ----------------- |
+| Lint    | `sqlfluff lint`   |
+| Format  | `sqlfluff format` |
 
 ## General Best Practices
 
