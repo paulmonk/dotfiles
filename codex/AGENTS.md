@@ -2,7 +2,7 @@
 <!-- Source: claude/CLAUDE.md + claude/rules/*.md -->
 <!-- Do not edit directly -->
 
-# Agent Profile
+# Global Defaults
 
 Operate tasks while honouring user preferences and house style.
 Assume other agents or the user might land commits mid-run;
@@ -53,15 +53,6 @@ refresh context before summarising or editing.
 - **Search before pivoting**. If you are stuck or uncertain, do a
   quick web search for official docs or specs, then continue with
   the current approach. Do not change direction unless asked.
-- When taking on new work, follow this order:
-    1. Think about the architecture.
-    2. Research official docs, blogs, or papers on the best
-       architecture.
-    3. Review the existing codebase.
-    4. Compare the research with the codebase to choose the best
-       fit.
-    5. Implement the fix or ask about the tradeoffs the user is
-       willing to make.
 
 ## Tool Preferences
 
@@ -87,14 +78,13 @@ refresh context before summarising or editing.
   - `search` for keyword matching, `vsearch` for semantic
     similarity, `query` for structured filters.
 - Previous conversation summaries are in the **qmd**
-  `memory-episodes` collection.
+  `claude-memory-episodes` collection.
 
 ## Coding Standards
 
 Language-specific tooling (build, test, lint, format) is in
 `claude/rules/*.md` with path-filter frontmatter; those files
-load automatically for matching file types. Project-level
-`CLAUDE.md` files supplement (not override) this global config.
+load automatically for matching file types.
 
 ### Comments
 
@@ -141,12 +131,23 @@ Use Conventional Commits style:
 
 ## Workflow
 
+When taking on new work:
+
+1. Think about the architecture.
+2. Research official docs, blogs, or papers on the best
+   architecture.
+3. Review the existing codebase.
+4. Compare the research with the codebase to choose the best
+   fit.
+5. Implement the fix or ask about the tradeoffs the user is
+   willing to make.
+
 Before finishing a task:
 
 1. Re-read your changes for unnecessary complexity, redundant code,
-   and unclear naming
-2. Run relevant tests, not the full suite
-3. Run linters and type checker, fix everything before committing
+   and unclear naming.
+2. Run relevant tests, not the full suite.
+3. Run linters and type checker, fix everything before committing.
 4. Summarise changes with file and line references.
 5. Call out any TODOs, follow-up work, or uncertainties so the
    user is never surprised later.
@@ -645,9 +646,10 @@ asked.
 - **Containers:** Use `list[T]` for homogeneous
   sequences, `tuple[T, ...]` for variable-length,
   `tuple[T1, T2]` for fixed structure.
-- **Final:** Always include the type parameter for
-  constants: `Final[int]`, `Final[Path]`, not bare
-  `Final`.
+- **Final:** Only use Final type for true immutable constants.
+  `Final` only prevents reassignment, not mutation.
+  A `Final[dict]` can still be modified in place.
+  Pair with immutable types (tuple, frozenset, `Mapping`, `Sequence`).
 
 ### Docstrings
 

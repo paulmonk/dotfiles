@@ -74,7 +74,7 @@ refresh context before summarising or editing.
   - `search` for keyword matching, `vsearch` for semantic
     similarity, `query` for structured filters.
 - Previous conversation summaries are in the **qmd**
-  `memory-episodes` collection.
+  `claude-memory-episodes` collection.
 
 ## Coding Standards
 

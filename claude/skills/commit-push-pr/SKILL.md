@@ -106,7 +106,7 @@ git pull origin $(git branch --show-current) --rebase && git push -u origin $(gi
 
 #### Find template
 
-Search for a PR/MR template in the repository using Glob:
+Search for a PR/MR template in the repository:
 
 **GitHub:** `**/*PULL_REQUEST_TEMPLATE*`
 
@@ -133,7 +133,7 @@ If that also doesn't exist, use a simple format:
 Write the body to a temp file to preserve formatting:
 
 ```bash
-cat > /tmp/claude/pr-body.md <<'EOF'
+cat > /tmp/ai-agent/pr-body.md <<'EOF'
 <TEMPLATE_BODY>
 EOF
 ```
@@ -144,7 +144,7 @@ EOF
 GH_PROMPT_DISABLED=1 GIT_TERMINAL_PROMPT=0 \
   gh pr create --draft \
     --title "<TITLE>" \
-    --body-file /tmp/claude/pr-body.md \
+    --body-file /tmp/ai-agent/pr-body.md \
     --head "$(git branch --show-current)"
 ```
 
@@ -153,7 +153,7 @@ GH_PROMPT_DISABLED=1 GIT_TERMINAL_PROMPT=0 \
 ```bash
 glab mr create --draft \
   --title "<TITLE>" \
-  --description "$(cat /tmp/claude/pr-body.md)" \
+  --description "$(cat /tmp/ai-agent/pr-body.md)" \
   --source-branch "$(git branch --show-current)"
 ```
 

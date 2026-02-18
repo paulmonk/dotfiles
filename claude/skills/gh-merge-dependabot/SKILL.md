@@ -135,9 +135,8 @@ Fetch each PR branch:
 git fetch origin pull/{number}/head:pr-{number}
 ```
 
-Launch up to 5 subagents in parallel using the Task tool
-with `subagent_type: "general-purpose"`. Send all Task
-calls in a single message.
+Launch up to 5 parallel evaluation agents. Send all
+evaluation requests in a single batch.
 
 #### Library dep subagent instructions
 

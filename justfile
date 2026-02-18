@@ -66,7 +66,7 @@ rcup-install: brew-install
 
 # Sync dotfiles symlinks only (no hooks, except dead symlink cleanup)
 [group('dotfiles')]
-dotfiles: rcup-install coding-agents
+dotfiles: rcup-install ai-coding-agents
     @echo "--------------------------------"
     @echo "Syncing dotfiles"
     @RCRC="{{ justfile_directory() }}/config/rcm/rcrc" PATH="{{ default_path }}" {{ prefix }}/bin/rcup -d {{ justfile_directory() }} -K -f -v
@@ -105,7 +105,7 @@ qmd-agent-unload:
 
 # Configure coding agent tools (Claude Code, Codex, OpenCode)
 [group('tools')]
-coding-agents: qmd
+ai-coding-agents: qmd
     #!/usr/bin/env bash
     set -euo pipefail
     echo "--------------------------------"
@@ -171,7 +171,40 @@ coding-agents: qmd
       done
     } | awk '/^$/{if(b)next;b=1;print;next}{b=0;print}' > codex/AGENTS.md
 
+    # Codex: copy custom skills (Codex does not follow symlinks)
+    echo "--------"
+    echo "Installing Codex custom skills"
+    for skill_dir in codex/skills/*/; do
+      skill_name=$(basename "${skill_dir}")
+      dest="$HOME/.codex/skills/${skill_name}"
+      echo "  ${skill_name}"
+      rm -rf "${dest}"
+      cp -R "${skill_dir}" "${dest}"
+    done
+
     # OpenCode and Codex: MCP and instructions are declarative in config files
+    echo "Done."
+    echo "--------------------------------"
+
+# Create and index Serena projects for code intelligence
+[group('tools')]
+ai-serena-index:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "--------------------------------"
+    echo "Indexing projects for Serena"
+    serena() { uvx --from git+https://github.com/oraios/serena serena "$@"; }
+    while IFS= read -r gitdir; do
+        dir=$(dirname "$gitdir")
+        name=${dir#"${HOME}/projects/"}
+        if [[ -f "${dir}/.serena/project.yml" ]]; then
+            echo "  Re-indexing ${name}"
+            serena project index "$dir" || echo "  [warn] Failed to index ${name}" >&2
+        else
+            echo "  Creating ${name}"
+            (cd "$dir" && yes | serena project create --index) || echo "  [warn] Failed to create ${name}" >&2
+        fi
+    done < <(fd --type d --hidden --no-ignore --glob '.git' "${HOME}/projects" --max-depth 3)
     echo "Done."
     echo "--------------------------------"
 
@@ -180,7 +213,7 @@ coding-agents: qmd
 install:
     @echo "--------------------------------"
     @just dotfiles-bootstrap
-    @just coding-agents
+    @just ai-coding-agents
     @just qmd-agent-load
     @echo "--------------------------------"
 

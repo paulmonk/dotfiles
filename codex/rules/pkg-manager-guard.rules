@@ -1,0 +1,41 @@
+# Prefer uv over pip, poetry, and pipenv for Python package management.
+prefix_rule(
+    pattern = ["pip", "install"],
+    decision = "prompt",
+    justification = "Use uv instead of pip. Run: uv add <package> or uv pip install <package>.",
+    match = [
+        "pip install requests",
+        "pip install -r requirements.txt",
+    ],
+)
+
+prefix_rule(
+    pattern = ["pip3", "install"],
+    decision = "prompt",
+    justification = "Use uv instead of pip3. Run: uv add <package> or uv pip install <package>.",
+    match = [
+        "pip3 install requests",
+    ],
+)
+
+prefix_rule(
+    pattern = ["poetry"],
+    decision = "prompt",
+    justification = "Use uv instead of poetry. Run: uv add <package>, uv sync, uv run <command>.",
+    match = [
+        "poetry add requests",
+        "poetry install",
+        "poetry run pytest",
+    ],
+)
+
+prefix_rule(
+    pattern = ["pipenv"],
+    decision = "prompt",
+    justification = "Use uv instead of pipenv. Run: uv add <package>, uv sync, uv run <command>.",
+    match = [
+        "pipenv install requests",
+        "pipenv shell",
+        "pipenv run pytest",
+    ],
+)

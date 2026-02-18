@@ -141,9 +141,9 @@ id_*
 # AI
 #---------------------------
 **/.claude/docs/**
-**/.claude/learnings/**
 **/.claude/plans/**
 **/.claude/settings.local.json
-*.worktrees/
+**/.serena/**
+**/.worktrees/**
 AGENTS.local.md
 CLAUDE.local.md

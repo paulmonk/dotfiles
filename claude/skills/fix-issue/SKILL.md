@@ -68,7 +68,7 @@ build complete understanding before planning.
 
 If the issue involves unfamiliar APIs, libraries, error
 messages, or domain concepts, search for official documentation
-and known solutions. Use the MCP tools configured in CLAUDE.md
+and known solutions. Use the MCP tools configured
 (exa for web search, context7 for library docs, firecrawl for
 page content).
 
@@ -76,13 +76,13 @@ Skip this step when the fix is clear from the codebase alone.
 
 ### 5. Plan
 
-Write a plan to `.claude/plans/fix-<issue-id>.md`:
+Save a plan covering:
 
-- Summarise the issue requirements
-- List every file to create or modify
-- Describe the approach and key design decisions
-- Call out risks or open questions
-- Reference relevant code paths by file:line
+- Summary of the issue requirements
+- Every file to create or modify
+- Approach and key design decisions
+- Risks or open questions
+- Relevant code paths by file:line
 
 ### 6. Create Branch
 
@@ -99,14 +99,14 @@ prefix based on the issue type:
 | Ambiguous     | `fix/`       |
 
 ```bash
-git checkout -b <prefix>/issue-<id>
+wt switch -c <prefix>/issue-<id>
 ```
 
 ### 7. Implement
 
 Implement the plan across all necessary files. Follow the
-project's CLAUDE.md and language rules. Keep changes minimal
-and focused on the issue requirements.
+project's coding standards and language rules. Keep changes
+minimal and focused on the issue requirements.
 
 Write tests alongside the implementation as part of the same
 step.
@@ -125,7 +125,8 @@ Before running anything, read the project's CI configuration:
    sync checks (`git diff --exit-code` after a command).
 2. **Read justfile or Makefile** (if present). Cross-reference
    targets used in CI.
-3. **Read CLAUDE.md** for project-specific quality gates.
+3. **Read CLAUDE.md or AGENTS.md** for project-specific
+   quality gates.
 
 CI-discovered commands override the fallback tables below.
 
@@ -200,8 +201,8 @@ Run in this order:
 
 ### 9. Self-Review
 
-Invoke `/code-review` against the current diff to run the
-review agents. Produce a list of findings ranked by severity.
+Invoke `/code-review` against the current diff. Produce a
+list of findings ranked by severity.
 
 ### 10. Fix Findings
 
@@ -216,11 +217,10 @@ After addressing findings, re-run the quality pipeline
 
 ### 11. Commit, Push, and Open PR
 
-Delete the plan file (`.claude/plans/fix-<issue-id>.md`).
-
-Invoke `/commit-push-pr <issue-id>` to commit the changes, push
-the branch, and create a draft PR/MR. The issue ID ensures the
-commit message and PR body reference the issue correctly.
+Invoke `/commit-push-pr <issue-id>` to commit the changes,
+push the branch, and create a draft PR/MR. The issue ID
+ensures the commit message and PR body reference the issue
+correctly.
 
 ## Notes
 

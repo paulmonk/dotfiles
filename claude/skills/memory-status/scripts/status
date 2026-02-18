@@ -75,10 +75,10 @@ fi
 # qmd collection status.
 echo ""
 if command -v qmd >/dev/null 2>&1; then
-  if qmd status 2>/dev/null | grep -q "memory-episodes"; then
-    echo "qmd: memory-episodes collection indexed"
+  if qmd status 2>/dev/null | grep -q "claude-memory-episodes"; then
+    echo "qmd: claude-memory-episodes collection indexed"
   else
-    echo "qmd: memory-episodes collection NOT found (run: qmd update && qmd embed)"
+    echo "qmd: claude-memory-episodes collection NOT found (run: qmd update && qmd embed)"
   fi
 else
   echo "qmd: not installed"

@@ -12,7 +12,7 @@ main() {
   # Drain stdin (Claude keeps pipe open).
   read_hook_input >/dev/null
 
-  deny_tool "Prefer firecrawl over WebFetch. Firecrawl provides better content extraction, handles JavaScript-rendered pages, and returns cleaner markdown."
+  deny_tool "Do not use WebFetch. For GitHub repos use deepwiki, for library/framework docs use context7, for general web pages use firecrawl."
 }
 
 main "$@"

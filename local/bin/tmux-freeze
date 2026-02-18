@@ -31,7 +31,7 @@ main() {
   # Freeze each session.
   local session
   while IFS= read -r session; do
-    if tmuxp freeze -y -f yaml --force "${session}" -o "${FREEZE_DIR}/${session}.yaml" 2>>"${LOG_FILE}"; then
+    if tmuxp freeze -y -f yaml --force "${session}" -o "${FREEZE_DIR}/${session}.yaml" >>"${LOG_FILE}" 2>&1; then
       log "Frozen: ${session}"
     else
       log "Failed to freeze: ${session}"

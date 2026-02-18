@@ -49,28 +49,29 @@ enabled = false
 # =================================================================================
 # MCP servers
 # =================================================================================
-[mcp_servers.aws-knowledge]
-url = "https://knowledge-mcp.global.api.aws"
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp"]
 enabled = true
 
 [mcp_servers.context7]
 url = "https://mcp.context7.com/mcp"
 enabled = true
 
-[mcp_servers.chrome-devtools]
+[mcp_servers.deepwiki]
+url = "https://mcp.deepwiki.com/mcp"
+enabled = true
+
+[mcp_servers.exa]
 command = "npx"
-args = ["-y", "chrome-devtools-mcp"]
+args = ["-y", "exa-mcp-server"]
+env_vars = ["EXA_API_KEY"]
 enabled = true
 
 [mcp_servers.firecrawl]
 command = "npx"
 args = ["-y", "firecrawl-mcp"]
 env_vars = ["FIRECRAWL_API_KEY"]
-enabled = true
-
-[mcp_servers.gcloud]
-command = "npx"
-args = ["-y", "@google-cloud/gcloud-mcp"]
 enabled = true
 
 [mcp_servers.gh_grep]
@@ -80,6 +81,11 @@ enabled = true
 [mcp_servers.playwright]
 command = "npx"
 args = ["-y", "@playwright/mcp"]
+enabled = true
+
+[mcp_servers.qmd]
+command = "qmd"
+args = ["mcp"]
 enabled = true
 
 [mcp_servers.serena]

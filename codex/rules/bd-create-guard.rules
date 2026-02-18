@@ -1,0 +1,10 @@
+# Require --acceptance flag on bd create commands.
+prefix_rule(
+    pattern = ["bd", "create"],
+    decision = "prompt",
+    justification = "bd create requires --acceptance with checklist items. For bugs, also include '## Steps to Reproduce' in --description.",
+    match = [
+        "bd create --title='Fix login bug' --type=bug",
+        "bd create --title='Add feature' --type=feature",
+    ],
+)

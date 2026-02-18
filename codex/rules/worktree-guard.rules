@@ -1,0 +1,40 @@
+# Prefer wt wrapper over raw git commands for branch/worktree management.
+prefix_rule(
+    pattern = ["git", "checkout", "-b"],
+    decision = "prompt",
+    justification = "Use wt switch -c <branch> instead. It creates a git worktree in .worktrees/ for isolated work.",
+    match = [
+        "git checkout -b feature/new-thing",
+        "git checkout -b fix/bug-123",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "switch", "-c"],
+    decision = "prompt",
+    justification = "Use wt switch -c <branch> instead. It creates a git worktree in .worktrees/ for isolated work.",
+    match = [
+        "git switch -c feature/new-thing",
+        "git switch -c fix/bug-123",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "switch", "--create"],
+    decision = "prompt",
+    justification = "Use wt switch -c <branch> instead. It creates a git worktree in .worktrees/ for isolated work.",
+    match = [
+        "git switch --create feature/new-thing",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "worktree"],
+    decision = "prompt",
+    justification = "Use the wt wrapper instead. Commands: wt switch -c <branch>, wt list, wt merge <target>, wt remove.",
+    match = [
+        "git worktree add .worktrees/feature feature/branch",
+        "git worktree remove .worktrees/feature",
+        "git worktree list",
+    ],
+)

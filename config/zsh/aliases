@@ -195,14 +195,9 @@ fi
 
 # Claude
 if (( $+commands[claude] )); then
-  alias ai="claude"
-
   # Bypasses all permission prompts. This is the recommended way to run Claude
   # for maximum throughput, pair it with sandboxing.
   alias claude-yolo="claude --dangerously-skip-permissions"
-
-  # Bypasses approval prompts but keeps workspace sandbox intact.
-  alias codex-yolo="codex --full-auto"
 
   # claude-local wraps claude with the local server env vars and
   # disables telemetry pings that won't reach Anthropic anyway.
@@ -212,6 +207,12 @@ if (( $+commands[claude] )); then
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
     claude "$@"
   }
+fi
+
+# Codex
+if (( $+commands[codex] )); then
+  # Bypasses approval prompts but keeps workspace sandbox intact.
+  alias codex-yolo="codex --ask-for-approval never --sandbox workspace-write"
 fi
 
 # Network aliases

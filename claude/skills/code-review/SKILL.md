@@ -48,7 +48,7 @@ for use throughout the review.
 
 | Aspect     | Agent Focus                              | When Applicable         |
 | ---------- | ---------------------------------------- | ----------------------- |
-| `code`     | CLAUDE.md compliance, bugs, code quality | Always                  |
+| `code`     | Coding standards compliance, bugs, code quality | Always              |
 | `tests`    | Test coverage quality and completeness   | Test files changed      |
 | `errors`   | Silent failures, error handling          | Error handling code     |
 | `comments` | Documentation accuracy                   | Comments added/modified |
@@ -58,8 +58,8 @@ for use throughout the review.
 
 ### 4. Launch Review Agents
 
-For each applicable aspect, launch a specialised agent
-from `.claude/agents/` using the Task tool:
+For each applicable aspect, launch a specialised review
+agent:
 
 **Sequential approach** (default): Easier to understand,
 each report completes before next
@@ -77,16 +77,7 @@ for comprehensive review
 - After fixes, re-run code-reviewer to verify resolution
   before closing review
 
-Example Task invocation:
-
-```text
-Task tool with:
-  subagent_type: "code-reviewer"  # Agent name from .claude/agents/
-  prompt: "Review the changes in: <list of files or git diff output>"
-  model: as specified below
-```
-
-### 5. Agents (defined in `.claude/agents/`)
+### 5. Review Agents
 
 | Agent                        | Aspect     | When to Run             |
 | ---------------------------- | ---------- | ----------------------- |
@@ -145,10 +136,10 @@ Agents filter their output by confidence to minimise false positives:
 | Score  | Meaning                                      |
 | ------ | -------------------------------------------- |
 | 0-25   | Likely false positive or pre-existing issue  |
-| 26-50  | Minor nitpick not explicitly in CLAUDE.md    |
+| 26-50  | Minor nitpick not explicitly in coding standards |
 | 51-75  | Valid but low-impact issue                   |
 | 76-90  | Important issue requiring attention          |
-| 91-100 | Critical bug or explicit CLAUDE.md violation |
+| 91-100 | Critical bug or explicit coding standards violation |
 
 **Only report issues with confidence >= 80**
 
@@ -157,7 +148,7 @@ Agents filter their output by confidence to minimise false positives:
 - Pre-existing issues (not introduced in this change)
 - Issues a linter/typechecker/compiler would catch
 - Pedantic nitpicks a senior engineer wouldn't call out
-- General code quality issues unless explicitly required in CLAUDE.md
+- General code quality issues unless explicitly required in coding standards
 - Issues silenced in code (lint ignore comments)
 - Intentional functionality changes related to the broader change
 - Issues on lines not modified in this change
@@ -202,7 +193,7 @@ For PR reviews, post a comment back to the user
 
 Found X issues:
 
-1. **[CRITICAL]** Brief description (CLAUDE.md says "...")
+1. **[CRITICAL]** Brief description (coding standards say "...")
    [file:line link with full SHA]
 
 2. **[IMPORTANT]** Brief description
@@ -222,8 +213,8 @@ No issues found.
 - Use the detected CLI (`gh` or `glab`) for forge
   interactions, not web fetch
 - Create a todo list before starting
-- Cite and link each issue (include CLAUDE.md reference
-  if applicable)
+- Cite and link each issue (include coding standards
+  reference if applicable)
 - Links must use full SHA:
   - GitHub: `https://github.com/org/repo/blob/abc123.../file.ts#L13-L17`
   - GitLab: `https://gitlab.com/org/repo/-/blob/abc123.../file.ts#L13-17`
