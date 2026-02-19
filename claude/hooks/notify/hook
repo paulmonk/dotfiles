@@ -1,16 +1,206 @@
-#!/usr/bin/env bash
-#/ Thin wrapper that delegates to the shared agent-notify script.
-#/
-#/ Claude Code passes JSON on stdin and expects it back on stdout.
-#/ agent-notify handles the passthrough automatically when reading
-#/ from stdin.
-set -o errexit -o errtrace -o pipefail -o nounset
+#!/usr/bin/env python3
+"""Claude-specific desktop notification hook.
 
-if ! command -v agent-notify &>/dev/null; then
-  echo "[notify] agent-notify not found on PATH. Run 'just install' to set up." >&2
-  # Maintain passthrough contract: forward stdin to stdout.
-  cat
-  exit 0
-fi
+Reads Claude hook JSON from stdin, sends notifications for selected events,
+and always writes the input payload back to stdout to satisfy Claude's
+hook passthrough contract.
+"""
 
-exec agent-notify
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any, Final, TextIO
+
+# Claude keeps stdin open during cancels/timeouts, so we read incrementally
+# and cap total bytes.
+MAX_STDIN_BYTES: Final[int] = 1024 * 1024
+CHUNK_SIZE: Final[int] = 4096
+MAX_PARSE_BUFFER: Final[int] = 65536
+
+
+def _log(message: str) -> None:
+    """Write diagnostic output.
+
+    Args:
+        message: Log line content.
+    """
+    sys.stderr.write(f"{message}\n")
+
+
+def _read_stdin_json(
+    stream: TextIO = sys.stdin, *, max_size: int = MAX_STDIN_BYTES
+) -> dict[str, Any]:
+    """Read one complete JSON object from stdin without waiting for EOF.
+
+    Args:
+        stream: Input text stream.
+        max_size: Maximum number of buffered bytes before failing.
+
+    Returns:
+        Parsed JSON object, or an empty dictionary on EOF.
+
+    Raises:
+        json.JSONDecodeError: If JSON is incomplete or malformed.
+    """
+    decoder = json.JSONDecoder()
+    buffer = ""
+    encoding = getattr(stream, "encoding", "utf-8") or "utf-8"
+    binary_stream = getattr(stream, "buffer", None)
+
+    if binary_stream is not None:
+        read_fn = getattr(binary_stream, "read1", None) or binary_stream.read
+
+        def _read_chunk() -> str:
+            chunk = read_fn(CHUNK_SIZE)
+            return chunk.decode(encoding, errors="replace") if chunk else ""
+    else:
+
+        def _read_chunk() -> str:
+            return stream.read(CHUNK_SIZE)
+
+    while True:
+        chunk = _read_chunk()
+        if not chunk:
+            if buffer.strip():
+                raise json.JSONDecodeError("Incomplete JSON input", buffer, len(buffer))
+            return {}
+
+        buffer += chunk
+        if len(buffer) > max_size:
+            raise json.JSONDecodeError("Input exceeds max size", buffer[:100], 0)
+        buffer = buffer.lstrip()
+        if not buffer:
+            continue
+
+        try:
+            result, _ = decoder.raw_decode(buffer)
+            if isinstance(result, dict):
+                return result
+            return {}
+        except json.JSONDecodeError:
+            if len(buffer) > MAX_PARSE_BUFFER:
+                raise json.JSONDecodeError(
+                    "Buffer exceeded 64 KiB without completing a JSON object",
+                    buffer[:200],
+                    0,
+                )
+            continue
+
+
+def _project_context(*, cwd: str, session_id: str) -> str:
+    """Build a compact subtitle for notifications.
+
+    Args:
+        cwd: Working directory path.
+        session_id: Claude session identifier.
+
+    Returns:
+        Formatted subtitle text.
+    """
+    project = Path(cwd).name if cwd else ""
+    short_id = session_id[:7] if session_id else ""
+    if short_id:
+        return f"{project} ({short_id})"
+    return project
+
+
+def _send_notification(*, title: str, message: str, subtitle: str, group: str) -> None:
+    """Send a notification via terminal-notifier.
+
+    Args:
+        title: Notification title.
+        message: Notification body.
+        subtitle: Optional subtitle line.
+        group: Notification group identifier.
+    """
+    cmd = [
+        "terminal-notifier",
+        "-title",
+        title,
+        "-message",
+        message,
+        "-group",
+        group,
+        "-ignoreDnD",
+    ]
+    if subtitle:
+        cmd.extend(["-subtitle", subtitle])
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=5, check=False)
+        if result.returncode != 0:
+            _log(
+                f"[claude-notify] terminal-notifier failed "
+                f"(exit {result.returncode}): {result.stderr.strip()}"
+            )
+    except OSError as exc:
+        _log(f"[claude-notify] terminal-notifier unavailable: {exc}")
+
+
+def _handle_payload(payload: dict[str, Any]) -> None:
+    """Handle supported Claude hook events.
+
+    Args:
+        payload: Parsed Claude hook payload.
+    """
+    hook_event = payload.get("hook_event_name", "")
+    if not isinstance(hook_event, str):
+        return
+
+    cwd = payload.get("cwd", "")
+    if not isinstance(cwd, str):
+        cwd = ""
+    session_id = payload.get("session_id", "")
+    if not isinstance(session_id, str):
+        session_id = ""
+    subtitle = _project_context(cwd=cwd, session_id=session_id)
+
+    if hook_event == "Notification":
+        notification_type = payload.get("notification_type", "")
+        if notification_type == "permission_prompt":
+            _send_notification(
+                title="Claude Code",
+                message="Permission needed",
+                subtitle=subtitle,
+                group="claude-code",
+            )
+    elif hook_event == "Stop":
+        _send_notification(
+            title="Claude Code",
+            message="Task completed",
+            subtitle=subtitle,
+            group="claude-code",
+        )
+
+
+def main() -> int:
+    """Process Claude hook input and preserve passthrough semantics.
+
+    Returns:
+        Process exit status.
+    """
+    payload: dict[str, Any] = {}
+    try:
+        payload = _read_stdin_json()
+        if payload:
+            _handle_payload(payload)
+        else:
+            _log("[claude-notify] Empty payload (EOF with no data)")
+    except (json.JSONDecodeError, ValueError) as exc:
+        _log(f"[claude-notify] Invalid input: {exc}")
+    except OSError as exc:
+        _log(f"[claude-notify] OS error: {exc}")
+    finally:
+        try:
+            sys.stdout.write(json.dumps(payload))
+        except (OSError, TypeError, ValueError) as exc:
+            _log(f"[claude-notify] Failed to write passthrough: {exc}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

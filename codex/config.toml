@@ -13,6 +13,7 @@
 # - MCP servers, profiles, and model providers are examples; remove or edit.
 # =================================================================================
 model = "gpt-5.3-codex"
+model_reasoning_effort = "high"
 
 # Project instructions
 project_doc_fallback_filenames = ["CLAUDE.md"]
@@ -21,15 +22,17 @@ project_doc_max_bytes = 131_072
 # Sandbox: confine writes to workspace, disable network by default.
 sandbox_mode = "workspace-write"
 
-# Auto-approve commands in sandbox; escalate to user on failure.
-approval_policy = "on-failure"
+# Auto-approve commands in sandbox; escalate to user when needed.
+# We have a yolo alias for never invocation.
+approval_policy = "on-request"
 
 # Updates installed via Homebrew
 check_for_update_on_startup = false
 
-# Notifications: Codex passes a JSON string as argv[1].
-# agent-notify auto-detects the Codex payload format.
-notify = ["agent-notify"]
+# Notifications/events: Codex passes a JSON string as argv[1].
+# Use a Codex-specific event listener so Codex automation can evolve
+# independently from shared notifier behavior used by other agents.
+notify = ["codex-event-listener"]
 
 # =================================================================================
 # UI, Notifications, and Misc (tables)
@@ -39,8 +42,15 @@ notify = ["agent-notify"]
 # Examples: false | ["agent-turn-complete", "approval-requested"]
 notifications = false
 
+# Configure the statusline segments shown in the TUI.
+status_line = ["model-with-reasoning", "current-dir", "session-id", "git-branch", "context-used", "used-tokens"]
+
 # Show onboarding tooltips in the welcome screen. Default: true
 show_tooltips = false
+
+[analytics]
+# Disable analytics/telemetry across all Codex product surfaces.
+enabled = false
 
 [feedback]
 # Control whether users can submit feedback from `/feedback`.
@@ -92,3 +102,7 @@ enabled = true
 command = "uvx"
 args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex", "--open-web-dashboard", "False"]
 enabled = true
+
+[features]
+# Experimental feature that allows Codex to delegate work to sub-agents.
+multi_agent = true

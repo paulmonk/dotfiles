@@ -33,7 +33,7 @@ summarise_conversation() {
   fi
 
   local escaped_cwd
-  escaped_cwd=$(echo "${SESSION_CWD}" | tr '/' '-')
+  escaped_cwd=$(echo "${SESSION_CWD}" | tr '/.' '-')
   local jsonl="${HOME}/.claude/projects/${escaped_cwd}/${SESSION_ID}.jsonl"
   if [[ ! -f ${jsonl} ]]; then
     log "No session JSONL at ${jsonl}, skipping"

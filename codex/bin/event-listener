@@ -1,0 +1,613 @@
+#!/usr/bin/env python3
+"""Codex event listener.
+
+Handles Codex `notify` payloads and keeps Codex-specific automation separate
+from the shared desktop notification utility.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import json
+import shutil
+import subprocess
+import sys
+import tempfile
+import textwrap
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any, Final
+
+# =============================================================================
+# Constants and Typed Records
+# =============================================================================
+
+# Default Codex home used for reading session transcripts.
+DEFAULT_CODEX_HOME: Final[Path] = Path.home() / ".codex"
+
+# Notification body hard cap to avoid oversized desktop alerts.
+MAX_MESSAGE_LENGTH: Final[int] = 200
+
+# Maximum dialogue size passed to the summarizer model.
+MAX_SUMMARY_INPUT_CHARS: Final[int] = 80_000
+
+# Lightweight Codex model for summary generation.
+SUMMARY_MODEL: Final[str] = "gpt-5-codex-mini"
+
+# Reasoning effort for Codex self-summarization calls.
+SUMMARY_REASONING_EFFORT: Final[str] = "low"
+
+
+@dataclass(frozen=True, kw_only=True)
+class EventRecord:
+    """Structured envelope for persisted event logs.
+
+    Attributes:
+        received_at: ISO-8601 timestamp for event receipt.
+        payload: Raw notify payload.
+    """
+
+    received_at: str
+    payload: dict[str, Any]
+
+
+@dataclass(frozen=True, kw_only=True)
+class CommandAuditEntry:
+    """Structured command audit record.
+
+    Attributes:
+        timestamp: Event timestamp from the session transcript.
+        command: Shell command string sent to the execution tool.
+    """
+
+    timestamp: str
+    command: str
+
+
+# =============================================================================
+# Shared Utilities
+# =============================================================================
+
+def _log_error(message: str) -> None:
+    """Write a listener-scoped error message to stderr.
+
+    Args:
+        message: Error message text.
+    """
+    sys.stderr.write(f"[codex-event-listener] {message}\n")
+
+
+def _resolve_runtime_root() -> Path:
+    """Resolve where listener output files should be written.
+
+    Returns:
+        Codex home directory for runtime artifacts.
+    """
+    return DEFAULT_CODEX_HOME
+
+
+def _load_payload() -> dict[str, Any]:
+    """Parse the JSON event payload from argv[1].
+
+    Returns:
+        Parsed payload dictionary, or an empty dictionary on failure.
+    """
+    if len(sys.argv) < 2:
+        return {}
+
+    try:
+        value = json.loads(sys.argv[1])
+    except json.JSONDecodeError as exc:
+        _log_error(f"invalid JSON payload: {exc}")
+        return {}
+
+    if isinstance(value, dict):
+        return value
+    return {}
+
+
+def _append_jsonl(path: Path, record: EventRecord) -> None:
+    """Append one JSON record to a JSONL file path.
+
+    Args:
+        path: Destination JSONL file path.
+        record: Typed event record to append.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(asdict(record), ensure_ascii=True))
+        f.write("\n")
+
+
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    """Read a JSONL file and return object records, skipping invalid rows.
+
+    Args:
+        path: Source JSONL file path.
+
+    Returns:
+        Parsed object rows from the file.
+    """
+    records: list[dict[str, Any]] = []
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                parsed = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed, dict):
+                records.append(parsed)
+    return records
+
+
+def _find_session_file(*, thread_id: str, runtime_root: Path) -> Path | None:
+    """Locate the newest session transcript file for a thread id.
+
+    Args:
+        thread_id: Codex thread identifier.
+        runtime_root: Runtime root directory containing session transcripts.
+
+    Returns:
+        Latest matching transcript path, or None when no match exists.
+    """
+    pattern = f"rollout-*-{thread_id}.jsonl"
+    matches = list((runtime_root / "sessions").glob(f"**/{pattern}"))
+    if not matches:
+        return None
+    return max(matches, key=lambda p: p.stat().st_mtime)
+
+
+def _safe_json_load(text: str) -> dict[str, Any]:
+    """Decode JSON into an object, returning an empty mapping on failure.
+
+    Args:
+        text: JSON string to parse.
+
+    Returns:
+        Parsed dictionary when valid, otherwise an empty dictionary.
+    """
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        return {}
+    if isinstance(value, dict):
+        return value
+    return {}
+
+
+# =============================================================================
+# Hook: notify (all events)
+# =============================================================================
+
+def _project_context(*, cwd: str, session_id: str) -> str:
+    """Format a compact project/session subtitle.
+
+    Args:
+        cwd: Working directory path from the event payload.
+        session_id: Session or thread identifier.
+
+    Returns:
+        Formatted subtitle string for desktop notifications.
+    """
+    project = Path(cwd).name if cwd else ""
+    short_id = session_id[:7] if session_id else ""
+    if short_id:
+        return f"{project} ({short_id})"
+    return project
+
+
+def _truncate(*, text: str, limit: int = MAX_MESSAGE_LENGTH) -> str:
+    """Truncate text to a maximum character count with ellipsis.
+
+    Args:
+        text: Input text to truncate.
+        limit: Maximum output length.
+
+    Returns:
+        Truncated text when needed, otherwise the original text.
+    """
+    if len(text) > limit:
+        return text[: limit - 3] + "..."
+    return text
+
+
+def _send_notification(*, title: str, message: str, subtitle: str, group: str) -> None:
+    """Send a desktop notification via terminal-notifier.
+
+    Args:
+        title: Notification title.
+        message: Notification body.
+        subtitle: Optional subtitle line.
+        group: Notification grouping key.
+    """
+    cmd = [
+        "terminal-notifier",
+        "-title",
+        title,
+        "-message",
+        message,
+        "-group",
+        group,
+        "-ignoreDnD",
+    ]
+    if subtitle:
+        cmd.extend(["-subtitle", subtitle])
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+        if result.returncode != 0:
+            _log_error(
+                f"terminal-notifier failed ({result.returncode}): {result.stderr.strip()}"
+            )
+    except OSError as exc:
+        _log_error(f"terminal-notifier unavailable: {exc}")
+
+
+def _notify_from_payload(*, payload: dict[str, Any]) -> None:
+    """Send a desktop notification from event payload data.
+
+    Args:
+        payload: Parsed Codex notify payload.
+    """
+    thread_id = payload.get("thread-id", "")
+    if not isinstance(thread_id, str):
+        thread_id = ""
+    cwd = payload.get("cwd", "")
+    if not isinstance(cwd, str):
+        cwd = ""
+    last_message = payload.get("last-assistant-message", "Turn complete")
+    if not isinstance(last_message, str):
+        last_message = "Turn complete"
+
+    _send_notification(
+        title="Codex",
+        message=_truncate(text=last_message),
+        subtitle=_project_context(cwd=cwd, session_id=thread_id),
+        group=f"codex-{thread_id}" if thread_id else "codex",
+    )
+
+
+def _handle_notify_hook(*, payload: dict[str, Any], event_log: Path) -> None:
+    """Handle baseline notify behavior for every incoming payload.
+
+    Args:
+        payload: Parsed Codex notify payload.
+        event_log: JSONL event log destination.
+    """
+    event_record = EventRecord(
+        received_at=dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        payload=payload,
+    )
+    try:
+        _append_jsonl(event_log, event_record)
+    except OSError as exc:
+        _log_error(f"failed to write event log: {exc}")
+
+    _notify_from_payload(payload=payload)
+
+
+# =============================================================================
+# Hook: agent-turn-complete
+# =============================================================================
+
+def _extract_exec_commands(events: list[dict[str, Any]]) -> list[CommandAuditEntry]:
+    """Extract timestamped exec_command invocations from session events.
+
+    Args:
+        events: Parsed session event objects.
+
+    Returns:
+        Typed command audit entries.
+    """
+    commands: list[CommandAuditEntry] = []
+    for event in events:
+        if event.get("type") != "response_item":
+            continue
+
+        payload = event.get("payload")
+        if not isinstance(payload, dict):
+            continue
+        if (
+            payload.get("type") != "function_call"
+            or payload.get("name") != "exec_command"
+        ):
+            continue
+
+        args = payload.get("arguments", "")
+        if not isinstance(args, str):
+            continue
+        cmd = _safe_json_load(args).get("cmd", "")
+        if not isinstance(cmd, str) or not cmd:
+            continue
+
+        timestamp = event.get("timestamp")
+        if not isinstance(timestamp, str):
+            continue
+
+        commands.append(CommandAuditEntry(timestamp=timestamp, command=cmd))
+    return commands
+
+
+def _update_bash_audit_log(*, thread_id: str, session_file: Path, bash_log_dir: Path) -> None:
+    """Rewrite the thread bash audit log from session transcript events.
+
+    Args:
+        thread_id: Codex thread identifier.
+        session_file: Source session transcript file.
+        bash_log_dir: Destination directory for per-thread bash logs.
+    """
+    events = _read_jsonl(session_file)
+    commands = _extract_exec_commands(events)
+
+    bash_log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = bash_log_dir / f"{thread_id}.log"
+    with log_file.open("w", encoding="utf-8") as f:
+        for entry in commands:
+            f.write(f"[{entry.timestamp}] {entry.command}\n")
+
+
+def _extract_dialogue(events: list[dict[str, Any]]) -> list[str]:
+    """Extract user/assistant text lines from session events.
+
+    Args:
+        events: Parsed session event objects.
+
+    Returns:
+        Speaker-prefixed dialogue lines.
+    """
+    lines: list[str] = []
+    for event in events:
+        if event.get("type") != "response_item":
+            continue
+        payload = event.get("payload")
+        if not isinstance(payload, dict):
+            continue
+        if payload.get("type") != "message":
+            continue
+
+        role = payload.get("role")
+        if role not in {"user", "assistant"}:
+            continue
+
+        content = payload.get("content")
+        if not isinstance(content, list):
+            continue
+
+        for item in content:
+            if not isinstance(item, dict):
+                continue
+            text = item.get("text")
+            if not isinstance(text, str):
+                text = item.get("input_text")
+            if not isinstance(text, str):
+                continue
+            cleaned = text.strip()
+            if not cleaned:
+                continue
+            speaker = "Human" if role == "user" else "Assistant"
+            lines.append(f"{speaker}: {cleaned}")
+
+    return lines
+
+
+def _write_memory_episode(
+    *, thread_id: str, cwd: str, session_file: Path, memory_dir: Path
+) -> None:
+    """Write a markdown conversation snapshot for qmd indexing.
+
+    Args:
+        thread_id: Codex thread identifier.
+        cwd: Working directory from the event payload.
+        session_file: Source session transcript file.
+        memory_dir: Destination directory for markdown episodes.
+    """
+    events = _read_jsonl(session_file)
+    dialogue = _extract_dialogue(events)
+    if not dialogue:
+        return
+
+    summary = _summarize_dialogue(dialogue=dialogue)
+
+    project_name = Path(cwd).name if cwd else "unknown"
+    timestamp = dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    short_id = thread_id[:7]
+    episode_file = memory_dir / f"codex-{short_id}.md"
+
+    memory_dir.mkdir(parents=True, exist_ok=True)
+    episode_lines = [
+        "---",
+        f"date: {timestamp}",
+        f"project: {project_name}",
+        f"directory: {cwd or 'unknown'}",
+        f"session_id: {short_id}",
+        "type: conversation",
+        "agent: codex",
+        "---",
+        "",
+        f"# Conversation: {project_name} (Codex)",
+        "",
+        summary,
+        "",
+    ]
+    with episode_file.open("w", encoding="utf-8") as f:
+        f.write("\n".join(episode_lines))
+
+
+def _summarize_dialogue(*, dialogue: list[str]) -> str:
+    """Summarize dialogue with an LLM and fallback to transcript snapshot.
+
+    Args:
+        dialogue: Extracted human/assistant conversation lines.
+
+    Returns:
+        Markdown summary text suitable for memory episode files.
+    """
+    transcript = "\n".join(dialogue)
+    if len(transcript) > MAX_SUMMARY_INPUT_CHARS:
+        transcript = transcript[-MAX_SUMMARY_INPUT_CHARS:]
+
+    codex_path = shutil.which("codex")
+    if codex_path is None:
+        return _snapshot_fallback(dialogue=dialogue)
+
+    prompt = textwrap.dedent(
+        f"""\
+        Summarise this Codex conversation concisely. Structure:
+
+        ## Goals
+        What the user wanted to achieve.
+
+        ## Decisions
+        Key choices made and their rationale.
+
+        ## Outcomes
+        What was accomplished, what remains.
+
+        Keep it under 300 words. Focus on decisions and rationale, not individual tool calls.
+
+        <conversation>
+        {transcript}
+        </conversation>
+        """
+    )
+
+    with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as temp_output:
+        cmd = [
+            codex_path,
+            "exec",
+            "-",
+            "--model",
+            SUMMARY_MODEL,
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--color",
+            "never",
+            "--output-last-message",
+            temp_output.name,
+            "-c",
+            f'model_reasoning_effort="{SUMMARY_REASONING_EFFORT}"',
+            "-c",
+            "notify=[]",
+        ]
+
+        try:
+            result = subprocess.run(
+                cmd,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError) as exc:
+            _log_error(f"summarizer execution failed: {exc}")
+            return _snapshot_fallback(dialogue=dialogue)
+
+        try:
+            summary_text = Path(temp_output.name).read_text(encoding="utf-8").strip()
+        except OSError as exc:
+            _log_error(f"summarizer output read failed: {exc}")
+            return _snapshot_fallback(dialogue=dialogue)
+
+        if result.returncode != 0 or not summary_text:
+            _log_error(
+                f"summarizer returned empty/non-zero result: {result.returncode}"
+            )
+            return _snapshot_fallback(dialogue=dialogue)
+
+        return summary_text
+
+
+def _snapshot_fallback(*, dialogue: list[str]) -> str:
+    """Return a transcript snapshot when model summarization is unavailable.
+
+    Args:
+        dialogue: Extracted human/assistant conversation lines.
+
+    Returns:
+        Markdown fallback section with recent transcript lines.
+    """
+    return "## Transcript Snapshot\n\n" + "\n\n".join(dialogue[-120:])
+
+
+def _handle_agent_turn_complete_hook(
+    *,
+    payload: dict[str, Any],
+    runtime_root: Path,
+    bash_log_dir: Path,
+    memory_dir: Path,
+) -> None:
+    """Process turn-complete enrichment outputs.
+
+    Args:
+        payload: Parsed Codex notify payload.
+        runtime_root: Runtime root directory for session discovery.
+        bash_log_dir: Destination directory for per-thread bash logs.
+        memory_dir: Destination directory for markdown episodes.
+    """
+    cwd = payload.get("cwd", "")
+    thread_id = payload.get("thread-id")
+    if not isinstance(thread_id, str) or not thread_id:
+        return
+
+    session_file = _find_session_file(thread_id=thread_id, runtime_root=runtime_root)
+    if session_file is None:
+        return
+
+    try:
+        _update_bash_audit_log(
+            thread_id=thread_id,
+            session_file=session_file,
+            bash_log_dir=bash_log_dir,
+        )
+        _write_memory_episode(
+            thread_id=thread_id,
+            cwd=cwd if isinstance(cwd, str) else "",
+            session_file=session_file,
+            memory_dir=memory_dir,
+        )
+    except OSError as exc:
+        _log_error(f"listener write failed: {exc}")
+    except ValueError as exc:
+        _log_error(f"listener parse failed: {exc}")
+
+
+# =============================================================================
+# Entrypoint
+# =============================================================================
+
+def main() -> int:
+    """Process one Codex notify event and update local artifacts.
+
+    Returns:
+        Process exit status code.
+    """
+    payload = _load_payload()
+    if not payload:
+        return 0
+
+    runtime_root = _resolve_runtime_root()
+    event_log = runtime_root / "logs" / "events" / "events.jsonl"
+    bash_log_dir = runtime_root / "logs" / "bash"
+    memory_dir = runtime_root / "memory-episodes"
+
+    _handle_notify_hook(payload=payload, event_log=event_log)
+
+    if payload.get("type") != "agent-turn-complete":
+        return 0
+
+    _handle_agent_turn_complete_hook(
+        payload=payload,
+        runtime_root=runtime_root,
+        bash_log_dir=bash_log_dir,
+        memory_dir=memory_dir,
+    )
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

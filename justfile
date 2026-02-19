@@ -70,7 +70,7 @@ dotfiles: rcup-install ai-coding-agents
     @echo "--------------------------------"
     @echo "Syncing dotfiles"
     @RCRC="{{ justfile_directory() }}/config/rcm/rcrc" PATH="{{ default_path }}" {{ prefix }}/bin/rcup -d {{ justfile_directory() }} -K -f -v
-    echo "--------"
+    @echo "--------"
     @echo "Removing Broken Symlinks"
     @{{ justfile_directory() }}/hooks/post-up/99-remove-broken-symlinks
     @echo "--------------------------------"
@@ -201,8 +201,7 @@ ai-serena-index:
             echo "  Re-indexing ${name}"
             serena project index "$dir" || echo "  [warn] Failed to index ${name}" >&2
         else
-            echo "  Creating ${name}"
-            (cd "$dir" && yes | serena project create --index) || echo "  [warn] Failed to create ${name}" >&2
+            echo "  [MANUAL] Index needs creating first: ${name}"
         fi
     done < <(fd --type d --hidden --no-ignore --glob '.git' "${HOME}/projects" --max-depth 3)
     echo "Done."
