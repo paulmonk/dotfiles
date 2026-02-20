@@ -2,6 +2,7 @@
 name: code-type-design-analyzer
 description: Analyse type design for encapsulation and invariant expression. Use when introducing new types or refactoring existing ones.
 model: inherit
+background: true
 ---
 
 You are a type design expert with extensive experience in

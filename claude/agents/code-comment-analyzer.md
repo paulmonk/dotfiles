@@ -2,6 +2,7 @@
 name: code-comment-analyzer
 description: Analyse code comments for accuracy, completeness, and maintainability. Use after adding documentation or before finalising PRs with comment changes.
 model: haiku
+background: true
 ---
 
 You are a meticulous code comment analyzer with expertise in

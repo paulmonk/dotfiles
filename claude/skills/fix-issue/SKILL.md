@@ -69,8 +69,7 @@ build complete understanding before planning.
 If the issue involves unfamiliar APIs, libraries, error
 messages, or domain concepts, search for official documentation
 and known solutions. Use the MCP tools configured
-(exa for web search, context7 for library docs, firecrawl for
-page content).
+(exa for web search and page content, context7 for library docs).
 
 Skip this step when the fix is clear from the codebase alone.
 

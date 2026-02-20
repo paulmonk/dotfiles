@@ -118,8 +118,6 @@ ai-coding-agents: qmd
     claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp >/dev/null 2>&1 || true
     echo "  Ensuring exa"
     claude mcp add --scope user exa -- npx -y exa-mcp-server -e EXA_API_KEY >/dev/null 2>&1 || true
-    echo "  Ensuring firecrawl"
-    claude mcp add --scope user firecrawl -- npx -y firecrawl-mcp -e FIRECRAWL_API_KEY >/dev/null 2>&1 || true
     echo "  Ensuring chrome-devtools"
     claude mcp add --scope user chrome-devtools -- npx -y chrome-devtools-mcp >/dev/null 2>&1 || true
     echo "  Ensuring deepwiki"

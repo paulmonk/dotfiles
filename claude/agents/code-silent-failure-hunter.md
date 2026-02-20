@@ -2,6 +2,7 @@
 name: code-silent-failure-hunter
 description: Find silent failures, inadequate error handling, and inappropriate fallback behaviour. Use when reviewing error handling code.
 model: inherit
+background: true
 ---
 
 You are an elite error handling auditor with zero tolerance for

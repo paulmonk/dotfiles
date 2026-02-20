@@ -60,7 +60,7 @@ if [ "$KERNEL" = "Darwin" ]; then
 
   # XDG
   export XDG_RUNTIME_DIR="/tmp/run"
-  [ ! -d "$XDG_RUNTIME_DIR" ] && mkdir -m 0700 "$XDG_RUNTIME_DIR"
+  mkdir -p -m 0700 "$XDG_RUNTIME_DIR" 2>/dev/null || true
 
   # Use homebrew GNU tools instead of system BSD
   # =============
@@ -100,7 +100,7 @@ if [ "$KERNEL" = "Darwin" ]; then
   # Xcode
   # BUILD Flags
   # Ensure CommandLineTools SDK is used correctly
-  CFLAGS="-I$(xcrun --show-sdk-path)/usr/include -I${BREW_PREFIX}/include -I/usr/local/include"
+  CFLAGS="-I$(xcrun --show-sdk-path 2>/dev/null)/usr/include -I${BREW_PREFIX}/include -I/usr/local/include"
   export CFLAGS
   export CPPFLAGS
   export LDFLAGS
@@ -117,13 +117,13 @@ if [ "$KERNEL" = "Darwin" ]; then
   export TERMINAL="open"
 
   # CPU
-  CPU_CORES="$(sysctl -n hw.ncpu)"
+  CPU_CORES="$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 else
   # Prefix
   export PREFIX="/usr"
 
   # CPU
-  CPU_CORES="$(nproc)"
+  CPU_CORES="$(nproc 2>/dev/null || echo 4)"
 fi
 
 # Local Bins (user)
@@ -144,7 +144,7 @@ elif command -v vim >/dev/null 2>&1; then
   export EDITOR="vim"
 else
   export EDITOR="vi"
-  # Don’t clear the screen after quitting a manual page
+  # Don't clear the screen after quitting a manual page
 fi
 export VISUAL="$EDITOR"
 
@@ -156,6 +156,10 @@ export ACK_PAGER_COLOR="less -x4SRFX"
 
 # Bat
 export BAT_THEME="Solarized (dark)"
+
+# Beads
+# Daemon does not work well with worktrees
+export BEADS_NO_DAEMON="1"
 
 # Curl
 export CURL_HOME="${XDG_CONFIG_HOME}/curl"
@@ -173,9 +177,6 @@ fi
 
 # Facebook PathPicker
 export FPP_DIR="${XDG_CACHE_HOME}/fpp"
-
-# Firecrawl
-export FIRECRAWL_NO_TELEMETRY="1"
 
 # GCC
 export GCC_COLORS="1"
@@ -282,6 +283,7 @@ export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export PATH="${PYENV_ROOT}/shims:${PATH}"
 
 # Python: uv
+export UV_CACHE_DIR="${XDG_CACHE_HOME}/uv"
 export UV_PYTHON_PREFERENCE=only-managed
 
 # Python: PIPX

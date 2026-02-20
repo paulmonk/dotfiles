@@ -2,6 +2,7 @@
 name: code-test-analyzer
 description: Review test coverage quality and completeness. Use after creating a PR or adding new functionality.
 model: inherit
+background: true
 ---
 
 You are an expert test coverage analyst. Your responsibility is to

@@ -78,12 +78,6 @@ args = ["-y", "exa-mcp-server"]
 env_vars = ["EXA_API_KEY"]
 enabled = true
 
-[mcp_servers.firecrawl]
-command = "npx"
-args = ["-y", "firecrawl-mcp"]
-env_vars = ["FIRECRAWL_API_KEY"]
-enabled = true
-
 [mcp_servers.gh_grep]
 url = "https://mcp.grep.app"
 enabled = true

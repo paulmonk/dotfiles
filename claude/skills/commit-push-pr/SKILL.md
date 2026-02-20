@@ -130,10 +130,12 @@ If that also doesn't exist, use a simple format:
 
 #### Create draft
 
-Write the body to a temp file to preserve formatting:
+Write the body to a unique temp file (avoids clobbering when
+multiple agents run concurrently):
 
 ```bash
-cat > /tmp/ai-agent/pr-body.md <<'EOF'
+PR_BODY=$(mktemp "${TMPDIR:-/tmp}/pr-body-XXXXXXXX.md")
+cat > "$PR_BODY" <<'EOF'
 <TEMPLATE_BODY>
 EOF
 ```
@@ -144,7 +146,7 @@ EOF
 GH_PROMPT_DISABLED=1 GIT_TERMINAL_PROMPT=0 \
   gh pr create --draft \
     --title "<TITLE>" \
-    --body-file /tmp/ai-agent/pr-body.md \
+    --body-file "$PR_BODY" \
     --head "$(git branch --show-current)"
 ```
 
@@ -153,12 +155,14 @@ GH_PROMPT_DISABLED=1 GIT_TERMINAL_PROMPT=0 \
 ```bash
 glab mr create --draft \
   --title "<TITLE>" \
-  --description "$(cat /tmp/ai-agent/pr-body.md)" \
+  --description "$(cat "$PR_BODY")" \
   --source-branch "$(git branch --show-current)"
 ```
 
 Title must be under 70 chars. Description should summarise the
-changes and reference the issue if one was provided.
+changes and reference the issue if one was provided. Keep the description
+concise but aligned with the template and do not worry about line-length
+constraints.
 
 ### 6. Link Back to Issue (if applicable)
 

@@ -16,7 +16,7 @@ shebang_to_rules() {
   local interpreter="${1}"
   case "${interpreter}" in
   *bash* | */sh | */sh\ *) echo "${HOME}/.claude/rules/shell.md" ;;
-  *python*) echo "${HOME}/.claude/rules/python.md" ;;
+  *python* | *uv\ run\ --script*) echo "${HOME}/.claude/rules/python.md" ;;
   *node*) echo "${HOME}/.claude/rules/typescript.md" ;;
   *) echo "" ;;
   esac

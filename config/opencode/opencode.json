@@ -86,14 +86,6 @@
       "url": "https://mcp.context7.com/mcp",
       "enabled": true
     },
-    "firecrawl": {
-      "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
-      "environment": {
-        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
-      },
-      "enabled": true
-    },
     "gcloud": {
       "type": "local",
       "command": ["npx", "-y", "@google-cloud/gcloud-mcp"],

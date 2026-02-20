@@ -54,6 +54,12 @@ alias fpath="echo \${FPATH} | tr ':' '\n' | nl"
 alias path="echo \${PATH} | tr ':' '\n' | nl"
 
 
+# Directory traversal
+# -------------------------
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+
 # General aliases
 # -------------------------
 alias _="sudo"
@@ -197,7 +203,21 @@ fi
 if (( $+commands[claude] )); then
   # Bypasses all permission prompts. This is the recommended way to run Claude
   # for maximum throughput, pair it with sandboxing.
-  alias claude-yolo="claude --dangerously-skip-permissions"
+  claude-yolo() {
+    local -a extra_dirs
+    local yolo_cache
+    yolo_cache="$(mktemp -d)"
+
+    # Isolate tool caches from the user's personal cache. Yolo sessions
+    # skip permission prompts, so they shouldn't pollute or corrupt
+    # caches shared with the regular shell. mktemp -d also avoids the
+    # sandbox's .git path deny (uv's cache contains a .git sentinel).
+    extra_dirs+=(--add-dir "${yolo_cache}")
+
+    XDG_CACHE_HOME="${yolo_cache}" \
+    UV_CACHE_DIR="${yolo_cache}/uv" \
+    claude --dangerously-skip-permissions "${extra_dirs[@]}" "$@"
+  }
 
   # claude-local wraps claude with the local server env vars and
   # disables telemetry pings that won't reach Anthropic anyway.
@@ -212,23 +232,21 @@ fi
 # Codex
 if (( $+commands[codex] )); then
   # Bypasses approval prompts while keeping workspace sandbox intact.
-  # In git worktrees, add git metadata dirs so operations that write refs/index
-  # (stash, branch/worktree creation, etc.) are not blocked.
   codex-yolo() {
     local -a extra_dirs
+    local yolo_cache
+    yolo_cache="$(mktemp -d)"
 
-    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-      local git_dir git_common_dir
-      git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)"
-      git_common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+    # Isolate tool caches from the user's personal cache (see claude-yolo).
+    extra_dirs+=(--add-dir "${yolo_cache}")
 
-      [[ -n "${git_dir}" ]] && extra_dirs+=(--add-dir "${git_dir}")
-      if [[ -n "${git_common_dir}" && "${git_common_dir}" != "${git_dir}" ]]; then
-        extra_dirs+=(--add-dir "${git_common_dir}")
-      fi
-    fi
-
-    codex --ask-for-approval never --sandbox workspace-write "${extra_dirs[@]}" "$@"
+    XDG_CACHE_HOME="${yolo_cache}" \
+    UV_CACHE_DIR="${yolo_cache}/uv" \
+    codex \
+      --ask-for-approval never \
+      --sandbox workspace-write \
+      --config "sandbox_workspace_write.network_access=true" \
+      "${extra_dirs[@]}" "$@"
   }
 fi
 

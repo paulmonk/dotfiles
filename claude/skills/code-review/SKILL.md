@@ -41,6 +41,7 @@ for use throughout the review.
 
 - If argument is a number or URL: fetch with the detected
   CLI (`gh pr view` or `glab mr view`)
+- If not possible check for a git worktree (use wt) for the branch
 - Otherwise: use `git diff` to identify changed files
 - Parse arguments for specific review aspects
 
