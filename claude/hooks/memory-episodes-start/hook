@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# SessionStart hook: surface recent memory episode context for the current project.
+# Reads pre-computed index.jsonl and outputs up to 5 recent session summaries.
+#
+# errexit intentionally omitted so failures don't block session start.
+set -o errtrace -o pipefail -o nounset
+
+readonly INDEX_FILE="${HOME}/.claude/memory-episodes/index.jsonl"
+
+main() {
+  export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+  local input
+  input=$(cat)
+
+  [[ -f "${INDEX_FILE}" ]] || exit 0
+  command -v jq &>/dev/null || exit 0
+
+  local project
+  project=$(jq -r '.cwd // empty' <<<"${input}")
+  [[ -n "${project}" ]] || exit 0
+  project=$(basename "${project}")
+
+  # 14-day cutoff. macOS uses -v flag, GNU date uses -d.
+  local cutoff
+  cutoff=$(date -v-14d +%Y-%m-%d 2>/dev/null) ||
+    cutoff=$(date -d '14 days ago' +%Y-%m-%d 2>/dev/null) ||
+    exit 0
+
+  # Read JSONL, filter by project + recency. try/fromjson skips malformed lines.
+  local lines
+  lines=$(jq -Rr --arg proj "${project}" --arg cutoff "${cutoff}" '
+    try (fromjson | select(.project == $proj and .date >= $cutoff) |
+      "\(.session_id)\t\(.date)\t\(.goals)")
+  ' "${INDEX_FILE}" 2>/dev/null) || true
+
+  [[ -n "${lines}" ]] || exit 0
+
+  # Sort by date descending, dedup by session_id, take 5.
+  local deduped
+  deduped=$(sort -t$'\t' -k2,2r <<<"${lines}" | awk -F'\t' '!seen[$1]++' | head -5) || true
+
+  [[ -n "${deduped}" ]] || exit 0
+
+  echo "# Recent Sessions (${project})"
+  echo ""
+  while IFS=$'\t' read -r _sid date goals; do
+    echo "- (${date}) ${goals}"
+  done <<<"${deduped}"
+}
+
+main
+exit 0

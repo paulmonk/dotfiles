@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #/ Blocks file edits in main checkout when worktrees are configured.
 #/
-#/ Repos with a .worktrees/ directory require sessions to run from within it.
+#/ Repos with a .worktrees/ directory require edits to happen within one.
 #/ This enforces development discipline by preventing accidental edits to the
 #/ main checkout when worktrees are available.
 set -o errexit -o errtrace -o pipefail -o nounset
@@ -10,7 +10,7 @@ set -o errexit -o errtrace -o pipefail -o nounset
 source "${HOME}/.claude/lib/hook-io.sh"
 
 main() {
-  local input tool_name cwd file_path git_root
+  local input tool_name file_path file_dir file_git_root
   input=$(read_hook_input)
 
   tool_name=$(echo "${input}" | jq -r '.tool_name // ""')
@@ -22,61 +22,27 @@ main() {
     ;;
   esac
 
-  cwd=$(echo "${input}" | jq -r '.cwd // ""')
-  [[ -z ${cwd} ]] && {
-    echo "${input}"
-    exit 0
-  }
-
-  # Find git root of cwd.
-  git_root=$(git -C "${cwd}" rev-parse --show-toplevel 2>/dev/null || echo "")
-  [[ -z ${git_root} ]] && {
-    echo "${input}"
-    exit 0
-  }
-
-  # Only enforce if .worktrees/ exists (opt-in).
-  [[ ! -d "${git_root}/.worktrees" ]] && {
-    echo "${input}"
-    exit 0
-  }
-
-  # Get the file path being edited.
+  # Resolve the file being edited and its repo root.
   file_path=$(echo "${input}" | jq -r '.tool_input.file_path // ""')
-
-  # If the target file lives in a different repo, apply that repo's worktree
-  # policy instead. Editing a file in a repo without .worktrees/ should not
-  # be blocked by the cwd repo's requirement.
-  if [[ -n ${file_path} ]]; then
-    local file_dir file_git_root
-    file_dir=$(dirname "${file_path}")
-    file_git_root=$(git -C "${file_dir}" rev-parse --show-toplevel 2>/dev/null || echo "")
-    if [[ -n ${file_git_root} && ${file_git_root} != "${git_root}" ]]; then
-      [[ ! -d "${file_git_root}/.worktrees" ]] && {
-        echo "${input}"
-        exit 0
-      }
-      # The other repo also uses worktrees; check if the file is inside one.
-      [[ ${file_path} == *"/.worktrees/"* ]] && {
-        echo "${input}"
-        exit 0
-      }
-      deny_tool "Edits require a worktree. Run: wt switch -c <branch-name>"
-    fi
-    # Target file is not in any git repo; allow it through.
-    if [[ -z ${file_git_root} ]]; then
-      echo "${input}"
-      exit 0
-    fi
-  fi
-
-  # Allow if cwd is within worktrees.
-  [[ ${cwd} == *"/.worktrees/"* ]] && {
+  [[ -z ${file_path} ]] && {
     echo "${input}"
     exit 0
   }
 
-  # Allow if target file is within worktrees.
+  file_dir=$(dirname "${file_path}")
+  file_git_root=$(git -C "${file_dir}" rev-parse --show-toplevel 2>/dev/null || echo "")
+  [[ -z ${file_git_root} ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Only enforce if .worktrees/ exists in the file's repo (opt-in).
+  [[ ! -d "${file_git_root}/.worktrees" ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Allow if target file is within a worktree.
   [[ ${file_path} == *"/.worktrees/"* ]] && {
     echo "${input}"
     exit 0
@@ -84,6 +50,12 @@ main() {
 
   # Allow plan files (plan mode writes here regardless of cwd).
   [[ ${file_path} == *"/.claude/plans/"* ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  # Allow gitignored files (untracked, safe to edit in main checkout).
+  git -C "${file_git_root}" check-ignore -q "${file_path}" 2>/dev/null && {
     echo "${input}"
     exit 0
   }

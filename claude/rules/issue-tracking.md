@@ -4,6 +4,12 @@ When a project has a `.beads/` directory, use `bd` for all issue
 tracking. Core commands are documented in the beads plugin
 context; this file covers workflow policy.
 
+If a project does not have `.beads/` directory already then
+run `beads init --stealth` to create one.
+
+Issue types: `task`, `bug`, `feature`, `story`, `epic`, `spike`.
+Priority: 0 (critical) to 4 (backlog).
+
 ## Plans Require Issues
 
 When entering plan mode, ensure the work is tracked by a beads
@@ -24,26 +30,33 @@ Exceptions (no issue needed):
 - Apply area labels when creating issues.
 - Run `bd lint <id>` after creating to verify compliance.
 
-## Additional Commands
+## Landing the Plane (Session Completion)
 
-Commands not covered by the beads plugin context:
+**When ending a work session**, you MUST complete ALL steps below.
+Work is NOT complete until `git push` succeeds.
 
-| Command                     | Purpose                               |
-| --------------------------- | ------------------------------------- |
-| `bd stale`                  | Find forgotten issues                 |
-| `bd find-duplicates`        | Find semantically similar issues      |
-| `bd defer <id>`             | Ice-box an issue (removes from ready) |
-| `bd undefer <id>`           | Bring deferred issue back             |
-| `bd graph --all`            | Visualise dependency DAG              |
-| `bd query "expr"`           | Rich filtering with boolean ops       |
-| `bd label add <id> <label>` | Add area label                        |
-| `bd lint <id>`              | Validate issue template               |
-| `bd lint`                   | Lint all open issues                  |
+### Mandatory Workflow
 
-## Quality Checklist
+1. **File issues for remaining work** - Create issues for anything
+   that needs follow-up
+2. **Run quality gates** (if code changed) - Tests, linters, builds
+3. **Update issue status** - Close finished work, update in-progress items
+4. **PUSH TO REMOTE** - This is MANDATORY:
 
-- Before starting work: confirm the issue has acceptance criteria.
-- Before closing: verify all acceptance criteria are met.
+```bash
+git pull --rebase
+bd sync
+git push
+git status  # MUST show "up to date with origin"
+```
 
-Issue types: `task`, `bug`, `feature`, `story`, `epic`, `spike`.
-Priority: 0 (critical) to 4 (backlog).
+5. **Clean up** - Clear stashes, prune remote branches
+6. **Verify** - All changes committed AND pushed
+7. **Hand off** - Provide context for next session
+
+### Critical Rules
+
+- Work is NOT complete until `git push` succeeds
+- NEVER stop before pushing - that leaves work stranded locally
+- NEVER say "ready to push when you are" - YOU must push
+- If push fails, resolve and retry until it succeeds

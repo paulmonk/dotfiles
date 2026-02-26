@@ -7,3 +7,9 @@
 # Stealth mode: do not run git operations during bd sync.
 # Flush to JSONL only; manual git workflow.
 no-git-ops: true
+
+# Chain existing hooks (e.g. prek) before bd's own hook logic.
+# bd looks for <hooks-dir>/pre-commit.old and runs it.
+hooks:
+  chain_strategy: before
+  chain_timeout_ms: 5000

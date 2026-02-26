@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# prek pre-commit shim for bd hook chaining.
+# bd calls this as pre-commit.old when chain_strategy is "before".
+set -o errexit -o errtrace -o pipefail -o nounset
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+readonly HERE
+PREK="$(command -v prek 2>/dev/null || echo /opt/homebrew/bin/prek)"
+readonly PREK
+
+[[ -x "${PREK}" ]] || exit 0
+exec "${PREK}" hook-impl --hook-dir "${HERE}" --script-version 4 --hook-type=pre-commit -- "$@"

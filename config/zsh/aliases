@@ -197,27 +197,39 @@ if (( $+commands[wt] )); then
   alias wtl='wt list'
   alias wtm='wt merge'
   alias wtr='wt remove'
+
+  # Remove all worktrees whose branch is already merged into main.
+  wtgc() {
+    local -a branches
+    # main_state values that mean "safe to delete" per wt docs:
+    # same_commit (_), ancestor (⊂), no_added_changes, trees_match,
+    # merge_adds_nothing.
+    branches=("${(@f)$(
+      wt list --format json 2>/dev/null \
+        | jq -r '.[]
+            | select(.is_current == false)
+            | select(.is_main == false)
+            | select(.main_state != "diverged" and .main_state != "is_main")
+            | .branch'
+    )}")
+    # Filter empty entries from the split.
+    branches=("${(@)branches:#}")
+
+    if (( ${#branches} == 0 )); then
+      echo "No merged worktrees to clean up."
+      return
+    fi
+
+    echo "Removing merged worktrees: ${branches[*]}"
+    wt remove --yes --force "${branches[@]}"
+  }
 fi
 
 # Claude
 if (( $+commands[claude] )); then
   # Bypasses all permission prompts. This is the recommended way to run Claude
   # for maximum throughput, pair it with sandboxing.
-  claude-yolo() {
-    local -a extra_dirs
-    local yolo_cache
-    yolo_cache="$(mktemp -d)"
-
-    # Isolate tool caches from the user's personal cache. Yolo sessions
-    # skip permission prompts, so they shouldn't pollute or corrupt
-    # caches shared with the regular shell. mktemp -d also avoids the
-    # sandbox's .git path deny (uv's cache contains a .git sentinel).
-    extra_dirs+=(--add-dir "${yolo_cache}")
-
-    XDG_CACHE_HOME="${yolo_cache}" \
-    UV_CACHE_DIR="${yolo_cache}/uv" \
-    claude --dangerously-skip-permissions "${extra_dirs[@]}" "$@"
-  }
+  alias claude-yolo="claude --dangerously-skip-permissions --add-dir ~/.cache/"
 
   # claude-local wraps claude with the local server env vars and
   # disables telemetry pings that won't reach Anthropic anyway.
@@ -233,20 +245,10 @@ fi
 if (( $+commands[codex] )); then
   # Bypasses approval prompts while keeping workspace sandbox intact.
   codex-yolo() {
-    local -a extra_dirs
-    local yolo_cache
-    yolo_cache="$(mktemp -d)"
-
-    # Isolate tool caches from the user's personal cache (see claude-yolo).
-    extra_dirs+=(--add-dir "${yolo_cache}")
-
-    XDG_CACHE_HOME="${yolo_cache}" \
-    UV_CACHE_DIR="${yolo_cache}/uv" \
     codex \
       --ask-for-approval never \
       --sandbox workspace-write \
-      --config "sandbox_workspace_write.network_access=true" \
-      "${extra_dirs[@]}" "$@"
+      --config "sandbox_workspace_write.network_access=true"
   }
 fi
 

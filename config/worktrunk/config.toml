@@ -66,10 +66,16 @@ Combine these commits into a single commit message.
 </diff>
 """
 
-# Run direnv allow in every new worktree automatically.
 [post-create]
-direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow || true"
-prek = "command -v prek >/dev/null 2>&1 && [ -f .pre-commit-config.yaml ] && prek install || true"
+prek = '''
+[ -f .pre-commit-config.yaml ] || exit 0
+if HOOKS_PATH=$(git config --get core.hooksPath 2>/dev/null) && [ -n "$HOOKS_PATH" ]; then
+  mkdir -p "$HOOKS_PATH"
+  [ -e "$HOOKS_PATH/pre-commit.old" ] || ln -s ~/.config/worktrunk/hooks/pre-commit.old "$HOOKS_PATH/pre-commit.old"
+else
+  prek install
+fi
+'''
 python-uv = "[ -f pyproject.toml ] && [ -f uv.lock ] && uv venv --clear && uv sync || true"
 
 # Copy gitignored files (node_modules, target/, .next/, etc.) from the main

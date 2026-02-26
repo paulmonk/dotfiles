@@ -2,38 +2,66 @@
 #
 # Summarise the session conversation via LLM and save for qmd indexing.
 # Always exits 0 to never block session close.
-
-# Note: errexit intentionally omitted so failures don't block session close.
+#
+# errexit intentionally omitted so failures don't block session close.
 set -o errtrace -o pipefail -o nounset
 
 readonly MEMORY_DIR="${HOME}/.claude/memory-episodes"
 readonly LOG_DIR="${HOME}/.claude/logs/memory-episodes"
 readonly LOG_FILE="${LOG_DIR}/summariser.log"
 
-command -v jq >/dev/null 2>&1 || exit 0
+log() { echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}" 2>/dev/null || true; }
 
-input=$(cat)
-SESSION_CWD=$(echo "${input}" | jq -r '.cwd // empty' 2>/dev/null)
-readonly SESSION_CWD
-SESSION_ID=$(echo "${input}" | jq -r '.session_id // empty' 2>/dev/null)
-readonly SESSION_ID
+extract_oneliner() {
+  local text="$1"
+  local line
 
-[[ -n ${SESSION_ID} && -n ${SESSION_CWD} ]] || exit 0
+  # Try ## Goals section: first non-empty line after header.
+  line=$(awk '/^## Goals/{found=1; next} found && /\S/{print; exit}' <<<"${text}")
+  [[ -n "${line}" ]] && {
+    echo "${line:0:200}"
+    return
+  }
 
-mkdir -p "${LOG_DIR}" 2>/dev/null || true
-log() { echo "[$(date -Iseconds)] $1" >>"${LOG_FILE}" 2>/dev/null || true; }
+  # Try ## Summary section.
+  line=$(awk '/^## Summary/{found=1; next} found && /\S/{print; exit}' <<<"${text}")
+  [[ -n "${line}" ]] && {
+    echo "${line:0:200}"
+    return
+  }
+
+  # Fallback: first non-header, non-empty content line.
+  line=$(awk '!/^#/ && !/^---/ && !/^$/ && /\S/{print; exit}' <<<"${text}")
+  echo "${line:0:200}"
+}
+
+append_to_index() {
+  local index_file="${MEMORY_DIR}/index.jsonl"
+  local date_short goals
+  date_short=$(date -u +%Y-%m-%d)
+  goals=$(extract_oneliner "${summary}")
+  [[ -n "${goals}" ]] || return 0
+
+  jq -c -n \
+    --arg date "${date_short}" \
+    --arg session_id "${SESSION_ID:0:7}" \
+    --arg project "${project_name}" \
+    --arg goals "${goals}" \
+    '{date: $date, session_id: $session_id, project: $project, goals: $goals}' \
+    >>"${index_file}" 2>/dev/null || true
+}
 
 summarise_conversation() {
   # Ensure common install locations are on PATH for backgrounded processes.
   export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 
   if ! mkdir -p "${MEMORY_DIR}" 2>/dev/null; then
-    echo "memory-episodes: could not create ${MEMORY_DIR}" >&2
+    log "Could not create ${MEMORY_DIR}"
     return 1
   fi
 
   local escaped_cwd
-  escaped_cwd=$(echo "${SESSION_CWD}" | tr '/.' '-')
+  escaped_cwd=$(tr '/.' '-' <<<"${SESSION_CWD}")
   local jsonl="${HOME}/.claude/projects/${escaped_cwd}/${SESSION_ID}.jsonl"
   if [[ ! -f ${jsonl} ]]; then
     log "No session JSONL at ${jsonl}, skipping"
@@ -99,7 +127,7 @@ PROMPT
     --system-prompt '' \
     <"${prompt_file}" 2>/dev/null)
   if [[ -z ${summary} ]]; then
-    log "LLM summarisation returned empty for session ${SESSION_ID:0:7}"
+    log "Summarisation returned empty for session ${SESSION_ID:0:7}"
     return 1
   fi
 
@@ -121,8 +149,26 @@ PROMPT
   fi
 
   log "Summarised conversation to $(basename "${summary_file}")"
+  append_to_index
 }
 
-summarise_conversation </dev/null &
+main() {
+  local input
+  input=$(cat)
+  local session_cwd session_id
+  session_cwd=$(jq -r '.cwd // empty' <<<"${input}")
+  session_id=$(jq -r '.session_id // empty' <<<"${input}")
 
+  [[ -n ${session_id} && -n ${session_cwd} ]] || exit 0
+
+  # Export for use in summarise_conversation (runs backgrounded).
+  readonly SESSION_CWD="${session_cwd}"
+  readonly SESSION_ID="${session_id}"
+
+  mkdir -p "${LOG_DIR}" 2>/dev/null || true
+
+  summarise_conversation </dev/null &
+}
+
+main
 exit 0

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+#/ Usage: memory-index-rebuild
+#/   Rebuild ~/.claude/memory-episodes/index.jsonl from existing episode files.
+#/   Useful for initial backfill or if the index gets corrupted.
+#
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly MEMORY_DIR="${HOME}/.claude/memory-episodes"
+readonly INDEX_FILE="${MEMORY_DIR}/index.jsonl"
+
+[[ "${1:-}" =~ ^(-h|--help)$ ]] && {
+  grep '^#/' "$0" | cut -c4-
+  exit 0
+}
+
+extract_oneliner() {
+  local text="$1"
+  local line
+
+  # Try ## Goals section: first non-empty line after header.
+  line=$(awk '/^## Goals/{found=1; next} found && /\S/{print; exit}' <<<"${text}")
+  [[ -n "${line}" ]] && {
+    echo "${line:0:200}"
+    return
+  }
+
+  # Try ## Summary section.
+  line=$(awk '/^## Summary/{found=1; next} found && /\S/{print; exit}' <<<"${text}")
+  [[ -n "${line}" ]] && {
+    echo "${line:0:200}"
+    return
+  }
+
+  # Fallback: first non-header, non-empty content line.
+  line=$(awk '!/^#/ && !/^---/ && !/^$/ && /\S/{print; exit}' <<<"${text}")
+  echo "${line:0:200}"
+}
+
+main() {
+  export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+  if [[ ! -d "${MEMORY_DIR}" ]]; then
+    echo "No memory-episodes directory at ${MEMORY_DIR}" >&2
+    exit 1
+  fi
+
+  local tmpfile
+  tmpfile=$(mktemp)
+  trap 'rm -f "${tmpfile:-}"' EXIT
+
+  local count=0
+  local date_val session_id project date_short body goals
+  for file in "${MEMORY_DIR}"/*.md; do
+    [[ -f "${file}" ]] || continue
+
+    # Parse frontmatter fields.
+    date_val=$(awk '/^---/{n++; next} n==1 && /^date:/{print $2; exit}' "${file}")
+    session_id=$(awk '/^---/{n++; next} n==1 && /^session_id:/{print $2; exit}' "${file}")
+    project=$(awk '/^---/{n++; next} n==1 && /^project:/{print $2; exit}' "${file}")
+
+    [[ -n "${date_val}" && -n "${session_id}" && -n "${project}" ]] || continue
+
+    # Extract just YYYY-MM-DD from the ISO timestamp.
+    date_short="${date_val:0:10}"
+
+    # Get body after frontmatter closing ---.
+    body=$(awk '/^---/{n++; next} n>=2{print}' "${file}")
+    goals=$(extract_oneliner "${body}")
+    [[ -n "${goals}" ]] || continue
+
+    jq -c -n \
+      --arg date "${date_short}" \
+      --arg session_id "${session_id}" \
+      --arg project "${project}" \
+      --arg goals "${goals}" \
+      '{date: $date, session_id: $session_id, project: $project, goals: $goals}' \
+      >>"${tmpfile}"
+
+    ((count += 1))
+  done
+
+  # Sort newest-first.
+  jq -s 'sort_by(.date) | reverse | .[]' -c "${tmpfile}" >"${INDEX_FILE}"
+
+  echo "Rebuilt index: ${count} entries -> ${INDEX_FILE}" >&2
+}
+
+main "$@"

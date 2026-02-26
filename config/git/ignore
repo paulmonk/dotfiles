@@ -138,12 +138,17 @@ id_*
 .tern-port
 
 #---------------------------
+# Git
+#---------------------------
+**/.worktrees/**
+.worktreeinclude
+
+#---------------------------
 # AI
 #---------------------------
 **/.claude/docs/**
 **/.claude/plans/**
 **/.claude/settings.local.json
 **/.serena/**
-**/.worktrees/**
 AGENTS.local.md
 CLAUDE.local.md

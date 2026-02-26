@@ -18,6 +18,7 @@
     "deny": [
       "Bash(aws *delete*)",
       "Bash(chmod 777*)",
+      "Bash(curl *| bash*)",
       "Bash(curl *|bash*)",
       "Bash(dd *)",
       "Bash(dbt build*)",
@@ -36,6 +37,7 @@
       "Bash(rm -rf *)",
       "Bash(sudo *)",
       "Bash(terraform destroy*)",
+      "Bash(wget *| bash*)",
       "Bash(wget *|bash*)",
       "Edit(~/.bash_profile)",
       "Edit(~/.bashrc)",
@@ -82,6 +84,10 @@
           {
             "type": "command",
             "command": "printf '[CONTEXT] Now: %s\\n' \"$(date +'%Y-%m-%d %H:%M:%S %Z')\""
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/memory-episodes-start/hook"
           }
         ]
       }
@@ -117,6 +123,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/pkg-manager-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/git-push-main-guard/hook"
           }
         ]
       },
@@ -144,6 +154,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/tmux-guard/hook"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/explore-guard/hook"
           }
         ]
       },
@@ -355,5 +369,6 @@
   "plansDirectory": "./.claude/plans",
   "skipDangerousModePermissionPrompt": true,
   "showTurnDuration": true,
-  "defaultMode": "plan"
+  "defaultMode": "plan",
+  "autoMemoryEnabled": true
 }

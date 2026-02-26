@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#/ Blocks the Explore subagent in favour of Serena's semantic tools.
+#/
+#/ Serena provides precise, token-efficient code navigation (symbol search,
+#/ overview, references) that the Explore subagent duplicates poorly.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+# shellcheck source=claude/lib/hook-io.sh
+source "${HOME}/.claude/lib/hook-io.sh"
+
+main() {
+  local input subagent_type
+  input=$(read_hook_input)
+
+  subagent_type=$(echo "${input}" | jq -r '.tool_input.subagent_type // ""')
+  [[ ${subagent_type} != "Explore" ]] && {
+    echo "${input}"
+    exit 0
+  }
+
+  local reason
+  reason="Use these instead of the Explore subagent:"
+  reason+=$'\n'"- Serena: mcp__serena__find_symbol, mcp__serena__get_symbols_overview, mcp__serena__search_for_pattern"
+  reason+=$'\n'"- fd: fast file finding"
+  reason+=$'\n'"- rg: fast pattern search"
+  reason+=$'\n'"- ast-grep: AST-based code search"
+  deny_tool "${reason}"
+}
+
+main "$@"

@@ -133,6 +133,9 @@ If that also doesn't exist, use a simple format:
 Write the body to a unique temp file (avoids clobbering when
 multiple agents run concurrently):
 
+Replace `XXXXXXXXX` with the pr number and a uniq suffix based
+on your session id.
+
 ```bash
 PR_BODY=$(mktemp "${TMPDIR:-/tmp}/pr-body-XXXXXXXX.md")
 cat > "$PR_BODY" <<'EOF'
