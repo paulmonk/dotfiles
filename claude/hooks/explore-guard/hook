@@ -18,13 +18,7 @@ main() {
     exit 0
   }
 
-  local reason
-  reason="Use these instead of the Explore subagent:"
-  reason+=$'\n'"- Serena: mcp__serena__find_symbol, mcp__serena__get_symbols_overview, mcp__serena__search_for_pattern"
-  reason+=$'\n'"- fd: fast file finding"
-  reason+=$'\n'"- rg: fast pattern search"
-  reason+=$'\n'"- ast-grep: AST-based code search"
-  deny_tool "${reason}"
+  deny_tool "Use the 'scout' custom agent (subagent_type=\"scout\") instead of the built-in Explore agent. It uses Serena, fd, rg, and ast-grep."
 }
 
 main "$@"

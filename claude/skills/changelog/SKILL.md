@@ -1,8 +1,9 @@
 ---
 name: changelog
-description: Create engaging changelogs for recent merges to main/master branch
+description: Create engaging changelogs for recent merges. Use when asked for a changelog, release notes, or summary of recent changes.
 argument-hint: "[optional: daily|weekly, or time period in days]"
-allowed-tools: Bash
+allowed-tools: Bash, Read, Glob, Grep
+disable-model-invocation: true
 ---
 
 # Changelog
@@ -10,6 +11,22 @@ allowed-tools: Bash
 Create a fun, engaging changelog for an internal development team
 by summarising recent merges to the main/master branch, highlighting
 new features, bug fixes, and crediting contributors.
+
+## When to Use
+
+- User asks for a changelog, release notes, or "what changed"
+- Summarising recent merges for a team update
+- Generating release notes for a deployment
+
+## When NOT to Use
+
+- Comparing two specific commits or branches (use `git log` directly)
+- Writing a CHANGELOG.md file for a library release (different format)
+
+## Arguments
+
+`$ARGUMENTS`: optional time period. `daily` (last 24h), `weekly`
+(last 7 days), or a number for last N days. Defaults to daily.
 
 ## Usage
 
@@ -21,6 +38,8 @@ new features, bug fixes, and crediting contributors.
 ```
 
 ## Workflow
+
+Execute every step sequentially.
 
 ### 1. Determine Time Period
 
@@ -48,7 +67,7 @@ gh pr view <number> --json title,body,author,labels,mergedAt,number
 
 ### 3. Analyse Changes
 
-Look for in each PR:
+Look for the following in each PR:
 
 - New features added
 - Bug fixes implemented
@@ -110,7 +129,7 @@ Use this format:
 
 ## Deployment Notes
 
-When relevant, include:
+Include only when explicitly mentioned in PR descriptions:
 
 - Database migrations required
 - Environment variable updates needed

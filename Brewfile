@@ -3,6 +3,7 @@ tap "heroku/brew"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "lightdash/lightdash"
+tap "polymarket/polymarket-cli", "https://github.com/Polymarket/polymarket-cli"
 tap "saulpw/vd"
 tap "thoughtbot/formulae"
 tap "warrensbox/tap"
@@ -77,12 +78,6 @@ brew "protobuf"
 brew "re2"
 # Next generation open source RPC library and framework
 brew "grpc"
-# Library for decimal floating point arithmetic
-brew "mpdecimal"
-# High-performance theorem prover
-brew "z3"
-# Next-gen compiler infrastructure
-brew "llvm"
 # Compression/decompression library aiming for high speed
 brew "snappy"
 # Framework for scalable cross-language services development
@@ -115,6 +110,8 @@ brew "atuin"
 brew "m4"
 # Automatic configure script builder
 brew "autoconf"
+# Library for decimal floating point arithmetic
+brew "mpdecimal"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Text-based UI library
@@ -511,6 +508,10 @@ brew "handbrake"
 brew "krb5"
 # Postgres C API library
 brew "libpq"
+# High-performance theorem prover
+brew "z3"
+# Next-gen compiler infrastructure
+brew "llvm"
 # ODBC 3 connectivity for UNIX
 brew "unixodbc"
 # Easy, fast, and beautiful database client for the terminal
@@ -559,6 +560,8 @@ brew "ipcalc"
 brew "iperf3"
 # Official CLI for the IPinfo IP Address API
 brew "ipinfo-cli"
+# Interactive computing in Python
+brew "ipython"
 # Serializes the output of command-line tools to structured JSON output
 brew "jc"
 # Implementation of malloc emphasizing fragmentation avoidance
@@ -793,6 +796,10 @@ brew "python@3.11"
 brew "qrencode"
 # Cross-platform application and UI framework
 brew "qt@5"
+# Tool Command Language
+brew "tcl-tk"
+# Software environment for statistical computing
+brew "r"
 # Develop and deploy code with zero configuration
 brew "railway"
 # JSON parser/generator for C++ with SAX and DOM style APIs
@@ -845,8 +852,6 @@ brew "srt"
 brew "stern"
 # Opinionated Lua code formatter
 brew "stylua"
-# Tool Command Language
-brew "tcl-tk"
 # Command-line packet analyzer
 brew "tcpdump"
 # Very fast implementation of tldr in Rust
@@ -961,6 +966,8 @@ brew "zsh-completions"
 brew "heroku/brew/heroku"
 # CLI for the Lightdash BI platform
 brew "lightdash/lightdash/lightdash"
+# CLI for Polymarket — browse markets, trade, and manage positions
+brew "polymarket/polymarket-cli/polymarket"
 # The tfswitch command lets you switch between terraform versions.
 brew "warrensbox/tap/tfswitch"
 # The tgswitch command lets you switch between terragrunt versions.
@@ -1174,6 +1181,7 @@ vscode "ms-vscode.remote-explorer"
 vscode "ms-vscode.remote-repositories"
 vscode "naumovs.color-highlight"
 vscode "oderwat.indent-rainbow"
+vscode "openai.chatgpt"
 vscode "opentofu.vscode-opentofu"
 vscode "oven.bun-vscode"
 vscode "oxc.oxc-vscode"

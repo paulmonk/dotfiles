@@ -20,6 +20,9 @@ export XDG_CONFIG_HOME := xdg_config_home
 export XDG_CACHE_HOME := xdg_cache_home
 export XDG_DATA_HOME := xdg_data_home
 
+# Discover extensionless Python scripts in local/bin by shebang.
+_py_bin_scripts := "$(rg -l '^#!.*(python|uv)' local/bin/ 2>/dev/null || true)"
+
 # ================================
 # Homebrew
 # ================================
@@ -169,15 +172,28 @@ ai-coding-agents: qmd
       done
     } | awk '/^$/{if(b)next;b=1;print;next}{b=0;print}' > codex/AGENTS.md
 
-    # Codex: copy custom skills (Codex does not follow symlinks)
+    # Codex: copy Claude skills with frontmatter stripped
     echo "--------"
-    echo "Installing Codex custom skills"
-    for skill_dir in codex/skills/*/; do
+    echo "Installing Codex skills (from Claude skills)"
+    for skill_md in claude/skills/*/SKILL.md; do
+      skill_dir=$(dirname "${skill_md}")
       skill_name=$(basename "${skill_dir}")
       dest="$HOME/.codex/skills/${skill_name}"
       echo "  ${skill_name}"
       rm -rf "${dest}"
-      cp -R "${skill_dir}" "${dest}"
+      mkdir -p "${dest}"
+      # Strip YAML frontmatter from SKILL.md
+      awk 'BEGIN{fm=0} /^---$/{fm++;if(fm<=2)next} fm>=2||fm==0' "${skill_md}" \
+        | sed '1{/^$/d}' > "${dest}/SKILL.md"
+      # Copy auxiliary files (templates, scripts, etc.)
+      for aux in "${skill_dir}"/*; do
+        [[ "$(basename "${aux}")" == "SKILL.md" ]] && continue
+        cp -R "${aux}" "${dest}/"
+      done
+      # Patch .claude/ paths to .codex/ in auxiliary files
+      while IFS= read -r f; do
+        sed -i 's|\.claude/|.codex/|g' "${f}"
+      done < <(fd -t f --exclude SKILL.md . "${dest}" 2>/dev/null)
     done
 
     # OpenCode and Codex: MCP and instructions are declarative in config files
@@ -224,6 +240,9 @@ lint:
     @echo "--------------------------------"
     @echo "Linting shell scripts"
     @shfmt --apply-ignore --find . | xargs shellcheck
+    @echo "Linting Python scripts"
+    @ruff check . {{ _py_bin_scripts }}
+    @{ fd -e py --exclude "config/ipython"; rg -l '^#!.*(python|uv)' local/bin/ 2>/dev/null || true; } | xargs ty check
     @echo "Linting Lua scripts"
     @selene .
     @echo "Linting Markdown files"
@@ -236,6 +255,9 @@ format:
     @echo "--------------------------------"
     @echo "Formatting shell scripts"
     @shfmt --write --apply-ignore .
+    @echo "Formatting Python scripts"
+    @ruff format . {{ _py_bin_scripts }}
+    @ruff check --fix . {{ _py_bin_scripts }}
     @echo "Formatting Lua scripts"
     @stylua .
     @echo "Formatting Markdown files"

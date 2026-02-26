@@ -46,11 +46,17 @@ export HOMEBREW_NO_GITHUB_API="1"
 # Avoid protocol downgrades from HTTPS to HTTP via redirect
 export HOMEBREW_NO_INSECURE_REDIRECT="1"
 
+# Sandbox source builds with macOS sandbox-exec
+export HOMEBREW_SANDBOX="1"
+
+# Remove cached downloads after 30 days
+export HOMEBREW_CLEANUP_MAX_AGE_DAYS="30"
+
 # macOS
 # -------------------------
 if [ "$KERNEL" = "Darwin" ]; then
   # Set Default PATH
-  export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+  export PATH="/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
   # Prefix
   export BREW_PREFIX="/opt/homebrew"
@@ -60,7 +66,7 @@ if [ "$KERNEL" = "Darwin" ]; then
 
   # XDG
   export XDG_RUNTIME_DIR="/tmp/run"
-  mkdir -p -m 0700 "$XDG_RUNTIME_DIR" 2>/dev/null || true
+  [ -d "$XDG_RUNTIME_DIR" ] || mkdir -m 0700 "$XDG_RUNTIME_DIR" 2>/dev/null || true
 
   # Use homebrew GNU tools instead of system BSD
   # =============
@@ -111,6 +117,9 @@ if [ "$KERNEL" = "Darwin" ]; then
   export PATH="${PATH}:${ANDROID_HOME}/tools"
   export PATH="${PATH}:${ANDROID_HOME}/tools/bin"
   export PATH="${PATH}:${ANDROID_HOME}/platform-tools"
+
+  # Obsidian
+  export PATH="${PATH}:/Applications/Obsidian.app/Contents/MacOS"
 
   # Set defaults
   export BROWSER="open"

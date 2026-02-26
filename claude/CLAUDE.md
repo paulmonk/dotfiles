@@ -104,8 +104,9 @@ Use **qmd** MCP server to search the Obsidian vault
 
 - `search` for keyword matching, `vsearch` for semantic
   similarity, `query` for structured filters.
-- Previous conversation summaries are in the **qmd**
-  `*-memory-episodes` collections.
+- Conversation summaries live in the `obsidian` collection
+  under `3-Claude-Sessions` and `3-Codex-Sessions`.
+  Use `/recall` to search past sessions.
 
 ## Coding Standards
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-#/ Guards against expensive BigQuery queries.
+#/ Guards against expensive or destructive BigQuery queries.
 #/
-#/ Denies bq query commands that lack a --maximum_bytes_billed flag. BigQuery
-#/ enforces the cap server-side, rejecting queries that would exceed it.
+#/ Blocks destructive DDL/DML (DROP, TRUNCATE, DELETE, CREATE OR REPLACE) and denies bq query commands that lack a --maximum_bytes_billed
+#/ flag. BigQuery enforces the cap server-side, rejecting queries that
+#/ would exceed it.
 set -o errexit -o errtrace -o pipefail -o nounset
 
 # shellcheck source=claude/lib/hook-io.sh
@@ -27,6 +28,30 @@ main() {
   # Only guard the query subcommand.
   if ! echo "${command}" | grep -qE '(^|[;&|]\s*)bq\s+.*\bquery\b'; then
     echo "${input}"
+    return 0
+  fi
+
+  # Block destructive SQL statements outright.
+  local sql
+  sql=$(echo "${command}" | tr '[:lower:]' '[:upper:]')
+
+  if echo "${sql}" | grep -qE '\bDROP\s+(TABLE|VIEW|SCHEMA|DATASET|FUNCTION|PROCEDURE)\b'; then
+    deny_tool "DROP is blocked. Destructive DDL via bq query requires manual confirmation outside Claude."
+    return 0
+  fi
+
+  if echo "${sql}" | grep -qE '\bTRUNCATE\s+TABLE\b'; then
+    deny_tool "TRUNCATE TABLE is blocked. Destructive operations via bq query require manual confirmation outside Claude."
+    return 0
+  fi
+
+  if echo "${sql}" | grep -qE '\bDELETE\s+FROM\b'; then
+    deny_tool "DELETE is blocked. Destructive DML via bq query requires manual confirmation outside Claude."
+    return 0
+  fi
+
+  if echo "${sql}" | grep -qE '\bCREATE\s+OR\s+REPLACE\b'; then
+    deny_tool "CREATE OR REPLACE is blocked. It silently overwrites existing objects. Use CREATE IF NOT EXISTS or run manually."
     return 0
   fi
 

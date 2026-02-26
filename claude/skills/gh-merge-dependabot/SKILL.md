@@ -1,6 +1,6 @@
 ---
 name: gh-merge-dependabot
-description: Evaluate and merge dependabot PRs with parallel builds, dependency analysis, and sequential merging
+description: Evaluate and merge open dependabot PRs for a repository. Use when asked to merge dependabot PRs, process dependency updates, or audit dependabot config.
 allowed-tools: Bash, Read, Write, Glob, Grep, Task
 argument-hint: "<org/repo> [--skip-config-audit]"
 ---
@@ -11,6 +11,17 @@ Evaluate and merge open dependabot PRs for a repository.
 Runs parallel build/test evaluations per PR, merges passing
 ones sequentially, and reports on anything that needs human
 attention.
+
+## When to Use
+
+- User asks to merge dependabot PRs or process dependency updates
+- Auditing a repository's dependabot configuration
+- Batch-processing open dependency bumps
+
+## When NOT to Use
+
+- Merging non-dependabot PRs (use normal review workflow)
+- Updating a single specific dependency manually
 
 ## Arguments
 
@@ -186,6 +197,9 @@ For each **PASS** verdict:
    ```bash
    gh pr merge --repo $REPO --squash --admin {number}
    ```
+
+   **Note:** `--admin` bypasses branch protection rules. Only
+   use when the automated evaluation has passed all checks.
 
 3. Verify merged state:
 

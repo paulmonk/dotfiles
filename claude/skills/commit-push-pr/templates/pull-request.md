@@ -8,8 +8,8 @@ Provide a short summary in the Title above. Examples of good PR titles:
 ## Why are we changing this?
 
 <!---
-- Make it easy understand, write it for people outside your team.
-- You can copy paste jira for "What/Why" or add any related stories/prs that help give the reviewer context.
+- Make it easy to understand, write it for people outside your team.
+- Add any related stories/PRs that help give the reviewer context.
 -->
 
 ## What has changed?

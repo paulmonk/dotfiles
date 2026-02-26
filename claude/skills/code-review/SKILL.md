@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Comprehensive code review using specialised agents
+description: Run a code review using specialised agents. Use when asked to review code, review a PR/MR, or check code quality.
 allowed-tools: Bash, Read, Glob, Grep, Task
 argument-hint: "[review-aspects] or [PR/MR number or URL]"
 disable-model-invocation: true
@@ -8,8 +8,25 @@ disable-model-invocation: true
 
 # Code Review
 
-Run a comprehensive code review using multiple specialised
-agents, each focusing on a different aspect of code quality.
+Run a code review using multiple specialised agents, each
+focusing on a different aspect of code quality.
+
+## When to Use
+
+- User asks to review code, a PR, or an MR
+- Running quality checks before merging
+- Auditing code for bugs, style, or test coverage
+
+## When NOT to Use
+
+- Reviewing a single line or trivial change (just read it)
+- Linting or formatting only (run the linter directly)
+
+## Arguments
+
+`$ARGUMENTS`: optional. Review aspects (`tests`, `errors`,
+`comments`, `types`, `simplify`, `all`), a PR/MR number, or a
+URL. Defaults to all applicable aspects on the current diff.
 
 ## Usage
 
@@ -130,30 +147,6 @@ After agents complete, summarise findings by severity:
 4. Re-run review after fixes
 ```
 
-## Confidence Scoring
-
-Agents filter their output by confidence to minimise false positives:
-
-| Score  | Meaning                                      |
-| ------ | -------------------------------------------- |
-| 0-25   | Likely false positive or pre-existing issue  |
-| 26-50  | Minor nitpick not explicitly in coding standards |
-| 51-75  | Valid but low-impact issue                   |
-| 76-90  | Important issue requiring attention          |
-| 91-100 | Critical bug or explicit coding standards violation |
-
-**Only report issues with confidence >= 80**
-
-## False Positives to Ignore
-
-- Pre-existing issues (not introduced in this change)
-- Issues a linter/typechecker/compiler would catch
-- Pedantic nitpicks a senior engineer wouldn't call out
-- General code quality issues unless explicitly required in coding standards
-- Issues silenced in code (lint ignore comments)
-- Intentional functionality changes related to the broader change
-- Issues on lines not modified in this change
-
 ## Examples
 
 **Full review of local changes:**
@@ -213,7 +206,8 @@ No issues found.
 
 - Use the detected CLI (`gh` or `glab`) for forge
   interactions, not web fetch
-- Create a todo list before starting
+- Agents filter output by confidence >= 80. See individual
+  agent definitions for scoring details.
 - Cite and link each issue (include coding standards
   reference if applicable)
 - Links must use full SHA:

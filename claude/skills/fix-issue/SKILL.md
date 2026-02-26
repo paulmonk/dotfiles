@@ -1,6 +1,6 @@
 ---
 name: fix-issue
-description: End-to-end workflow to plan, implement, test, review, commit, push, and open a PR/MR for an issue
+description: End-to-end workflow to fix an issue: plan, implement, test, review, and open a PR/MR. Use when asked to fix, resolve, or implement an issue.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 argument-hint: "<issue-number, beads-ID, or URL>"
 disable-model-invocation: true
@@ -10,6 +10,26 @@ disable-model-invocation: true
 
 End-to-end workflow: read an issue, plan, implement, test,
 review, commit, push, and create a PR/MR.
+
+## When to Use
+
+- User asks to fix, resolve, or implement an issue
+- Working through a beads issue or GitHub/GitLab issue
+- Any task that needs the full plan-implement-test-review-PR cycle
+
+## When NOT to Use
+
+- Quick one-line fixes where a full workflow is overkill
+- Pure research or exploration with no code changes
+- Already mid-workflow (use the relevant sub-step instead)
+
+## Usage
+
+```text
+/fix-issue 42
+/fix-issue beads-abc
+/fix-issue https://github.com/org/repo/issues/42
+```
 
 ## Arguments
 

@@ -1,7 +1,9 @@
 # IPython: an enhanced interactive Python shell
 # ---
+from __future__ import annotations
 
 import os
+
 from pygments.token import Token
 
 # Powerline

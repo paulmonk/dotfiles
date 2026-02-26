@@ -1,8 +1,8 @@
 ---
 name: commit-push-pr
-description: Commit staged work, push, and open a draft PR/MR. Use after implementation is complete and tests pass.
+description: Commit staged work, push, and open a draft PR/MR. Use when asked to commit and push, create a PR, or ship changes.
 allowed-tools: Bash, Read, Glob, Grep
-argument-hint: "<optional: issue number or beads-ID to reference>"
+argument-hint: "[issue number or beads-ID]"
 disable-model-invocation: true
 ---
 
@@ -11,6 +11,17 @@ disable-model-invocation: true
 Commit the current changes, push the branch, and create a draft
 PR/MR. This is the tail end of the fix-issue workflow, for when
 the implementation and quality checks are already done.
+
+## When to Use
+
+- User asks to commit, push, and open a PR/MR
+- Implementation and quality checks are done, time to ship
+- Invoked by `/fix-issue` at the end of its workflow
+
+## When NOT to Use
+
+- Changes haven't been tested or reviewed yet
+- User only wants to commit without pushing or creating a PR
 
 ## Arguments
 
@@ -133,11 +144,8 @@ If that also doesn't exist, use a simple format:
 Write the body to a unique temp file (avoids clobbering when
 multiple agents run concurrently):
 
-Replace `XXXXXXXXX` with the pr number and a uniq suffix based
-on your session id.
-
 ```bash
-PR_BODY=$(mktemp "${TMPDIR:-/tmp}/pr-body-XXXXXXXX.md")
+PR_BODY="${TMPDIR:-/tmp}/pr-body-$(date +%Y%m%d%H%M%S).md"
 cat > "$PR_BODY" <<'EOF'
 <TEMPLATE_BODY>
 EOF
