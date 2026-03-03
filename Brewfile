@@ -72,8 +72,6 @@ brew "webp"
 brew "aom"
 # AWS SDK for C++
 brew "aws-sdk-cpp"
-# Protocol buffers (Google's data interchange format)
-brew "protobuf"
 # Alternative to backtracking PCRE-style regular expression engines
 brew "re2"
 # Next generation open source RPC library and framework
@@ -512,6 +510,8 @@ brew "libpq"
 brew "z3"
 # Next-gen compiler infrastructure
 brew "llvm"
+# Protocol buffers (Google's data interchange format)
+brew "protobuf"
 # ODBC 3 connectivity for UNIX
 brew "unixodbc"
 # Easy, fast, and beautiful database client for the terminal
@@ -938,6 +938,8 @@ brew "xsv"
 brew "xvid"
 # Linter for YAML files
 brew "yamllint"
+# Tool to do pattern matching for malware research
+brew "yara-x"
 # CLI to convert between YAML, TOML, JSON and HCL
 brew "yj"
 # Tool for managing your YubiKey configuration

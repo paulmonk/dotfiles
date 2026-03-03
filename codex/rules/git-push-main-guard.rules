@@ -1,0 +1,12 @@
+# Block direct pushes to main or master branches.
+# Use a feature branch and PR instead.
+substring_rule(
+    pattern = "git push",
+    decision = "deny",
+    justification = "Use a feature branch and PR instead of pushing directly to main/master.",
+    match = [
+        "git push origin main",
+        "git push origin master",
+        "git push origin main:main",
+    ],
+)

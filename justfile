@@ -106,7 +106,7 @@ qmd-agent-load:
 qmd-agent-unload:
     @launchctl unload ~/Library/LaunchAgents/local.qmd.update.plist
 
-# Configure coding agent tools (Claude Code, Codex, OpenCode)
+# Configure coding agent tools (Claude Code, Codex)
 [group('tools')]
 ai-coding-agents: qmd
     #!/usr/bin/env bash
@@ -196,7 +196,7 @@ ai-coding-agents: qmd
       done < <(fd -t f --exclude SKILL.md . "${dest}" 2>/dev/null)
     done
 
-    # OpenCode and Codex: MCP and instructions are declarative in config files
+    # Codex: MCP and instructions are declarative in config files
     echo "Done."
     echo "--------------------------------"
 

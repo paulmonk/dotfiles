@@ -16,32 +16,60 @@
   },
   "permissions": {
     "deny": [
+      "Bash(*DROP DATABASE*)",
+      "Bash(*DROP TABLE*)",
+      "Bash(*FLUSHALL*)",
+      "Bash(*FLUSHDB*)",
+      "Bash(*TRUNCATE TABLE*)",
+      "Bash(*base64*| bash*)",
+      "Bash(*base64*| sh*)",
+      "Bash(*base64*|bash*)",
+      "Bash(*base64*|sh*)",
+      "Bash(*dropDatabase*)",
       "Bash(aws *delete*)",
+      "Bash(aws configure set*)",
+      "Bash(cat *.key)",
+      "Bash(cat *.pem)",
+      "Bash(cat *id_ed25519*)",
+      "Bash(cat *id_rsa*)",
       "Bash(chmod 777*)",
+      "Bash(crontab -r*)",
       "Bash(curl *| bash*)",
       "Bash(curl *|bash*)",
-      "Bash(dd *)",
       "Bash(dbt build*)",
       "Bash(dbt run*)",
-      "Bash(uv *dbt build*)",
-      "Bash(uv *dbt run*)",
-      "Bash(gcloud auth*)",
+      "Bash(dd *)",
+      "Bash(docker system prune*)",
+      "Bash(docker volume prune*)",
       "Bash(gcloud *delete*)",
-      "Bash(gsutil rm *)",
-      "Bash(gsutil -m rm *)",
-      "Bash(gsutil rb *)",
-      "Bash(git push *-f*)",
       "Bash(git push *--force*)",
+      "Bash(git push *-f*)",
       "Bash(git push --f*)",
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
+      "Bash(gsutil -m rm *)",
+      "Bash(gsutil rb *)",
+      "Bash(gsutil rm *)",
+      "Bash(history -c*)",
+      "Bash(iptables -F*)",
+      "Bash(iptables -X*)",
+      "Bash(kill -9 -1*)",
       "Bash(kubectl delete*)",
       "Bash(kubectl drain*)",
       "Bash(mkfs *)",
+      "Bash(nc -l*)",
+      "Bash(ncat -l*)",
+      "Bash(netcat -l*)",
+      "Bash(npm config set *registry*)",
+      "Bash(pip config set *index*)",
       "Bash(rm -fr *)",
       "Bash(rm -rf *)",
+      "Bash(shred *)",
       "Bash(sudo *)",
       "Bash(terraform destroy*)",
+      "Bash(ufw disable*)",
+      "Bash(uv *dbt build*)",
+      "Bash(uv *dbt run*)",
       "Bash(wget *| bash*)",
       "Bash(wget *|bash*)",
       "Edit(~/.bash_profile)",
@@ -99,10 +127,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-guard/hook"
-          },
-          {
-            "type": "command",
             "command": "~/.claude/hooks/trash-guard/hook"
           },
           {
@@ -152,10 +176,6 @@
       {
         "matcher": "Task",
         "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/tmux-guard/hook"
-          },
           {
             "type": "command",
             "command": "~/.claude/hooks/explore-guard/hook"
@@ -261,8 +281,7 @@
     "skill-extractor@skills-curated": true,
     "skill-improver@trailofbits": true,
     "static-analysis@trailofbits": true,
-    "superpowers@superpowers-marketplace": true,
-    "zeroize-audit@trailofbits": true
+    "superpowers@superpowers-marketplace": true
   },
   "extraKnownMarketplaces": {
     "agent-browser": {
@@ -379,5 +398,6 @@
   "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "showTurnDuration": true,
-  "defaultMode": "plan"
+  "defaultMode": "plan",
+  "effortLevel": "high"
 }

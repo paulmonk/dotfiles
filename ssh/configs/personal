@@ -2,28 +2,39 @@
 # https://wiki.mozilla.org/Security/Guidelines/OpenSSH
 
 Host *
-  Protocol 2
-
-  # Ensure KnownHosts are unreadable if leaked - it is otherwise easier to know which hosts your keys have access to.
+  # Ensure KnownHosts are unreadable if leaked, making it harder
+  # to know which hosts your keys have access to.
   HashKnownHosts yes
 
+  # Show ASCII art representation of remote host key
   VisualHostKey yes
 
+  # Disable password auth, require key-based auth
   PasswordAuthentication no
-  ChallengeResponseAuthentication no
+  KbdInteractiveAuthentication no
 
+  # Use YubiKey smartcard key for authentication
   IdentityFile ~/.ssh/smartcard.pub
+
+  # Automatically add keys to the running ssh-agent
   AddKeysToAgent yes
+
+  # Prompt before accepting unknown host keys (reject silently changed ones)
   StrictHostKeyChecking ask
 
+  # Multiplex connections to the same host
   ControlMaster auto
-  ControlPath /tmp/ssh-%r@%h:%p
+  ControlPath ~/.ssh/sockets/%r@%h:%p
   ControlPersist 2m
 
-  # Host keys the client accepts - order here is honored by OpenSSH
-  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
+  # Host keys the client accepts, order here is honoured by OpenSSH.
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
 
-  KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+  # Key exchange algorithms. sntrup761 provides post-quantum resistance.
+  KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+
+  # Message authentication codes. Prefer encrypt-then-MAC (etm) variants.
   MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
+  # Symmetric ciphers. AEAD ciphers (chacha20, gcm) preferred over CTR.
   Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr

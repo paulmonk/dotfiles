@@ -1,3 +1,42 @@
+# Block destructive DDL/DML (DROP, TRUNCATE, DELETE, CREATE OR REPLACE).
+# These require manual confirmation outside the agent.
+substring_rule(
+    pattern = "DROP ",
+    decision = "deny",
+    justification = "DROP is blocked. Destructive DDL via bq query requires manual confirmation outside the agent.",
+    match = [
+        "bq query 'DROP TABLE dataset.table'",
+        "bq query 'DROP VIEW dataset.view'",
+    ],
+)
+
+substring_rule(
+    pattern = "TRUNCATE TABLE",
+    decision = "deny",
+    justification = "TRUNCATE TABLE is blocked. Destructive operations via bq query require manual confirmation outside the agent.",
+    match = [
+        "bq query 'TRUNCATE TABLE dataset.table'",
+    ],
+)
+
+substring_rule(
+    pattern = "DELETE FROM",
+    decision = "deny",
+    justification = "DELETE is blocked. Destructive DML via bq query requires manual confirmation outside the agent.",
+    match = [
+        "bq query 'DELETE FROM dataset.table WHERE 1=1'",
+    ],
+)
+
+substring_rule(
+    pattern = "CREATE OR REPLACE",
+    decision = "deny",
+    justification = "CREATE OR REPLACE is blocked. It silently overwrites existing objects. Use CREATE IF NOT EXISTS or run manually.",
+    match = [
+        "bq query 'CREATE OR REPLACE TABLE dataset.table AS SELECT 1'",
+    ],
+)
+
 # Require a cost cap on bq query commands.
 prefix_rule(
     pattern = ["bq", "query"],

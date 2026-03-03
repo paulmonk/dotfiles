@@ -3,6 +3,7 @@ name: gh-merge-dependabot
 description: Evaluate and merge open dependabot PRs for a repository. Use when asked to merge dependabot PRs, process dependency updates, or audit dependabot config.
 allowed-tools: Bash, Read, Write, Glob, Grep, Task
 argument-hint: "<org/repo> [--skip-config-audit]"
+disable-model-invocation: true
 ---
 
 # Merge Dependabot PRs

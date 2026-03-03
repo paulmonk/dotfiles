@@ -5,9 +5,6 @@ default_install_hook_types:
   - pre-commit
   - commit-msg
 
-# These are the submodules code, we need to ignore this.
-exclude: ^local/share/tmux/plugins/
-
 repos:
   # Basic config for all filetypes
   # ======
