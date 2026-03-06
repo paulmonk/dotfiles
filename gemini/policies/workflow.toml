@@ -1,0 +1,53 @@
+# Workflow policy: enforce safe defaults for high-risk operations.
+# Blocks direct pushes to main/master, denies destructive BigQuery
+# operations, and requires user confirmation for tool setup commands.
+
+# -- Block direct pushes to main/master --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "git push origin (main|master)"
+decision = "deny"
+priority = 200
+
+# -- bd create requires --acceptance --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "bd create"
+decision = "ask_user"
+priority = 100
+
+# -- BigQuery: block destructive DDL/DML --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "bq query.*DROP "
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "bq query.*TRUNCATE TABLE"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "bq query.*DELETE FROM"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "bq query.*CREATE OR REPLACE"
+decision = "deny"
+priority = 200
+
+# -- bq query requires cost cap --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "bq query"
+decision = "ask_user"
+priority = 100

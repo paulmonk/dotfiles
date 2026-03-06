@@ -252,6 +252,12 @@ if (( $+commands[codex] )); then
   }
 fi
 
+# Gemini CLI
+if (( $+commands[gemini] )); then
+  # Bypasses all approval prompts with explicit sandbox.
+  alias gemini-yolo="gemini --yolo --sandbox sandbox-exec"
+fi
+
 # Network aliases
 # -------------------------
 # IP addresses

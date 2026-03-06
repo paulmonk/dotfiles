@@ -1,0 +1,305 @@
+# Security policy: deny destructive and dangerous shell commands
+# (database destruction, privilege escalation, unauthorized system access).
+# Rules are evaluated before execution; matching commands are blocked.
+
+# -- Database destruction --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "DROP DATABASE"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "DROP TABLE"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "TRUNCATE TABLE"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "FLUSHALL"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "FLUSHDB"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "dropDatabase"
+decision = "deny"
+priority = 200
+
+# -- Obfuscated code execution --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "base64.*\\| ?bash"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "base64.*\\| ?sh"
+decision = "deny"
+priority = 200
+
+# -- Remote code execution via pipe to shell --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "curl .*\\| ?bash"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "wget .*\\| ?bash"
+decision = "deny"
+priority = 200
+
+# -- Process substitution execution --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "bash <("
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "sh <("
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "source <("
+decision = "deny"
+priority = 200
+
+# -- Secret exfiltration --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "cat .*(id_rsa|id_ed25519|\\.pem|\\.key)"
+decision = "deny"
+priority = 200
+
+# -- Network listeners --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "nc -l"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "ncat -l"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "netcat -l"
+decision = "deny"
+priority = 200
+
+# -- Evidence tampering --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "history -c"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "shred "
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "crontab -r"
+decision = "deny"
+priority = 200
+
+# -- Mass process killing --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "kill -9 -1"
+decision = "deny"
+priority = 200
+
+# -- Firewall manipulation --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "iptables -F"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "iptables -X"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "ufw disable"
+decision = "deny"
+priority = 200
+
+# -- Supply chain / config tampering --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "aws configure set"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "npm config set.*registry"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "pip config set.*index"
+decision = "deny"
+priority = 200
+
+# -- Docker bulk cleanup --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "docker system prune"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "docker volume prune"
+decision = "deny"
+priority = 200
+
+# -- Filesystem destruction --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "rm -rf"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "rm -fr"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "mkfs"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "dd "
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "chmod 777"
+decision = "deny"
+priority = 200
+
+# -- Privilege escalation --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "sudo "
+decision = "deny"
+priority = 200
+
+# -- Destructive git operations --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "git push.*(--force|-f)"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git reset --hard"
+decision = "deny"
+priority = 200
+
+# -- Cloud infrastructure destruction --
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "aws .*delete"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "gcloud .*delete"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "gsutil rm"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "gsutil -m rm"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "gsutil rb"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "terraform destroy"
+decision = "deny"
+priority = 200
+
+# -- Kubernetes destruction --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "kubectl delete"
+decision = "deny"
+priority = 200
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "kubectl drain"
+decision = "deny"
+priority = 200

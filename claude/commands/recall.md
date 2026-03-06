@@ -7,8 +7,8 @@ allowed-tools: mcp__qmd__vsearch, mcp__qmd__search, mcp__qmd__get
 
 # /recall - Search Past Sessions
 
-Search conversation summaries from Claude Code and Codex sessions
-stored in the Obsidian vault.
+Search conversation summaries from Claude Code, Codex, and Gemini CLI
+sessions stored in the Obsidian vault.
 
 ## When to Use
 
@@ -39,7 +39,7 @@ Perform a semantic search across all past sessions:
 1. Use `mcp__qmd__vsearch` with the query, filtering to
    collection `obsidian`, limit 10.
 2. Filter results to paths containing `3-Claude-Sessions/`
-   or `3-Codex-Sessions/`.
+   `3-Codex-Sessions/`, or `3-Gemini-Sessions/`.
 3. If fewer than 3 results, also run `mcp__qmd__search`
    with the same query and collection filter as a fallback.
 4. Present results as a concise list: date, project, and
@@ -54,7 +54,7 @@ Show recent sessions for the current project:
 2. Use `mcp__qmd__search` with the project name as query,
    filtering to collection `obsidian`, limit 5.
 3. Filter results to paths containing `3-Claude-Sessions/`
-   or `3-Codex-Sessions/`.
+   `3-Codex-Sessions/`, or `3-Gemini-Sessions/`.
 4. Present results sorted by date (newest first).
 
 If no results are found, suggest broadening the query or
@@ -72,7 +72,7 @@ checking `qmd status` to verify the collection is indexed.
 ## Notes
 
 - Sessions are markdown files with YAML frontmatter containing
-  `date`, `project`, `session_id`, `agent` (claude or codex),
-  and `type: conversation`.
+  `date`, `project`, `session_id`, `agent` (claude, codex, or
+  gemini), and `type: conversation`.
 - Use `mcp__qmd__get` to read the full content of a session
   if the user wants more detail.

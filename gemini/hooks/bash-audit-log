@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#/ Logs every shell command to per-session files in ~/.gemini/logs/bash/.
+#/ Uses the session_id from hook input for the filename, falling back to
+#/ the current date. Logs older than 90 days are pruned.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+readonly LOG_DIR="${HOME}/.gemini/logs/bash"
+readonly RETENTION_DAYS=90
+
+# Logging is best-effort; failures must never block tool execution.
+_log_command() {
+  local input="$1" command session log_file
+
+  command=$(echo "${input}" | jq -r '
+    .tool_input.command //
+    .tool_input.args.command //
+    .tool_call.input.command //
+    ""
+  ') || return 1
+
+  if [[ -n ${command} ]]; then
+    mkdir -p "${LOG_DIR}"
+
+    session=$(echo "${input}" | jq -r '.session_id // empty') || true
+    session="${session:-$(date -u '+%Y-%m-%d')}"
+    log_file="${LOG_DIR}/${session}.log"
+
+    printf '[%s] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${command}" \
+      >>"${log_file}"
+
+    # Prune old logs on first write to a new log file (line count == 1).
+    if [[ $(wc -l <"${log_file}") -eq 1 ]]; then
+      find "${LOG_DIR}" -name '*.log' -mtime "+${RETENTION_DAYS}" -delete 2>/dev/null || true
+    fi
+  fi
+}
+
+main() {
+  local input
+
+  # Gemini sends complete JSON on stdin (no incremental parsing needed).
+  input=$(cat)
+
+  if command -v jq >/dev/null 2>&1; then
+    _log_command "${input}" || true
+  fi
+
+  # Always pass through. This is the hook's primary contract.
+  echo "${input}"
+}
+
+main "$@"

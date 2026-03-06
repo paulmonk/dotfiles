@@ -414,6 +414,8 @@ brew "gawk"
 brew "gd"
 # GNU database manager
 brew "gdbm"
+# Interact with Google Gemini AI models from the command-line
+brew "gemini-cli"
 # GitHub command-line tool
 brew "gh"
 # JBIG2 decoder and library (for monochrome documents)

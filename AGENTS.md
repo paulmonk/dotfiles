@@ -16,6 +16,7 @@ symlinked to `$HOME` for shell, editor, and tool configuration.
 | `config/`  | XDG config files (git, tmux, zsh, opencode, etc.) |
 | `claude/`  | Claude Code configuration (see below)             |
 | `codex/`   | Codex configuration (generated AGENTS.md, rules)  |
+| `gemini/`  | Gemini CLI configuration (settings, GEMINI.md)    |
 | `Library/` | macOS application preferences                     |
 | `local/`   | Local bin scripts and data                        |
 

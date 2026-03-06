@@ -1,0 +1,78 @@
+# Tool preference policy: ask user before executing legacy alternatives.
+# Nudges toward modern tooling (trash/uv/rg/fd/wt) over legacy commands.
+
+# -- Prefer trash over rm --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "rm "
+decision = "ask_user"
+priority = 100
+
+# -- Prefer rg over grep --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "grep "
+decision = "ask_user"
+priority = 100
+
+# -- Prefer fd over find --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "find "
+decision = "ask_user"
+priority = 100
+
+# -- Prefer uv over pip/poetry/pipenv --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "pip install"
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "pip3 install"
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "poetry "
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "pipenv "
+decision = "ask_user"
+priority = 100
+
+# -- Prefer wt over raw git branch/worktree commands --
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git checkout -b"
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git switch -c"
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git switch --create"
+decision = "ask_user"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git worktree "
+decision = "ask_user"
+priority = 100
