@@ -76,7 +76,7 @@ relevant ones, don't block on them
 | `deepwiki` MCP | - | `mcp__deepwiki__ask_question` or `mcp__deepwiki__read_wiki_contents` |
 | `serena` MCP | - | `mcp__serena__find_symbol`, `mcp__serena__get_symbols_overview` |
 | `rg` (ripgrep) | grep | `rg "pattern"` - 10x faster regex search |
-| `fd` | find | `fd "*.py"` - fast file finder |
+| `fd` | find | `fd --hidden "*.py"` - fast file finder (always pass `--hidden` to include dotfiles) |
 | `ast-grep` | - | `ast-grep --pattern '$FUNC($$$)' --lang py` - AST-based code search |
 | `semgrep` | - | `semgrep --config auto` - semantic static analysis |
 | `shellcheck` | - | `shellcheck script.sh` - shell script linter |
@@ -96,10 +96,13 @@ relevant ones, don't block on them
 - **Git safety**: Do not run destructive git commands
   (`reset --hard`, `checkout .`, `clean -f`, `push --force`)
   without explicit permission.
-- **Git worktrees**: Create worktrees with
-  `wt switch -c <branch>` (uses `.worktrees/` at repository
-  root). Use `wt list` to view, `wt merge <target>` to
-  squash-merge back, `wt remove` to clean up.
+- **Git worktrees**: Before starting code changes, run
+  `wt list`. If a worktree exists for the task or branch,
+  switch to it. If none exists, create one with
+  `wt switch -c <branch>`. Never work directly on the default
+  branch unless the project CLAUDE.md explicitly allows it.
+  Use `wt merge <target>` to squash-merge back,
+  `wt remove` to clean up.
 
 ## Knowledge Base
 

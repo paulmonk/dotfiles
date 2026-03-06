@@ -36,7 +36,3 @@ ignore = true
 
 [{zshrc,zshenv,zprofile,zlogin,zlogout}]
 ignore = true
-
-# Ignore as these are submodule code
-[**/tmux/plugins/**]
-ignore = true

@@ -14,10 +14,27 @@ symlinked to `$HOME` for shell, editor, and tool configuration.
 | Directory  | Purpose                                           |
 | ---------- | ------------------------------------------------- |
 | `config/`  | XDG config files (git, tmux, zsh, opencode, etc.) |
-| `claude/`  | Claude Code configuration (skills, agents, rules) |
+| `claude/`  | Claude Code configuration (see below)             |
 | `codex/`   | Codex configuration (generated AGENTS.md, rules)  |
 | `Library/` | macOS application preferences                     |
 | `local/`   | Local bin scripts and data                        |
+
+### Claude Code (`claude/`)
+
+| Directory    | Purpose                                            |
+| ------------ | -------------------------------------------------- |
+| `commands/`  | Slash commands: explicit user-invoked actions       |
+| `skills/`    | Skills: domain knowledge auto-triggered by context  |
+| `agents/`    | Subagent definitions (used by commands/skills)      |
+| `hooks/`     | Event hooks (PreToolUse, PostToolUse)               |
+| `rules/`     | Path-scoped and global rules                        |
+
+**Commands vs skills**: commands are procedural recipes the user
+triggers explicitly (`/changelog`, `/fix-issue`). Skills are
+guidance and domain knowledge Claude picks up automatically when
+the conversation matches (cloud-pricing, investigation,
+research). If something has `disable-model-invocation: true`, it
+belongs in `commands/`.
 
 ## Worktree Policy
 

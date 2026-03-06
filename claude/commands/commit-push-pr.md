@@ -3,7 +3,6 @@ name: commit-push-pr
 description: Commit staged work, push, and open a draft PR/MR. Use when asked to commit and push, create a PR, or ship changes.
 allowed-tools: Bash, Read, Glob, Grep
 argument-hint: "[issue number or beads-ID]"
-disable-model-invocation: true
 ---
 
 # Commit, Push, and Open PR
@@ -125,18 +124,30 @@ Search for a PR/MR template in the repository:
 `**/.gitlab/merge_request_templates/*` or
 `.gitlab/merge_request_templates/Default.md`
 
-If not found, use the default template from
-[./templates/pull-request.md](templates/pull-request.md).
-If that also doesn't exist, use a simple format:
+If not found, use this default template:
 
 ```markdown
-## Why
+## Why are we changing this?
 
-<one-paragraph summary>
+<!--- Make it easy to understand, write it for people outside your team. -->
+<!--- Add any related stories/PRs that help give the reviewer context. -->
 
-## What changed
+## What has changed?
 
-<bullet list of changes>
+<!--- You know the ins and out of the code, the reviewer might not. -->
+<!--- Add any specific implementation details or anything non-obvious. -->
+
+## How to test it and expected results?
+
+<!--- Make it easy to test, give explicit step-by-step instructions. -->
+<!--- Include screenshots or pastes of output so it's clear what to expect. -->
+
+## Checklist
+
+- [ ] My pull request represents one logical piece of work.
+- [ ] My commits are related to the pull request and look clean.
+- [ ] My code follows our coding conventions.
+- [ ] My code has appropriate tests and documentation.
 ```
 
 #### Create draft

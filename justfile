@@ -172,25 +172,34 @@ ai-coding-agents: qmd
       done
     } | awk '/^$/{if(b)next;b=1;print;next}{b=0;print}' > codex/AGENTS.md
 
-    # Codex: copy Claude skills, converting frontmatter to Codex format.
-    # Codex parses: name, description, metadata.short-description.
-    # Claude-specific fields (allowed-tools, disable-model-invocation,
-    # user_invocable, argument-hint) are stripped via yq.
+    # Codex: copy Claude skills and commands, converting frontmatter
+    # to Codex format. Codex parses: name, description,
+    # metadata.short-description. Claude-specific fields
+    # (allowed-tools, disable-model-invocation, user_invocable,
+    # argument-hint) are stripped via yq.
     echo "--------"
-    echo "Installing Codex skills (from Claude skills)"
-    for skill_md in claude/skills/*/SKILL.md; do
-      skill_dir=$(dirname "${skill_md}")
-      skill_name=$(basename "${skill_dir}")
-      dest="$HOME/.codex/skills/${skill_name}"
-      echo "  ${skill_name}"
+    echo "Installing Codex skills (from Claude skills + commands)"
+
+    # Helper: convert a source .md file to a Codex skill at $dest/SKILL.md
+    install_codex_skill() {
+      local src="$1" dest="$2"
       rm -rf "${dest}"
       mkdir -p "${dest}"
       {
-        yq --front-matter=extract 'with_entries(select(.key == "name" or .key == "description"))' "${skill_md}"
+        yq --front-matter=extract 'with_entries(select(.key == "name" or .key == "description"))' "${src}"
         echo "---"
         echo
-        awk 'BEGIN{fm=0} /^---$/{fm++;next} fm>=2{print}' "${skill_md}"
+        awk 'BEGIN{fm=0} /^---$/{fm++;next} fm>=2{print}' "${src}"
       } > "${dest}/SKILL.md"
+    }
+
+    # Skills: claude/skills/<name>/SKILL.md (may have auxiliary files)
+    for skill_md in claude/skills/*/SKILL.md; do
+      skill_dir=$(dirname "${skill_md}")
+      skill_name=$(basename "${skill_dir}")
+      dest="$HOME/.agents/skills/dotfiles/${skill_name}"
+      echo "  ${skill_name} (skill)"
+      install_codex_skill "${skill_md}" "${dest}"
       # Copy auxiliary files (templates, scripts, etc.)
       for aux in "${skill_dir}"/*; do
         [[ "$(basename "${aux}")" == "SKILL.md" ]] && continue
@@ -200,6 +209,14 @@ ai-coding-agents: qmd
       while IFS= read -r f; do
         sed -i '' 's|\.claude/|.codex/|g' "${f}"
       done < <(fd -t f --exclude SKILL.md . "${dest}" 2>/dev/null)
+    done
+
+    # Commands: claude/commands/<name>.md (single files)
+    for cmd_md in claude/commands/*.md; do
+      cmd_name=$(basename "${cmd_md}" .md)
+      dest="$HOME/.agents/skills/dotfiles/${cmd_name}"
+      echo "  ${cmd_name} (command)"
+      install_codex_skill "${cmd_md}" "${dest}"
     done
 
     # Codex: MCP and instructions are declarative in config files

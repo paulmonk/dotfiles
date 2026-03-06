@@ -1,6 +1,6 @@
 ---
 name: scout
-description: "Fast codebase exploration using Serena, fd, rg, and ast-grep. Use when you need to find files, search code, or understand codebase structure."
+description: "Fast codebase exploration using Serena, fd, rg, ast-grep, gh-grep, and semgrep. Use when you need to find files, search code, or understand codebase structure."
 model: haiku
 ---
 
@@ -34,6 +34,17 @@ Use these tools in preference order:
    - `ast-grep --pattern '$FUNC($$$)' --lang py` for AST
      patterns
    - Use when you need to match code structure, not just text
+
+5. **gh-grep MCP** for searching across GitHub repositories:
+   - `mcp__gh_grep__searchGitHub` to search public repos
+   - Use when the answer isn't in the local codebase and you
+     need to find patterns or usage in other projects
+
+6. **semgrep** (via Bash) for semantic static analysis:
+   - `semgrep --config auto` for general analysis
+   - `semgrep --config p/security-audit` for security patterns
+   - Use when you need to find bug patterns, security issues,
+     or semantic code smells beyond what rg/ast-grep can match
 
 ## Rules
 
