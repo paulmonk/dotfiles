@@ -172,7 +172,10 @@ ai-coding-agents: qmd
       done
     } | awk '/^$/{if(b)next;b=1;print;next}{b=0;print}' > codex/AGENTS.md
 
-    # Codex: copy Claude skills with frontmatter stripped
+    # Codex: copy Claude skills, converting frontmatter to Codex format.
+    # Codex parses: name, description, metadata.short-description.
+    # Claude-specific fields (allowed-tools, disable-model-invocation,
+    # user_invocable, argument-hint) are stripped via yq.
     echo "--------"
     echo "Installing Codex skills (from Claude skills)"
     for skill_md in claude/skills/*/SKILL.md; do
@@ -182,9 +185,12 @@ ai-coding-agents: qmd
       echo "  ${skill_name}"
       rm -rf "${dest}"
       mkdir -p "${dest}"
-      # Strip YAML frontmatter from SKILL.md
-      awk 'BEGIN{fm=0} /^---$/{fm++;if(fm<=2)next} fm>=2||fm==0' "${skill_md}" \
-        | sed '1{/^$/d}' > "${dest}/SKILL.md"
+      {
+        yq --front-matter=extract 'with_entries(select(.key == "name" or .key == "description"))' "${skill_md}"
+        echo "---"
+        echo
+        awk 'BEGIN{fm=0} /^---$/{fm++;next} fm>=2{print}' "${skill_md}"
+      } > "${dest}/SKILL.md"
       # Copy auxiliary files (templates, scripts, etc.)
       for aux in "${skill_dir}"/*; do
         [[ "$(basename "${aux}")" == "SKILL.md" ]] && continue
@@ -192,7 +198,7 @@ ai-coding-agents: qmd
       done
       # Patch .claude/ paths to .codex/ in auxiliary files
       while IFS= read -r f; do
-        sed -i 's|\.claude/|.codex/|g' "${f}"
+        sed -i '' 's|\.claude/|.codex/|g' "${f}"
       done < <(fd -t f --exclude SKILL.md . "${dest}" 2>/dev/null)
     done
 

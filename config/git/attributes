@@ -12,3 +12,7 @@ secrets.* diff=nodiff merge=union
 
 # Existing
 package-lock.json diff=nodiff
+
+*.ipynb diff=jupyternotebook
+
+*.ipynb merge=jupyternotebook

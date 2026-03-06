@@ -19,6 +19,10 @@ symlinked to `$HOME` for shell, editor, and tool configuration.
 | `Library/` | macOS application preferences                     |
 | `local/`   | Local bin scripts and data                        |
 
+## Worktree Policy
+
+Working directly on the default branch is allowed for this repository.
+
 ## Usage
 
 Recipes are defined in the `justfile` to manage dotfiles, dependencies, and

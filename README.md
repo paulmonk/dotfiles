@@ -1,25 +1,21 @@
 # Dotfiles
 
-User preference and configuration files that I use. Beware :wink:
+Personal configuration files managed with
+[rcm](https://github.com/thoughtbot/rcm) and
+[just](https://github.com/casey/just).
 
-This repository includes [git](http://git-scm.com/) submodules.
-The submodules need to be initialised:
+## Setup
 
-```sh
-git submodule update --init --recursive --remote --rebase
-```
-
-To install [homebrew](https://brew.sh) you will need the Xcode
-command-line tools installed and the licence accepted.
+Install Xcode command-line tools:
 
 ```sh
 xcode-select --install
-sudo xcodebuild -license accept
 ```
 
-Then from macOS Mojave onwards we need to install headers into the
-correct place.
+Install dependencies and symlink dotfiles:
 
 ```sh
-sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+just install
 ```
+
+See `just --list` for available recipes.

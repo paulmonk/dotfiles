@@ -172,8 +172,9 @@ glab mr create --draft \
 
 Title must be under 70 chars. Description should summarise the
 changes and reference the issue if one was provided. Keep the description
-concise but aligned with the template and do not worry about line-length
-constraints.
+concise but aligned with the template. Do NOT hard-wrap lines in the PR
+description body. Write each sentence or bullet point as a single long
+line and let the renderer handle wrapping.
 
 ### 6. Link Back to Issue (if applicable)
 

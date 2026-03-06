@@ -92,10 +92,13 @@ relevant ones, don't block on them
 - **Git safety**: Do not run destructive git commands
   (`reset --hard`, `checkout .`, `clean -f`, `push --force`)
   without explicit permission.
-- **Git worktrees**: Create worktrees with
-  `wt switch -c <branch>` (uses `.worktrees/` at repository
-  root). Use `wt list` to view, `wt merge <target>` to
-  squash-merge back, `wt remove` to clean up.
+- **Git worktrees**: Before starting code changes, run
+  `wt list`. If a worktree exists for the task or branch,
+  switch to it. If none exists, create one with
+  `wt switch -c <branch>`. Never work directly on the default
+  branch unless the project CLAUDE.md explicitly allows it.
+  Use `wt merge <target>` to squash-merge back,
+  `wt remove` to clean up.
 
 ## Knowledge Base
 

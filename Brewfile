@@ -574,6 +574,10 @@ brew "json-c"
 brew "json-glib"
 # Library for interacting with JSON
 brew "jsoncpp"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
+# High-performance, asynchronous messaging library
+brew "zeromq"
 # Handy way to save and run project-specific commands
 brew "just"
 # Modern load testing tool, using Go and JavaScript
@@ -710,6 +714,8 @@ brew "mycli"
 brew "mypy"
 # Virtual environments for Node.js
 brew "nave"
+# Jupyter Notebook Diff and Merge tools
+brew "nbdime"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # HTTP/2 C Library
@@ -742,8 +748,6 @@ brew "oxfmt"
 brew "oxlint"
 # 7-Zip (high compression file archiver) implementation
 brew "p7zip"
-# Swiss-army knife of markup format conversion
-brew "pandoc"
 # Perl compatible regular expressions library
 brew "pcre"
 # Simplistic interactive filtering tool
@@ -950,8 +954,6 @@ brew "ykpers"
 brew "yq"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
-# High-performance, asynchronous messaging library
-brew "zeromq"
 # Compression and file packaging/archive utility
 brew "zip"
 # Find security issues in GitHub Actions setups
@@ -1137,7 +1139,6 @@ vscode "databricks.databricks"
 vscode "davidanson.vscode-markdownlint"
 vscode "dbaeumer.vscode-eslint"
 vscode "detachhead.basedpyright"
-vscode "donjayamanne.githistory"
 vscode "dotenv.dotenv-vscode"
 vscode "ecmel.vscode-html-css"
 vscode "editorconfig.editorconfig"

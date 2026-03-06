@@ -1,6 +1,6 @@
 ---
 name: fix-issue
-description: End-to-end workflow to fix an issue: plan, implement, test, review, and open a PR/MR. Use when asked to fix, resolve, or implement an issue.
+description: "End-to-end workflow to fix an issue, plan, implement, test, review, and open a PR/MR. Use when asked to fix, resolve, or implement an issue."
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, Skill
 argument-hint: "<issue-number, beads-ID, or URL>"
 disable-model-invocation: true
