@@ -1,19 +1,7 @@
-[project]
-name = "dotfiles"
-requires-python = ">=3.13"
-
-# Type Checking
-# ===================
-[tool.ty.environment]
-python-version = "3.13"
-
-# Linting
-# ===================
-[tool.ruff]
 target-version = "py313"
 line-length = 100
 
-[tool.ruff.format]
+[format]
 # Like Black, use double quotes for strings.
 quote-style = "double"
 # Like Black, indent with spaces, rather than tabs.
@@ -23,7 +11,7 @@ skip-magic-trailing-comma = false
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
 
-[tool.ruff.lint]
+[lint]
 select = [
   "A",    # flake8-builtins
   "B",    # flake8-bugbear
@@ -87,7 +75,7 @@ extend-safe-fixes = [
   "UP006",
 ]
 
-[tool.ruff.lint.per-file-ignores]
+[lint.per-file-ignores]
 "**/tests/**/*.py" = [
   "D103",    # Relax docstring requirements
   "FBT001",  # False positive for boolean trap
@@ -106,23 +94,20 @@ extend-safe-fixes = [
 # IPython config: get_config() and c are IPython-injected globals.
 "config/ipython/profile_default/**/*.py" = ["D", "ERA", "F401", "F821", "ICN", "PTH"]
 
-[tool.ruff.lint.flake8-import-conventions]
+[lint.flake8-import-conventions]
 banned-from = [
-  "ast",
   "datetime",
   "decimal",
   "itertools",
-  "operator",
   "numpy",
   "polars",
-  "re",
 ]
-aliases = { datetime = "dt", decimal = "dec", numpy = "np", polars = "pl" }
+aliases = { datetime = "dt", decimal = "dec", itertools = "it", numpy = "np", polars = "pl" }
 
-[tool.ruff.lint.mccabe]
+[lint.mccabe]
 max-complexity = 15
 
-[tool.ruff.lint.isort]
+[lint.isort]
 section-order = [
   "future",
   "standard-library",
@@ -133,5 +118,5 @@ section-order = [
 
 required-imports = ["from __future__ import annotations"]
 
-[tool.ruff.lint.pydocstyle]
+[lint.pydocstyle]
 convention = "google"

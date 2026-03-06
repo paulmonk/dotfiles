@@ -100,3 +100,6 @@ enabled = true
 [features]
 # Experimental feature that allows Codex to delegate work to sub-agents.
 multi_agent = true
+
+[notice]
+hide_rate_limit_model_nudge = true

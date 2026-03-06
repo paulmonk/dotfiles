@@ -72,7 +72,7 @@ relevant ones, don't block on them
 | `deepwiki` MCP | - | `mcp__deepwiki__ask_question` or `mcp__deepwiki__read_wiki_contents` |
 | `serena` MCP | - | `mcp__serena__find_symbol`, `mcp__serena__get_symbols_overview` |
 | `rg` (ripgrep) | grep | `rg "pattern"` - 10x faster regex search |
-| `fd` | find | `fd "*.py"` - fast file finder |
+| `fd` | find | `fd --hidden "*.py"` - fast file finder (always pass `--hidden` to include dotfiles) |
 | `ast-grep` | - | `ast-grep --pattern '$FUNC($$$)' --lang py` - AST-based code search |
 | `semgrep` | - | `semgrep --config auto` - semantic static analysis |
 | `shellcheck` | - | `shellcheck script.sh` - shell script linter |

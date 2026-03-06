@@ -726,10 +726,6 @@ brew "nmap"
 brew "odt2txt"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
-# AI coding agent, built for the terminal
-brew "opencode"
 # Audio codecs extracted from Android open source project
 brew "opencore-amr"
 # Open source suite of directory software
@@ -814,6 +810,8 @@ brew "rav1e"
 brew "rcm"
 # Fast, configurable, extensible, flexible, and beautiful linter for Go
 brew "revive"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Wrapper around ripgrep that adds multiple rich file types
 brew "ripgrep-all"
 # Rootkit hunter

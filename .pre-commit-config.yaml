@@ -9,7 +9,7 @@ repos:
   # Basic config for all filetypes
   # ======
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
         stages: [pre-commit]
@@ -26,28 +26,54 @@ repos:
         stages: [pre-commit]
 
   - repo: https://github.com/sirosen/texthooks
-    rev: 815307a61a62d48c84412f34f3e6789a2cd9179a # frozen: 0.7.1
+    rev: 815307a61a62d48c84412f34f3e6789a2cd9179a  # frozen: 0.7.1
     hooks:
       - id: fix-smartquotes
       - id: fix-spaces
       - id: fix-ligatures
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: 8f2901e453e79dc8c524a8e43268721aa91931a6 # frozen: v4.3.0
+    rev: 8f2901e453e79dc8c524a8e43268721aa91931a6  # frozen: v4.3.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
+  # YAML
+  # ======
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: "79a6b2b1392eaf49cdd32ac4f14be1a809bbd8f7"  # frozen: v1.37.1
+    hooks:
+      - id: yamllint
+        args: ["--format", "parsable"]
+        stages: [pre-commit]
+
+  # Python
+  # ======
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 1a1f58ba4c35362efe8fed2279715a905baee93d  # frozen: v0.14.8
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        stages: [pre-commit]
+      - id: ruff-format
+        stages: [pre-commit]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: 75992aaa40730136014f34227e0135f63fc951b4  # frozen: v3.21.2
+    hooks:
+      - id: pyupgrade
+        args: ["--py311-plus"]
+        stages: [pre-commit]
+
   # Markdown
   # ======
   - repo: https://github.com/rvben/rumdl-pre-commit
-    rev: e2cb0cd6d4b373e8bb5647166b9ff1e5652315ea # frozen: v0.1.17
+    rev: e2cb0cd6d4b373e8bb5647166b9ff1e5652315ea  # frozen: v0.1.17
     hooks:
       - id: rumdl-fmt
 
   # Shell
   # ======
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: 745eface02aef23e168a8afb6b5737818efbea95 # frozen: v0.11.0.1
+    rev: 745eface02aef23e168a8afb6b5737818efbea95  # frozen: v0.11.0.1
     hooks:
       - id: shellcheck
         exclude: (^|/)\.?z(shrc|shenv|profile|login|logout)$|config/zsh/|p10k\.zsh$
@@ -55,7 +81,7 @@ repos:
         # selection, which is not guaranteed if it did not change.
         args: [--exclude=SC1091]
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: 2a30809d16bc7a60d9b97353c797f42b510d3368 # frozen: v3.12.0-2
+    rev: 2a30809d16bc7a60d9b97353c797f42b510d3368  # frozen: v3.12.0-2
     hooks:
       - id: shfmt
         exclude: (^|/)\.?z(shrc|shenv|profile|login|logout)$|config/zsh/|p10k\.zsh$
