@@ -39,7 +39,12 @@ belongs in `commands/`.
 
 ## Worktree Policy
 
-Working directly on the default branch is allowed for this repository.
+When `.worktrees/` exists for this repo, make edits from a worktree
+path (for example `.../.worktrees/<branch>/...`) rather than the main
+checkout.
+
+If `.worktrees/` does not exist yet, working in the main checkout is
+allowed.
 
 ## Usage
 

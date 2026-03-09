@@ -3,6 +3,7 @@ name: changelog
 description: Create engaging changelogs for recent merges. Use when asked for a changelog, release notes, or summary of recent changes.
 argument-hint: "[optional: daily|weekly, or time period in days]"
 allowed-tools: Bash, Read, Glob, Grep
+disable-model-invocation: true
 ---
 
 # Changelog

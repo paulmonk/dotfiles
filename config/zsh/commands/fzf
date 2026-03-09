@@ -136,52 +136,67 @@ if (( $+commands[tmux] )); then
     fi
   }
 
-  # tp [path] - Create or attach to a tmux session for a directory.
-  # If no path given, uses fzf to select from ~/projects.
+  # Create tmux sessions for one or more directories, then switch to the first.
   tp() {
-    local dir session projects_dir="${HOME}/projects"
+    # Track every selected directory so we can create all sessions first, then
+    # switch to a single deterministic target.
+    local dir session selection projects_dir="${HOME}/projects"
+    local -a dirs sessions
 
-    if [[ $# -ge 1 ]]; then
-      dir="${1}"
+    if (( $# >= 1 )); then
+      dirs=("$@")
     else
-      dir=$(fd --type d --max-depth 3 --hidden --no-ignore \
+      if ! (( $+commands[fd] )); then
+        echo "tp: fd is required but not found on PATH" >&2
+        return 1
+      fi
+      selection=$(fd --type d --max-depth 3 --hidden --no-ignore \
         --glob '.git' "${projects_dir}" 2>/dev/null |
         sed 's|/\.git/$||' |
         sort |
-        fzf --prompt="Select project: ") || return
+        fzf \
+          --multi \
+          --bind='tab:toggle+down,btab:toggle+up' \
+          --header='TAB marks projects, ENTER opens the first selection' \
+          --prompt="Select project(s): ") || return
+      dirs=("${(@f)selection}")
     fi
 
-    dir="${dir%/}"
-
-    if [[ ! -d "${dir}" ]]; then
-      echo "tp: not a directory: ${dir}" >&2
-      return 1
+    if (( ${#dirs[@]} == 0 )); then
+      return 0
     fi
 
-    # Session name: relative to ~/projects (slashes become dashes), or basename
-    if [[ "${dir}" == "${projects_dir}/"* ]]; then
-      session="${dir#"${projects_dir}"/}"
-      session="${session//\//-}"
-    else
-      session="${dir:t}"
-    fi
+    for dir in "${dirs[@]}"; do
+      dir="${dir%/}"
 
-    # Sanitise for tmux (no dots, colons, or underscores)
-    session="${session//./-}"
-    session="${session//:/-}"
-    session="${session//_/-}"
-
-    if tmux has-session -t "${session}" 2>/dev/null; then
-      if [[ -n "${TMUX:-}" ]]; then
-        tmux switch-client -t "${session}"
-      else
-        tmux attach-session -t "${session}"
+      if [[ ! -d "${dir}" ]]; then
+        echo "tp: not a directory: ${dir}" >&2
+        return 1
       fi
-      return
-    fi
 
-    tmux new-session -d -s "${session}" -c "${dir}"
+      # Session name: relative to ~/projects (slashes become dashes), or basename
+      if [[ "${dir}" == "${projects_dir}/"* ]]; then
+        session="${dir#"${projects_dir}"/}"
+        session="${session//\//-}"
+      else
+        session="${dir:t}"
+      fi
 
+      # Sanitise for tmux (no dots, colons, or underscores)
+      session="${session//./-}"
+      session="${session//:/-}"
+      session="${session//_/-}"
+      sessions+=("${session}")
+
+      if ! tmux has-session -t "${session}" 2>/dev/null; then
+        if ! tmux new-session -d -s "${session}" -c "${dir}"; then
+          echo "tp: failed to create session '${session}' for ${dir}" >&2
+          return 1
+        fi
+      fi
+    done
+
+    session="${sessions[1]}"
     if [[ -n "${TMUX:-}" ]]; then
       tmux switch-client -t "${session}"
     else

@@ -11,14 +11,66 @@ set -o errexit -o errtrace -o pipefail -o nounset
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 
+readonly XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"
 readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 readonly FREEZE_DIR="${XDG_DATA_HOME}/tmux/frozen-sessions"
 readonly LOG_FILE="${FREEZE_DIR}/restore.log"
+readonly RUNTIME_STATE_DIR="${XDG_RUNTIME_DIR}/tmux"
+readonly RESTORE_LOCK_DIR="${RUNTIME_STATE_DIR}/restore.lock"
+owns_restore_lock=0
 
+# Append a timestamped entry to the restore log.
 log() {
   echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}"
 }
 
+# Only remove the lock when this process created it.
+release_restore_lock() {
+  if ((owns_restore_lock == 0)); then
+    return 0
+  fi
+
+  command rm -f "${RESTORE_LOCK_DIR}/pid" 2>/dev/null || true
+  rmdir "${RESTORE_LOCK_DIR}" 2>/dev/null || true
+  owns_restore_lock=0
+}
+
+# Clear a stale restore lock left behind by a dead process.
+clear_stale_restore_lock() {
+  command rm -f "${RESTORE_LOCK_DIR}/pid" 2>/dev/null || true
+  rmdir "${RESTORE_LOCK_DIR}" 2>/dev/null || true
+}
+
+# Claim restore ownership, or recover a stale lock from a dead process.
+acquire_restore_lock() {
+  local restore_pid=""
+
+  mkdir -p "${RUNTIME_STATE_DIR}"
+  if mkdir "${RESTORE_LOCK_DIR}" 2>/dev/null; then
+    echo "$$" >"${RESTORE_LOCK_DIR}/pid"
+    owns_restore_lock=1
+    return 0
+  fi
+
+  if [[ -f "${RESTORE_LOCK_DIR}/pid" ]]; then
+    restore_pid=$(<"${RESTORE_LOCK_DIR}/pid")
+  fi
+
+  if [[ -n "${restore_pid}" ]] && kill -0 "${restore_pid}" 2>/dev/null; then
+    log "Restore already in progress, skipping"
+    return 1
+  fi
+
+  clear_stale_restore_lock
+  if ! mkdir "${RESTORE_LOCK_DIR}" 2>/dev/null; then
+    log "Failed to re-acquire restore lock after clearing stale"
+    return 1
+  fi
+  echo "$$" >"${RESTORE_LOCK_DIR}/pid"
+  owns_restore_lock=1
+}
+
+# Restore frozen sessions into the current tmux server, then refresh snapshots.
 main() {
   # Nothing to restore if the directory is missing or empty.
   if [[ ! -d "${FREEZE_DIR}" ]]; then
@@ -30,6 +82,15 @@ main() {
   if [[ ! -f "${files[0]}" ]]; then
     return 0
   fi
+
+  trap release_restore_lock EXIT
+  acquire_restore_lock || return 0
+
+  local socket_path
+  socket_path=$(tmux display-message -p '#{socket_path}' 2>/dev/null) || {
+    log "Failed to determine socket path, cannot restore"
+    return 1
+  }
 
   # Get existing sessions (may be empty on fresh server start).
   local existing_sessions=""
@@ -47,12 +108,16 @@ main() {
       continue
     fi
 
-    if tmuxp load -d "${file}" 2>>"${LOG_FILE}"; then
+    if tmuxp load -S "${socket_path}" -d "${file}" 2>>"${LOG_FILE}"; then
       log "Restored: ${session_name}"
     else
       log "Failed to restore: ${session_name}"
     fi
   done
+
+  release_restore_lock
+  trap - EXIT
+  LOCAL_TMUX_SOCKET_PATH="${socket_path}" "$HOME/.local/bin/tmux-freeze" --prune
 }
 
 main "$@"

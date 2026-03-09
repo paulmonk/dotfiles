@@ -3,6 +3,7 @@ name: code-review
 description: Run a code review using specialised agents. Use when asked to review code, review a PR/MR, or check code quality.
 allowed-tools: Bash, Read, Glob, Grep, Task
 argument-hint: "[review-aspects] or [PR/MR number or URL]"
+disable-model-invocation: true
 ---
 
 # Code Review

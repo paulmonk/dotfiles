@@ -229,7 +229,32 @@ fi
 if (( $+commands[claude] )); then
   # Bypasses all permission prompts. This is the recommended way to run Claude
   # for maximum throughput, pair it with sandboxing.
-  alias claude-yolo="claude --dangerously-skip-permissions --add-dir ~/.cache/"
+  claude-yolo() {
+    local -a args
+    local git_common_dir git_dir
+
+    args=(
+      --add-dir "${HOME}/.cache"
+      --dangerously-skip-permissions
+    )
+
+    # Allow git metadata writes for commits and pushes, including worktree setups
+    # where the writable git dir lives outside the checkout.
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)"
+      git_common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+
+      if [[ -n "${git_dir}" ]]; then
+        args+=(--add-dir "${git_dir}")
+      fi
+
+      if [[ -n "${git_common_dir}" && "${git_common_dir}" != "${git_dir}" ]]; then
+        args+=(--add-dir "${git_common_dir}")
+      fi
+    fi
+
+    claude "${args[@]}" "$@"
+  }
 
   # claude-local wraps claude with the local server env vars and
   # disables telemetry pings that won't reach Anthropic anyway.
@@ -245,10 +270,32 @@ fi
 if (( $+commands[codex] )); then
   # Bypasses approval prompts while keeping workspace sandbox intact.
   codex-yolo() {
-    codex \
-      --ask-for-approval never \
-      --sandbox workspace-write \
+    local -a args
+    local git_common_dir git_dir
+
+    args=(
+      --add-dir "${HOME}/.cache"
+      --ask-for-approval never
+      --sandbox workspace-write
       --config "sandbox_workspace_write.network_access=true"
+    )
+
+    # Allow git metadata writes for commits and pushes, including worktree setups
+    # where the writable git dir lives outside the checkout.
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)"
+      git_common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+
+      if [[ -n "${git_dir}" ]]; then
+        args+=(--add-dir "${git_dir}")
+      fi
+
+      if [[ -n "${git_common_dir}" && "${git_common_dir}" != "${git_dir}" ]]; then
+        args+=(--add-dir "${git_common_dir}")
+      fi
+    fi
+
+    codex "${args[@]}" "$@"
   }
 fi
 

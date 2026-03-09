@@ -1,13 +1,13 @@
 ---
 name: research
 description: >-
-  This skill should be used when the user asks to "research",
-  "spike", "evaluate options", "compare approaches", "assess
-  feasibility", "explore whether", "find out if we can",
-  "pros and cons of", or "what's the best way to". Also
-  triggered by requests to produce a spike report, write up
-  research findings, or answer a technical question that
-  requires exploration before implementation.
+  Use when a decision needs research before implementation.
+  Symptoms: evaluating libraries, tools, or vendors; comparing
+  approaches with trade-offs; "compare X vs Y"; feasibility
+  assessment; pros and cons analysis; "can we?" or "should we?"
+  questions; "what are our options for...?"; exploring
+  alternatives; "which approach should we take"; time-boxed
+  spike to reduce uncertainty before committing to a path.
 user_invocable: true
 ---
 
@@ -107,6 +107,27 @@ question where possible: "Can we...?", "Should we...?",
 
 ## Workflow
 
+### Context preservation
+
+Use **parallel subagents** (via the Agent tool) to research
+independent options or sub-questions simultaneously. For
+example, when comparing three libraries, dispatch one agent
+per library rather than researching them sequentially in the
+main context.
+
+Use the **Scout agent** (`subagent_type: scout`) for any
+codebase exploration needed to understand current architecture,
+dependencies, or constraints. This keeps file contents and
+search results out of the main context.
+
+Reserve the main context for:
+
+- Defining the question and evaluation criteria
+- Synthesising findings from subagents into the report
+- Web searches (exa, deepwiki, context7) when not delegated
+  to a parallel agent
+- Interactive clarification with the user
+
 ### 1. Define the question
 
 Extract the core question from the user's request. A good
@@ -172,3 +193,20 @@ Before presenting the report, check:
 - **Keep it skimmable.** Stakeholders will read the Goal,
   skip to Recommendations, and only read Evidence if they
   need convincing. Structure accordingly.
+
+## Common Mistakes
+
+- **Researching sequentially when options are independent.**
+  Dispatch parallel subagents for each option. Synthesise
+  results in the main context.
+- **No evaluation criteria before researching.** Establish
+  what matters (cost, performance, complexity, maintenance)
+  up front so findings are comparable, not ad hoc.
+- **Opinion without evidence.** Every claim in Recommendations
+  must trace back to something in Evidence. Link to docs,
+  benchmarks, or code.
+- **Hiding trade-offs.** Every option has downsides. Stating
+  them builds trust and prevents surprises.
+- **Exhaustive research instead of time-boxed.** This is a
+  spike, not a thesis. Answer the core question, flag what
+  remains unknown, and move on.

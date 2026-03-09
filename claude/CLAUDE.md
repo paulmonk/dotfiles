@@ -84,6 +84,13 @@ relevant ones, don't block on them
 | `bd` | - | Issue tracking and task management |
 | `trash` | rm | `trash file` - moves to macOS Trash (recoverable). **Never use `rm -rf`** |
 
+For web research:
+
+- Use `exa` for general web search and page retrieval.
+- Use `context7` for library/framework documentation.
+- Use `deepwiki` for GitHub repository docs/questions.
+- Do not use native WebSearch/WebFetch when these tools are available.
+
 ### Tooling Workflow
 
 - **Task runner**. If a `justfile` exists, prefer `just` for

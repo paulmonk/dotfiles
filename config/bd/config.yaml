@@ -4,8 +4,8 @@
 # Overrides per-project .beads/config.yaml defaults.
 # Per-project settings still take precedence when set.
 
-# Stealth mode: do not run git operations during bd sync.
-# Flush to JSONL only; manual git workflow.
+# Stealth mode: do not run git operations automatically.
+# Manual git workflow.
 no-git-ops: true
 
 # Chain existing hooks (e.g. prek) before bd's own hook logic.

@@ -56,10 +56,10 @@ paths: **/*.{sh,bash}
 # Bad: variables set in while are lost
 cat file | while read -r line; do ...
 
-# Good: use process substitution
+# Good: redirect from file
 while read -r line; do
   process "${line}"
-done < <(cat file)
+done < file
 ```
 
 ## Functions

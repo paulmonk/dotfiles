@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+#/ Usage: tmux-autosave
+#/
+#/ Runs a singleton background loop that periodically freezes tmux sessions.
+#/ Started by tmux on server start and exits automatically when the tmux server
+#/ stops. Logs unexpected exits and notifies tmux if the loop dies mid-session.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
+readonly XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"
+readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+readonly FREEZE_DIR="${XDG_DATA_HOME}/tmux/frozen-sessions"
+readonly LOG_FILE="${FREEZE_DIR}/autosave.log"
+readonly RUNTIME_STATE_DIR="${XDG_RUNTIME_DIR}/tmux"
+readonly AUTOSAVE_LOCK_DIR="${RUNTIME_STATE_DIR}/autosave.lock"
+readonly FREEZE_INTERVAL_SECONDS="${LOCAL_TMUX_AUTOSAVE_INTERVAL_SECONDS:-600}"
+tmux_socket_path=""
+owns_autosave_lock=0
+
+# Re-exec in a detached session so the autosave loop survives run-shell exit.
+if [[ "${LOCAL_TMUX_AUTOSAVE_DETACH:-0}" == "1" ]] && [[ "${LOCAL_TMUX_AUTOSAVE_DAEMONIZED:-0}" != "1" ]]; then
+  exec python -c '
+import os
+import subprocess
+import sys
+
+env = dict(os.environ)
+env["LOCAL_TMUX_AUTOSAVE_DAEMONIZED"] = "1"
+env.pop("LOCAL_TMUX_AUTOSAVE_DETACH", None)
+
+with open(os.devnull, "rb") as stdin, open(os.devnull, "ab") as stdout:
+    subprocess.Popen(
+        [sys.argv[1]],
+        stdin=stdin,
+        stdout=stdout,
+        stderr=subprocess.STDOUT,
+        env=env,
+        start_new_session=True,
+        close_fds=True,
+    )
+' "$0"
+fi
+
+# Append a timestamped entry to the autosave log.
+log() {
+  mkdir -p "${FREEZE_DIR}"
+  echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}"
+}
+
+# Run tmux against the captured socket so the loop follows one server only.
+tmux_cmd() {
+  if [[ -n "${tmux_socket_path}" ]]; then
+    tmux -S "${tmux_socket_path}" "$@"
+  else
+    tmux "$@"
+  fi
+}
+
+# Surface autosave failures inside tmux when the server is still available.
+notify_tmux() {
+  local message="$1"
+
+  if tmux_cmd list-sessions &>/dev/null; then
+    tmux_cmd display-message "${message}" >/dev/null 2>&1 || true
+  fi
+}
+
+# Only remove the lock when this process owns it.
+release_autosave_lock() {
+  if ((owns_autosave_lock == 0)); then
+    return 0
+  fi
+
+  command rm -f "${AUTOSAVE_LOCK_DIR}/pid" 2>/dev/null || true
+  rmdir "${AUTOSAVE_LOCK_DIR}" 2>/dev/null || true
+  owns_autosave_lock=0
+}
+
+# Clear a stale autosave lock left behind by a dead process.
+clear_stale_autosave_lock() {
+  command rm -f "${AUTOSAVE_LOCK_DIR}/pid" 2>/dev/null || true
+  rmdir "${AUTOSAVE_LOCK_DIR}" 2>/dev/null || true
+}
+
+# Wait briefly for an existing autosave loop to settle before treating it as live.
+acquire_autosave_lock() {
+  mkdir -p "${RUNTIME_STATE_DIR}"
+  local autosave_pid=""
+
+  for _ in 1 2 3; do
+    if mkdir "${AUTOSAVE_LOCK_DIR}" 2>/dev/null; then
+      echo "$$" >"${AUTOSAVE_LOCK_DIR}/pid"
+      owns_autosave_lock=1
+      return 0
+    fi
+
+    autosave_pid=""
+    if [[ -f "${AUTOSAVE_LOCK_DIR}/pid" ]]; then
+      autosave_pid=$(<"${AUTOSAVE_LOCK_DIR}/pid")
+    fi
+
+    if [[ -n "${autosave_pid}" ]] && kill -0 "${autosave_pid}" 2>/dev/null; then
+      sleep 1
+      continue
+    fi
+
+    clear_stale_autosave_lock
+    if mkdir "${AUTOSAVE_LOCK_DIR}" 2>/dev/null; then
+      echo "$$" >"${AUTOSAVE_LOCK_DIR}/pid"
+      owns_autosave_lock=1
+      return 0
+    fi
+  done
+
+  log "Autosave loop already running, skipping"
+  return 1
+}
+
+# Report unexpected exits so the loop does not fail silently.
+on_exit() {
+  local exit_code=$?
+
+  release_autosave_lock
+
+  if ((exit_code == 0)); then
+    log "Autosave loop exited cleanly"
+  else
+    log "Autosave loop exited with code ${exit_code}"
+    notify_tmux "tmux autosave stopped, see ${LOG_FILE}"
+  fi
+
+  exit "${exit_code}"
+}
+
+# Start a singleton autosave loop for the current tmux server socket.
+main() {
+  trap on_exit EXIT
+
+  if ! [[ "${FREEZE_INTERVAL_SECONDS}" =~ ^[1-9][0-9]*$ ]]; then
+    log "Invalid LOCAL_TMUX_AUTOSAVE_INTERVAL_SECONDS=${FREEZE_INTERVAL_SECONDS}"
+    return 1
+  fi
+
+  acquire_autosave_lock || return 0
+  tmux_socket_path=$(tmux display-message -p '#{socket_path}' 2>/dev/null) || {
+    log "Failed to capture tmux socket path (server may not be ready)"
+    return 1
+  }
+  log "Autosave loop started for ${tmux_socket_path} at ${FREEZE_INTERVAL_SECONDS}s"
+
+  while tmux_cmd list-sessions &>/dev/null; do
+    sleep "${FREEZE_INTERVAL_SECONDS}"
+
+    if ! tmux_cmd list-sessions &>/dev/null; then
+      break
+    fi
+
+    if ! LOCAL_TMUX_SOCKET_PATH="${tmux_socket_path}" "$HOME/.local/bin/tmux-freeze"; then
+      log "Periodic freeze failed"
+    fi
+  done
+}
+
+main "$@"

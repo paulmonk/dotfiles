@@ -123,17 +123,4 @@ return {
 			)
 		end,
 	},
-
-	-- Claude Code
-	{
-		'coder/claudecode.nvim',
-		dependencies = { 'folke/snacks.nvim' },
-		lazy = false,
-		opts = {
-			terminal = {
-				split_side = 'right',
-				split_width_percentage = 0.40,
-			},
-		},
-	},
 }

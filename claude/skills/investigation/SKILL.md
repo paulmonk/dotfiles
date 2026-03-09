@@ -1,12 +1,14 @@
 ---
 name: investigation
 description: >-
-  This skill should be used when the user asks to "investigate",
-  "look into", "find out why", "what caused", "root cause",
-  "diagnose", "troubleshoot", "debug why", "analyze this
-  failure", or "figure out what's going on with". Also triggered
-  by requests to write up findings, produce an investigation
-  report, or explain a data discrepancy.
+  This skill should be used when the cause of a problem is
+  unknown and evidence gathering is needed before a fix.
+  Triggered by phrases like "why did X break", "something
+  stopped working", "find the root cause", "investigate why",
+  "diagnose this issue". Symptoms include data discrepancies,
+  unexpected behaviour changes, intermittent failures,
+  regressions, dropped metrics, mismatched values, and missing
+  records. Produces a five-section diagnostic report.
 user_invocable: true
 ---
 
@@ -25,6 +27,7 @@ Invoke with a topic or problem description:
 /investigation cost data mismatch in campaign reporting
 /investigation why deploy pipeline fails on main since Monday
 /investigation intermittent 502 errors on payments endpoint
+/investigation test suite started flaking after dependency upgrade
 ```
 
 ## Arguments
@@ -95,29 +98,55 @@ external party, state exactly what to ask them.>
 
 ## Workflow
 
+### Context preservation
+
+Use the **Scout agent** (via the Agent tool with
+`subagent_type: scout`) for all codebase exploration, file
+reading, log tailing, and search operations. This keeps the
+heavy output out of the main context window.
+
+Dispatch Scout with a clear, specific question. Scout returns
+a concise summary. Synthesise those summaries here rather than
+reading raw files yourself.
+
+Reserve direct tool use in the main context for:
+
+- Writing the final report
+- Small, targeted reads (a single config value, a short diff)
+- Web searches (exa, deepwiki, context7) that Scout cannot do
+- Interactive clarification with the user
+
 ### 1. Gather context
 
-Read any files, logs, data, or documentation the user points
-to. If the user describes the problem verbally, extract the
-key facts: what changed, when, what's affected.
+Extract the key facts from the user's description: what
+changed, when, what's affected.
 
-Inspect files, tail logs, check `git log` and `git blame`
-for recent changes, query databases, or search the web for
-error messages and known issues.
+Dispatch Scout subagents (in parallel where independent) to:
+
+- Read files, logs, or documentation the user points to
+- Check `git log` and `git blame` for recent changes
+- Search the codebase for related code and configuration
+- Find error messages or patterns in logs
+
+If the problem involves external data, use web search tools
+(exa, deepwiki) directly since Scout cannot access them.
 
 ### 2. Form hypotheses
 
-Based on initial evidence, list possible causes. Rank by
+Based on Scout's findings, list possible causes. Rank by
 likelihood. This guides where to look next.
 
 ### 3. Verify
 
-For each hypothesis, gather evidence to confirm or rule it
-out. Use queries, file inspection, log analysis, or web
-searches as needed. For regressions, `git bisect` can
-pinpoint the introducing commit. Record what was checked
-and what was found, including negative results (things
-ruled out).
+For each hypothesis, dispatch Scout to gather evidence that
+confirms or rules it out. Use parallel Scout calls when
+checking independent hypotheses.
+
+For regressions, ask Scout to run `git bisect` or inspect
+commit history to pinpoint the introducing change.
+
+Record what was checked and what was found, including
+negative results (things ruled out).
 
 ### 4. Write the report
 
@@ -149,3 +178,19 @@ Before presenting the report, check:
   originates in our systems or an external one.
 - **Quantify impact.** Stakeholders need to know how bad it is
   to prioritise the fix. Rough numbers are better than none.
+
+## Common Mistakes
+
+- **Jumping to a fix before understanding the cause.** If the
+  cause is already known, use /fix-issue instead. This skill
+  is for when you need to find the cause first.
+- **Mixing fact and hypothesis.** "What is verified" must be
+  independently confirmable. If you're guessing, it goes in
+  "Suspected cause".
+- **Reading entire files in main context.** Delegate to Scout.
+  You only need the summary to write the report.
+- **Sequential hypothesis checking.** If hypotheses are
+  independent, dispatch parallel Scout calls. Don't wait for
+  one to finish before starting the next.
+- **Vague impact.** "Some users are affected" is not useful.
+  Quantify: how many, how much, since when.

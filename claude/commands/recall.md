@@ -3,6 +3,7 @@ name: recall
 description: Search past conversation sessions via QMD. Use when the user wants to find previous sessions, recall what was discussed, or search conversation history.
 argument-hint: "[query]"
 allowed-tools: mcp__qmd__vsearch, mcp__qmd__search, mcp__qmd__get
+disable-model-invocation: true
 ---
 
 # /recall - Search Past Sessions

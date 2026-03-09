@@ -3,6 +3,7 @@ name: commit-push-pr
 description: Commit staged work, push, and open a draft PR/MR. Use when asked to commit and push, create a PR, or ship changes.
 allowed-tools: Bash, Read, Glob, Grep
 argument-hint: "[issue number or beads-ID]"
+disable-model-invocation: true
 ---
 
 # Commit, Push, and Open PR

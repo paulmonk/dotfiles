@@ -1,49 +1,33 @@
-# Block destructive DDL/DML (DROP, TRUNCATE, DELETE, CREATE OR REPLACE).
-# These require manual confirmation outside the agent.
-substring_rule(
-    pattern = "DROP ",
-    decision = "deny",
-    justification = "DROP is blocked. Destructive DDL via bq query requires manual confirmation outside the agent.",
+# Guard BigQuery commands.
+# This policy language only supports command-prefix matching,
+# so query text itself cannot be inspected reliably.
+
+# Block destructive `bq rm` operations.
+prefix_rule(
+    pattern = ["bq", "rm"],
+    decision = "forbidden",
+    justification = "bq rm is blocked. Destructive BigQuery operations require manual confirmation outside the agent.",
     match = [
-        "bq query 'DROP TABLE dataset.table'",
-        "bq query 'DROP VIEW dataset.view'",
+        "bq rm -t project:dataset.table",
+        "bq rm -f -r project:dataset",
+    ],
+    not_match = [
+        "bq ls",
+        "bq query 'SELECT 1'",
     ],
 )
 
-substring_rule(
-    pattern = "TRUNCATE TABLE",
-    decision = "deny",
-    justification = "TRUNCATE TABLE is blocked. Destructive operations via bq query require manual confirmation outside the agent.",
-    match = [
-        "bq query 'TRUNCATE TABLE dataset.table'",
-    ],
-)
-
-substring_rule(
-    pattern = "DELETE FROM",
-    decision = "deny",
-    justification = "DELETE is blocked. Destructive DML via bq query requires manual confirmation outside the agent.",
-    match = [
-        "bq query 'DELETE FROM dataset.table WHERE 1=1'",
-    ],
-)
-
-substring_rule(
-    pattern = "CREATE OR REPLACE",
-    decision = "deny",
-    justification = "CREATE OR REPLACE is blocked. It silently overwrites existing objects. Use CREATE IF NOT EXISTS or run manually.",
-    match = [
-        "bq query 'CREATE OR REPLACE TABLE dataset.table AS SELECT 1'",
-    ],
-)
-
-# Require a cost cap on bq query commands.
+# Require explicit user approval for all bq query invocations.
 prefix_rule(
     pattern = ["bq", "query"],
-    decision = "prompt",
-    justification = "bq query requires a --maximum_bytes_billed flag to prevent expensive queries. Add --maximum_bytes_billed=10737418240 (10 GiB limit).",
+    decision = "forbidden",
+    justification = "bq query is blocked in agent execution. Run manually outside Codex after explicit human review.",
     match = [
         "bq query --use_legacy_sql=false 'SELECT 1'",
-        "bq query 'SELECT * FROM dataset.table'",
+        "bq query --maximum_bytes_billed=10737418240 'SELECT * FROM dataset.table LIMIT 10'",
+    ],
+    not_match = [
+        "bq ls",
+        "bq show project:dataset.table",
     ],
 )

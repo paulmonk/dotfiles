@@ -88,6 +88,13 @@ relevant ones, don't block on them
 | `bd` | - | Issue tracking and task management |
 | `trash` | rm | `trash file` - moves to macOS Trash (recoverable). **Never use `rm -rf`** |
 
+For web research:
+
+- Use `exa` for general web search and page retrieval.
+- Use `context7` for library/framework documentation.
+- Use `deepwiki` for GitHub repository docs/questions.
+- Do not use native WebSearch/WebFetch when these tools are available.
+
 ### Tooling Workflow
 
 - **Task runner**. If a `justfile` exists, prefer `just` for
@@ -203,7 +210,7 @@ Before finishing a task:
 - **Pin actions to SHA hashes** with a version comment:
 
   ```yaml
-  - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b  # v3.0.2
+  - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
     with:
       persist-credentials: false
   ```
@@ -560,7 +567,6 @@ Work is NOT complete until `git push` succeeds.
 
 ```bash
 git pull --rebase
-bd sync
 git push
 git status  # MUST show "up to date with origin"
 ```
@@ -587,7 +593,7 @@ git status  # MUST show "up to date with origin"
 | Format      | `uv run ruff format`                        |
 | Types       | `uv run ty check` (fallback: `uv run mypy`) |
 | Tests       | `uv run pytest -q`                          |
-| Build       | `uv_build` backend                          |
+| Build       | `uv build`                                  |
 
 Do not introduce `pip`, Poetry, or `requirements.txt` unless
 asked.
@@ -939,10 +945,10 @@ similar_names = "allow"
 ## Bad: variables set in while are lost
 cat file | while read -r line; do ...
 
-## Good: use process substitution
+## Good: redirect from file
 while read -r line; do
   process "${line}"
-done < <(cat file)
+done < file
 ```
 
 ### Functions
@@ -1031,7 +1037,9 @@ usage() { grep '^#/' "$0" | cut -c4-; exit 0; }
   SQL, more portable).
 - **Null handling:** Use `coalesce` instead of
   `ifnull`/`nvl`. Use `is null`/`is not null` instead of
-  `isnull`/`notnull`.
+  `isnull`/`notnull`. For nullable column comparisons, use
+  `is [not] distinct from` instead of verbose `case` logic
+  (SQL:2023, widely supported).
 - **Conditionals:** Use `case` statements instead of
   `iff`/`if` for portability.
 - **Aliasing:** Always use the `as` keyword when aliasing
@@ -1039,7 +1047,9 @@ usage() { grep '^#/' "$0" | cut -c4-; exit 0; }
 - **Aggregates:** Always alias grouping aggregates and other
   column expressions.
 - **Filtering:** Use `where` instead of `having` when either
-  would suffice (better performance).
+  would suffice (better performance). Use `qualify` to filter
+  on window function results directly, avoiding a CTE wrapper
+  (BigQuery, Databricks, DuckDB, Snowflake, ClickHouse).
 - **Unions:** Use `union all` instead of `union` unless
   duplicates must be removed.
 - **Distinct:** Use `select distinct` instead of grouping by
@@ -1053,6 +1063,22 @@ usage() { grep '^#/' "$0" | cut -c4-; exit 0; }
   continuation lines by 4 spaces.
 - **Strings:** Use single quotes. Double quotes are for
   identifiers in most dialects.
+- **Selective aggregation:** Use `filter (where ...)` on
+  aggregate functions for conditional aggregates instead of
+  `case` inside the aggregate (PostgreSQL, DuckDB, SQLite,
+  Databricks).
+- **Grouping:** Use `group by all` where supported (DuckDB,
+  Databricks, ClickHouse) to avoid repeating non-aggregate
+  columns. Use `grouping sets`, `rollup`, or `cube` for
+  multi-level aggregation in a single pass instead of
+  unioning multiple queries.
+- **Pivoting:** Use `pivot`/`unpivot` where supported
+  (DuckDB, Databricks, Snowflake, SQL Server, BigQuery)
+  instead of manual `case` expressions for transposition.
+- **Compound types:** Use native `struct`, `array`, and
+  `map` types for nested data where supported (DuckDB,
+  BigQuery, Databricks, Snowflake) instead of flattening
+  into separate tables or JSON strings.
 
 ### Joins
 
@@ -1067,6 +1093,17 @@ usage() { grep '^#/' "$0" | cut -c4-; exit 0; }
   prefix column names with the table name/alias.
 - **Filter placement:** For inner joins, put filter
   conditions in `where`, not the `join` clause.
+- **Semi/anti joins:** Where supported (DuckDB, ClickHouse),
+  prefer explicit `semi join` / `anti join` over
+  `where exists` / `where not exists` subqueries.
+- **ASOF joins:** For time-series "closest match" joins
+  (e.g. matching to the most recent exchange rate), use
+  `asof join` where supported (DuckDB, Snowflake,
+  ClickHouse). Syntax varies by platform.
+- **Lateral joins:** Use `lateral` (or `cross apply` /
+  `outer apply` on SQL Server) for correlated subqueries
+  in the `from` clause. Powerful but can degrade
+  performance; use with caution.
 
 ```sql
 /* Good */
@@ -1086,8 +1123,9 @@ join orders on customers.id = orders.customer_id
 
 ### Performance
 
-The below applies to OLAP engines (BigQuery, Databricks,
-Spark, Snowflake):
+The below applies to distributed OLAP engines (BigQuery,
+Databricks, Snowflake). In-process engines like DuckDB
+handle partitioning and join strategies automatically.
 
 #### Partitioning
 
@@ -1100,8 +1138,6 @@ Spark, Snowflake):
   CTE that references the table.
 - BigQuery: Date/timestamp or integer range columns. Max
   4,000 partitions per table.
-- Spark: Use `partitionBy()` when writing. Filter columns
-  benefit most.
 - Databricks: Delta Lake uses `partitionBy()`. Avoid
   over-partitioning; target files of 1GB each.
 - Snowflake: Automatic micro-partitions. Define clustering
@@ -1115,11 +1151,10 @@ Spark, Snowflake):
   their defined order (leftmost first).
 - BigQuery: Up to 4 columns. Effective on
   tables/partitions over 64MB.
-- Spark: Use `bucketBy()` for similar benefits on
-  join/filter columns.
 - Databricks: Use `OPTIMIZE ... ZORDER BY` for
   multi-dimensional clustering. Liquid clustering
-  (`CLUSTER BY`) auto-maintains.
+  (`CLUSTER BY`) auto-maintains. Use `bucketBy()` for
+  join/filter column co-location.
 - Snowflake: Up to 4 columns recommended. Check depth with
   `SYSTEM$CLUSTERING_INFORMATION`.
 
@@ -1135,16 +1170,15 @@ Spark, Snowflake):
   join locally without shuffle.
 - **Avoid skew:** Highly skewed join keys cause hot spots.
   Consider pre-aggregating or salting.
-- Spark: `/*+ BROADCAST(t) */`, `/*+ MERGE(t) */`,
-  `/*+ SHUFFLE_HASH(t) */`. Priority:
-  broadcast > merge > shuffle_hash.
-- Databricks: Same Spark hints. Adaptive Query Execution
-  (AQE) auto-optimises join strategy at runtime.
+- Databricks: Spark hints `/*+ BROADCAST(t) */`,
+  `/*+ MERGE(t) */`, `/*+ SHUFFLE_HASH(t) */`. Priority:
+  broadcast > merge > shuffle_hash. Adaptive Query
+  Execution (AQE) auto-optimises at runtime.
 - Snowflake: No hints. Ensure join columns have matching
   data types.
 
 ```sql
-/* Spark: broadcast small dimension table */
+/* Databricks: broadcast small dimension table */
 select /*+ BROADCAST(regions) */
     orders.id
     , regions.name
@@ -1162,12 +1196,19 @@ inner join regions on orders.region_id = regions.id
   logic.
 - **Prefer CTEs:** Use CTEs rather than subqueries for
   readability and reusability.
+- **Recursive CTEs:** Use `with recursive` for hierarchical
+  or graph traversal queries (org charts, bill of materials,
+  category trees). Always include a depth limit or
+  termination condition to prevent infinite loops.
 
 ```sql
 /* Good */
 with
     paying_customers as (
-        select *
+        select
+            id
+            , email
+            , plan_name
         from customers
         where plan_name != 'free'
     )
@@ -1178,7 +1219,9 @@ from paying_customers
 /* Bad */
 select ...
 from (
-    select * from customers where plan_name != 'free'
+    select id, email, plan_name
+    from customers
+    where plan_name != 'free'
 ) as paying_customers
 ```
 
@@ -1271,9 +1314,13 @@ where
 #### Group By and Order By
 
 ```sql
-/* Column numbers on one line */
-/* Prefer column names over numbers */
-group by 1, 2, 3
+/* Prefer group by all where supported */
+group by all
+
+/* Otherwise use column names, not numbers */
+group by
+    plan_name
+    , signup_month
 
 /* Column names: single on same line, multiple indented */
 order by
@@ -1338,6 +1385,53 @@ row_number() over (
     partition by customer_id
     order by created_at
   ) as order_rank
+
+/* RANGE frame: value-based bounds (e.g. time intervals) */
+avg(temperature) over (
+    order by reading_datetime
+    range between interval '1 hour' preceding
+              and interval '1 hour' following
+) as avg_temperature_within_hour
+
+/* EXCLUDE: omit current row from frame */
+avg(temperature) over (
+    order by reading_datetime
+    range between interval '1 hour' preceding
+              and interval '1 hour' following
+          exclude current row
+) as avg_excluding_current
+
+/* Named window: reuse the same definition across columns */
+select
+    reading_datetime
+    , min(temperature) over hourly as min_temp
+    , avg(temperature) over hourly as avg_temp
+    , max(temperature) over hourly as max_temp
+from readings
+window hourly as (
+    order by reading_datetime
+    range between interval '1 hour' preceding
+              and interval '1 hour' following
+)
+```
+
+#### Qualify and Filter
+
+```sql
+/* QUALIFY: filter on window results without a CTE */
+select *
+from customers
+qualify 1 = row_number() over (
+    partition by customer_id
+    order by updated_at desc
+)
+
+/* FILTER: conditional aggregation without case */
+select
+    count(*) as total_orders
+    , count(*) filter (where status = 'shipped') as shipped_orders
+    , sum(amount) filter (where status = 'refunded') as refunded_amount
+from orders
 ```
 
 #### In Lists
@@ -1902,7 +1996,8 @@ options:
 
 - **Wrapper objects:** Never use `String`, `Boolean`,
   `Number`, `Object` constructors.
-- **const enum:** Use plain `enum` instead.
+- **enum:** Prefer `as const` objects over both `enum` and
+  `const enum` (`const enum` breaks `isolatedModules`).
 - **debugger:** Not in production code.
 - **with:** Never use.
 - **eval:** No dynamic code evaluation.

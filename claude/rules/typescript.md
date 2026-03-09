@@ -236,7 +236,8 @@ options:
 
 - **Wrapper objects:** Never use `String`, `Boolean`,
   `Number`, `Object` constructors.
-- **const enum:** Use plain `enum` instead.
+- **enum:** Prefer `as const` objects over both `enum` and
+  `const enum` (`const enum` breaks `isolatedModules`).
 - **debugger:** Not in production code.
 - **with:** Never use.
 - **eval:** No dynamic code evaluation.

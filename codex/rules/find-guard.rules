@@ -1,7 +1,7 @@
 # Prefer fd over find for faster, .gitignore-aware file searches.
 prefix_rule(
     pattern = ["find"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use fd instead of find. It is faster, respects .gitignore, and has simpler syntax.",
     match = [
         "find . -name '*.py'",

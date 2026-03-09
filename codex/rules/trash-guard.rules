@@ -1,7 +1,7 @@
 # Prefer trash over rm for safer file deletion.
 prefix_rule(
     pattern = ["rm"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use trash instead of rm. The trash command moves files to the system trash where they can be recovered.",
     match = [
         "rm file.txt",

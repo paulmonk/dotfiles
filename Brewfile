@@ -5,7 +5,6 @@ tap "homebrew/services"
 tap "lightdash/lightdash"
 tap "polymarket/polymarket-cli", "https://github.com/Polymarket/polymarket-cli"
 tap "saulpw/vd"
-tap "thoughtbot/formulae"
 tap "warrensbox/tap"
 tap "withgraphite/tap"
 # C++ Common Libraries
@@ -72,10 +71,18 @@ brew "webp"
 brew "aom"
 # AWS SDK for C++
 brew "aws-sdk-cpp"
+# Protocol buffers (Google's data interchange format)
+brew "protobuf"
 # Alternative to backtracking PCRE-style regular expression engines
 brew "re2"
 # Next generation open source RPC library and framework
 brew "grpc"
+# Library for decimal floating point arithmetic
+brew "mpdecimal"
+# High-performance theorem prover
+brew "z3"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Compression/decompression library aiming for high speed
 brew "snappy"
 # Framework for scalable cross-language services development
@@ -108,8 +115,6 @@ brew "atuin"
 brew "m4"
 # Automatic configure script builder
 brew "autoconf"
-# Library for decimal floating point arithmetic
-brew "mpdecimal"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Text-based UI library
@@ -434,6 +439,8 @@ brew "tesseract"
 brew "ghostscript"
 # Distributed revision control system
 brew "git"
+# Enable transparent encryption/decryption of files in a git repo
+brew "git-crypt"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
 # Small git utilities
@@ -508,12 +515,6 @@ brew "handbrake"
 brew "krb5"
 # Postgres C API library
 brew "libpq"
-# High-performance theorem prover
-brew "z3"
-# Next-gen compiler infrastructure
-brew "llvm"
-# Protocol buffers (Google's data interchange format)
-brew "protobuf"
 # ODBC 3 connectivity for UNIX
 brew "unixodbc"
 # Easy, fast, and beautiful database client for the terminal
@@ -528,6 +529,8 @@ brew "hdf5"
 brew "helm"
 # Command-line hex viewer
 brew "hexyl"
+# Client library for huggingface.co hub
+brew "hf"
 # Library for communicating with USB and Bluetooth HID devices
 brew "hidapi"
 # Powerful, lightweight programming language
@@ -544,8 +547,6 @@ brew "httpie"
 brew "httpstat"
 # Add GitHub support to git on the command-line
 brew "hub"
-# Client library for huggingface.co hub
-brew "huggingface-cli"
 # Spell checker and morphological analyzer
 brew "hunspell"
 # Portable abstraction of the hierarchical topology of modern architectures
@@ -982,8 +983,6 @@ brew "withgraphite/tap/graphite"
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
-# Enable Windows-like alt-tab
-cask "alt-tab"
 # Application uninstaller
 cask "appcleaner"
 # Chromium based browser

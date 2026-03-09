@@ -13,7 +13,7 @@ paths: **/*.py, **/pyproject.toml, **/setup.{py,cfg}
 | Format      | `uv run ruff format`                        |
 | Types       | `uv run ty check` (fallback: `uv run mypy`) |
 | Tests       | `uv run pytest -q`                          |
-| Build       | `uv_build` backend                          |
+| Build       | `uv build`                                  |
 
 Do not introduce `pip`, Poetry, or `requirements.txt` unless
 asked.

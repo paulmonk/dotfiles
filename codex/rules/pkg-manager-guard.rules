@@ -1,7 +1,7 @@
 # Prefer uv over pip, poetry, and pipenv for Python package management.
 prefix_rule(
     pattern = ["pip", "install"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use uv instead of pip. Run: uv add <package> or uv pip install <package>.",
     match = [
         "pip install requests",
@@ -11,7 +11,7 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["pip3", "install"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use uv instead of pip3. Run: uv add <package> or uv pip install <package>.",
     match = [
         "pip3 install requests",
@@ -20,7 +20,7 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["poetry"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use uv instead of poetry. Run: uv add <package>, uv sync, uv run <command>.",
     match = [
         "poetry add requests",
@@ -31,7 +31,7 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["pipenv"],
-    decision = "prompt",
+    decision = "forbidden",
     justification = "Use uv instead of pipenv. Run: uv add <package>, uv sync, uv run <command>.",
     match = [
         "pipenv install requests",

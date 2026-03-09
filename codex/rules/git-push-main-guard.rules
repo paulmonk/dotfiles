@@ -1,12 +1,42 @@
 # Block direct pushes to main or master branches.
 # Use a feature branch and PR instead.
-substring_rule(
-    pattern = "git push",
-    decision = "deny",
+
+prefix_rule(
+    pattern = ["git", "push", "origin", ["main", "master"]],
+    decision = "forbidden",
     justification = "Use a feature branch and PR instead of pushing directly to main/master.",
     match = [
         "git push origin main",
         "git push origin master",
+    ],
+    not_match = [
+        "git push origin feature-branch",
+        "git push",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push", "origin", ["main:main", "master:master"]],
+    decision = "forbidden",
+    justification = "Use a feature branch and PR instead of pushing directly to main/master.",
+    match = [
         "git push origin main:main",
+        "git push origin master:master",
+    ],
+    not_match = [
+        "git push origin feature:feature",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["main", "master"]],
+    decision = "forbidden",
+    justification = "Use a feature branch and PR instead of pushing directly to main/master.",
+    match = [
+        "git push main",
+        "git push master",
+    ],
+    not_match = [
+        "git push feature-branch",
     ],
 )

@@ -148,7 +148,10 @@ id_*
 #---------------------------
 **/.claude/docs/**
 **/.claude/plans/**
+**/.claude/skills/**
 **/.claude/settings.local.json
 **/.serena/**
+**/docs/superpowers/**
+.roborev.toml
 AGENTS.local.md
 CLAUDE.local.md

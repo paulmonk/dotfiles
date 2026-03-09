@@ -114,7 +114,7 @@ ai-coding-agents: qmd
     echo "--------------------------------"
 
     # Claude Code MCP servers
-    echo "Configuring Claude Code MCP servers"
+    echo "[claude] Configuring MCP servers"
     echo "  Ensuring gh_grep"
     claude mcp add-json --scope user gh_grep '{"type":"http","url":"https://mcp.grep.app"}' >/dev/null 2>&1 || true
     echo "  Ensuring context7"
@@ -135,9 +135,25 @@ ai-coding-agents: qmd
       echo "  [warn] BUN_INSTALL_BIN not set; skipping qmd MCP server" >&2
     fi
 
+    # Superpowers skills for Codex (and Claude Code via plugin)
+    echo "--------"
+    echo "[codex] Installing Superpowers skills"
+    if [[ -d "$HOME/.codex/superpowers" ]]; then
+      echo "  Updating existing clone"
+      git -C "$HOME/.codex/superpowers" pull --quiet
+    else
+      echo "  Cloning obra/superpowers"
+      git clone --quiet https://github.com/obra/superpowers.git "$HOME/.codex/superpowers"
+    fi
+    mkdir -p "$HOME/.agents/skills"
+    if [[ ! -L "$HOME/.agents/skills/superpowers" ]]; then
+      echo "  Creating symlink"
+      ln -s "$HOME/.codex/superpowers/skills" "$HOME/.agents/skills/superpowers"
+    fi
+
     # Setup Claude Code Devcontainers
     echo "--------"
-    echo "Ensuring Claude Devcontainer"
+    echo "[claude] Ensuring Devcontainer"
     if [[ ! -d "$HOME/.claude-devcontainer" ]]; then
       echo "  Claude DevContainer not found, installing..."
       git clone https://github.com/trailofbits/claude-code-devcontainer $HOME/.claude-devcontainer
@@ -146,7 +162,7 @@ ai-coding-agents: qmd
 
     # Generate shared agent instructions from Claude Code sources
     echo "--------"
-    echo "Generating Codex AGENTS.md + Gemini GEMINI.md"
+    echo "[codex/gemini] Generating AGENTS.md + GEMINI.md"
     if [[ ! -f claude/CLAUDE.md ]]; then
       echo "Error: claude/CLAUDE.md not found" >&2
       exit 1
@@ -185,7 +201,7 @@ ai-coding-agents: qmd
     # (allowed-tools, disable-model-invocation, user_invocable,
     # argument-hint) are stripped via yq.
     echo "--------"
-    echo "Installing Codex skills (from Claude skills + commands)"
+    echo "[codex] Installing skills (from Claude skills + commands)"
 
     # Helper: convert a source .md file to a Codex skill at $dest/SKILL.md
     install_codex_skill() {
@@ -193,7 +209,9 @@ ai-coding-agents: qmd
       rm -rf "${dest}"
       mkdir -p "${dest}"
       {
-        yq --front-matter=extract 'with_entries(select(.key == "name" or .key == "description"))' "${src}"
+        echo "---"
+        yq --front-matter=extract 'with_entries(select(.key == "name" or .key == "description"))' "${src}" \
+          | sed '/^---$/d'
         echo "---"
         echo
         awk 'BEGIN{fm=0} /^---$/{fm++;next} fm>=2{print}' "${src}"
@@ -228,7 +246,7 @@ ai-coding-agents: qmd
 
     # Gemini: convert Claude commands to TOML prompt templates
     echo "--------"
-    echo "Installing Gemini commands (from Claude commands)"
+    echo "[gemini] Installing commands (from Claude commands)"
     mkdir -p "$HOME/.gemini/commands"
     for cmd_md in claude/commands/*.md; do
       cmd_name=$(basename "${cmd_md}" .md)

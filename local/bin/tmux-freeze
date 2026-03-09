@@ -2,8 +2,9 @@
 #/ Usage: tmux-freeze
 #/
 #/ Freezes all running tmux sessions to YAML files using tmuxp. Triggered by
-#/ tmux hooks on structural changes (new session, new window, detach, close).
-#/ Prunes freeze files for sessions that no longer exist.
+#/ tmux hooks on structural changes, detach, and restore. Pass --prune only
+#/ from hooks where the tmux server is known to still be alive and stable, or
+#/ pass --prune-closed <session> from the session-closed hook.
 #/
 #/ Output: ${XDG_DATA_HOME}/tmux/frozen-sessions/<session>.yaml
 #/ Log:    ${XDG_DATA_HOME}/tmux/frozen-sessions/freeze.log
@@ -11,48 +12,163 @@ set -o errexit -o errtrace -o pipefail -o nounset
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
 
+readonly XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"
 readonly XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 readonly FREEZE_DIR="${XDG_DATA_HOME}/tmux/frozen-sessions"
 readonly LOG_FILE="${FREEZE_DIR}/freeze.log"
+readonly RUNTIME_STATE_DIR="${XDG_RUNTIME_DIR}/tmux"
+readonly RESTORE_LOCK_DIR="${RUNTIME_STATE_DIR}/restore.lock"
+readonly LOCAL_TMUX_SOCKET_PATH="${LOCAL_TMUX_SOCKET_PATH:-}"
+readonly PRUNE_DELAY_SECONDS=2
 
+# Append a timestamped entry to the freeze log.
 log() {
+  mkdir -p "${FREEZE_DIR}" 2>/dev/null || true
   echo "[$(date -Iseconds)] $*" >>"${LOG_FILE}"
 }
 
-main() {
-  mkdir -p "${FREEZE_DIR}"
+# Run tmux against an explicit socket when restore/autosave passes one in.
+tmux_cmd() {
+  if [[ -n "${LOCAL_TMUX_SOCKET_PATH}" ]]; then
+    tmux -S "${LOCAL_TMUX_SOCKET_PATH}" "$@"
+  else
+    tmux "$@"
+  fi
+}
 
-  # Bail if the tmux server isn't running.
-  if ! tmux list-sessions &>/dev/null; then
-    log "No tmux server running, skipping freeze"
-    return 0
+# Surface freeze failures inside tmux when a client is available.
+notify_tmux() {
+  local message="$1"
+
+  if tmux_cmd list-sessions &>/dev/null; then
+    tmux_cmd display-message "${message}" >/dev/null 2>&1 || true
+  fi
+}
+
+# Report non-zero exits so silent autosave failures leave evidence behind.
+on_exit() {
+  local exit_code=$?
+
+  if ((exit_code != 0)); then
+    log "Freeze exited with code ${exit_code}"
+    notify_tmux "tmux freeze failed, see ${LOG_FILE}"
   fi
 
-  # Freeze each session.
-  local session
-  while IFS= read -r session; do
-    if tmuxp freeze -y -f yaml --force "${session}" -o "${FREEZE_DIR}/${session}.yaml" >>"${LOG_FILE}" 2>&1; then
-      log "Frozen: ${session}"
-    else
-      log "Failed to freeze: ${session}"
-    fi
-  done < <(tmux list-sessions -F '#{session_name}')
+  exit "${exit_code}"
+}
 
+# Remove stale snapshot files only when the caller knows the server is stable.
+prune_stale_snapshots() {
   # Re-capture live sessions before pruning to avoid a race where a session
   # created during the freeze loop gets its file incorrectly deleted.
   local live_sessions
-  live_sessions=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
+  live_sessions=$(tmux_cmd list-sessions -F '#{session_name}' 2>/dev/null || true)
 
-  # Prune freeze files for sessions that no longer exist.
+  if [[ -z "${live_sessions}" ]]; then
+    log "No live sessions returned, skipping prune to avoid data loss"
+    return 0
+  fi
+
   local file session_name
   for file in "${FREEZE_DIR}"/*.yaml; do
     [[ -f "${file}" ]] || continue
     session_name=$(basename "${file}" .yaml)
     if ! echo "${live_sessions}" | grep -qxF "${session_name}"; then
-      rm -f "${file}"
+      command rm -f "${file}"
       log "Pruned: ${session_name}"
     fi
   done
 }
+
+# Remove one closed session's snapshot only if the tmux server remains alive.
+prune_closed_session() {
+  local session_name="$1"
+
+  mkdir -p "${FREEZE_DIR}"
+  sleep "${PRUNE_DELAY_SECONDS}"
+
+  if ! tmux_cmd list-sessions &>/dev/null; then
+    log "Server stopped, keeping snapshot: ${session_name}"
+    return 0
+  fi
+
+  if tmux_cmd has-session -t "${session_name}" 2>/dev/null; then
+    log "Session still exists, keeping snapshot: ${session_name}"
+    return 0
+  fi
+
+  if [[ -f "${FREEZE_DIR}/${session_name}.yaml" ]]; then
+    command rm -f "${FREEZE_DIR}/${session_name}.yaml"
+    log "Pruned: ${session_name}"
+    return 0
+  fi
+
+  log "No snapshot to prune: ${session_name}"
+}
+
+# Freeze each live session and optionally prune stale snapshots afterward.
+main() {
+  local should_prune=0
+  local closed_session_name=""
+
+  case "${1:-}" in
+  "") ;;
+  --prune)
+    should_prune=1
+    ;;
+  --prune-closed)
+    closed_session_name="${2:-}"
+    if [[ -z "${closed_session_name}" ]]; then
+      echo "Usage: tmux-freeze [--prune] [--prune-closed <session>]" >&2
+      return 1
+    fi
+    prune_closed_session "${closed_session_name}"
+    return 0
+    ;;
+  *)
+    echo "Usage: tmux-freeze [--prune] [--prune-closed <session>]" >&2
+    return 1
+    ;;
+  esac
+
+  mkdir -p "${FREEZE_DIR}" "${RUNTIME_STATE_DIR}"
+
+  # Bail if the tmux server isn't running.
+  if ! tmux_cmd list-sessions &>/dev/null; then
+    log "No tmux server running, skipping freeze"
+    return 0
+  fi
+
+  if [[ -d "${RESTORE_LOCK_DIR}" ]]; then
+    log "Restore in progress, skipping freeze"
+    return 0
+  fi
+
+  # Freeze each session.
+  local -a tmuxp_socket_args=()
+  if [[ -n "${LOCAL_TMUX_SOCKET_PATH}" ]]; then
+    tmuxp_socket_args=(-S "${LOCAL_TMUX_SOCKET_PATH}")
+  fi
+
+  local had_failures=0 session
+  while IFS= read -r session; do
+    if tmuxp freeze "${tmuxp_socket_args[@]}" -y -f yaml --force "${session}" -o "${FREEZE_DIR}/${session}.yaml" >>"${LOG_FILE}" 2>&1; then
+      log "Frozen: ${session}"
+    else
+      log "Failed to freeze: ${session}"
+      had_failures=1
+    fi
+  done < <(tmux_cmd list-sessions -F '#{session_name}')
+
+  if ((should_prune == 1)); then
+    prune_stale_snapshots
+  fi
+
+  if ((had_failures != 0)); then
+    return 1
+  fi
+}
+
+trap on_exit EXIT
 
 main "$@"
