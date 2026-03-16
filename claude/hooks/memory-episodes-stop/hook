@@ -17,6 +17,7 @@ import json
 import logging
 import os
 import re
+import shutil
 import subprocess
 import sys
 from collections import Counter
@@ -358,6 +359,24 @@ def write_episode(
     return summary_file
 
 
+def _link_to_daily_note(episode_path: Path) -> None:
+    """Link the episode to the Obsidian daily note."""
+    linker = shutil.which("obsidian-aisession-to-dailynote")
+    if linker is None:
+        log.warning("obsidian-aisession-to-dailynote not on PATH")
+        return
+    try:
+        subprocess.run(  # noqa: S603 - calling our own linker script
+            [linker, str(episode_path)],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        log.warning("Daily note linking failed: %s", exc)
+
+
 def _run_pipeline(hook_input: dict) -> None:
     """Run the summarisation pipeline from parsed hook input."""
     cwd = hook_input.get("cwd", "")
@@ -404,6 +423,7 @@ def _run_pipeline(hook_input: dict) -> None:
         now=now,
     )
     log.info("Wrote episode %s", episode.name)
+    _link_to_daily_note(episode)
 
 
 if __name__ == "__main__":

@@ -17,7 +17,9 @@ set -g set-titles-string '#T #S:#I.#P #W'
 
 setw -g automatic-rename on
 # Show directory name for shells and terminal agents, command name for everything else
-setw -g automatic-rename-format '#{?#{||:#{||:#{m:*sh,#{pane_current_command}},#{==:claude,#{pane_current_command}}},#{==:codex,#{pane_current_command}}},#{b:pane_current_path},#{pane_current_command}}'
+# Show command:directory for everything, with friendly names for AI tools
+# codex-aarch64-a → codex, node → gemini, shells suppressed (just directory)
+setw -g automatic-rename-format '#{?#{m:*sh,#{pane_current_command}},#{b:pane_current_path},#{?#{==:claude,#{pane_current_command}},claude,#{?#{m:codex*,#{pane_current_command}},codex,#{?#{||:#{==:node,#{pane_current_command}},#{==:gemini,#{pane_current_command}}},gemini,#{pane_current_command}}}}:#{b:pane_current_path}}'
 
 # Always honor extended keys, fixes Alacritty mods.
 set-option -s -a extended-keys always

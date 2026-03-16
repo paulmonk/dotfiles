@@ -1,0 +1,461 @@
+#!/usr/bin/env python3
+"""Link an AI coding session episode to the Obsidian daily note.
+
+Reads frontmatter from an episode .md file and appends a wikilink to the
+corresponding daily note under the '## AI Coding Sessions' section.
+"""
+
+from __future__ import annotations
+
+import calendar
+import datetime as dt
+import re
+import shutil
+import subprocess
+import sys
+import textwrap
+from pathlib import Path
+from typing import Final
+
+# Root of the Obsidian vault on disk.
+VAULT_ROOT: Final[Path] = Path.home() / "Documents" / "Personal"
+
+# Directory containing daily journal notes.
+JOURNALS_DIR: Final[Path] = VAULT_ROOT / "2-Areas" / "Journals"
+
+# Markdown heading used for the session links section.
+SECTION_HEADING: Final[str] = "## AI Coding Sessions"
+
+
+def die(msg: str) -> int:
+    """Print an error message to stderr and return exit code 1."""
+    print(f"error: {msg}", file=sys.stderr)
+    return 1
+
+
+def parse_frontmatter(*, path: Path) -> dict[str, str]:
+    """Extract YAML frontmatter key-value pairs from a markdown file.
+
+    Args:
+        path: Absolute path to the episode markdown file.
+
+    Returns:
+        Dict of frontmatter fields as strings.
+
+    Raises:
+        SystemExit: If the file has no valid frontmatter.
+    """
+    text = path.read_text(encoding="utf-8")
+    match = re.match(r"^---\n(.+?)\n---", text, re.DOTALL)
+    if not match:
+        raise SystemExit(die(f"no frontmatter found in {path}"))
+
+    fm: dict[str, str] = {}
+    for line in match.group(1).splitlines():
+        if ":" not in line:
+            continue
+        key, _, value = line.partition(":")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and value:
+            fm[key] = value
+    return fm
+
+
+def parse_episode_date(*, raw: str) -> dt.datetime:
+    """Parse an ISO 8601 date string from frontmatter.
+
+    Args:
+        raw: Date string like '2026-03-15T17:08:02Z'.
+
+    Returns:
+        A timezone-aware datetime object.
+    """
+    # Handle the trailing Z that fromisoformat didn't accept before 3.11
+    cleaned = raw.replace("Z", "+00:00")
+    return dt.datetime.fromisoformat(cleaned)
+
+
+def vault_relative_link(*, episode_path: Path) -> str:
+    """Compute the vault-relative path without .md extension.
+
+    Args:
+        episode_path: Absolute path to the episode file inside the vault.
+
+    Returns:
+        Vault-relative path string suitable for wikilinks.
+    """
+    relative = episode_path.relative_to(VAULT_ROOT)
+    return str(relative.with_suffix(""))
+
+
+def format_wikilink(
+    *,
+    episode_path: Path,
+    title: str,
+    agent: str,
+    episode_dt: dt.datetime,
+) -> str:
+    """Build the wikilink line for the daily note.
+
+    Args:
+        episode_path: Absolute path to the episode file.
+        title: Episode title from frontmatter.
+        agent: Agent name from frontmatter.
+        episode_dt: Parsed datetime of the episode.
+
+    Returns:
+        Formatted line like '- HH:MM - [[path|Title]] (agent)'.
+    """
+    time_str = episode_dt.strftime("%H:%M")
+    rel_path = vault_relative_link(episode_path=episode_path)
+    return f"- {time_str} - [[{rel_path}|{title}]] ({agent})"
+
+
+def try_obsidian_cli(*, date: dt.date) -> bool:
+    """Try to create today's daily note via the Obsidian CLI.
+
+    Requires Obsidian 1.12+ to be running (CLI connects via IPC).
+
+    Args:
+        date: The date for the daily note.
+
+    Returns:
+        True if the daily note file exists after the attempt.
+    """
+    daily_path = JOURNALS_DIR / f"{date.isoformat()}.md"
+    if daily_path.exists():
+        return True
+
+    obsidian_bin = shutil.which("obsidian")
+    if obsidian_bin is None:
+        return False
+
+    try:
+        subprocess.run(  # noqa: S603 - calling obsidian CLI with our own args
+            [obsidian_bin, "daily", "silent"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+    return daily_path.exists()
+
+
+def generate_daily_note(*, date: dt.date) -> str:
+    """Generate daily note content matching the vault template.
+
+    Args:
+        date: The date for the daily note.
+
+    Returns:
+        Markdown content for the daily note.
+    """
+    day_name = calendar.day_name[date.weekday()]
+    month_name = calendar.month_name[date.month]
+    date_iso = date.isoformat()
+    yesterday = date - dt.timedelta(days=1)
+    tomorrow = date + dt.timedelta(days=1)
+    yesterday_iso = yesterday.isoformat()
+    tomorrow_iso = tomorrow.isoformat()
+
+    return textwrap.dedent(f"""\
+        ---
+        type: Daily Note
+        created_at:
+        updated_at:
+        aliases:
+        tags:
+          - journal
+        urls:
+        related:
+        ---
+
+        ---
+        # {day_name}, {date.day}. {month_name} {date.year}
+
+        \u2190 [[2-Areas/journals/{yesterday.year}/{yesterday_iso}|Yesterday]] \
+| [[journals/{tomorrow.year}/{tomorrow_iso}|Tomorrow]] \u2192
+
+        ---
+
+        - …
+
+        ---
+
+        ### Created today
+
+        ```base
+        filters:
+          and:
+            - 'file.ctime >= date("{date_iso}")'
+            - 'file.ctime < date("{date_iso}") + "1d"'
+        views:
+          - type: list
+            name: Created
+        ```
+
+        ### Changed today
+
+        ```base
+        filters:
+          and:
+            - 'file.mtime >= date("{date_iso}")'
+            - 'file.mtime < date("{date_iso}") + "1d"'
+        views:
+          - type: list
+            name: Modified
+        ```
+    """)
+
+
+def ensure_daily_note(*, date: dt.date) -> Path:
+    """Ensure the daily note exists, creating it if necessary.
+
+    Tries the Obsidian URI scheme first for Templater expansion,
+    then falls back to generating the note manually.
+
+    Args:
+        date: The date for the daily note.
+
+    Returns:
+        Path to the daily note file.
+
+    Raises:
+        SystemExit: If the journals directory does not exist.
+    """
+    daily_path = JOURNALS_DIR / f"{date.isoformat()}.md"
+
+    if daily_path.exists():
+        return daily_path
+
+    if try_obsidian_cli(date=date):
+        return daily_path
+
+    if not JOURNALS_DIR.is_dir():
+        raise SystemExit(die(f"journals directory not found: {JOURNALS_DIR}"))
+
+    daily_path.write_text(generate_daily_note(date=date), encoding="utf-8")
+    return daily_path
+
+
+def insert_link_into_daily_note(*, daily_path: Path, link_line: str) -> None:
+    """Insert a session link into the daily note.
+
+    Handles three cases:
+    1. Section exists: append within it (before next ## heading or EOF).
+    2. No section but ## Meetings exists: insert new section before it.
+    3. Neither exists: append at end of file.
+
+    Skips if the link is already present (idempotency).
+
+    Args:
+        daily_path: Path to the daily note file.
+        link_line: The formatted wikilink line to insert.
+    """
+    content = daily_path.read_text(encoding="utf-8")
+
+    # Idempotency: skip if already linked
+    if link_line in content:
+        print(f"already linked in {daily_path.name}, skipping")
+        return
+
+    lines = content.splitlines(keepends=True)
+    section_idx = _find_heading_index(lines=lines, heading=SECTION_HEADING)
+
+    if section_idx is not None:
+        _append_to_existing_section(
+            daily_path=daily_path,
+            lines=lines,
+            section_idx=section_idx,
+            link_line=link_line,
+        )
+    else:
+        meetings_idx = _find_heading_index(lines=lines, heading="## Meetings")
+        if meetings_idx is not None:
+            _insert_section_before(
+                daily_path=daily_path,
+                lines=lines,
+                before_idx=meetings_idx,
+                link_line=link_line,
+            )
+        else:
+            _append_section_at_end(
+                daily_path=daily_path,
+                content=content,
+                link_line=link_line,
+            )
+
+    _sort_section_links(daily_path=daily_path)
+    print(f"linked in {daily_path.name}")
+
+
+def _find_heading_index(*, lines: list[str], heading: str) -> int | None:
+    """Find the line index of a markdown heading.
+
+    Args:
+        lines: File content split into lines (with endings).
+        heading: The heading text to find (e.g. '## Meetings').
+
+    Returns:
+        Line index if found, None otherwise.
+    """
+    for i, line in enumerate(lines):
+        if line.rstrip() == heading:
+            return i
+    return None
+
+
+def _find_section_end(*, lines: list[str], section_idx: int) -> int:
+    """Find the index after the last content line of a section.
+
+    Scans forward from the heading until the next ## heading or EOF.
+
+    Args:
+        lines: File content split into lines (with endings).
+        section_idx: Index of the section heading.
+
+    Returns:
+        Index where new content should be inserted.
+    """
+    i = section_idx + 1
+    while i < len(lines):
+        if lines[i].startswith("## "):
+            break
+        i += 1
+    return i
+
+
+def _append_to_existing_section(
+    *,
+    daily_path: Path,
+    lines: list[str],
+    section_idx: int,
+    link_line: str,
+) -> None:
+    """Append a link line within an existing section.
+
+    Args:
+        daily_path: Path to the daily note.
+        lines: File content split into lines.
+        section_idx: Index of the section heading.
+        link_line: The wikilink line to insert.
+    """
+    insert_at = _find_section_end(lines=lines, section_idx=section_idx)
+    lines.insert(insert_at, link_line + "\n")
+    daily_path.write_text("".join(lines), encoding="utf-8")
+
+
+def _insert_section_before(
+    *,
+    daily_path: Path,
+    lines: list[str],
+    before_idx: int,
+    link_line: str,
+) -> None:
+    """Insert a new AI Coding Sessions section before a given heading.
+
+    Args:
+        daily_path: Path to the daily note.
+        lines: File content split into lines.
+        before_idx: Index of the heading to insert before.
+        link_line: The wikilink line to include.
+    """
+    new_section = f"{SECTION_HEADING}\n{link_line}\n"
+    lines.insert(before_idx, new_section)
+    daily_path.write_text("".join(lines), encoding="utf-8")
+
+
+def _append_section_at_end(
+    *,
+    daily_path: Path,
+    content: str,
+    link_line: str,
+) -> None:
+    """Append a new AI Coding Sessions section at the end of the file.
+
+    Args:
+        daily_path: Path to the daily note.
+        content: Full file content as a string.
+        link_line: The wikilink line to include.
+    """
+    separator = "\n" if content.endswith("\n") else "\n\n"
+    daily_path.write_text(
+        content + separator + f"{SECTION_HEADING}\n{link_line}\n",
+        encoding="utf-8",
+    )
+
+
+def _sort_section_links(*, daily_path: Path) -> None:
+    """Sort link lines within the AI Coding Sessions section by time.
+
+    Args:
+        daily_path: Path to the daily note file.
+    """
+    lines = daily_path.read_text(encoding="utf-8").splitlines(keepends=True)
+    section_idx = _find_heading_index(lines=lines, heading=SECTION_HEADING)
+    if section_idx is None:
+        return
+
+    section_end = _find_section_end(lines=lines, section_idx=section_idx)
+
+    # Extract link lines (start with "- "), preserve non-link lines as-is.
+    link_lines = []
+    other_lines = []
+    for line in lines[section_idx + 1 : section_end]:
+        if line.startswith("- "):
+            link_lines.append(line)
+        else:
+            other_lines.append(line)
+
+    # Sort by the time prefix "- HH:MM".
+    link_lines.sort(key=lambda line: line[:7])
+
+    rebuilt = lines[: section_idx + 1] + link_lines + other_lines + lines[section_end:]
+    daily_path.write_text("".join(rebuilt), encoding="utf-8")
+
+
+def main() -> int:
+    """Link an AI session episode to its daily note.
+
+    Returns:
+        Exit code: 0 on success, 1 on error.
+    """
+    if len(sys.argv) != 2:
+        print(
+            f"usage: {Path(sys.argv[0]).name} <episode.md>",
+            file=sys.stderr,
+        )
+        return 1
+
+    episode_path = Path(sys.argv[1]).resolve()
+    if not episode_path.is_file():
+        return die(f"file not found: {episode_path}")
+
+    fm = parse_frontmatter(path=episode_path)
+
+    for key in ("date", "title", "agent"):
+        if key not in fm:
+            return die(f"missing frontmatter field '{key}' in {episode_path}")
+
+    episode_dt = parse_episode_date(raw=fm["date"])
+    episode_date = episode_dt.date()
+
+    daily_path = ensure_daily_note(date=episode_date)
+
+    link_line = format_wikilink(
+        episode_path=episode_path,
+        title=fm["title"],
+        agent=fm["agent"],
+        episode_dt=episode_dt,
+    )
+
+    insert_link_into_daily_note(daily_path=daily_path, link_line=link_line)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

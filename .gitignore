@@ -26,3 +26,7 @@ __pycache__/
 
 # Ignore local user config
 config/git/users
+
+# Git clean/smudge vault (contain sensitive values)
+git-filter-clean.sed
+git-filter-smudge.sed

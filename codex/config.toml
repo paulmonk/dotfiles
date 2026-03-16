@@ -86,11 +86,6 @@ enabled = true
 url = "https://mcp.grep.app"
 enabled = true
 
-[mcp_servers.playwright]
-command = "npx"
-args = ["-y", "@playwright/mcp"]
-enabled = true
-
 [mcp_servers.qmd]
 command = "qmd"
 args = ["mcp"]
@@ -108,5 +103,11 @@ multi_agent = true
 [notice]
 hide_rate_limit_model_nudge = true
 
-[projects."/Users/paul.monk/projects/dotfiles"]
+[projects."~/projects/dotfiles"]
+trust_level = "trusted"
+
+[projects."~/projects/decide-with-data/www-decidewithdata"]
+trust_level = "trusted"
+
+[projects."~/projects/{{ CLIENT_1 }}/data_pipeline_dbt"]
 trust_level = "trusted"

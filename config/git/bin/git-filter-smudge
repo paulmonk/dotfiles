@@ -1,0 +1,5 @@
+#!/bin/bash
+# Git smudge filter: restore sensitive values and expand home paths.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+if [[ -f git-filter-smudge.sed ]]; then sed -f git-filter-smudge.sed; else cat; fi | sed "s|~/|${HOME}/|g"

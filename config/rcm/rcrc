@@ -1,3 +1,3 @@
 DOTFILES_DIRS="$HOME/projects/dotfiles"
-EXCLUDES="README.md LICENSE Brewfile Brewfile.lock.json Makefile justfile install .stylua.toml .rumdl.toml selene.toml neovim.yml .claude .beads CLAUDE.md .pre-commit-config.yaml __pycache__ codex/skills .ruff.toml .ty.toml"
+EXCLUDES="README.md LICENSE Brewfile Brewfile.lock.json Makefile justfile install .stylua.toml .rumdl.toml selene.toml neovim.yml .claude .beads CLAUDE.md .pre-commit-config.yaml __pycache__ codex/skills .ruff.toml .ty.toml git-filter-clean.sed git-filter-smudge.sed .gitattributes"
 UNDOTTED="Library"

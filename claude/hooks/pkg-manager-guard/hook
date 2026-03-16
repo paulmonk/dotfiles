@@ -78,6 +78,12 @@ main() {
 
   project_dir="${CLAUDE_PROJECT_DIR:-.}"
 
+  # Block uv pip install --system unconditionally. Use uvx or uv tool install.
+  if echo "${command}" | grep -qE 'uv\s+pip\s+install\s.*--system|uv\s+pip\s+install\s+--system'; then
+    deny_tool "Do not use \`uv pip install --system\`. Use \`uvx\` for one-off tools or \`uv tool install\` for persistent CLI tools."
+    exit 0
+  fi
+
   # JS ecosystem: deny wrong package manager.
   local js_manager
   js_manager=$(detect_js_manager "${project_dir}")

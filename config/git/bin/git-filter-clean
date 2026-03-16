@@ -1,0 +1,5 @@
+#!/bin/bash
+# Git clean filter: normalise home paths and scrub sensitive values.
+set -o errexit -o errtrace -o pipefail -o nounset
+
+sed "s|${HOME}|~|g" | if [[ -f git-filter-clean.sed ]]; then sed -f git-filter-clean.sed; else cat; fi

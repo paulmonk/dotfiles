@@ -220,8 +220,10 @@
     path = ~/.config/git/users/decide-with-data
 [includeIf "gitdir:~/projects/hawkfry/**/"]
     path = ~/.config/git/users/hawkfry
-[includeIf "gitdir:~/projects/trailmix/**/"]
-    path = ~/.config/git/users/trailmix
+[includeIf "gitdir:~/projects/{{ CLIENT_1 }}/**/"]
+    path = ~/.config/git/users/{{ CLIENT_1 }}
+[includeIf "gitdir:~/projects/{{ CLIENT_5 }}/**/"]
+    path = ~/.config/git/users/{{ CLIENT_5 }}
 # Second brain
 [includeIf "gitdir:~/Documents/Personal/**/"]
     path = ~/.config/git/users/obsidian
@@ -376,6 +378,9 @@
     catchup = "!f(){ echo -n \"reset \\033[0;33m$(git symbolic-ref -q --short HEAD)\\033[0m to \\033[0;33m$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))\\033[0m? (Y/n) \"; read -r and; if [ \"$and\" = \"y\" -o \"$and\" = \"Y\" -o -z \"$and\" ]; then git reset --hard $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); else echo \"catchup aborted\"; fi }; f"
 
 # vim: set ft=gitconfig ts=4 sw=4 tw=80 et :
+[filter "homedir"]
+    clean = ~/.config/git/bin/git-filter-clean
+    smudge = ~/.config/git/bin/git-filter-smudge
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f

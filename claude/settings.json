@@ -109,6 +109,7 @@
       "Read(~/Library/Keychains/**)"
     ]
   },
+  "model": "opus[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "SessionStart": [
@@ -263,15 +264,20 @@
   "enabledPlugins": {
     "agent-browser@agent-browser": true,
     "agentic-actions-auditor@trailofbits": true,
+    "autoresearch@hawkfry": true,
     "beads@beads-marketplace": true,
     "claude-code-setup@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
+    "decidewithdata-branding@decidewithdata": true,
     "differential-review@trailofbits": true,
     "gh-cli@trailofbits": true,
+    "hawkfry-branding@hawkfry": true,
     "humanizer@skills-curated": true,
     "insecure-defaults@trailofbits": true,
     "last30days@skills-curated": true,
     "marketing-skills@marketingskills": true,
+    "obsidian@obsidian-skills": true,
+    "omni-analytics@omni-analytics": true,
     "openai-doc@skills-curated": true,
     "openai-gh-address-comments@skills-curated": true,
     "openai-gh-fix-ci@skills-curated": true,
@@ -280,9 +286,11 @@
     "plugin-dev@claude-plugins-official": true,
     "sharp-edges@trailofbits": true,
     "skill-extractor@skills-curated": true,
+    "skill-improver@hawkfry": true,
     "static-analysis@trailofbits": true,
     "superpowers@superpowers-marketplace": true,
-    "skill-improver@hawkfry": true
+    "frontend-design@claude-plugins-official": true,
+    "ghost@ghost-security": true
   },
   "extraKnownMarketplaces": {
     "agent-browser": {
@@ -332,6 +340,36 @@
         "source": "github",
         "repo": "trailofbits/skills-curated"
       }
+    },
+    "hawkfry": {
+      "source": {
+        "source": "directory",
+        "path": "~/projects/hawkfry/hawkfry-skills"
+      }
+    },
+    "decidewithdata": {
+      "source": {
+        "source": "directory",
+        "path": "~/projects/decide-with-data/decidewithdata-skills"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    },
+    "omni-analytics": {
+      "source": {
+        "source": "github",
+        "repo": "exploreomni/omni-claude-skills"
+      }
+    },
+    "ghost-security": {
+      "source": {
+        "source": "github",
+        "repo": "ghostsecurity/skills"
+      }
     }
   },
   "outputStyle": "Personal",
@@ -339,6 +377,7 @@
   "sandbox": {
     "enabled": true
   },
+  "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
@@ -403,6 +442,5 @@
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
   "showTurnDuration": true,
-  "defaultMode": "plan",
-  "model": "opus[1m]"
+  "defaultMode": "plan"
 }

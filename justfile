@@ -76,6 +76,12 @@ dotfiles: rcup-install ai-coding-agents
     @echo "--------"
     @echo "Removing Broken Symlinks"
     @{{ justfile_directory() }}/hooks/post-up/99-remove-broken-symlinks
+    @echo "--------"
+    @echo "Bootstrapping git clean/smudge filter"
+    @git -C {{ justfile_directory() }} config --local filter.homedir.clean '~/.config/git/bin/git-filter-clean'
+    @git -C {{ justfile_directory() }} config --local filter.homedir.smudge '~/.config/git/bin/git-filter-smudge'
+    @git -C {{ justfile_directory() }} checkout -- config/git/config
+    @git -C {{ justfile_directory() }} config --local --remove-section filter.homedir
     @echo "--------------------------------"
 
 # Bootstrap dotfiles with pre and post hooks

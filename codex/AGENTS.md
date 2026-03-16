@@ -920,8 +920,8 @@ similar_names = "allow"
   purpose.
 - **File order:** Shebang, header comment, `set` options,
   constants, includes/sources, functions, main logic.
-- **Extensions:** Executables may omit `.sh`; libraries must use
-  `.sh` and be non-executable.
+- **Extensions:** Executables should omit `.sh` or `.bash`; libraries must use
+  `.sh` or `.bash` and be non-executable.
 
 ### Variables & Naming
 

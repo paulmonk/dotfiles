@@ -4,3 +4,7 @@ line-length = 100
 
 [MD013]
 code_blocks = false
+
+[MD060]
+enabled = true
+style = "aligned"

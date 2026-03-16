@@ -28,7 +28,7 @@
 \set HISTSIZE 2000
 \set ECHO_HIDDEN OFF
 
--- Start writing keywords in lowercase and when pressing tab they’ll be
+-- Start writing keywords in lowercase and when pressing tab they'll be
 -- completed and transformed to uppercase.
 \set COMP_KEYWORD_CASE upper
 
